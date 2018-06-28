@@ -19,7 +19,9 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        def OAUTH_CLIENT_ID = "OAUTH_CLIENT_ID"
         debug {
+            buildConfigField "String", OAUTH_CLIENT_ID, "\"196233843818-aluarmqrskkkn5t82svife5rn5htep5k.apps.googleusercontent.com\""
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
         }
@@ -45,6 +47,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:16.0.1'
     implementation 'com.facebook.android:facebook-android-sdk:4.30.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'com.google.firebase:firebase-auth:16.0.2'
+    implementation 'com.google.android.gms:play-services-auth:15.0.1'
 
     kapt 'com.google.dagger:dagger-android-processor:2.15'
     kapt "android.arch.lifecycle:compiler:1.1.1"
