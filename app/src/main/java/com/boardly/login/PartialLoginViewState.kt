@@ -1,14 +1,53 @@
 package com.boardly.login
 
+import com.boardly.R
+import com.boardly.constants.ERROR_INVALID_EMAIL
+import com.boardly.constants.ERROR_USER_NOT_FOUND
+import com.boardly.constants.ERROR_WRONG_PASSWORD
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.auth.FirebaseAuthException
+
 sealed class PartialLoginViewState {
 
-    class InProgressState : PartialLoginViewState()
+    abstract fun reduce(previousState: LoginViewState): LoginViewState
+
+    class InProgressState : PartialLoginViewState() {
+        override fun reduce(previousState: LoginViewState) = LoginViewState(true)
+    }
 
     data class LocalValidation(val emailValid: Boolean = false,
-                               val passwordValid: Boolean = false) : PartialLoginViewState()
+                               val passwordValid: Boolean = false) : PartialLoginViewState() {
+        override fun reduce(previousState: LoginViewState) = LoginViewState(
+                emailValid = emailValid,
+                passwordValid = passwordValid)
+    }
 
-    data class ErrorState(val exception: Exception?,
-                          val dismissToast: Boolean = false) : PartialLoginViewState()
+    data class ErrorState(private val exception: Exception?,
+                          val dismissToast: Boolean = false) : PartialLoginViewState() {
+        override fun reduce(previousState: LoginViewState) = LoginViewState(
+                errorMessageId = getErrorMessageId(exception),
+                error = true,
+                dismissToast = dismissToast)
 
-    class LoginSuccess : PartialLoginViewState()
+        private fun getErrorMessageId(exception: Exception?): Int {
+            return when (exception) {
+                is FirebaseNetworkException -> R.string.no_internet_error
+                is FirebaseAuthException -> getErrorMessageId(exception)
+                else -> R.string.generic_error
+            }
+        }
+
+        private fun getErrorMessageId(exception: FirebaseAuthException): Int {
+            return when (exception.errorCode) {
+                ERROR_INVALID_EMAIL -> R.string.invalid_email_error
+                ERROR_WRONG_PASSWORD -> R.string.wrong_password_error
+                ERROR_USER_NOT_FOUND -> R.string.user_not_found_error
+                else -> R.string.generic_error
+            }
+        }
+    }
+
+    class LoginSuccess : PartialLoginViewState() {
+        override fun reduce(previousState: LoginViewState) = LoginViewState(loginSuccess = true)
+    }
 }
