@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Boardly</string>
+    <string name="create_account_text">Stwórz konto</string>
+    <string name="sign_in_with_google_text">Zaloguj przez Gmail</string>
+    <string name="sign_in_with_facebook_text">Zaloguj przez Facebook</string>
+    <string name="sign_in_text">Zaloguj</string>
+    <string name="password_hint_login">Hasło</string>
+    <string name="email_hint">Email</string>
 </resources>
