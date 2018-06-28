@@ -8,4 +8,10 @@
     <string name="password_hint_login">Hasło</string>
     <string name="email_hint">Email</string>
     <string name="password_hint_sign_up">Hasło (przynajmniej 6 znaków)</string>
+    <string name="no_internet_error">Nie jesteś podłączony do internetu</string>
+    <string name="generic_error">Coś poszło nie tak :(</string>
+    <string name="wrong_password_error">To hasło jest niepoprawne</string>
+    <string name="user_not_found_error">Podany użytkownik nie istnieje</string>
+    <string name="invalid_email_error">Ten email jest nieprawidłowy</string>
+    <string name="already_used_email_error">Ten email już jest używany</string>
 </resources>
