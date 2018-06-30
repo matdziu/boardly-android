@@ -14,8 +14,8 @@ open class BaseInteractor {
     protected val firebaseAuth = FirebaseAuth.getInstance()
     protected val currentUserId = firebaseAuth.currentUser?.uid ?: ""
 
-    protected fun getUsersNodeRef(): DatabaseReference {
-        return firebaseDatabase.getReference(USERS_NODE)
+    protected fun getUserNodeRef(userId: String): DatabaseReference {
+        return firebaseDatabase.getReference("$USERS_NODE/$userId")
     }
 
     protected fun getStorageProfilePictureRef(userId: String): StorageReference {

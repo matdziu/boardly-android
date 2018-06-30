@@ -68,7 +68,7 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
         with(editProfileViewState) {
             showProgress(progress)
             nameEditText.showError(nameFieldEmpty)
-            if (success) finish()
+            if (successfulUpdate) finish()
         }
     }
 
