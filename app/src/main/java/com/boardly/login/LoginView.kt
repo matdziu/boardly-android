@@ -1,5 +1,6 @@
 package com.boardly.login
 
+import com.boardly.login.models.InputData
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import io.reactivex.Observable

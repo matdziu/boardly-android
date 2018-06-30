@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseActivity
+import com.boardly.editprofile.models.InputData
 import com.boardly.factories.EditProfileViewModelFactory
 import com.boardly.injection.modules.GlideApp
 import com.jakewharton.rxbinding2.view.RxView

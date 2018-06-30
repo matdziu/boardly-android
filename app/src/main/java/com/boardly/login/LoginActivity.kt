@@ -11,6 +11,7 @@ import com.boardly.base.BaseActivity
 import com.boardly.constants.SIGN_IN_REQUEST_CODE
 import com.boardly.factories.LoginViewModelFactory
 import com.boardly.home.HomeActivity
+import com.boardly.login.models.InputData
 import com.boardly.signup.SignUpActivity
 import com.facebook.AccessToken
 import com.facebook.CallbackManager

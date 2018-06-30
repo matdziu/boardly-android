@@ -9,6 +9,7 @@ import com.boardly.R
 import com.boardly.base.BaseActivity
 import com.boardly.factories.SignUpViewModelFactory
 import com.boardly.home.HomeActivity
+import com.boardly.signup.models.InputData
 import com.jakewharton.rxbinding2.view.RxView
 import dagger.android.AndroidInjection
 import io.reactivex.Observable

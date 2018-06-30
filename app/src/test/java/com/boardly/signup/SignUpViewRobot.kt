@@ -1,6 +1,7 @@
 package com.boardly.signup
 
 import com.boardly.base.BaseViewRobot
+import com.boardly.signup.models.InputData
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject

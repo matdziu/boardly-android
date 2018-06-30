@@ -4,6 +4,7 @@ import android.net.Uri
 import com.boardly.base.BaseInteractor
 import com.boardly.constants.NAME_CHILD
 import com.boardly.constants.PROFILE_PICTURE_CHILD
+import com.boardly.editprofile.models.InputData
 import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.UploadTask
 import io.reactivex.Observable

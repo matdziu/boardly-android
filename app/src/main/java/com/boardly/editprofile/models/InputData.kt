@@ -1,4 +1,4 @@
-package com.boardly.editprofile
+package com.boardly.editprofile.models
 
 import java.io.File
 

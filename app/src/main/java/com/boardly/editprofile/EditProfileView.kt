@@ -1,5 +1,6 @@
 package com.boardly.editprofile
 
+import com.boardly.editprofile.models.InputData
 import io.reactivex.Observable
 
 interface EditProfileView {

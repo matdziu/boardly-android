@@ -1,6 +1,7 @@
 package com.boardly.editprofile
 
 import com.boardly.base.BaseViewRobot
+import com.boardly.editprofile.models.InputData
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
