@@ -1,10 +1,10 @@
 package com.boardly.login
 
+import com.boardly.base.BaseInteractor
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -12,9 +12,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 
-class LoginInteractor {
-
-    private val firebaseAuth = FirebaseAuth.getInstance()
+class LoginInteractor : BaseInteractor() {
 
     fun login(email: String, password: String): Observable<PartialLoginViewState> {
         val stateSubject: Subject<PartialLoginViewState> = PublishSubject.create()

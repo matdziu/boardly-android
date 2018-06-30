@@ -72,7 +72,9 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
     }
 
     override fun emitInputData(): Observable<InputData> {
-        return RxView.clicks(saveChangesButton).map { InputData(nameEditText.text.toString(), selectedProfilePictureFile) }
+        return RxView.clicks(saveChangesButton)
+                .doOnNext { hideSoftKeyboard() }
+                .map { InputData(nameEditText.text.toString(), selectedProfilePictureFile) }
     }
 
     private fun askForImage() {
