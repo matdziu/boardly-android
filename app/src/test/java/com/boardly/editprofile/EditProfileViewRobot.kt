@@ -8,6 +8,7 @@ import io.reactivex.subjects.PublishSubject
 class EditProfileViewRobot(editProfileViewModel: EditProfileViewModel) : BaseViewRobot<EditProfileViewState>() {
 
     private val inputDataSubject = PublishSubject.create<InputData>()
+    private val fetchProfileDataSubject = PublishSubject.create<Boolean>()
 
     private val editProfileView = object : EditProfileView {
         override fun render(editProfileViewState: EditProfileViewState) {
@@ -15,6 +16,8 @@ class EditProfileViewRobot(editProfileViewModel: EditProfileViewModel) : BaseVie
         }
 
         override fun emitInputData(): Observable<InputData> = inputDataSubject
+
+        override fun emitFetchProfileDataTrigger(): Observable<Boolean> = fetchProfileDataSubject
     }
 
     init {
@@ -23,5 +26,9 @@ class EditProfileViewRobot(editProfileViewModel: EditProfileViewModel) : BaseVie
 
     fun emitInputData(inputData: InputData) {
         inputDataSubject.onNext(inputData)
+    }
+
+    fun emitFetchTrigger() {
+        fetchProfileDataSubject.onNext(true)
     }
 }

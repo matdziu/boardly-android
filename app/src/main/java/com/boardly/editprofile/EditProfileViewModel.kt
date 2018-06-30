@@ -21,7 +21,7 @@ class EditProfileViewModel(private val editProfileInteractor: EditProfileInterac
 
         val inputDataObservable = editProfileView.emitInputData()
                 .flatMap {
-                    if (it.name.isNotEmpty()) {
+                    if (it.name.isNotBlank()) {
                         editProfileInteractor
                                 .saveProfileChanges(it)
                                 .startWith(PartialEditProfileViewState.ProgressState())
