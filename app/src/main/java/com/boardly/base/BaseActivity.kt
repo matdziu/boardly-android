@@ -3,6 +3,7 @@ package com.boardly.base
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.support.annotation.DrawableRes
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.inputmethod.InputMethodManager
@@ -37,9 +38,10 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun loadImageFromUrl(imageView: ImageView, pictureUrl: String) {
+    fun loadImageFromUrl(imageView: ImageView, pictureUrl: String, @DrawableRes placeholderId: Int) {
         GlideApp.with(this)
                 .load(pictureUrl)
+                .placeholder(placeholderId)
                 .into(imageView)
     }
 }

@@ -85,7 +85,7 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
 
             if (render) {
                 nameEditText.setText(profileData.name)
-                profileData.profilePicture?.let { loadImageFromUrl(profilePictureImageView, it) }
+                profileData.profilePicture?.let { loadImageFromUrl(profilePictureImageView, it, R.drawable.profile_picture_shape) }
                 ratingTextView.text = profileData.rating?.toString() ?: "-"
             }
         }
