@@ -12,6 +12,13 @@ class EditProfileViewModel(private val editProfileInteractor: EditProfileInterac
     private val stateSubject = BehaviorSubject.createDefault(EditProfileViewState())
 
     fun bind(editProfileView: EditProfileView) {
+        val fetchDataObservable = editProfileView.emitFetchProfileDataTrigger()
+                .filter { it }
+                .flatMap {
+                    editProfileInteractor.fetchProfileData()
+                            .startWith(PartialEditProfileViewState.ProgressState())
+                }
+
         val inputDataObservable = editProfileView.emitInputData()
                 .flatMap {
                     if (it.name.isNotEmpty()) {
@@ -22,10 +29,14 @@ class EditProfileViewModel(private val editProfileInteractor: EditProfileInterac
                         Observable.just(PartialEditProfileViewState.NameFieldEmptyState())
                     }
                 }
+
+        val mergedObservable = Observable.merge(
+                fetchDataObservable,
+                inputDataObservable)
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 
-        compositeDisposable.add(inputDataObservable.subscribe { editProfileView.render(it) })
+        compositeDisposable.add(mergedObservable.subscribe { editProfileView.render(it) })
     }
 
     private fun reduce(previousState: EditProfileViewState, partialState: PartialEditProfileViewState)

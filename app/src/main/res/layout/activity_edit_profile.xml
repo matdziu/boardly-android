@@ -24,15 +24,31 @@
             app:civ_border_color="@color/lightGrey"
             app:civ_border_width="1dp" />
 
-        <TextView
-            android:id="@+id/ratingTextView"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:text="@string/your_current_rating"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:text="@string/your_current_rating"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/ratingTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="3dp"
+                android:layout_marginTop="16dp"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"

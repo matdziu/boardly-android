@@ -22,12 +22,17 @@ class EditProfileInteractor : BaseInteractor() {
 
         getUserNodeRef(currentUserId).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                dataSnapshot.getValue(ProfileData::class.java)?.let {
-                    resultSubject.onNext(PartialEditProfileViewState.ProfileDataFetched(it))
+                val profileData = dataSnapshot.getValue(ProfileData::class.java)
+
+                if (profileData != null) {
+                    resultSubject.onNext(PartialEditProfileViewState.ProfileDataFetched(profileData, true))
+                    resultSubject.onNext(PartialEditProfileViewState.ProfileDataFetched(profileData))
+                } else {
+                    resultSubject.onNext(PartialEditProfileViewState.ProfileDataFetched())
                 }
             }
 
-            override fun onCancelled(p0: DatabaseError) {
+            override fun onCancelled(databaseError: DatabaseError) {
                 // unused
             }
         })

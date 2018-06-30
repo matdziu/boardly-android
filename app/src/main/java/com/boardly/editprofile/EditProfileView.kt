@@ -8,4 +8,6 @@ interface EditProfileView {
     fun render(editProfileViewState: EditProfileViewState)
 
     fun emitInputData(): Observable<InputData>
+
+    fun emitFetchProfileDataTrigger(): Observable<Boolean>
 }

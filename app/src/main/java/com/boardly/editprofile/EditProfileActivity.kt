@@ -15,8 +15,10 @@ import com.jakewharton.rxbinding2.view.RxView
 import com.theartofdev.edmodo.cropper.CropImage
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_edit_profile.nameEditText
 import kotlinx.android.synthetic.main.activity_edit_profile.profilePictureImageView
+import kotlinx.android.synthetic.main.activity_edit_profile.ratingTextView
 import kotlinx.android.synthetic.main.activity_edit_profile.saveChangesButton
 import kotlinx.android.synthetic.main.activity_sign_up.contentViewGroup
 import kotlinx.android.synthetic.main.activity_sign_up.progressBar
@@ -32,6 +34,10 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
     @Inject
     lateinit var editProfileViewModelFactory: EditProfileViewModelFactory
 
+    private lateinit var fetchProfileDataSubject: PublishSubject<Boolean>
+
+    private var init = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         setContentView(R.layout.activity_edit_profile)
@@ -43,10 +49,17 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
 
     override fun onStart() {
         super.onStart()
+        initEmitters()
         editProfileViewModel.bind(this)
+        fetchProfileDataSubject.onNext(init)
+    }
+
+    private fun initEmitters() {
+        fetchProfileDataSubject = PublishSubject.create()
     }
 
     override fun onStop() {
+        init = false
         editProfileViewModel.unbind()
         super.onStop()
     }
@@ -69,6 +82,12 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
             showProgress(progress)
             nameEditText.showError(nameFieldEmpty)
             if (successfulUpdate) finish()
+
+            if (render) {
+                nameEditText.setText(profileData.name)
+                profileData.profilePicture?.let { loadImageFromUrl(profilePictureImageView, it) }
+                ratingTextView.text = profileData.rating?.toString() ?: "-"
+            }
         }
     }
 
@@ -77,6 +96,8 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
                 .doOnNext { hideSoftKeyboard() }
                 .map { InputData(nameEditText.text.toString(), selectedProfilePictureFile) }
     }
+
+    override fun emitFetchProfileDataTrigger(): Observable<Boolean> = fetchProfileDataSubject
 
     private fun askForImage() {
         CropImage.activity()

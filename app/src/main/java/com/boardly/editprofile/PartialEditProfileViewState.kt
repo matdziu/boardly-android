@@ -18,9 +18,12 @@ sealed class PartialEditProfileViewState {
         override fun reduce(previousState: EditProfileViewState) = EditProfileViewState(nameFieldEmpty = true)
     }
 
-    class ProfileDataFetched(private val profileData: ProfileData) : PartialEditProfileViewState() {
+    class ProfileDataFetched(private val profileData: ProfileData = ProfileData(),
+                             private val render: Boolean = false) : PartialEditProfileViewState() {
         override fun reduce(previousState: EditProfileViewState): EditProfileViewState {
-            return previousState.copy(profileData = profileData)
+            return previousState.copy(profileData = profileData,
+                    render = render,
+                    progress = false)
         }
     }
 }
