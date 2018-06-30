@@ -50,10 +50,13 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.0.2'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
 
     kapt 'com.google.dagger:dagger-android-processor:2.15'
     kapt "android.arch.lifecycle:compiler:1.1.1"
     kapt 'com.google.dagger:dagger-compiler:2.16'
+    kapt 'com.github.bumptech.glide:compiler:4.7.1'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.16.0'
