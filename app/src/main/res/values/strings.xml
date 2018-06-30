@@ -15,4 +15,7 @@
     <string name="invalid_email_error">Ten email jest nieprawidłowy</string>
     <string name="already_used_email_error">Ten email już jest używany</string>
     <string name="login_error_text">Coś poszło nie tak :(</string>
+    <string name="your_name_hint">Twoje imię</string>
+    <string name="your_current_rating">Twoja obecna ocena:</string>
+    <string name="save_changes">Zapisz zmiany</string>
 </resources>

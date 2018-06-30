@@ -8,9 +8,10 @@
 
     <LinearLayout
         android:id="@+id/contentViewGroup"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/toolbar"
+        android:layout_centerInParent="true"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:padding="16dp">
@@ -23,6 +24,46 @@
             app:civ_border_color="@color/lightGrey"
             app:civ_border_width="1dp" />
 
+        <TextView
+            android:id="@+id/ratingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="@string/your_current_rating"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="16dp"
+            android:text="@string/your_name_hint" />
+
+        <com.boardly.customviews.BoardlyEditText
+            android:id="@+id/nameEditText"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+
+        <com.boardly.customviews.BoardlyButton
+            android:id="@+id/saveChangesButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/blue_background_selector"
+            android:text="@string/save_changes" />
+
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:visibility="gone" />
 
 </RelativeLayout>
