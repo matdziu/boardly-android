@@ -1,13 +1,16 @@
 package com.boardly.home
 
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import com.boardly.R
+import com.boardly.addevent.AddEventActivity
 import com.boardly.base.BaseDrawerActivity
 import com.boardly.factories.HomeViewModelFactory
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.activity_home.addEventButton
 import javax.inject.Inject
 
 class HomeActivity : BaseDrawerActivity(), HomeView {
@@ -27,6 +30,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         super.onCreate(savedInstanceState)
 
         homeViewModel = ViewModelProviders.of(this, homeViewModelFactory)[HomeViewModel::class.java]
+        addEventButton.setOnClickListener { startActivity(Intent(this, AddEventActivity::class.java)) }
     }
 
     override fun onStart() {
