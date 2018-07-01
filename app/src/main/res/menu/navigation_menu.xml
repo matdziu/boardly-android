@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/profile_item"
+        android:checkable="true"
+        android:icon="@drawable/ic_account_circle_white_18dp"
+        android:title="@string/your_profile_text" />
+
+    <item
+        android:id="@+id/sign_out_item"
+        android:icon="@drawable/ic_first_page_white_18dp"
+        android:title="@string/sign_out_text" />
+
+</menu>

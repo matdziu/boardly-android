@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import com.boardly.R
-import com.boardly.base.BaseActivity
+import com.boardly.base.BaseDrawerActivity
 import com.boardly.editprofile.models.InputData
 import com.boardly.factories.EditProfileViewModelFactory
 import com.boardly.injection.modules.GlideApp
@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.activity_sign_up.progressBar
 import java.io.File
 import javax.inject.Inject
 
-class EditProfileActivity : BaseActivity(), EditProfileView {
+class EditProfileActivity : BaseDrawerActivity(), EditProfileView {
 
     private lateinit var editProfileViewModel: EditProfileViewModel
 
@@ -56,6 +56,11 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
 
     private fun initEmitters() {
         fetchProfileDataSubject = PublishSubject.create()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setNavigationSelection(R.id.profile_item)
     }
 
     override fun onStop() {

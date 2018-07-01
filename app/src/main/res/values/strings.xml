@@ -18,4 +18,8 @@
     <string name="your_name_hint">Twoje imię</string>
     <string name="your_current_rating">Twoja obecna ocena:</string>
     <string name="save_changes">Zapisz zmiany</string>
+    <string name="your_profile_text">Twój profil</string>
+    <string name="sign_out_text">Wyloguj</string>
+    <string name="drawer_opened">Nawigacja otwarta</string>
+    <string name="drawer_closed">Nawigacja zamknięta</string>
 </resources>

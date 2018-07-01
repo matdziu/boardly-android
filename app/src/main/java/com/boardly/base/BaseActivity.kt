@@ -2,6 +2,7 @@ package com.boardly.base
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.DrawableRes
 import android.support.v7.app.AppCompatActivity
@@ -10,11 +11,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import com.boardly.R
 import com.boardly.injection.modules.GlideApp
+import com.boardly.login.LoginActivity
+import com.google.firebase.auth.FirebaseAuth
 
 @SuppressLint("Registered")
 open class BaseActivity : AppCompatActivity() {
 
-    private val toolbar: Toolbar by lazy {
+    protected val toolbar: Toolbar by lazy {
         findViewById<Toolbar>(R.id.toolbar)
     }
 
@@ -24,7 +27,7 @@ open class BaseActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
-    fun showBackToolbarArrow(show: Boolean, backAction: () -> Unit = {}) {
+    open fun showBackToolbarArrow(show: Boolean, backAction: () -> Unit = {}) {
         supportActionBar?.setDisplayHomeAsUpEnabled(show)
         supportActionBar?.setDisplayShowHomeEnabled(show)
         toolbar.setNavigationOnClickListener { backAction() }
@@ -43,5 +46,12 @@ open class BaseActivity : AppCompatActivity() {
                 .load(pictureUrl)
                 .placeholder(placeholderId)
                 .into(imageView)
+    }
+
+    fun signOut() {
+        FirebaseAuth.getInstance().signOut()
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
     }
 }
