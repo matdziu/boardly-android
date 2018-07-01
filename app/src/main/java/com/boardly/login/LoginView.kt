@@ -14,4 +14,6 @@ interface LoginView {
     fun emitGoogleSignIn(): Observable<GoogleSignInAccount>
 
     fun emitFacebookSignIn(): Observable<AccessToken>
+
+    fun emitInitialLoginCheck(): Observable<Boolean>
 }

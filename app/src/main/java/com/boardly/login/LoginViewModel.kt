@@ -12,7 +12,9 @@ class LoginViewModel(private val loginInteractor: LoginInteractor) : ViewModel()
     private val stateSubject = BehaviorSubject.createDefault(LoginViewState())
 
     fun bind(loginView: LoginView) {
-        val isLoggedInObservable = loginInteractor.isLoggedIn()
+        val initialLoginCheckObservable = loginView.emitInitialLoginCheck()
+                .filter { it }
+                .flatMap { loginInteractor.isLoggedIn().startWith(PartialLoginViewState.InProgressState()) }
 
         val googleSignInObservable = loginView.emitGoogleSignIn()
                 .flatMap { loginInteractor.login(it).startWith(PartialLoginViewState.InProgressState()) }
@@ -38,7 +40,7 @@ class LoginViewModel(private val loginInteractor: LoginInteractor) : ViewModel()
 
         val mergedObservable = Observable.merge(listOf(
                 inputDataObservable,
-                isLoggedInObservable,
+                initialLoginCheckObservable,
                 googleSignInObservable,
                 facebookSignInObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))

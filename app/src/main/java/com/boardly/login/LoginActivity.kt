@@ -9,6 +9,7 @@ import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseActivity
 import com.boardly.constants.SIGN_IN_REQUEST_CODE
+import com.boardly.editprofile.EditProfileActivity
 import com.boardly.factories.LoginViewModelFactory
 import com.boardly.home.HomeActivity
 import com.boardly.login.models.InputData
@@ -44,6 +45,7 @@ class LoginActivity : BaseActivity(), LoginView {
 
     private lateinit var googleSignInSubject: Subject<GoogleSignInAccount>
     private lateinit var facebookSignInSubject: Subject<AccessToken>
+    private lateinit var initialLoginCheckSubject: Subject<Boolean>
 
     private lateinit var loginViewModel: LoginViewModel
 
@@ -58,6 +60,8 @@ class LoginActivity : BaseActivity(), LoginView {
 
     @Inject
     lateinit var loginManager: LoginManager
+
+    private var init = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -84,14 +88,17 @@ class LoginActivity : BaseActivity(), LoginView {
         super.onStart()
         initEmitters()
         loginViewModel.bind(this)
+        initialLoginCheckSubject.onNext(init)
     }
 
     private fun initEmitters() {
         googleSignInSubject = PublishSubject.create()
         facebookSignInSubject = PublishSubject.create()
+        initialLoginCheckSubject = PublishSubject.create()
     }
 
     override fun onStop() {
+        init = false
         loginViewModel.unbind()
         super.onStop()
     }
@@ -147,6 +154,8 @@ class LoginActivity : BaseActivity(), LoginView {
         return RxView.clicks(loginButton).map { InputData(emailEditText.text.toString(), passwordEditText.text.toString()) }
     }
 
+    override fun emitInitialLoginCheck(): Observable<Boolean> = initialLoginCheckSubject
+
     override fun render(loginViewState: LoginViewState) {
         hideSoftKeyboard()
         showProgress(loginViewState.inProgress)
@@ -157,8 +166,11 @@ class LoginActivity : BaseActivity(), LoginView {
             Toast.makeText(this, getString(loginViewState.errorMessageId), Toast.LENGTH_SHORT).show()
         }
 
-        if (loginViewState.loginSuccess) {
+        if (loginViewState.loginSuccess && loginViewState.isProfileFilled) {
             startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+        } else if (loginViewState.loginSuccess && !loginViewState.isProfileFilled) {
+            EditProfileActivity.start(this, false)
             finish()
         }
     }

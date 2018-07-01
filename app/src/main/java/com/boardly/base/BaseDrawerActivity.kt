@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
 import com.boardly.R
 import com.boardly.editprofile.EditProfileActivity
+import com.boardly.home.HomeActivity
 
 @SuppressLint("Registered")
 open class BaseDrawerActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -37,7 +38,8 @@ open class BaseDrawerActivity : BaseActivity(), NavigationView.OnNavigationItemS
         return if (!item.isChecked) {
             when (item.itemId) {
                 R.id.sign_out_item -> signOut()
-                R.id.profile_item -> startActivity(Intent(this, EditProfileActivity::class.java))
+                R.id.profile_item -> EditProfileActivity.start(this, true)
+                R.id.events_item -> startActivity(Intent(this, HomeActivity::class.java))
             }
             drawerLayout.closeDrawers()
             true
@@ -60,6 +62,16 @@ open class BaseDrawerActivity : BaseActivity(), NavigationView.OnNavigationItemS
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
             toggle.isDrawerIndicatorEnabled = true
+        }
+    }
+
+    fun showHamburgerIcon(show: Boolean) {
+        if (show) {
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            toggle.isDrawerIndicatorEnabled = true
+        } else {
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            toggle.isDrawerIndicatorEnabled = false
         }
     }
 }

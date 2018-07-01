@@ -22,4 +22,5 @@
     <string name="sign_out_text">Wyloguj</string>
     <string name="drawer_opened">Nawigacja otwarta</string>
     <string name="drawer_closed">Nawigacja zamknięta</string>
+    <string name="events_text">Wydarzenia</string>
 </resources>

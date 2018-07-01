@@ -6,7 +6,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class EditProfileModule {
+class EditProfileActivityModule {
 
     @Provides
     @ActivityScope

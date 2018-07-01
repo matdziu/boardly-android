@@ -1,14 +1,13 @@
 package com.boardly.signup
 
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseActivity
+import com.boardly.editprofile.EditProfileActivity
 import com.boardly.factories.SignUpViewModelFactory
-import com.boardly.home.HomeActivity
 import com.boardly.signup.models.InputData
 import com.jakewharton.rxbinding2.view.RxView
 import dagger.android.AndroidInjection
@@ -56,9 +55,7 @@ class SignUpActivity : BaseActivity(), SignUpView {
         }
 
         if (signUpViewState.signUpSuccess) {
-            val intent = Intent(this, HomeActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(intent)
+            EditProfileActivity.start(this, false)
             finish()
         }
     }

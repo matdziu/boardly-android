@@ -47,7 +47,18 @@ sealed class PartialLoginViewState {
         }
     }
 
-    class LoginSuccess : PartialLoginViewState() {
-        override fun reduce(previousState: LoginViewState) = LoginViewState(loginSuccess = true)
+    class LoginSuccess(private val isProfileFilled: Boolean = true) : PartialLoginViewState() {
+        override fun reduce(previousState: LoginViewState) = LoginViewState(
+                inProgress = true,
+                loginSuccess = true,
+                notLoggedIn = false,
+                isProfileFilled = isProfileFilled)
+    }
+
+    class NotLoggedIn : PartialLoginViewState() {
+        override fun reduce(previousState: LoginViewState) = previousState.copy(
+                inProgress = false,
+                loginSuccess = false,
+                notLoggedIn = true)
     }
 }

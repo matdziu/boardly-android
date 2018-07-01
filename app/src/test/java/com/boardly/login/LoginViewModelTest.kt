@@ -19,13 +19,20 @@ class LoginViewModelTest {
     @Test
     fun testWithCorrectInput() {
         val loginViewRobot = LoginViewRobot(loginViewModel)
-        whenever(loginInteractor.login(any(), any())).thenReturn(Observable.just(PartialLoginViewState.LoginSuccess()))
+        whenever(loginInteractor.login(any(), any())).thenReturn(Observable.just(PartialLoginViewState.LoginSuccess(false)))
 
         loginViewRobot.clickLoginButton("test@test.com", "qwerty")
 
-        loginViewRobot.assertViewStates(LoginViewState(),
-                LoginViewState(inProgress = true),
-                LoginViewState(loginSuccess = true))
+        loginViewRobot.assertViewStates(
+                LoginViewState(),
+                LoginViewState(
+                        inProgress = true),
+                LoginViewState(
+                        inProgress = true),
+                LoginViewState(
+                        inProgress = true,
+                        loginSuccess = true,
+                        notLoggedIn = false))
     }
 
     @Test
@@ -37,6 +44,7 @@ class LoginViewModelTest {
         loginViewRobot.clickLoginButton("", "qwerty")
 
         loginViewRobot.assertViewStates(LoginViewState(),
+                LoginViewState(inProgress = true),
                 LoginViewState(emailValid = false, passwordValid = false),
                 LoginViewState(emailValid = true, passwordValid = false),
                 LoginViewState(emailValid = false, passwordValid = true))
@@ -52,6 +60,8 @@ class LoginViewModelTest {
 
         loginViewRobot.assertViewStates(
                 LoginViewState(),
+                LoginViewState(
+                        inProgress = true),
                 LoginViewState(
                         inProgress = true),
                 LoginViewState(

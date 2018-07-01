@@ -54,10 +54,12 @@
 
         <activity
             android:name=".home.HomeActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".editprofile.EditProfileActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <activity

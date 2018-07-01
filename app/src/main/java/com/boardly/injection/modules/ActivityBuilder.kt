@@ -1,6 +1,7 @@
 package com.boardly.injection.modules
 
 import com.boardly.editprofile.EditProfileActivity
+import com.boardly.home.HomeActivity
 import com.boardly.injection.ActivityScope
 import com.boardly.login.LoginActivity
 import com.boardly.signup.SignUpActivity
@@ -20,6 +21,10 @@ abstract class ActivityBuilder {
     abstract fun bindLoginActivity(): LoginActivity
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = [EditProfileModule::class])
+    @ContributesAndroidInjector(modules = [EditProfileActivityModule::class])
     abstract fun bindEditProfileActivity(): EditProfileActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [HomeActivityModule::class])
+    abstract fun bindHomeActivity(): HomeActivity
 }

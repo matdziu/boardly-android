@@ -8,4 +8,6 @@ data class LoginViewState(val inProgress: Boolean = false,
                           @StringRes val errorMessageId: Int = 0,
                           val error: Boolean = false,
                           val dismissToast: Boolean = false,
-                          val loginSuccess: Boolean = false)
+                          val loginSuccess: Boolean = false,
+                          val isProfileFilled: Boolean = false,
+                          val notLoggedIn: Boolean = true)
