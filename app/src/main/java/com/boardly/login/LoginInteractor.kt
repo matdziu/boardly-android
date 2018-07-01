@@ -36,14 +36,13 @@ class LoginInteractor : BaseInteractor() {
 
     fun isLoggedIn(): Observable<PartialLoginViewState> {
         val resultSubject = PublishSubject.create<PartialLoginViewState>()
-        checkIfProfileIsFilled(currentUserId).addOnSuccessListener {
-            if (firebaseAuth.currentUser != null) {
+        if (firebaseAuth.currentUser != null) {
+            checkIfProfileIsFilled(currentUserId).addOnSuccessListener {
                 resultSubject.onNext(PartialLoginViewState.LoginSuccess(it))
-            } else {
-                resultSubject.onNext(PartialLoginViewState.NotLoggedIn())
             }
+        } else {
+            return Observable.just(PartialLoginViewState.NotLoggedIn())
         }
-
         return resultSubject
     }
 
