@@ -27,12 +27,10 @@
     <string name="number_of_players_hint">Maksymalna ilość graczy</string>
     <string name="pick_game_text">Wybierz grę</string>
     <string name="game_text_placeholder">Nie wybrano gry</string>
-    <string name="city_text_placeholder">Nie wybrano miasta</string>
-    <string name="pick_city_text">Wybierz miasto</string>
+    <string name="place_text_placeholder">Nie wybrano miejsca</string>
+    <string name="pick_place_text">Wybierz miejsce</string>
     <string name="level_text_placeholder">Nie wybrano poziomu</string>
     <string name="pick_level_text">Wybierz poziom (opcjonalnie)</string>
-    <string name="place_text_placeholder">Nie wybrano miejsca</string>
-    <string name="pick_place_text">Wybierz miejsce (opcjonalnie)</string>
     <string name="date_text_placeholder">Nie wybrano daty</string>
     <string name="pick_date_text">Wybierz datę (opcjonalnie)</string>
     <string name="add_new_event">Dodaj wydarzenie</string>
