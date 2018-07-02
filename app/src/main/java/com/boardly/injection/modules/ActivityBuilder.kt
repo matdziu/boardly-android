@@ -5,6 +5,7 @@ import com.boardly.editprofile.EditProfileActivity
 import com.boardly.home.HomeActivity
 import com.boardly.injection.ActivityScope
 import com.boardly.login.LoginActivity
+import com.boardly.pickcity.PickCityActivity
 import com.boardly.signup.SignUpActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -32,4 +33,8 @@ abstract class ActivityBuilder {
     @ActivityScope
     @ContributesAndroidInjector(modules = [AddEventActivityModule::class])
     abstract fun bindAddEventActivity(): AddEventActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [PickCityActivityModule::class])
+    abstract fun bindPickCityActivity(): PickCityActivity
 }

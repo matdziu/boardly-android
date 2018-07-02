@@ -20,7 +20,7 @@ class HomeViewRobot(homeViewModel: HomeViewModel) : BaseViewRobot<HomeViewState>
         homeViewModel.bind(homeView)
     }
 
-    fun emitInitalFetchTrigge() {
+    fun emitInitalFetchTrigger() {
         initialFetchSubject.onNext(true)
     }
 }
