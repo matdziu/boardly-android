@@ -36,4 +36,6 @@
     <string name="add_new_event">Dodaj wydarzenie</string>
     <string name="search_hint">Wpisz a potem zatwierdź</string>
     <string name="search_title">Szukaj</string>
+    <string name="gps_not_available">Google Play Services nie są dostępne</string>
+    <string name="gps_update_needed">Zaktualizuj lub włącz Google Play Services</string>
 </resources>
