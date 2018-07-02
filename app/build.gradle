@@ -55,6 +55,7 @@ dependencies {
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
     implementation 'com.google.firebase:firebase-storage:16.0.1'
     implementation 'com.google.android.gms:play-services-places:15.0.1'
+    implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
 
     kapt 'com.google.dagger:dagger-android-processor:2.15'
     kapt "android.arch.lifecycle:compiler:1.1.1"

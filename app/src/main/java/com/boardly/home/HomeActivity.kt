@@ -1,12 +1,15 @@
 package com.boardly.home
 
+import android.Manifest
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import com.boardly.R
 import com.boardly.addevent.AddEventActivity
 import com.boardly.base.BaseDrawerActivity
 import com.boardly.factories.HomeViewModelFactory
+import com.tbruyelle.rxpermissions2.RxPermissions
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -31,6 +34,8 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
         homeViewModel = ViewModelProviders.of(this, homeViewModelFactory)[HomeViewModel::class.java]
         addEventButton.setOnClickListener { startActivity(Intent(this, AddEventActivity::class.java)) }
+
+        requestLocationPermission()
     }
 
     override fun onStart() {
@@ -59,5 +64,16 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
     override fun render(homeViewState: HomeViewState) {
 
+    }
+
+    private fun requestLocationPermission() {
+        RxPermissions(this)
+                .request(Manifest.permission.ACCESS_COARSE_LOCATION)
+                .subscribe {
+                    if (!it) {
+                        finish()
+                        Toast.makeText(this, R.string.location_permission_denied_text, Toast.LENGTH_LONG).show()
+                    }
+                }
     }
 }
