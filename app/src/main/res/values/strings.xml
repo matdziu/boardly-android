@@ -36,4 +36,6 @@
     <string name="date_text_placeholder">Nie wybrano daty</string>
     <string name="pick_date_text">Wybierz datę (opcjonalnie)</string>
     <string name="add_new_event">Dodaj wydarzenie</string>
+    <string name="search_hint">Wpisz a potem zatwierdź</string>
+    <string name="search_title">Szukaj</string>
 </resources>
