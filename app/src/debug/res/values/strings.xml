@@ -3,4 +3,5 @@
     <string name="app_name">Boardly DEBUG</string>
     <string name="facebook_app_id">272690140134523</string>
     <string name="fb_login_protocol_scheme">fb272690140134523</string>
+    <string name="places_api_key">AIzaSyCZIPrE1bpb4w8sLz0s1wo_INtbvY6BbRo</string>
 </resources>

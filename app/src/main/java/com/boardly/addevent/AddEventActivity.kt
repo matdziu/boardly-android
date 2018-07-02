@@ -5,10 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import com.boardly.R
 import com.boardly.base.BaseActivity
+import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
 import com.boardly.factories.AddEventViewModelFactory
 import com.boardly.pickgame.PickGameActivity
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+import com.google.android.gms.common.GooglePlayServicesRepairableException
+import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_add_event.pickGameButton
+import kotlinx.android.synthetic.main.activity_add_event.pickPlaceButton
 import javax.inject.Inject
 
 class AddEventActivity : BaseActivity(), AddEventView {
@@ -25,7 +30,9 @@ class AddEventActivity : BaseActivity(), AddEventView {
         showBackToolbarArrow(true, this::finish)
 
         addEventViewModel = ViewModelProviders.of(this, addEventViewModelFactory)[AddEventViewModel::class.java]
+
         pickGameButton.setOnClickListener { startActivity(Intent(this, PickGameActivity::class.java)) }
+        pickPlaceButton.setOnClickListener { launchPlaceSearch() }
     }
 
     override fun onStart() {
@@ -40,5 +47,17 @@ class AddEventActivity : BaseActivity(), AddEventView {
 
     override fun render(addEventViewState: AddEventViewState) {
 
+    }
+
+    private fun launchPlaceSearch() {
+        try {
+            val placeSearchIntent = PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                    .build(this)
+            startActivityForResult(placeSearchIntent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
+        } catch (e: GooglePlayServicesRepairableException) {
+
+        } catch (e: GooglePlayServicesNotAvailableException) {
+
+        }
     }
 }
