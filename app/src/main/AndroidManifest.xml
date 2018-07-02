@@ -81,7 +81,7 @@
         </activity>
 
         <activity
-            android:name=".pickcity.PickCityActivity"
+            android:name=".pickgame.PickGameActivity"
             android:screenOrientation="portrait" />
 
     </application>

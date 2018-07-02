@@ -1,16 +1,16 @@
 package com.boardly.injection.modules
 
 import com.boardly.injection.ActivityScope
-import com.boardly.pickcity.PickCityInteractor
+import com.boardly.pickgame.PickGameInteractor
 import dagger.Module
 import dagger.Provides
 
 @Module
-class PickCityActivityModule {
+class PickGameActivityModule {
 
     @Provides
     @ActivityScope
-    fun providePickCityInteractor(): PickCityInteractor {
-        return PickCityInteractor()
+    fun providePickGameInteractor(): PickGameInteractor {
+        return PickGameInteractor()
     }
 }

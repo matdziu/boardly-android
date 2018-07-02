@@ -6,7 +6,7 @@ import android.os.Bundle
 import com.boardly.R
 import com.boardly.base.BaseActivity
 import com.boardly.factories.AddEventViewModelFactory
-import com.boardly.pickcity.PickCityActivity
+import com.boardly.pickgame.PickGameActivity
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_add_event.pickCityButton
 import javax.inject.Inject
@@ -25,7 +25,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
         showBackToolbarArrow(true, this::finish)
 
         addEventViewModel = ViewModelProviders.of(this, addEventViewModelFactory)[AddEventViewModel::class.java]
-        pickCityButton.setOnClickListener { startActivity(Intent(this, PickCityActivity::class.java)) }
+        pickCityButton.setOnClickListener { startActivity(Intent(this, PickGameActivity::class.java)) }
     }
 
     override fun onStart() {
