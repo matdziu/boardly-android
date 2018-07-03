@@ -6,7 +6,7 @@ import dagger.Provides
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.jaxb.JaxbConverterFactory
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -18,7 +18,7 @@ class NetworkModule {
         return Retrofit.Builder()
                 .baseUrl(BuildConfig.BGG_API_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-                .addConverterFactory(JaxbConverterFactory.create())
+                .addConverterFactory(SimpleXmlConverterFactory.create())
                 .build()
     }
 }

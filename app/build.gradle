@@ -23,13 +23,13 @@ android {
         def BGG_API_URL = "BGG_API_URL"
         debug {
             buildConfigField "String", OAUTH_CLIENT_ID, "\"196233843818-aluarmqrskkkn5t82svife5rn5htep5k.apps.googleusercontent.com\""
-            buildConfigField "String", BGG_API_URL, "\"https://www.boardgamegeek.com/xmlapi/\""
+            buildConfigField "String", BGG_API_URL, "\"https://www.boardgamegeek.com/xmlapi2/\""
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
         }
         release {
             minifyEnabled true
-            buildConfigField "String", BGG_API_URL, "\"https://www.boardgamegeek.com/xmlapi/\""
+            buildConfigField "String", BGG_API_URL, "\"https://www.boardgamegeek.com/xmlapi2/\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -61,7 +61,7 @@ dependencies {
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-jaxb:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-simplexml:2.4.0'
 
     kapt 'com.google.dagger:dagger-android-processor:2.15'
     kapt "android.arch.lifecycle:compiler:1.1.1"
