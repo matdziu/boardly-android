@@ -51,6 +51,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/numberOfPlayersHintTextView" />
 
+            <TextView
+                android:id="@+id/descriptionTextVieHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/description_hint"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/numberOfPlayersEditText" />
+
+            <com.boardly.customviews.BoardlyEditText
+                android:id="@+id/descriptionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/descriptionTextVieHint" />
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/boardGameImageView"
                 android:layout_width="120dp"
@@ -62,7 +79,7 @@
                 app:civ_border_width="1dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/numberOfPlayersEditText" />
+                app:layout_constraintTop_toBottomOf="@id/descriptionEditText" />
 
             <TextView
                 android:id="@+id/boardGameTextView"
