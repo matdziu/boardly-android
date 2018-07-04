@@ -13,6 +13,7 @@ class PickGameViewModel(private val pickGameInteractor: PickGameInteractor) : Vi
 
     fun bind(pickGameView: PickGameView) {
         pickGameView.emitQuery()
+                .filter { it.length > 1 }
                 .flatMap { pickGameInteractor.fetchSearchResults(it).startWith(PartialPickGameViewState.ProgressState()) }
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .observeOn(AndroidSchedulers.mainThread())

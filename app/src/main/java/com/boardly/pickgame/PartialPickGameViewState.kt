@@ -18,7 +18,7 @@ sealed class PartialPickGameViewState {
 
     class ErrorState(private val throwable: Throwable, private val unacceptedQuery: String) : PartialPickGameViewState() {
         override fun reduce(previousState: PickGameViewState): PickGameViewState {
-            return previousState.copy(error = throwable, unacceptedQuery = unacceptedQuery)
+            return PickGameViewState(error = throwable, unacceptedQuery = unacceptedQuery)
         }
     }
 }

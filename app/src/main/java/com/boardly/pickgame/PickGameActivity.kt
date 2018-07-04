@@ -86,7 +86,6 @@ class PickGameActivity : BaseSearchActivity(), PickGameView {
     }
 
     override fun emitQuery(): Observable<String> =
-            searchInput
-                    .debounce(300, TimeUnit.MILLISECONDS)
+            searchInput.debounce(300, TimeUnit.MILLISECONDS)
                     .distinctUntilChanged()
 }
