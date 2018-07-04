@@ -55,9 +55,9 @@ class PickGameActivity : BaseSearchActivity(), PickGameView {
 
     override fun render(pickGameViewState: PickGameViewState) {
         with(pickGameViewState) {
-            showProgressBar(progress && error == null)
-            showNoResultsPrompt(searchResults.isEmpty() && !progress)
-            showContent(searchResults.isNotEmpty() && !progress)
+            showProgressBar(progress)
+            showNoResultsPrompt(searchResults.isEmpty() && !progress && error == null)
+            showContent(searchResults.isNotEmpty() && !progress && error == null)
             showTimeOutPrompt(error is SocketTimeoutException, unacceptedQuery)
             searchResultsAdapter.submitList(searchResults)
         }
