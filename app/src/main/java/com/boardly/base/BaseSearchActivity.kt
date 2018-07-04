@@ -57,6 +57,6 @@ abstract class BaseSearchActivity : BaseActivity() {
 
     private fun formatAndEmitQuery(rawQuery: String, subject: Subject<String>) {
         val formattedQuery = rawQuery.trim().toLowerCase()
-        if (formattedQuery.isNotBlank()) subject.onNext(formattedQuery)
+        if (formattedQuery.length > 1) subject.onNext(formattedQuery)
     }
 }

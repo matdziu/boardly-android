@@ -41,4 +41,5 @@
     <string name="location_permission_denied_text">Dzięki informacji o lokalizacji możemy znaleźć odpowiednie wydarzenia</string>
     <string name="description_hint">Opis wydarzenia (opcjonalnie)</string>
     <string name="no_search_results_text">Brak wyników</string>
+    <string name="be_more_specific_error_text">Dla \'%1$s\' jest zbyt dużo wyników. Spróbuj sprecyzować.</string>
 </resources>

@@ -15,4 +15,10 @@ sealed class PartialPickGameViewState {
             return PickGameViewState(searchResults = searchResults)
         }
     }
+
+    class ErrorState(private val throwable: Throwable, private val unacceptedQuery: String) : PartialPickGameViewState() {
+        override fun reduce(previousState: PickGameViewState): PickGameViewState {
+            return previousState.copy(error = throwable, unacceptedQuery = unacceptedQuery)
+        }
+    }
 }

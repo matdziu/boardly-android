@@ -10,9 +10,11 @@ import com.boardly.factories.PickGameViewModelFactory
 import com.boardly.pickgame.list.SearchResultsAdapter
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.activity_pick_game.noResultsTextView
+import kotlinx.android.synthetic.main.activity_pick_game.noSearchResultsTextView
 import kotlinx.android.synthetic.main.activity_pick_game.progressBar
 import kotlinx.android.synthetic.main.activity_pick_game.searchResultsRecyclerView
+import kotlinx.android.synthetic.main.activity_pick_game.timeOutTextView
+import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -53,9 +55,10 @@ class PickGameActivity : BaseSearchActivity(), PickGameView {
 
     override fun render(pickGameViewState: PickGameViewState) {
         with(pickGameViewState) {
-            showProgressBar(progress)
+            showProgressBar(progress && error == null)
             showNoResultsPrompt(searchResults.isEmpty() && !progress)
             showContent(searchResults.isNotEmpty() && !progress)
+            showTimeOutPrompt(error is SocketTimeoutException, unacceptedQuery)
             searchResultsAdapter.submitList(searchResults)
         }
     }
@@ -67,12 +70,19 @@ class PickGameActivity : BaseSearchActivity(), PickGameView {
 
     private fun showNoResultsPrompt(show: Boolean) {
         val visibility = if (show) View.VISIBLE else View.GONE
-        noResultsTextView.visibility = visibility
+        noSearchResultsTextView.visibility = visibility
+        noSearchResultsTextView.text = getString(R.string.no_search_results_text)
     }
 
     private fun showContent(show: Boolean) {
         val visibility = if (show) View.VISIBLE else View.GONE
         searchResultsRecyclerView.visibility = visibility
+    }
+
+    private fun showTimeOutPrompt(show: Boolean, query: String) {
+        val visibility = if (show) View.VISIBLE else View.GONE
+        timeOutTextView.visibility = visibility
+        timeOutTextView.text = getString(R.string.be_more_specific_error_text, query)
     }
 
     override fun emitQuery(): Observable<String> =
