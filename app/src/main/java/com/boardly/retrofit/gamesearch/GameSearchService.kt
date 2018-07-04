@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 interface GameSearchService {
 
-    @GET("search?type=boardgame,boardgameexpansion")
+    @GET("search?type=boardgame")
     fun search(@Query("query") query: String): Observable<SearchResponse>
 
     @GET("thing")
