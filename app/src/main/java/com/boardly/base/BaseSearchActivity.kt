@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.widget.SearchView
 import com.boardly.R
 import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 
 abstract class BaseSearchActivity : BaseActivity() {
 
@@ -28,13 +29,13 @@ abstract class BaseSearchActivity : BaseActivity() {
         searchView.requestFocus()
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                val formattedQuery = query.trim().toLowerCase()
-                if (formattedQuery.isNotBlank()) searchInput.onNext(formattedQuery)
+                formatAndEmitQuery(query, searchInput)
                 return false
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
+            override fun onQueryTextChange(newText: String): Boolean {
+                formatAndEmitQuery(newText, searchInput)
+                return false
             }
         })
 
@@ -52,5 +53,10 @@ abstract class BaseSearchActivity : BaseActivity() {
         })
 
         return true
+    }
+
+    private fun formatAndEmitQuery(rawQuery: String, subject: Subject<String>) {
+        val formattedQuery = rawQuery.trim().toLowerCase()
+        if (formattedQuery.isNotBlank()) subject.onNext(formattedQuery)
     }
 }

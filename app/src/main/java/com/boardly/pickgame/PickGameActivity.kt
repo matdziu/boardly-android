@@ -13,6 +13,7 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_pick_game.noResultsTextView
 import kotlinx.android.synthetic.main.activity_pick_game.progressBar
 import kotlinx.android.synthetic.main.activity_pick_game.searchResultsRecyclerView
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class PickGameActivity : BaseSearchActivity(), PickGameView {
@@ -74,5 +75,8 @@ class PickGameActivity : BaseSearchActivity(), PickGameView {
         searchResultsRecyclerView.visibility = visibility
     }
 
-    override fun emitQuery(): Observable<String> = searchInput
+    override fun emitQuery(): Observable<String> =
+            searchInput
+                    .debounce(300, TimeUnit.MILLISECONDS)
+                    .distinctUntilChanged()
 }
