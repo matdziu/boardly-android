@@ -40,4 +40,5 @@
     <string name="gps_update_needed">Zaktualizuj lub włącz Google Play Services</string>
     <string name="location_permission_denied_text">Dzięki informacji o lokalizacji możemy znaleźć odpowiednie wydarzenia</string>
     <string name="description_hint">Opis wydarzenia (opcjonalnie)</string>
+    <string name="no_search_results_text">Brak wyników</string>
 </resources>

@@ -1,3 +1,6 @@
 package com.boardly.pickgame
 
-data class PickGameViewState(val progress: Boolean = false)
+import com.boardly.retrofit.gamesearch.models.SearchResult
+
+data class PickGameViewState(val progress: Boolean = false,
+                             val searchResults: List<SearchResult> = listOf())
