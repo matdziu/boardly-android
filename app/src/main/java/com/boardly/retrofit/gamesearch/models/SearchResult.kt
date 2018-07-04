@@ -5,17 +5,11 @@ import com.tickaroo.tikxml.annotation.Path
 import com.tickaroo.tikxml.annotation.Xml
 
 @Xml(name = "item")
-data class SearchResult @JvmOverloads constructor(@field:Attribute var type: String = "",
-
-                                                  @field:Attribute var id: Int = 0,
+data class SearchResult @JvmOverloads constructor(@field:Attribute var id: Int = 0,
 
                                                   @field:Path("name")
                                                   @field:Attribute(name = "value")
                                                   var name: String = "",
-
-                                                  @field:Path("name")
-                                                  @field:Attribute(name = "type")
-                                                  var nameType: String = "",
 
                                                   @field:Path("yearpublished")
                                                   @field:Attribute(name = "value")
