@@ -13,6 +13,8 @@ import javax.inject.Inject
 
 class PickGameActivity : BaseSearchActivity(), PickGameView {
 
+    override val searchHintResId: Int = R.string.search_game_hint
+
     @Inject
     lateinit var pickGameViewModelFactory: PickGameViewModelFactory
 

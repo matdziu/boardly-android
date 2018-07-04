@@ -1,6 +1,5 @@
 package com.boardly.base
 
-import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.view.Menu
@@ -9,9 +8,9 @@ import android.widget.SearchView
 import com.boardly.R
 import io.reactivex.subjects.PublishSubject
 
+abstract class BaseSearchActivity : BaseActivity() {
 
-@SuppressLint("Registered")
-open class BaseSearchActivity : BaseActivity() {
+    abstract val searchHintResId: Int
 
     protected var searchInput = PublishSubject.create<String>()
 
@@ -25,7 +24,7 @@ open class BaseSearchActivity : BaseActivity() {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.setIconifiedByDefault(false)
         searchView.maxWidth = Integer.MAX_VALUE
-        searchView.queryHint = getString(R.string.search_hint)
+        searchView.queryHint = getString(searchHintResId)
         searchView.requestFocus()
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
