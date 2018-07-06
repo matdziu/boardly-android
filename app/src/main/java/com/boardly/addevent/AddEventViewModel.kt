@@ -16,7 +16,10 @@ class AddEventViewModel(private val addEventInteractor: AddEventInteractor) : Vi
         val pickedGameIdObservable = addEventView.emitPickedGameId()
                 .flatMap { addEventInteractor.fetchGameDetails(it) }
 
-        val mergedObservable = Observable.merge(listOf(pickedGameIdObservable))
+        val inputDataObservable = addEventView.emitInputData()
+                .flatMap { Observable.just(PartialAddEventViewState.ProgressState()) }
+
+        val mergedObservable = Observable.merge(listOf(pickedGameIdObservable, inputDataObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(stateSubject)

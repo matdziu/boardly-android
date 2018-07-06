@@ -21,13 +21,18 @@ import com.boardly.retrofit.gamesearch.models.SearchResult
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
+import com.jakewharton.rxbinding2.view.RxView
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.activity_add_event.addEventButton
 import kotlinx.android.synthetic.main.activity_add_event.boardGameImageView
 import kotlinx.android.synthetic.main.activity_add_event.boardGameTextView
 import kotlinx.android.synthetic.main.activity_add_event.dateTextView
+import kotlinx.android.synthetic.main.activity_add_event.descriptionEditText
+import kotlinx.android.synthetic.main.activity_add_event.eventNameEditText
 import kotlinx.android.synthetic.main.activity_add_event.levelTextView
+import kotlinx.android.synthetic.main.activity_add_event.numberOfPlayersEditText
 import kotlinx.android.synthetic.main.activity_add_event.pickDateButton
 import kotlinx.android.synthetic.main.activity_add_event.pickGameButton
 import kotlinx.android.synthetic.main.activity_add_event.pickLevelButton
@@ -46,7 +51,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
 
     private lateinit var pickedGameIdSubject: PublishSubject<String>
 
-    private var currentDate: Date? = null
+    private val inputData = InputData()
 
     private val levelNames = listOf(
             R.string.beginner_level,
@@ -107,7 +112,11 @@ class AddEventActivity : BaseActivity(), AddEventView {
         when (resultCode) {
             Activity.RESULT_OK -> {
                 val place = PlaceAutocomplete.getPlace(this, data)
-                placeTextView.text = place.address
+                with(place) {
+                    inputData.placeLatitude = latLng.latitude
+                    inputData.placeLongitude = latLng.longitude
+                    placeTextView.text = address
+                }
             }
             PlaceAutocomplete.RESULT_ERROR -> showErrorToast(R.string.generic_error)
             Activity.RESULT_CANCELED -> hideSoftKeyboard()
@@ -118,8 +127,11 @@ class AddEventActivity : BaseActivity(), AddEventView {
         when (resultCode) {
             Activity.RESULT_OK -> {
                 val pickedGame = data.getParcelableExtra<SearchResult>(PICKED_GAME)
-                boardGameTextView.text = pickedGame.name
-                pickedGameIdSubject.onNext(pickedGame.id.toString())
+                with(pickedGame) {
+                    boardGameTextView.text = name
+                    inputData.gameId = id.toString()
+                    pickedGameIdSubject.onNext(id.toString())
+                }
             }
         }
     }
@@ -146,7 +158,9 @@ class AddEventActivity : BaseActivity(), AddEventView {
         AlertDialog.Builder(this)
                 .setTitle(R.string.pick_level_title)
                 .setItems(levelNames.map { getString(it) }.toTypedArray(), { _, which ->
-                    val clickedItemName = getString(levelNames[which])
+                    val itemNameResId = levelNames[which]
+                    val clickedItemName = getString(itemNameResId)
+                    inputData.levelId = levelIdsMap[itemNameResId] ?: ""
                     levelTextView.text = clickedItemName
                 })
                 .create()
@@ -170,7 +184,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
                     dayOfMonth,
                     hourOfDay,
                     minute)
-            currentDate = pickedDate
+            inputData.timestamp = pickedDate.time
             dateTextView.text = pickedDate.formatForAddEventScreen()
         }
         timePickerDialog.show(supportFragmentManager, "timePicker")
@@ -191,4 +205,13 @@ class AddEventActivity : BaseActivity(), AddEventView {
     }
 
     override fun emitPickedGameId(): Observable<String> = pickedGameIdSubject
+
+    override fun emitInputData(): Observable<InputData> = RxView.clicks(addEventButton)
+            .map {
+                inputData.apply {
+                    eventName = eventNameEditText.text.toString()
+                    maxPlayers = numberOfPlayersEditText.text.toString().toInt()
+                    description = descriptionEditText.text.toString()
+                }
+            }
 }
