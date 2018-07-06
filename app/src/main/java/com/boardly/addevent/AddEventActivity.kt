@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v4.content.ContextCompat
+import android.view.View
 import android.widget.Toast
 import com.boardly.R
 import com.boardly.addevent.dialogs.DatePickerFragment
@@ -29,6 +30,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_add_event.addEventButton
 import kotlinx.android.synthetic.main.activity_add_event.boardGameImageView
 import kotlinx.android.synthetic.main.activity_add_event.boardGameTextView
+import kotlinx.android.synthetic.main.activity_add_event.contentViewGroup
 import kotlinx.android.synthetic.main.activity_add_event.dateTextView
 import kotlinx.android.synthetic.main.activity_add_event.descriptionEditText
 import kotlinx.android.synthetic.main.activity_add_event.eventNameEditText
@@ -39,6 +41,7 @@ import kotlinx.android.synthetic.main.activity_add_event.pickGameButton
 import kotlinx.android.synthetic.main.activity_add_event.pickLevelButton
 import kotlinx.android.synthetic.main.activity_add_event.pickPlaceButton
 import kotlinx.android.synthetic.main.activity_add_event.placeTextView
+import kotlinx.android.synthetic.main.activity_add_event.progressBar
 import java.util.*
 import javax.inject.Inject
 
@@ -106,6 +109,11 @@ class AddEventActivity : BaseActivity(), AddEventView {
     override fun render(addEventViewState: AddEventViewState) {
         with(addEventViewState) {
             loadImageFromUrl(boardGameImageView, selectedGame.image, R.drawable.board_game_placeholder)
+            eventNameEditText.showError(!eventNameValid)
+            numberOfPlayersEditText.showError(!numberOfPlayersValid)
+            showPickedGameError(!selectedGameValid)
+            showPickedPlaceError(!selectedPlaceValid)
+            showProgressBar(progress)
         }
     }
 
@@ -116,6 +124,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
                 with(place) {
                     inputData.placeLatitude = latLng.latitude
                     inputData.placeLongitude = latLng.longitude
+                    showPickedPlaceError(false)
                     placeTextView.text = address
                 }
             }
@@ -129,6 +138,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
             Activity.RESULT_OK -> {
                 val pickedGame = data.getParcelableExtra<SearchResult>(PICKED_GAME)
                 with(pickedGame) {
+                    showPickedGameError(false)
                     boardGameTextView.text = name
                     inputData.gameId = id.toString()
                     pickedGameIdSubject.onNext(id.toString())
@@ -210,9 +220,9 @@ class AddEventActivity : BaseActivity(), AddEventView {
     override fun emitInputData(): Observable<InputData> = RxView.clicks(addEventButton)
             .map {
                 inputData.apply {
-                    eventName = eventNameEditText.text.toString()
+                    eventName = eventNameEditText.text.toString().trim()
                     maxPlayers = numberOfPlayersEditText.text.toString().toIntOrNull() ?: 0
-                    description = descriptionEditText.text.toString()
+                    description = descriptionEditText.text.toString().trim()
                 }
             }
 
@@ -229,6 +239,16 @@ class AddEventActivity : BaseActivity(), AddEventView {
             placeTextView.setTextColor(ContextCompat.getColor(this, R.color.errorRed))
         } else {
             placeTextView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText))
+        }
+    }
+
+    private fun showProgressBar(show: Boolean) {
+        if (show) {
+            contentViewGroup.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
+        } else {
+            contentViewGroup.visibility = View.VISIBLE
+            progressBar.visibility = View.GONE
         }
     }
 }

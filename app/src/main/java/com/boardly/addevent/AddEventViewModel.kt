@@ -17,7 +17,25 @@ class AddEventViewModel(private val addEventInteractor: AddEventInteractor) : Vi
                 .flatMap { addEventInteractor.fetchGameDetails(it) }
 
         val inputDataObservable = addEventView.emitInputData()
-                .flatMap { Observable.just(PartialAddEventViewState.ProgressState()) }
+                .flatMap {
+                    val eventNameValid = it.eventName.isNotBlank()
+                    val numberOfPlayersValid = it.maxPlayers > 0
+                    val selectedGameValid = it.gameId.isNotBlank()
+                    val selectedPlaceValid = it.placeLatitude != null && it.placeLongitude != null
+
+                    if (eventNameValid
+                            && numberOfPlayersValid
+                            && selectedGameValid
+                            && selectedPlaceValid) {
+                        Observable.just(PartialAddEventViewState.ProgressState())
+                    } else {
+                        Observable.just(PartialAddEventViewState.LocalValidation(
+                                eventNameValid,
+                                numberOfPlayersValid,
+                                selectedGameValid,
+                                selectedPlaceValid))
+                    }
+                }
 
         val mergedObservable = Observable.merge(listOf(pickedGameIdObservable, inputDataObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
