@@ -8,13 +8,17 @@ import android.support.annotation.StringRes
 import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseActivity
+import com.boardly.constants.PICKED_GAME
+import com.boardly.constants.PICK_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
 import com.boardly.factories.AddEventViewModelFactory
 import com.boardly.pickgame.PickGameActivity
+import com.boardly.retrofit.gamesearch.models.SearchResult
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import dagger.android.AndroidInjection
+import kotlinx.android.synthetic.main.activity_add_event.boardGameTextView
 import kotlinx.android.synthetic.main.activity_add_event.pickGameButton
 import kotlinx.android.synthetic.main.activity_add_event.pickPlaceButton
 import kotlinx.android.synthetic.main.activity_add_event.placeTextView
@@ -36,8 +40,8 @@ class AddEventActivity : BaseActivity(), AddEventView {
 
         addEventViewModel = ViewModelProviders.of(this, addEventViewModelFactory)[AddEventViewModel::class.java]
 
-        pickGameButton.setOnClickListener { startActivity(Intent(this, PickGameActivity::class.java)) }
-        pickPlaceButton.setOnClickListener { launchPlaceSearch() }
+        pickGameButton.setOnClickListener { launchGamePickScreen() }
+        pickPlaceButton.setOnClickListener { launchPlacePickScreen() }
     }
 
     override fun onStart() {
@@ -51,15 +55,9 @@ class AddEventActivity : BaseActivity(), AddEventView {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-            when (resultCode) {
-                Activity.RESULT_OK -> {
-                    val place = PlaceAutocomplete.getPlace(this, data)
-                    placeTextView.text = place.address
-                }
-                PlaceAutocomplete.RESULT_ERROR -> showErrorToast(R.string.generic_error)
-                Activity.RESULT_CANCELED -> hideSoftKeyboard()
-            }
+        when (requestCode) {
+            PLACE_AUTOCOMPLETE_REQUEST_CODE -> handleAutoCompleteResult(resultCode, data)
+            PICK_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data)
         }
     }
 
@@ -68,7 +66,27 @@ class AddEventActivity : BaseActivity(), AddEventView {
 
     }
 
-    private fun launchPlaceSearch() {
+    private fun handleAutoCompleteResult(resultCode: Int, data: Intent) {
+        when (resultCode) {
+            Activity.RESULT_OK -> {
+                val place = PlaceAutocomplete.getPlace(this, data)
+                placeTextView.text = place.address
+            }
+            PlaceAutocomplete.RESULT_ERROR -> showErrorToast(R.string.generic_error)
+            Activity.RESULT_CANCELED -> hideSoftKeyboard()
+        }
+    }
+
+    private fun handlePickGameResult(resultCode: Int, data: Intent) {
+        when (resultCode) {
+            Activity.RESULT_OK -> {
+                val pickedGame = data.getParcelableExtra<SearchResult>(PICKED_GAME)
+                boardGameTextView.text = pickedGame.name
+            }
+        }
+    }
+
+    private fun launchPlacePickScreen() {
         try {
             val placeSearchIntent = PlaceAutocomplete
                     .IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
@@ -79,6 +97,11 @@ class AddEventActivity : BaseActivity(), AddEventView {
         } catch (e: GooglePlayServicesNotAvailableException) {
             showErrorToast(R.string.gps_not_available)
         }
+    }
+
+    private fun launchGamePickScreen() {
+        val pickGameIntent = Intent(this, PickGameActivity::class.java)
+        startActivityForResult(pickGameIntent, PICK_GAME_REQUEST_CODE)
     }
 
     private fun showErrorToast(@StringRes errorTextId: Int) {
