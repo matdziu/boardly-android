@@ -58,6 +58,8 @@ class AddEventActivity : BaseActivity(), AddEventView {
 
     private val inputData = InputData()
 
+    private var gamePickEvent = false
+
     private val levelNames = listOf(
             R.string.beginner_level,
             R.string.intermediate_level,
@@ -86,6 +88,9 @@ class AddEventActivity : BaseActivity(), AddEventView {
         super.onStart()
         initEmitters()
         addEventViewModel.bind(this)
+
+        if (gamePickEvent) gamePickEventSubject.onNext(inputData.gameId)
+        gamePickEvent = false
     }
 
     private fun initEmitters() {
@@ -126,8 +131,11 @@ class AddEventActivity : BaseActivity(), AddEventView {
                 with(place) {
                     inputData.placeLatitude = latLng.latitude
                     inputData.placeLongitude = latLng.longitude
-                    placePickEventSubject.onNext(true)
                     placeTextView.text = address
+
+                    // Somehow default Places API Activity does not trigger onStop() of AddEventActivity
+                    // so it's ok to emit event here
+                    placePickEventSubject.onNext(true)
                 }
             }
             PlaceAutocomplete.RESULT_ERROR -> showErrorToast(R.string.generic_error)
@@ -142,7 +150,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
                 with(pickedGame) {
                     boardGameTextView.text = name
                     inputData.gameId = id.toString()
-                    gamePickEventSubject.onNext(id.toString())
+                    gamePickEvent = true
                 }
             }
         }
