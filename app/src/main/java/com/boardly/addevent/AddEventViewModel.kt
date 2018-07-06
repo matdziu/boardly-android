@@ -13,8 +13,11 @@ class AddEventViewModel(private val addEventInteractor: AddEventInteractor) : Vi
     private val stateSubject = BehaviorSubject.createDefault(AddEventViewState())
 
     fun bind(addEventView: AddEventView) {
-        val pickedGameIdObservable = addEventView.emitPickedGameId()
-                .flatMap { addEventInteractor.fetchGameDetails(it) }
+        val gamePickEventObservable = addEventView.emitGamePickEvent()
+                .flatMap { addEventInteractor.fetchGameDetails(it).startWith(PartialAddEventViewState.GamePickedState()) }
+
+        val placePickEventObservable = addEventView.emitPlacePickEvent()
+                .map { PartialAddEventViewState.PlacePickedState() }
 
         val inputDataObservable = addEventView.emitInputData()
                 .flatMap {
@@ -37,7 +40,10 @@ class AddEventViewModel(private val addEventInteractor: AddEventInteractor) : Vi
                     }
                 }
 
-        val mergedObservable = Observable.merge(listOf(pickedGameIdObservable, inputDataObservable))
+        val mergedObservable = Observable.merge(listOf(
+                gamePickEventObservable,
+                placePickEventObservable,
+                inputDataObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(stateSubject)

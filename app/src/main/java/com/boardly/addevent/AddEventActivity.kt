@@ -53,7 +53,8 @@ class AddEventActivity : BaseActivity(), AddEventView {
 
     private lateinit var addEventViewModel: AddEventViewModel
 
-    private lateinit var pickedGameIdSubject: PublishSubject<String>
+    private lateinit var gamePickEventSubject: PublishSubject<String>
+    private lateinit var placePickEventSubject: PublishSubject<Boolean>
 
     private val inputData = InputData()
 
@@ -88,7 +89,8 @@ class AddEventActivity : BaseActivity(), AddEventView {
     }
 
     private fun initEmitters() {
-        pickedGameIdSubject = PublishSubject.create()
+        gamePickEventSubject = PublishSubject.create()
+        placePickEventSubject = PublishSubject.create()
     }
 
     override fun onStop() {
@@ -111,9 +113,9 @@ class AddEventActivity : BaseActivity(), AddEventView {
             loadImageFromUrl(boardGameImageView, selectedGame.image, R.drawable.board_game_placeholder)
             eventNameEditText.showError(!eventNameValid)
             numberOfPlayersEditText.showError(!numberOfPlayersValid)
+            showProgressBar(progress)
             showPickedGameError(!selectedGameValid)
             showPickedPlaceError(!selectedPlaceValid)
-            showProgressBar(progress)
         }
     }
 
@@ -124,7 +126,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
                 with(place) {
                     inputData.placeLatitude = latLng.latitude
                     inputData.placeLongitude = latLng.longitude
-                    showPickedPlaceError(false)
+                    placePickEventSubject.onNext(true)
                     placeTextView.text = address
                 }
             }
@@ -138,10 +140,9 @@ class AddEventActivity : BaseActivity(), AddEventView {
             Activity.RESULT_OK -> {
                 val pickedGame = data.getParcelableExtra<SearchResult>(PICKED_GAME)
                 with(pickedGame) {
-                    showPickedGameError(false)
                     boardGameTextView.text = name
                     inputData.gameId = id.toString()
-                    pickedGameIdSubject.onNext(id.toString())
+                    gamePickEventSubject.onNext(id.toString())
                 }
             }
         }
@@ -215,8 +216,6 @@ class AddEventActivity : BaseActivity(), AddEventView {
         Toast.makeText(this, errorTextId, Toast.LENGTH_LONG).show()
     }
 
-    override fun emitPickedGameId(): Observable<String> = pickedGameIdSubject
-
     override fun emitInputData(): Observable<InputData> = RxView.clicks(addEventButton)
             .map {
                 inputData.apply {
@@ -225,6 +224,10 @@ class AddEventActivity : BaseActivity(), AddEventView {
                     description = descriptionEditText.text.toString().trim()
                 }
             }
+
+    override fun emitPlacePickEvent(): Observable<Boolean> = placePickEventSubject
+
+    override fun emitGamePickEvent(): Observable<String> = gamePickEventSubject
 
     private fun showPickedGameError(show: Boolean) {
         if (show) {

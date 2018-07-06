@@ -16,6 +16,18 @@ sealed class PartialAddEventViewState {
         }
     }
 
+    class GamePickedState : PartialAddEventViewState() {
+        override fun reduce(previousState: AddEventViewState): AddEventViewState {
+            return previousState.copy(selectedGameValid = true)
+        }
+    }
+
+    class PlacePickedState : PartialAddEventViewState() {
+        override fun reduce(previousState: AddEventViewState): AddEventViewState {
+            return previousState.copy(selectedPlaceValid = true)
+        }
+    }
+
     data class LocalValidation(private val eventNameValid: Boolean = true,
                                private val numberOfPlayersValid: Boolean = true,
                                private val selectedGameValid: Boolean = true,
