@@ -23,6 +23,7 @@ class SearchResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
             setOnClickListener {
                 parentActivity.setResult(RESULT_OK, resultIntent)
+                parentActivity.hideSoftKeyboard()
                 parentActivity.finish()
             }
         }

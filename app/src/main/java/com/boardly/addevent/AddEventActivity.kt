@@ -18,6 +18,9 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import dagger.android.AndroidInjection
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.activity_add_event.boardGameImageView
 import kotlinx.android.synthetic.main.activity_add_event.boardGameTextView
 import kotlinx.android.synthetic.main.activity_add_event.pickGameButton
 import kotlinx.android.synthetic.main.activity_add_event.pickPlaceButton
@@ -31,6 +34,8 @@ class AddEventActivity : BaseActivity(), AddEventView {
     lateinit var addEventViewModelFactory: AddEventViewModelFactory
 
     private lateinit var addEventViewModel: AddEventViewModel
+
+    private lateinit var pickedGameIdSubject: PublishSubject<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -46,7 +51,12 @@ class AddEventActivity : BaseActivity(), AddEventView {
 
     override fun onStart() {
         super.onStart()
+        initEmitters()
         addEventViewModel.bind(this)
+    }
+
+    private fun initEmitters() {
+        pickedGameIdSubject = PublishSubject.create()
     }
 
     override fun onStop() {
@@ -54,16 +64,20 @@ class AddEventActivity : BaseActivity(), AddEventView {
         super.onStop()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        when (requestCode) {
-            PLACE_AUTOCOMPLETE_REQUEST_CODE -> handleAutoCompleteResult(resultCode, data)
-            PICK_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (data != null) {
+            when (requestCode) {
+                PLACE_AUTOCOMPLETE_REQUEST_CODE -> handleAutoCompleteResult(resultCode, data)
+                PICK_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data)
+            }
         }
     }
 
 
     override fun render(addEventViewState: AddEventViewState) {
-
+        with(addEventViewState) {
+            loadImageFromUrl(boardGameImageView, selectedGame.image, R.drawable.board_game_placeholder)
+        }
     }
 
     private fun handleAutoCompleteResult(resultCode: Int, data: Intent) {
@@ -82,6 +96,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
             Activity.RESULT_OK -> {
                 val pickedGame = data.getParcelableExtra<SearchResult>(PICKED_GAME)
                 boardGameTextView.text = pickedGame.name
+                pickedGameIdSubject.onNext(pickedGame.id.toString())
             }
         }
     }
@@ -107,4 +122,6 @@ class AddEventActivity : BaseActivity(), AddEventView {
     private fun showErrorToast(@StringRes errorTextId: Int) {
         Toast.makeText(this, errorTextId, Toast.LENGTH_LONG).show()
     }
+
+    override fun emitPickedGameId(): Observable<String> = pickedGameIdSubject
 }
