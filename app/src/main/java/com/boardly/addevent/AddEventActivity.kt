@@ -1,6 +1,7 @@
 package com.boardly.addevent
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
@@ -22,7 +23,9 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_add_event.boardGameImageView
 import kotlinx.android.synthetic.main.activity_add_event.boardGameTextView
+import kotlinx.android.synthetic.main.activity_add_event.levelTextView
 import kotlinx.android.synthetic.main.activity_add_event.pickGameButton
+import kotlinx.android.synthetic.main.activity_add_event.pickLevelButton
 import kotlinx.android.synthetic.main.activity_add_event.pickPlaceButton
 import kotlinx.android.synthetic.main.activity_add_event.placeTextView
 import javax.inject.Inject
@@ -37,6 +40,16 @@ class AddEventActivity : BaseActivity(), AddEventView {
 
     private lateinit var pickedGameIdSubject: PublishSubject<String>
 
+    private val levelNames = listOf(
+            R.string.beginner_level,
+            R.string.intermediate_level,
+            R.string.advanced_level)
+
+    private val levelIdsMap = mapOf(
+            R.string.beginner_level to "1",
+            R.string.intermediate_level to "2",
+            R.string.advanced_level to "3")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         setContentView(R.layout.activity_add_event)
@@ -47,6 +60,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
 
         pickGameButton.setOnClickListener { launchGamePickScreen() }
         pickPlaceButton.setOnClickListener { launchPlacePickScreen() }
+        pickLevelButton.setOnClickListener { launchLevelDialog() }
     }
 
     override fun onStart() {
@@ -117,6 +131,17 @@ class AddEventActivity : BaseActivity(), AddEventView {
     private fun launchGamePickScreen() {
         val pickGameIntent = Intent(this, PickGameActivity::class.java)
         startActivityForResult(pickGameIntent, PICK_GAME_REQUEST_CODE)
+    }
+
+    private fun launchLevelDialog() {
+        AlertDialog.Builder(this)
+                .setTitle(R.string.pick_level_title)
+                .setItems(levelNames.map { getString(it) }.toTypedArray(), { _, which ->
+                    val clickedItemName = getString(levelNames[which])
+                    levelTextView.text = clickedItemName
+                })
+                .create()
+                .show()
     }
 
     private fun showErrorToast(@StringRes errorTextId: Int) {

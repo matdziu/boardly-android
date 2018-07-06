@@ -42,4 +42,10 @@
     <string name="description_hint">Opis wydarzenia (opcjonalnie)</string>
     <string name="no_search_results_text">Brak wyników</string>
     <string name="be_more_specific_error_text">Dla \'%1$s\' jest zbyt dużo wyników. Spróbuj sprecyzować.</string>
+    <string name="dialog_ok">Akceptuj</string>
+    <string name="dialog_cancel">Anuluj</string>
+    <string name="pick_level_title">Wybierz poziom</string>
+    <string name="beginner_level">Początkujący</string>
+    <string name="intermediate_level">Średnio-zaawansowany</string>
+    <string name="advanced_level">Zaawansowany</string>
 </resources>
