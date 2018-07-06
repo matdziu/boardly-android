@@ -15,6 +15,7 @@ import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
 import com.boardly.factories.AddEventViewModelFactory
+import com.boardly.formatForAddEventScreen
 import com.boardly.pickgame.PickGameActivity
 import com.boardly.retrofit.gamesearch.models.SearchResult
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
@@ -25,12 +26,14 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_add_event.boardGameImageView
 import kotlinx.android.synthetic.main.activity_add_event.boardGameTextView
+import kotlinx.android.synthetic.main.activity_add_event.dateTextView
 import kotlinx.android.synthetic.main.activity_add_event.levelTextView
 import kotlinx.android.synthetic.main.activity_add_event.pickDateButton
 import kotlinx.android.synthetic.main.activity_add_event.pickGameButton
 import kotlinx.android.synthetic.main.activity_add_event.pickLevelButton
 import kotlinx.android.synthetic.main.activity_add_event.pickPlaceButton
 import kotlinx.android.synthetic.main.activity_add_event.placeTextView
+import java.util.*
 import javax.inject.Inject
 
 
@@ -42,6 +45,8 @@ class AddEventActivity : BaseActivity(), AddEventView {
     private lateinit var addEventViewModel: AddEventViewModel
 
     private lateinit var pickedGameIdSubject: PublishSubject<String>
+
+    private var currentDate: Date? = null
 
     private val levelNames = listOf(
             R.string.beginner_level,
@@ -151,14 +156,34 @@ class AddEventActivity : BaseActivity(), AddEventView {
     private fun launchDatePickerDialog() {
         val datePickerDialog = DatePickerFragment()
         datePickerDialog.dateSetHandler = { year, month, dayOfMonth ->
-            launchTimePickerDialog()
+            launchTimePickerDialog(year, month, dayOfMonth)
         }
         datePickerDialog.show(supportFragmentManager, "datePicker")
     }
 
-    private fun launchTimePickerDialog() {
+    private fun launchTimePickerDialog(year: Int, month: Int, dayOfMonth: Int) {
         val timePickerDialog = TimePickerFragment()
+        timePickerDialog.timeSetHandler = { hourOfDay, minute ->
+            val pickedDate = getPickedDate(
+                    year,
+                    month,
+                    dayOfMonth,
+                    hourOfDay,
+                    minute)
+            currentDate = pickedDate
+            dateTextView.text = pickedDate.formatForAddEventScreen()
+        }
         timePickerDialog.show(supportFragmentManager, "timePicker")
+    }
+
+    private fun getPickedDate(year: Int,
+                              month: Int,
+                              dayOfMonth: Int,
+                              hourOfDay: Int,
+                              minute: Int): Date {
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, dayOfMonth, hourOfDay, minute)
+        return Date(calendar.timeInMillis)
     }
 
     private fun showErrorToast(@StringRes errorTextId: Int) {
