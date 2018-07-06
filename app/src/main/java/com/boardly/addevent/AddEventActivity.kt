@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
+import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import com.boardly.R
 import com.boardly.addevent.dialogs.DatePickerFragment
@@ -210,8 +211,24 @@ class AddEventActivity : BaseActivity(), AddEventView {
             .map {
                 inputData.apply {
                     eventName = eventNameEditText.text.toString()
-                    maxPlayers = numberOfPlayersEditText.text.toString().toInt()
+                    maxPlayers = numberOfPlayersEditText.text.toString().toIntOrNull() ?: 0
                     description = descriptionEditText.text.toString()
                 }
             }
+
+    private fun showPickedGameError(show: Boolean) {
+        if (show) {
+            boardGameTextView.setTextColor(ContextCompat.getColor(this, R.color.errorRed))
+        } else {
+            boardGameTextView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText))
+        }
+    }
+
+    private fun showPickedPlaceError(show: Boolean) {
+        if (show) {
+            placeTextView.setTextColor(ContextCompat.getColor(this, R.color.errorRed))
+        } else {
+            placeTextView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText))
+        }
+    }
 }

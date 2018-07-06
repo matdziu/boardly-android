@@ -8,4 +8,5 @@
     <color name="facebookBlue">#5c6bc0</color>
     <color name="facebookBlueDark">#3949ab</color>
     <color name="lightGrey">#D8D8D8</color>
+    <color name="errorRed">#F44336</color>
 </resources>

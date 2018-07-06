@@ -4,10 +4,15 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textViewStyle">@style/BoardlyTextViewStyle</item>
     </style>
 
     <style name="SplashTheme" parent="AppTheme">
         <item name="android:windowBackground">@drawable/splash_background</item>
+    </style>
+
+    <style name="BoardlyTextViewStyle" parent="@android:style/Widget.TextView">
+        <item name="android:textColor">@color/colorPrimaryText</item>
     </style>
 
 </resources>
