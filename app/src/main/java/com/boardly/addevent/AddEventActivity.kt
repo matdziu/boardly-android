@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.support.annotation.StringRes
 import android.widget.Toast
 import com.boardly.R
+import com.boardly.addevent.dialogs.DatePickerFragment
+import com.boardly.addevent.dialogs.TimePickerFragment
 import com.boardly.base.BaseActivity
 import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_GAME_REQUEST_CODE
@@ -24,6 +26,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_add_event.boardGameImageView
 import kotlinx.android.synthetic.main.activity_add_event.boardGameTextView
 import kotlinx.android.synthetic.main.activity_add_event.levelTextView
+import kotlinx.android.synthetic.main.activity_add_event.pickDateButton
 import kotlinx.android.synthetic.main.activity_add_event.pickGameButton
 import kotlinx.android.synthetic.main.activity_add_event.pickLevelButton
 import kotlinx.android.synthetic.main.activity_add_event.pickPlaceButton
@@ -61,6 +64,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
         pickGameButton.setOnClickListener { launchGamePickScreen() }
         pickPlaceButton.setOnClickListener { launchPlacePickScreen() }
         pickLevelButton.setOnClickListener { launchLevelDialog() }
+        pickDateButton.setOnClickListener { launchDatePickerDialog() }
     }
 
     override fun onStart() {
@@ -142,6 +146,19 @@ class AddEventActivity : BaseActivity(), AddEventView {
                 })
                 .create()
                 .show()
+    }
+
+    private fun launchDatePickerDialog() {
+        val datePickerDialog = DatePickerFragment()
+        datePickerDialog.dateSetHandler = { year, month, dayOfMonth ->
+            launchTimePickerDialog()
+        }
+        datePickerDialog.show(supportFragmentManager, "datePicker")
+    }
+
+    private fun launchTimePickerDialog() {
+        val timePickerDialog = TimePickerFragment()
+        timePickerDialog.show(supportFragmentManager, "timePicker")
     }
 
     private fun showErrorToast(@StringRes errorTextId: Int) {
