@@ -40,4 +40,12 @@ sealed class PartialAddEventViewState {
                     selectedPlaceValid = selectedPlaceValid)
         }
     }
+
+    class SuccessState : PartialAddEventViewState() {
+        override fun reduce(previousState: AddEventViewState): AddEventViewState {
+            return AddEventViewState(
+                    success = true,
+                    selectedGame = previousState.selectedGame)
+        }
+    }
 }

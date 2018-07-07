@@ -48,4 +48,5 @@
     <string name="beginner_level">Początkujący</string>
     <string name="intermediate_level">Średnio-zaawansowany</string>
     <string name="advanced_level">Zaawansowany</string>
+    <string name="event_added_text">Wydarzenia zostało dodane</string>
 </resources>

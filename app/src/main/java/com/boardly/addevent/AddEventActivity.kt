@@ -121,6 +121,10 @@ class AddEventActivity : BaseActivity(), AddEventView {
             showProgressBar(progress)
             showPickedGameError(!selectedGameValid)
             showPickedPlaceError(!selectedPlaceValid)
+            if (success) {
+                Toast.makeText(this@AddEventActivity, R.string.event_added_text, Toast.LENGTH_SHORT).show()
+                finish()
+            }
         }
     }
 

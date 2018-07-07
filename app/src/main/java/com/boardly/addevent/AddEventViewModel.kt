@@ -30,7 +30,8 @@ class AddEventViewModel(private val addEventInteractor: AddEventInteractor) : Vi
                             && numberOfPlayersValid
                             && selectedGameValid
                             && selectedPlaceValid) {
-                        Observable.just(PartialAddEventViewState.ProgressState())
+                        addEventInteractor.addEvent(it)
+                                .startWith(PartialAddEventViewState.ProgressState())
                     } else {
                         Observable.just(PartialAddEventViewState.LocalValidation(
                                 eventNameValid,
