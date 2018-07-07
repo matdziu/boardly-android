@@ -12,20 +12,21 @@ class EditProfileViewModelTest {
 
     private val outputProfileData = ProfileData("Mateusz", "link/to/pic", 2.0)
 
-    @Suppress("UNCHECKED_CAST")
     private val editProfileInteractor: EditProfileInteractor = mock {
-        on { it.fetchProfileData() } doReturn Observable.just(PartialEditProfileViewState.ProfileDataFetched(outputProfileData))
-                .startWith(PartialEditProfileViewState.ProfileDataFetched(outputProfileData, true))
-                as Observable<PartialEditProfileViewState>
-        on { it.saveProfileChanges(any()) } doReturn Observable.just(PartialEditProfileViewState.SuccessfulUpdateState())
-                as Observable<PartialEditProfileViewState>
+        on { it.fetchProfileData() } doReturn
+                Observable.just(PartialEditProfileViewState.ProfileDataFetched(outputProfileData))
+                        .startWith(PartialEditProfileViewState.ProfileDataFetched(outputProfileData, true))
+                        .cast(PartialEditProfileViewState::class.java)
+        on { it.saveProfileChanges(any()) } doReturn
+                Observable.just(PartialEditProfileViewState.SuccessfulUpdateState())
+                        .cast(PartialEditProfileViewState::class.java)
     }
+
+    private val editProfileViewModel = EditProfileViewModel(editProfileInteractor)
+    private val editProfileViewRobot = EditProfileViewRobot(editProfileViewModel)
 
     @Test
     fun whenUserNameIsEmptyShowEmptyFieldError() {
-        val editProfileViewModel = EditProfileViewModel(editProfileInteractor)
-        val editProfileViewRobot = EditProfileViewRobot(editProfileViewModel)
-
         editProfileViewRobot.emitInputData(InputData("  ", null))
 
         editProfileViewRobot.assertViewStates(
@@ -37,9 +38,6 @@ class EditProfileViewModelTest {
 
     @Test
     fun whenUserNameIsNotEmptyShowSuccess() {
-        val editProfileViewModel = EditProfileViewModel(editProfileInteractor)
-        val editProfileViewRobot = EditProfileViewRobot(editProfileViewModel)
-
         editProfileViewRobot.emitInputData(InputData("Mateusz", null))
 
         editProfileViewRobot.assertViewStates(
@@ -52,9 +50,6 @@ class EditProfileViewModelTest {
 
     @Test
     fun testInitialProfileDataFetch() {
-        val editProfileViewModel = EditProfileViewModel(editProfileInteractor)
-        val editProfileViewRobot = EditProfileViewRobot(editProfileViewModel)
-
         editProfileViewRobot.emitFetchTrigger()
 
         editProfileViewRobot.assertViewStates(

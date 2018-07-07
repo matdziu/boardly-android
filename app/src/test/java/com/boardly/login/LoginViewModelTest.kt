@@ -15,11 +15,12 @@ class LoginViewModelTest {
         on { it.isLoggedIn() } doReturn Completable.complete().toObservable()
     }
     private val loginViewModel = LoginViewModel(loginInteractor)
+    private val loginViewRobot = LoginViewRobot(loginViewModel)
 
     @Test
     fun testWithCorrectInput() {
-        val loginViewRobot = LoginViewRobot(loginViewModel)
-        whenever(loginInteractor.login(any(), any())).thenReturn(Observable.just(PartialLoginViewState.LoginSuccess(false)))
+        whenever(loginInteractor.login(any(), any()))
+                .thenReturn(Observable.just(PartialLoginViewState.LoginSuccess(false)))
 
         loginViewRobot.clickLoginButton("test@test.com", "qwerty")
 
@@ -37,8 +38,6 @@ class LoginViewModelTest {
 
     @Test
     fun testWithEmptyInput() {
-        val loginViewRobot = LoginViewRobot(loginViewModel)
-
         loginViewRobot.clickLoginButton("", "   \n")
         loginViewRobot.clickLoginButton("test@test", "   \n")
         loginViewRobot.clickLoginButton("", "qwerty")
@@ -52,7 +51,6 @@ class LoginViewModelTest {
 
     @Test
     fun testWithErrorFromInteractor() {
-        val loginViewRobot = LoginViewRobot(loginViewModel)
         whenever(loginInteractor.login(any(), any())).thenReturn(Observable.just(
                 PartialLoginViewState.ErrorState(null)))
 

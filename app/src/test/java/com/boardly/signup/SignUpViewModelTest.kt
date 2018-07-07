@@ -11,11 +11,12 @@ class SignUpViewModelTest {
 
     private val signUpInteractor: SignUpInteractor = mock()
     private val signUpViewModel = SignUpViewModel(signUpInteractor)
+    private val signUpViewRobot = SignUpViewRobot(signUpViewModel)
 
     @Test
     fun testWithCorrectInput() {
-        val signUpViewRobot = SignUpViewRobot(signUpViewModel)
-        whenever(signUpInteractor.createAccount(any(), any())).thenReturn(Observable.just(PartialSignUpViewState.SignUpSuccess()))
+        whenever(signUpInteractor.createAccount(any(), any()))
+                .thenReturn(Observable.just(PartialSignUpViewState.SignUpSuccess()))
 
         signUpViewRobot.clickCreateAccountButton("test@test.com", "qwerty")
 
@@ -26,8 +27,6 @@ class SignUpViewModelTest {
 
     @Test
     fun testWithEmptyInput() {
-        val signUpViewRobot = SignUpViewRobot(signUpViewModel)
-
         signUpViewRobot.clickCreateAccountButton(" ", "\n")
         signUpViewRobot.clickCreateAccountButton("test@test", "\n")
 
@@ -38,7 +37,6 @@ class SignUpViewModelTest {
 
     @Test
     fun testWithErrorFromInteractor() {
-        val signUpViewRobot = SignUpViewRobot(signUpViewModel)
         whenever(signUpInteractor.createAccount(any(), any())).thenReturn(
                 Observable.just(PartialSignUpViewState.ErrorState(null)))
 
