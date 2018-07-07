@@ -1,10 +1,22 @@
 package com.boardly.addevent
 
 import com.boardly.base.BaseViewRobot
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 
 class AddEventViewRobot(addEventViewModel: AddEventViewModel) : BaseViewRobot<AddEventViewState>() {
 
+    private val inputDataSubject = PublishSubject.create<InputData>()
+    private val gamePickEventSubject = PublishSubject.create<String>()
+    private val placePickEventSubject = PublishSubject.create<Boolean>()
+
     private val addEventView = object : AddEventView {
+        override fun emitInputData(): Observable<InputData> = inputDataSubject
+
+        override fun emitGamePickEvent(): Observable<String> = gamePickEventSubject
+
+        override fun emitPlacePickEvent(): Observable<Boolean> = placePickEventSubject
+
         override fun render(addEventViewState: AddEventViewState) {
             renderedStates.add(addEventViewState)
         }
@@ -12,5 +24,17 @@ class AddEventViewRobot(addEventViewModel: AddEventViewModel) : BaseViewRobot<Ad
 
     init {
         addEventViewModel.bind(addEventView)
+    }
+
+    fun emitInputData(inputData: InputData) {
+        inputDataSubject.onNext(inputData)
+    }
+
+    fun pickGame(gameId: String) {
+        gamePickEventSubject.onNext(gameId)
+    }
+
+    fun pickPlace() {
+        placePickEventSubject.onNext(true)
     }
 }
