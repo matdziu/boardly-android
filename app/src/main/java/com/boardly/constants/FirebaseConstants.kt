@@ -3,6 +3,7 @@ package com.boardly.constants
 import com.boardly.R
 
 const val USERS_NODE = "users"
+const val EVENTS_NODE = "events"
 
 const val NAME_CHILD = "name"
 const val PROFILE_PICTURE_CHILD = "profilePicture"

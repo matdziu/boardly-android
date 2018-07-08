@@ -1,5 +1,6 @@
 package com.boardly.base
 
+import com.boardly.constants.EVENTS_NODE
 import com.boardly.constants.USERS_NODE
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -16,6 +17,10 @@ open class BaseInteractor {
 
     protected fun getUserNodeRef(userId: String): DatabaseReference {
         return firebaseDatabase.getReference("$USERS_NODE/$userId")
+    }
+
+    protected fun getEventsNode(): DatabaseReference {
+        return firebaseDatabase.getReference(EVENTS_NODE)
     }
 
     protected fun getStorageProfilePictureRef(userId: String): StorageReference {
