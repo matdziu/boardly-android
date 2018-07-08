@@ -1,7 +1,9 @@
 package com.boardly.base
 
+import com.boardly.constants.EVENTS_LOCATION_NODE
 import com.boardly.constants.EVENTS_NODE
 import com.boardly.constants.USERS_NODE
+import com.firebase.geofire.GeoFire
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -25,5 +27,9 @@ open class BaseInteractor {
 
     protected fun getStorageProfilePictureRef(userId: String): StorageReference {
         return firebaseStorage.reference.child(userId)
+    }
+
+    protected fun getGeoFire(): GeoFire {
+        return GeoFire(firebaseDatabase.getReference(EVENTS_LOCATION_NODE))
     }
 }
