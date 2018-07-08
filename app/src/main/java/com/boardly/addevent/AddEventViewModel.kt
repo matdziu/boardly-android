@@ -24,7 +24,7 @@ class AddEventViewModel(private val addEventInteractor: AddEventInteractor) : Vi
                     val eventNameValid = it.eventName.isNotBlank()
                     val numberOfPlayersValid = it.maxPlayers > 0
                     val selectedGameValid = it.gameId.isNotBlank()
-                    val selectedPlaceValid = it.placeLatitude != null && it.placeLongitude != null
+                    val selectedPlaceValid = it.placeId.isNotBlank()
 
                     if (eventNameValid
                             && numberOfPlayersValid

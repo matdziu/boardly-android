@@ -13,6 +13,7 @@ import com.boardly.R
 import com.boardly.addevent.dialogs.DatePickerFragment
 import com.boardly.addevent.dialogs.TimePickerFragment
 import com.boardly.base.BaseActivity
+import com.boardly.constants.LEVEL_IDS_MAP
 import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
@@ -64,11 +65,6 @@ class AddEventActivity : BaseActivity(), AddEventView {
             R.string.beginner_level,
             R.string.intermediate_level,
             R.string.advanced_level)
-
-    private val levelIdsMap = mapOf(
-            R.string.beginner_level to "1",
-            R.string.intermediate_level to "2",
-            R.string.advanced_level to "3")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -135,6 +131,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
                 with(place) {
                     inputData.placeLatitude = latLng.latitude
                     inputData.placeLongitude = latLng.longitude
+                    inputData.placeId = id
                     placeTextView.text = address
 
                     // Somehow default Places API Activity does not trigger onStop() of AddEventActivity
@@ -184,7 +181,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
                 .setItems(levelNames.map { getString(it) }.toTypedArray(), { _, which ->
                     val itemNameResId = levelNames[which]
                     val clickedItemName = getString(itemNameResId)
-                    inputData.levelId = levelIdsMap[itemNameResId] ?: ""
+                    inputData.levelId = LEVEL_IDS_MAP[itemNameResId] ?: ""
                     levelTextView.text = clickedItemName
                 })
                 .create()
