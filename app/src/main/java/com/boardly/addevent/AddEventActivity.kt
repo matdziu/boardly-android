@@ -18,7 +18,7 @@ import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
 import com.boardly.factories.AddEventViewModelFactory
-import com.boardly.formatForAddEventScreen
+import com.boardly.extensions.formatForAddEventScreen
 import com.boardly.pickgame.PickGameActivity
 import com.boardly.retrofit.gamesearch.models.SearchResult
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException

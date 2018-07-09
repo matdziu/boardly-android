@@ -1,4 +1,4 @@
-package com.boardly
+package com.boardly.extensions
 
 import java.text.SimpleDateFormat
 import java.util.*
