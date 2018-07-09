@@ -7,7 +7,7 @@ sealed class PartialAddEventViewState {
     abstract fun reduce(previousState: AddEventViewState): AddEventViewState
 
     class ProgressState : PartialAddEventViewState() {
-        override fun reduce(previousState: AddEventViewState) = AddEventViewState(progress = true)
+        override fun reduce(previousState: AddEventViewState) = previousState.copy(progress = true)
     }
 
     class GameDetailsFetched(private val game: Game) : PartialAddEventViewState() {

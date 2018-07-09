@@ -1,6 +1,7 @@
 package com.boardly.addevent
 
 import com.boardly.base.BaseInteractor
+import com.boardly.constants.EVENTS_NODE
 import com.boardly.retrofit.gamesearch.GameSearchService
 import com.boardly.retrofit.gamesearch.models.DetailsResponse
 import com.firebase.geofire.GeoLocation
@@ -26,10 +27,12 @@ class AddEventInteractor @Inject constructor(private val gameSearchService: Game
         val eventKey = UUID.randomUUID().toString()
         val geoLocation = GeoLocation(inputData.placeLatitude, inputData.placeLongitude)
 
-        getEventsNode()
-                .child(eventKey)
-                .setValue(inputData)
-                .continueWithTask { setGeoLocationTask(eventKey, geoLocation) }
+        setGeoLocationTask(eventKey, geoLocation)
+                .continueWithTask {
+                    getEventsNode()
+                            .child(eventKey)
+                            .updateChildren(inputData.toMap())
+                }
                 .addOnCompleteListener { resultSubject.onNext(PartialAddEventViewState.SuccessState()) }
 
         return resultSubject
@@ -38,7 +41,7 @@ class AddEventInteractor @Inject constructor(private val gameSearchService: Game
     private fun setGeoLocationTask(eventKey: String, geoLocation: GeoLocation): Task<String> {
         val geoSource = TaskCompletionSource<String>()
         val geoTask = geoSource.task
-        getGeoFire().setLocation(eventKey, geoLocation) { key, _ ->
+        getGeoFire(EVENTS_NODE).setLocation(eventKey, geoLocation) { key, _ ->
             geoSource.setResult(key)
         }
         return geoTask

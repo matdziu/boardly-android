@@ -10,4 +10,20 @@ data class InputData(var eventName: String = "",
                      var placeLatitude: Double = 0.0,
                      var placeLongitude: Double = 0.0,
                      var levelId: String = "",
-                     var timestamp: Long = 0)
+                     var timestamp: Long = 0) {
+
+    fun toMap(): Map<String, Any> {
+        return mapOf(
+                "eventName" to eventName,
+                "maxPlayers" to maxPlayers,
+                "description" to description,
+                "gameName" to gameName,
+                "gameId" to gameId,
+                "gameImageUrl" to gameImageUrl,
+                "placeName" to placeName,
+                "placeLatitude" to placeLatitude,
+                "placeLongitude" to placeLongitude,
+                "levelId" to levelId,
+                "timestamp" to timestamp)
+    }
+}
