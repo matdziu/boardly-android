@@ -17,8 +17,8 @@ import com.boardly.constants.LEVEL_IDS_MAP
 import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
-import com.boardly.factories.AddEventViewModelFactory
 import com.boardly.extensions.formatForDisplay
+import com.boardly.factories.AddEventViewModelFactory
 import com.boardly.pickgame.PickGameActivity
 import com.boardly.retrofit.gamesearch.models.SearchResult
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
@@ -111,6 +111,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
 
     override fun render(addEventViewState: AddEventViewState) {
         with(addEventViewState) {
+            inputData.gameImageUrl = selectedGame.image
             loadImageFromUrl(boardGameImageView, selectedGame.image, R.drawable.board_game_placeholder)
             eventNameEditText.showError(!eventNameValid)
             numberOfPlayersEditText.showError(!numberOfPlayersValid)
@@ -131,7 +132,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
                 with(place) {
                     inputData.placeLatitude = latLng.latitude
                     inputData.placeLongitude = latLng.longitude
-                    inputData.placeId = id
+                    inputData.placeName = address.toString()
                     placeTextView.text = address
 
                     // Somehow default Places API Activity does not trigger onStop() of AddEventActivity
@@ -151,6 +152,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
                 with(pickedGame) {
                     boardGameTextView.text = name
                     inputData.gameId = id.toString()
+                    inputData.gameName = name
                     gamePickEvent = true
                 }
             }

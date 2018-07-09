@@ -42,7 +42,7 @@ class AddEventViewModelTest {
                 eventName = "  ",
                 gameId = "1",
                 maxPlayers = 1,
-                placeId = "testPlaceId")
+                placeName = "Domowka")
 
         addEventViewRobot.emitInputData(inputData)
 
@@ -57,7 +57,7 @@ class AddEventViewModelTest {
                 eventName = "Let's go",
                 gameId = "1",
                 maxPlayers = 0,
-                placeId = "testPlaceId")
+                placeName = "Domowka")
 
         addEventViewRobot.emitInputData(inputData)
 
@@ -72,7 +72,7 @@ class AddEventViewModelTest {
                 eventName = "Let's go",
                 gameId = "",
                 maxPlayers = 1,
-                placeId = "testPlaceId")
+                placeName = "Domowka")
 
         addEventViewRobot.emitInputData(inputData)
 
@@ -101,7 +101,7 @@ class AddEventViewModelTest {
                 eventName = "Let's go",
                 gameId = "1",
                 maxPlayers = 1,
-                placeId = "testPlaceId")
+                placeName = "Domowka")
         whenever(addEventInteractor.addEvent(any())).thenReturn(Observable.just(PartialAddEventViewState.SuccessState()))
 
         addEventViewRobot.emitInputData(inputData)
