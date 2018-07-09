@@ -5,19 +5,23 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import android.widget.Toast
 import com.boardly.R
 import com.boardly.addevent.AddEventActivity
 import com.boardly.base.BaseDrawerActivity
 import com.boardly.factories.HomeViewModelFactory
 import com.boardly.home.list.EventsAdapter
-import com.boardly.home.models.Event
+import com.boardly.home.models.Filter
 import com.tbruyelle.rxpermissions2.RxPermissions
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_home.addEventButton
+import kotlinx.android.synthetic.main.activity_home.contentViewGroup
 import kotlinx.android.synthetic.main.activity_home.eventsRecyclerView
+import kotlinx.android.synthetic.main.activity_home.lookingForEventsTextView
+import kotlinx.android.synthetic.main.activity_home.noEventsTextView
 import javax.inject.Inject
 
 class HomeActivity : BaseDrawerActivity(), HomeView {
@@ -27,7 +31,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
     private lateinit var homeViewModel: HomeViewModel
 
-    private lateinit var initialFetchSubject: PublishSubject<Boolean>
+    private lateinit var filteredFetchSubject: PublishSubject<Filter>
 
     private val eventsAdapter = EventsAdapter()
 
@@ -48,24 +52,13 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
     private fun initRecyclerView() {
         eventsRecyclerView.layoutManager = LinearLayoutManager(this)
         eventsRecyclerView.adapter = eventsAdapter
-
-        eventsAdapter.submitList(listOf(
-                Event("1", "Zapraszam wszystkich na granie", "Eurobusiness", "2", "Domówka", 11112223344, 5, 3, ""),
-                Event("1", "Zapraszam wszystkich na granie", "Eurobusiness", "2", "Domówka", 11112223344, 5, 3, ""),
-                Event("1", "Zapraszam wszystkich na granie", "Eurobusiness", "2", "Domówka", 11112223344, 5, 3, ""),
-                Event("1", "Zapraszam wszystkich na granie", "Eurobusiness", "2", "Domówka", 11112223344, 5, 3, ""),
-                Event("1", "Zapraszam wszystkich na granie", "Eurobusiness", "2", "Domówka", 11112223344, 5, 3, ""),
-                Event("1", "Zapraszam wszystkich na granie", "Eurobusiness", "2", "Domówka", 11112223344, 5, 3, ""),
-                Event("1", "Zapraszam wszystkich na granie", "Eurobusiness", "2", "Domówka", 11112223344, 5, 3, ""),
-                Event("1", "Zapraszam wszystkich na granie", "Eurobusiness", "2", "Domówka", 11112223344, 5, 3, "")
-        ))
     }
 
     override fun onStart() {
         super.onStart()
         initEmitters()
         homeViewModel.bind(this)
-        initialFetchSubject.onNext(init)
+        if (init) filteredFetchSubject.onNext(Filter(1.0))
     }
 
     override fun onResume() {
@@ -80,13 +73,41 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
     }
 
     private fun initEmitters() {
-        initialFetchSubject = PublishSubject.create()
+        filteredFetchSubject = PublishSubject.create()
     }
 
-    override fun emitInitialFetchTrigger(): Observable<Boolean> = initialFetchSubject
+    override fun emitFilteredFetchTrigger(): Observable<Filter> = filteredFetchSubject
 
     override fun render(homeViewState: HomeViewState) {
+        with(homeViewState) {
+            showNoEventsFoundText(false)
+            showLookingForEventsText(progress)
+            if (eventList.isNotEmpty() && !progress) {
+                eventsAdapter.submitList(eventList)
+            } else if (!progress) {
+                showNoEventsFoundText(true)
+            }
+        }
+    }
 
+    private fun showLookingForEventsText(show: Boolean) {
+        if (show) {
+            lookingForEventsTextView.visibility = View.VISIBLE
+            contentViewGroup.visibility = View.GONE
+        } else {
+            lookingForEventsTextView.visibility = View.GONE
+            contentViewGroup.visibility = View.VISIBLE
+        }
+    }
+
+    private fun showNoEventsFoundText(show: Boolean) {
+        if (show) {
+            contentViewGroup.visibility = View.GONE
+            noEventsTextView.visibility = View.VISIBLE
+        } else {
+            contentViewGroup.visibility = View.VISIBLE
+            noEventsTextView.visibility = View.GONE
+        }
     }
 
     private fun requestLocationPermission() {

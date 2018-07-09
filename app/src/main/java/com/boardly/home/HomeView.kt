@@ -1,10 +1,11 @@
 package com.boardly.home
 
+import com.boardly.home.models.Filter
 import io.reactivex.Observable
 
 interface HomeView {
 
     fun render(homeViewState: HomeViewState)
 
-    fun emitInitialFetchTrigger(): Observable<Boolean>
+    fun emitFilteredFetchTrigger(): Observable<Filter>
 }

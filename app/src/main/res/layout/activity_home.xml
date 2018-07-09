@@ -37,13 +37,24 @@
 
         </RelativeLayout>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+        <TextView
+            android:id="@+id/noEventsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
+            android:padding="16dp"
+            android:text="@string/no_event_found_text"
+            android:textAlignment="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/lookingForEventsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="16dp"
+            android:text="@string/looking_for_events_text"
+            android:textAlignment="center"
             android:visibility="gone" />
 
     </RelativeLayout>

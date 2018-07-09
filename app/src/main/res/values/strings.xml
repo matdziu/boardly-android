@@ -51,4 +51,6 @@
     <string name="event_added_text">Wydarzenie zostało dodane</string>
     <string name="join_event">Dołącz</string>
     <string name="empty"> </string>
+    <string name="no_event_found_text">Nie znaleziono żadnych wydarzeń. Spróbuj zmienić kryteria wyszukiwania.</string>
+    <string name="looking_for_events_text">Szukam dla Ciebie wydarzeń...</string>
 </resources>
