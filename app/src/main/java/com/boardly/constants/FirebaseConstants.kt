@@ -13,3 +13,8 @@ val LEVEL_IDS_MAP = mapOf(
         R.string.beginner_level to "1",
         R.string.intermediate_level to "2",
         R.string.advanced_level to "3")
+
+val LEVEL_STRINGS_MAP = mapOf(
+        "1" to R.string.beginner_level,
+        "2" to R.string.intermediate_level,
+        "3" to R.string.advanced_level)

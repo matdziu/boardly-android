@@ -12,9 +12,10 @@ import kotlinx.android.synthetic.main.item_search_result.view.yearPublishedTextV
 
 class SearchResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+    private val parentActivity = itemView.context as PickGameActivity
+
     fun bind(searchResult: SearchResult) {
         with(itemView) {
-            val parentActivity = context as PickGameActivity
             val resultIntent = Intent()
             resultIntent.putExtra(PICKED_GAME, searchResult)
 

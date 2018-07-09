@@ -50,4 +50,5 @@
     <string name="advanced_level">Zaawansowany</string>
     <string name="event_added_text">Wydarzenie zostało dodane</string>
     <string name="join_event">Dołącz</string>
+    <string name="empty"> </string>
 </resources>
