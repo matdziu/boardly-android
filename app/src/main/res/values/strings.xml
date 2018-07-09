@@ -49,4 +49,5 @@
     <string name="intermediate_level">Średnio-zaawansowany</string>
     <string name="advanced_level">Zaawansowany</string>
     <string name="event_added_text">Wydarzenie zostało dodane</string>
+    <string name="join_event">Dołącz</string>
 </resources>
