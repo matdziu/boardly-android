@@ -41,7 +41,9 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
     private val eventsAdapter = EventsAdapter()
 
-    private var init = true
+    private var selectedFilter = Filter()
+
+    private var emitFilter = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -64,7 +66,10 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         super.onStart()
         initEmitters()
         homeViewModel.bind(this)
-        if (init) filteredFetchSubject.onNext(Filter(1.0))
+        if (emitFilter) {
+            filteredFetchSubject.onNext(selectedFilter)
+            emitFilter = false
+        }
     }
 
     private fun initEmitters() {
@@ -77,7 +82,6 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
     }
 
     override fun onStop() {
-        init = false
         homeViewModel.unbind()
         super.onStop()
     }
@@ -98,15 +102,16 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data != null) {
             when (requestCode) {
-                PICK_FILTER_REQUEST_CODE -> handlePickFilterCode(resultCode, data)
+                PICK_FILTER_REQUEST_CODE -> handlePickFilterResult(resultCode, data)
             }
         }
     }
 
-    private fun handlePickFilterCode(resultCode: Int, data: Intent) {
+    private fun handlePickFilterResult(resultCode: Int, data: Intent) {
         when (resultCode) {
             Activity.RESULT_OK -> {
-                val filter = data.getParcelableExtra<Filter>(PICKED_FILTER)
+                selectedFilter = data.getParcelableExtra(PICKED_FILTER)
+                emitFilter = true
             }
         }
     }
