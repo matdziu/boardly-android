@@ -1,6 +1,6 @@
 package com.boardly.home
 
-import com.boardly.home.models.Filter
+import com.boardly.filter.models.Filter
 import io.reactivex.Observable
 
 interface HomeView {

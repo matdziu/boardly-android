@@ -25,12 +25,12 @@ abstract class BaseSearchActivity : BaseActivity() {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.setIconifiedByDefault(false)
         searchView.maxWidth = Integer.MAX_VALUE
-        searchView.queryHint = getString(searchHintResId)
         searchView.requestFocus()
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 formatAndEmitQuery(query, searchInput)
-                return false
+                hideSoftKeyboard()
+                return true
             }
 
             override fun onQueryTextChange(newText: String): Boolean {

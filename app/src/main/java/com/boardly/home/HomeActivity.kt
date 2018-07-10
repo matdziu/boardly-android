@@ -5,14 +5,17 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.boardly.R
 import com.boardly.addevent.AddEventActivity
 import com.boardly.base.BaseDrawerActivity
 import com.boardly.factories.HomeViewModelFactory
+import com.boardly.filter.FilterActivity
+import com.boardly.filter.models.Filter
 import com.boardly.home.list.EventsAdapter
-import com.boardly.home.models.Filter
 import com.tbruyelle.rxpermissions2.RxPermissions
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
@@ -70,6 +73,18 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         init = false
         homeViewModel.unbind()
         super.onStop()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.home_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.filter_events_item -> startActivity(Intent(this, FilterActivity::class.java))
+        }
+        return false
     }
 
     private fun initEmitters() {

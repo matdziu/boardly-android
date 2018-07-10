@@ -53,4 +53,5 @@
     <string name="empty"> </string>
     <string name="no_event_found_text">Nie znaleziono żadnych wydarzeń. Spróbuj zmienić kryteria wyszukiwania.</string>
     <string name="looking_for_events_text">Szukam dla Ciebie wydarzeń...</string>
+    <string name="filter_text">Filtruj</string>
 </resources>
