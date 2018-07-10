@@ -1,3 +1,7 @@
 package com.boardly.filter.models
 
-data class Filter(val radius: Double, val gameId: String = "")
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+data class Filter(val radius: Double, val gameId: String = "") : Parcelable

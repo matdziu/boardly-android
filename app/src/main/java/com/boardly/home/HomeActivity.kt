@@ -1,6 +1,7 @@
 package com.boardly.home
 
 import android.Manifest
+import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +13,8 @@ import android.widget.Toast
 import com.boardly.R
 import com.boardly.addevent.AddEventActivity
 import com.boardly.base.BaseDrawerActivity
+import com.boardly.constants.PICKED_FILTER
+import com.boardly.constants.PICK_FILTER_REQUEST_CODE
 import com.boardly.factories.HomeViewModelFactory
 import com.boardly.filter.FilterActivity
 import com.boardly.filter.models.Filter
@@ -64,6 +67,10 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         if (init) filteredFetchSubject.onNext(Filter(1.0))
     }
 
+    private fun initEmitters() {
+        filteredFetchSubject = PublishSubject.create()
+    }
+
     override fun onResume() {
         super.onResume()
         setNavigationSelection(R.id.events_item)
@@ -82,13 +89,26 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.filter_events_item -> startActivity(Intent(this, FilterActivity::class.java))
+            R.id.filter_events_item -> startActivityForResult(
+                    Intent(this, FilterActivity::class.java), PICK_FILTER_REQUEST_CODE)
         }
         return false
     }
 
-    private fun initEmitters() {
-        filteredFetchSubject = PublishSubject.create()
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (data != null) {
+            when (requestCode) {
+                PICK_FILTER_REQUEST_CODE -> handlePickFilterCode(resultCode, data)
+            }
+        }
+    }
+
+    private fun handlePickFilterCode(resultCode: Int, data: Intent) {
+        when (resultCode) {
+            Activity.RESULT_OK -> {
+                val filter = data.getParcelableExtra<Filter>(PICKED_FILTER)
+            }
+        }
     }
 
     override fun emitFilteredFetchTrigger(): Observable<Filter> = filteredFetchSubject
