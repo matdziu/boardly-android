@@ -1,17 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <include layout="@layout/toolbar" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/contentViewGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:padding="16dp">
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/boardGameImageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/board_game_placeholder"
+            app:civ_border_color="@color/lightGrey"
+            app:civ_border_width="1dp" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/boardGameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/boardGameImageView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:text="@string/game_text_placeholder" />
+
+        <Button
+            android:id="@+id/pickGameButton"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/boardGameTextView"
+            android:layout_centerHorizontal="true"
+            android:text="@string/pick_game_text"
+            android:textColor="@color/colorPrimary" />
+
+        <TextView
+            android:id="@+id/distanceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pickGameButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="@string/max_distance_text"
+            tools:text="Maksymalna odległość wydarzenia: 5 km" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/distanceSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/distanceTextView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:max="100" />
+
+        <com.boardly.customviews.BoardlyButton
+            android:id="@+id/applyFilterButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/blue_background_selector"
+            android:text="@string/apply_filter_text" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

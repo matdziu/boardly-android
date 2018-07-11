@@ -52,6 +52,8 @@
     <string name="join_event">Dołącz</string>
     <string name="empty"> </string>
     <string name="no_event_found_text">Nie znaleziono żadnych wydarzeń. Spróbuj zmienić kryteria wyszukiwania.</string>
-    <string name="looking_for_events_text">Szukam dla Ciebie wydarzeń...</string>
+    <string name="looking_for_events_text">Szukam dla Ciebie wydarzeń…</string>
     <string name="filter_text">Filtruj</string>
+    <string name="max_distance_text">Maksymalna odległość wydarzenia: %1$d km</string>
+    <string name="apply_filter_text">Zastosuj</string>
 </resources>
