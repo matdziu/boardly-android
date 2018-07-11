@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.widget.SeekBar
 import com.boardly.R
 import com.boardly.base.BaseActivity
+import com.boardly.constants.PICKED_FILTER
 import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_GAME_REQUEST_CODE
 import com.boardly.filter.models.Filter
 import com.boardly.pickgame.PickGameActivity
 import com.boardly.retrofit.gamesearch.models.SearchResult
+import kotlinx.android.synthetic.main.activity_filter.applyFilterButton
 import kotlinx.android.synthetic.main.activity_filter.boardGameTextView
 import kotlinx.android.synthetic.main.activity_filter.distanceSeekBar
 import kotlinx.android.synthetic.main.activity_filter.distanceTextView
@@ -27,6 +29,12 @@ class FilterActivity : BaseActivity() {
         initDistanceFilter(50)
 
         pickGameButton.setOnClickListener { launchGamePickScreen() }
+        applyFilterButton.setOnClickListener {
+            val data = Intent()
+            data.putExtra(PICKED_FILTER, currentFilter)
+            setResult(Activity.RESULT_OK, data)
+            finish()
+        }
     }
 
     private fun launchGamePickScreen() {
