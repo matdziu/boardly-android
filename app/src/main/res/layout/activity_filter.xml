@@ -53,7 +53,7 @@
             android:text="@string/max_distance_text"
             tools:text="Maksymalna odległość wydarzenia: 5 km" />
 
-        <android.support.v7.widget.AppCompatSeekBar
+        <SeekBar
             android:id="@+id/distanceSeekBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
