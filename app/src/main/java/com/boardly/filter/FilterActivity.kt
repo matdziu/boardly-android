@@ -51,9 +51,11 @@ class FilterActivity : BaseActivity() {
     }
 
     private fun initDistanceFilter(initialProgress: Int) {
+        val seekBarMin = 1
         distanceSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                distanceTextView.text = getString(R.string.max_distance_text, progress)
+                val actualProgress = progress + seekBarMin
+                distanceTextView.text = getString(R.string.max_distance_text, actualProgress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -64,6 +66,7 @@ class FilterActivity : BaseActivity() {
                 // unused
             }
         })
-        distanceSeekBar.progress = initialProgress
+        val actualInitialProgress = initialProgress - seekBarMin
+        distanceSeekBar.progress = actualInitialProgress
     }
 }
