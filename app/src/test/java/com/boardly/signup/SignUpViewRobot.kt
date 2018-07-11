@@ -16,7 +16,7 @@ class SignUpViewRobot(signUpViewModel: SignUpViewModel) : BaseViewRobot<SignUpVi
             renderedStates.add(signUpViewState)
         }
 
-        override fun emitInput(): Observable<InputData> = inputObservable
+        override fun inputEmitter(): Observable<InputData> = inputObservable
     }
 
     init {

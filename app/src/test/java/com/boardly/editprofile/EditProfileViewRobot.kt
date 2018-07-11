@@ -15,9 +15,9 @@ class EditProfileViewRobot(editProfileViewModel: EditProfileViewModel) : BaseVie
             renderedStates.add(editProfileViewState)
         }
 
-        override fun emitInputData(): Observable<InputData> = inputDataSubject
+        override fun inputDataEmitter(): Observable<InputData> = inputDataSubject
 
-        override fun emitFetchProfileDataTrigger(): Observable<Boolean> = fetchProfileDataSubject
+        override fun fetchProfileDataTriggerEmitter(): Observable<Boolean> = fetchProfileDataSubject
     }
 
     init {

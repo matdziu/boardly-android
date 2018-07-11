@@ -122,13 +122,13 @@ class EditProfileActivity : BaseDrawerActivity(), EditProfileView {
         }
     }
 
-    override fun emitInputData(): Observable<InputData> {
+    override fun inputDataEmitter(): Observable<InputData> {
         return RxView.clicks(saveChangesButton)
                 .doOnNext { hideSoftKeyboard() }
                 .map { InputData(nameEditText.text.toString().trim(), selectedProfilePictureFile) }
     }
 
-    override fun emitFetchProfileDataTrigger(): Observable<Boolean> = fetchProfileDataSubject
+    override fun fetchProfileDataTriggerEmitter(): Observable<Boolean> = fetchProfileDataSubject
 
     private fun askForImage() {
         CropImage.activity()

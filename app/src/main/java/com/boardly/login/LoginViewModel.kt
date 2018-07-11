@@ -12,17 +12,17 @@ class LoginViewModel(private val loginInteractor: LoginInteractor) : ViewModel()
     private val stateSubject = BehaviorSubject.createDefault(LoginViewState())
 
     fun bind(loginView: LoginView) {
-        val initialLoginCheckObservable = loginView.emitInitialLoginCheck()
+        val initialLoginCheckObservable = loginView.initialLoginCheckEmitter()
                 .filter { it }
                 .flatMap { loginInteractor.isLoggedIn().startWith(PartialLoginViewState.InProgressState()) }
 
-        val googleSignInObservable = loginView.emitGoogleSignIn()
+        val googleSignInObservable = loginView.googleSignInEmitter()
                 .flatMap { loginInteractor.login(it).startWith(PartialLoginViewState.InProgressState()) }
 
-        val facebookSignInObservable = loginView.emitFacebookSignIn()
+        val facebookSignInObservable = loginView.facebookSignInEmitter()
                 .flatMap { loginInteractor.login(it).startWith(PartialLoginViewState.InProgressState()) }
 
-        val inputDataObservable = loginView.emitInput()
+        val inputDataObservable = loginView.inputEmitter()
                 .flatMap { inputData ->
                     val trimmedEmail = inputData.email.trim()
                     val trimmedPassword = inputData.password.trim()

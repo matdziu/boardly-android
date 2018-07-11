@@ -11,11 +11,11 @@ class AddEventViewRobot(addEventViewModel: AddEventViewModel) : BaseViewRobot<Ad
     private val placePickEventSubject = PublishSubject.create<Boolean>()
 
     private val addEventView = object : AddEventView {
-        override fun emitInputData(): Observable<InputData> = inputDataSubject
+        override fun inputDataEmitter(): Observable<InputData> = inputDataSubject
 
-        override fun emitGamePickEvent(): Observable<String> = gamePickEventSubject
+        override fun gamePickEventEmitter(): Observable<String> = gamePickEventSubject
 
-        override fun emitPlacePickEvent(): Observable<Boolean> = placePickEventSubject
+        override fun placePickEventEmitter(): Observable<Boolean> = placePickEventSubject
 
         override fun render(addEventViewState: AddEventViewState) {
             renderedStates.add(addEventViewState)

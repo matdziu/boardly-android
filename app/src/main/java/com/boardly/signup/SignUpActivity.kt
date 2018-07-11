@@ -72,7 +72,7 @@ class SignUpActivity : BaseActivity(), SignUpView {
         }
     }
 
-    override fun emitInput(): Observable<InputData> {
+    override fun inputEmitter(): Observable<InputData> {
         return RxView.clicks(createAccountButton).map {
             InputData(emailEditText.text.toString(),
                     passwordEditText.text.toString())

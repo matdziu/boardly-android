@@ -15,17 +15,17 @@ class LoginViewRobot(loginViewModel: LoginViewModel) : BaseViewRobot<LoginViewSt
     private val initialLoginCheckSubject = PublishSubject.create<Boolean>()
 
     private val loginView = object : LoginView {
-        override fun emitInitialLoginCheck(): Observable<Boolean> = initialLoginCheckSubject
+        override fun initialLoginCheckEmitter(): Observable<Boolean> = initialLoginCheckSubject
 
-        override fun emitFacebookSignIn(): Observable<AccessToken> = Completable.complete().toObservable()
+        override fun facebookSignInEmitter(): Observable<AccessToken> = Completable.complete().toObservable()
 
-        override fun emitGoogleSignIn(): Observable<GoogleSignInAccount> = Completable.complete().toObservable()
+        override fun googleSignInEmitter(): Observable<GoogleSignInAccount> = Completable.complete().toObservable()
 
         override fun render(loginViewState: LoginViewState) {
             renderedStates.add(loginViewState)
         }
 
-        override fun emitInput(): Observable<InputData> = inputObservable
+        override fun inputEmitter(): Observable<InputData> = inputObservable
 
     }
 

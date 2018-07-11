@@ -12,14 +12,14 @@ class EditProfileViewModel(private val editProfileInteractor: EditProfileInterac
     private val stateSubject = BehaviorSubject.createDefault(EditProfileViewState())
 
     fun bind(editProfileView: EditProfileView) {
-        val fetchDataObservable = editProfileView.emitFetchProfileDataTrigger()
+        val fetchDataObservable = editProfileView.fetchProfileDataTriggerEmitter()
                 .filter { it }
                 .flatMap {
                     editProfileInteractor.fetchProfileData()
                             .startWith(PartialEditProfileViewState.ProgressState())
                 }
 
-        val inputDataObservable = editProfileView.emitInputData()
+        val inputDataObservable = editProfileView.inputDataEmitter()
                 .flatMap {
                     if (it.name.isNotBlank()) {
                         editProfileInteractor

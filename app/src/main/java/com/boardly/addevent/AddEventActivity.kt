@@ -227,7 +227,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
         Toast.makeText(this, errorTextId, Toast.LENGTH_LONG).show()
     }
 
-    override fun emitInputData(): Observable<InputData> = RxView.clicks(addEventButton)
+    override fun inputDataEmitter(): Observable<InputData> = RxView.clicks(addEventButton)
             .map {
                 inputData.apply {
                     eventName = eventNameEditText.text.toString().trim()
@@ -236,9 +236,9 @@ class AddEventActivity : BaseActivity(), AddEventView {
                 }
             }
 
-    override fun emitPlacePickEvent(): Observable<Boolean> = placePickEventSubject
+    override fun placePickEventEmitter(): Observable<Boolean> = placePickEventSubject
 
-    override fun emitGamePickEvent(): Observable<String> = gamePickEventSubject
+    override fun gamePickEventEmitter(): Observable<String> = gamePickEventSubject
 
     private fun showPickedGameError(show: Boolean) {
         if (show) {

@@ -6,5 +6,5 @@ interface PickGameView {
 
     fun render(pickGameViewState: PickGameViewState)
 
-    fun emitQuery(): Observable<String>
+    fun queryEmitter(): Observable<String>
 }

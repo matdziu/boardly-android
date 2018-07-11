@@ -13,13 +13,13 @@ class AddEventViewModel(private val addEventInteractor: AddEventInteractor) : Vi
     private val stateSubject = BehaviorSubject.createDefault(AddEventViewState())
 
     fun bind(addEventView: AddEventView) {
-        val gamePickEventObservable = addEventView.emitGamePickEvent()
+        val gamePickEventObservable = addEventView.gamePickEventEmitter()
                 .flatMap { addEventInteractor.fetchGameDetails(it).startWith(PartialAddEventViewState.GamePickedState()) }
 
-        val placePickEventObservable = addEventView.emitPlacePickEvent()
+        val placePickEventObservable = addEventView.placePickEventEmitter()
                 .map { PartialAddEventViewState.PlacePickedState() }
 
-        val inputDataObservable = addEventView.emitInputData()
+        val inputDataObservable = addEventView.inputDataEmitter()
                 .flatMap {
                     val eventNameValid = it.eventName.isNotBlank()
                     val numberOfPlayersValid = it.maxPlayers > 0

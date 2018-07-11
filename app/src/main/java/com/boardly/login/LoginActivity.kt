@@ -146,15 +146,15 @@ class LoginActivity : BaseActivity(), LoginView {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun emitGoogleSignIn(): Observable<GoogleSignInAccount> = googleSignInSubject
+    override fun googleSignInEmitter(): Observable<GoogleSignInAccount> = googleSignInSubject
 
-    override fun emitFacebookSignIn(): Observable<AccessToken> = facebookSignInSubject
+    override fun facebookSignInEmitter(): Observable<AccessToken> = facebookSignInSubject
 
-    override fun emitInput(): Observable<InputData> {
+    override fun inputEmitter(): Observable<InputData> {
         return RxView.clicks(loginButton).map { InputData(emailEditText.text.toString(), passwordEditText.text.toString()) }
     }
 
-    override fun emitInitialLoginCheck(): Observable<Boolean> = initialLoginCheckSubject
+    override fun initialLoginCheckEmitter(): Observable<Boolean> = initialLoginCheckSubject
 
     override fun render(loginViewState: LoginViewState) {
         hideSoftKeyboard()

@@ -12,7 +12,7 @@ class SignUpViewModel(private val signUpInteractor: SignUpInteractor) : ViewMode
     private val stateSubject = BehaviorSubject.createDefault(SignUpViewState())
 
     fun bind(signUpView: SignUpView) {
-        val inputDataObservable = signUpView.emitInput()
+        val inputDataObservable = signUpView.inputEmitter()
                 .flatMap { inputData ->
                     val trimmedEmail = inputData.email.trim()
                     val trimmedPassword = inputData.password.trim()

@@ -6,9 +6,9 @@ interface AddEventView {
 
     fun render(addEventViewState: AddEventViewState)
 
-    fun emitInputData(): Observable<InputData>
+    fun inputDataEmitter(): Observable<InputData>
 
-    fun emitGamePickEvent(): Observable<String>
+    fun gamePickEventEmitter(): Observable<String>
 
-    fun emitPlacePickEvent(): Observable<Boolean>
+    fun placePickEventEmitter(): Observable<Boolean>
 }

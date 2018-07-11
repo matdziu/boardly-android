@@ -7,5 +7,5 @@ interface SignUpView {
 
     fun render(signUpViewState: SignUpViewState)
 
-    fun emitInput(): Observable<InputData>
+    fun inputEmitter(): Observable<InputData>
 }

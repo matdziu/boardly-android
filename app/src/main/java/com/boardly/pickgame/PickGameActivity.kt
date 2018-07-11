@@ -85,7 +85,7 @@ class PickGameActivity : BaseSearchActivity(), PickGameView {
         timeOutTextView.text = getString(R.string.be_more_specific_error_text, query)
     }
 
-    override fun emitQuery(): Observable<String> =
+    override fun queryEmitter(): Observable<String> =
             searchInput.debounce(300, TimeUnit.MILLISECONDS)
                     .distinctUntilChanged()
 }

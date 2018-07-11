@@ -12,7 +12,7 @@ class PickGameViewModel(private val pickGameInteractor: PickGameInteractor) : Vi
     private val stateSubject = BehaviorSubject.createDefault(PickGameViewState())
 
     fun bind(pickGameView: PickGameView) {
-        pickGameView.emitQuery()
+        pickGameView.queryEmitter()
                 .filter { it.length > 1 }
                 .flatMap { pickGameInteractor.fetchSearchResults(it).startWith(PartialPickGameViewState.ProgressState()) }
                 .scan(stateSubject.value, BiFunction(this::reduce))

@@ -7,5 +7,5 @@ interface HomeView {
 
     fun render(homeViewState: HomeViewState)
 
-    fun emitFilteredFetchTrigger(): Observable<Filter>
+    fun filteredFetchTriggerEmitter(): Observable<Filter>
 }

@@ -9,7 +9,7 @@ class PickGameViewRobot(pickGameViewModel: PickGameViewModel) : BaseViewRobot<Pi
     private val emitQuerySubject = PublishSubject.create<String>()
 
     private val pickGameView = object : PickGameView {
-        override fun emitQuery(): Observable<String> = emitQuerySubject
+        override fun queryEmitter(): Observable<String> = emitQuerySubject
 
         override fun render(pickGameViewState: PickGameViewState) {
             renderedStates.add(pickGameViewState)

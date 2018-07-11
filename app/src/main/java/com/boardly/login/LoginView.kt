@@ -9,11 +9,11 @@ interface LoginView {
 
     fun render(loginViewState: LoginViewState)
 
-    fun emitInput(): Observable<InputData>
+    fun inputEmitter(): Observable<InputData>
 
-    fun emitGoogleSignIn(): Observable<GoogleSignInAccount>
+    fun googleSignInEmitter(): Observable<GoogleSignInAccount>
 
-    fun emitFacebookSignIn(): Observable<AccessToken>
+    fun facebookSignInEmitter(): Observable<AccessToken>
 
-    fun emitInitialLoginCheck(): Observable<Boolean>
+    fun initialLoginCheckEmitter(): Observable<Boolean>
 }

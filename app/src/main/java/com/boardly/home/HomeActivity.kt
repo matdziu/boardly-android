@@ -116,7 +116,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         }
     }
 
-    override fun emitFilteredFetchTrigger(): Observable<Filter> = filteredFetchSubject
+    override fun filteredFetchTriggerEmitter(): Observable<Filter> = filteredFetchSubject
 
     override fun render(homeViewState: HomeViewState) {
         with(homeViewState) {
