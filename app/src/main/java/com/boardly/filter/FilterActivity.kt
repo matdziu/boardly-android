@@ -8,6 +8,7 @@ import com.boardly.R
 import com.boardly.base.BaseActivity
 import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_GAME_REQUEST_CODE
+import com.boardly.filter.models.Filter
 import com.boardly.pickgame.PickGameActivity
 import com.boardly.retrofit.gamesearch.models.SearchResult
 import kotlinx.android.synthetic.main.activity_filter.boardGameTextView
@@ -16,6 +17,8 @@ import kotlinx.android.synthetic.main.activity_filter.distanceTextView
 import kotlinx.android.synthetic.main.activity_filter.pickGameButton
 
 class FilterActivity : BaseActivity() {
+
+    private val currentFilter = Filter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_filter)
@@ -45,6 +48,7 @@ class FilterActivity : BaseActivity() {
                 val pickedGame = data.getParcelableExtra<SearchResult>(PICKED_GAME)
                 with(pickedGame) {
                     boardGameTextView.text = name
+                    currentFilter.gameId = id.toString()
                 }
             }
         }
@@ -55,6 +59,7 @@ class FilterActivity : BaseActivity() {
         distanceSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 val actualProgress = progress + seekBarMin
+                currentFilter.radius = actualProgress.toDouble()
                 distanceTextView.text = getString(R.string.max_distance_text, actualProgress)
             }
 
