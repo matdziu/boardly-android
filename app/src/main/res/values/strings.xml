@@ -56,4 +56,5 @@
     <string name="filter_text">Filtruj</string>
     <string name="max_distance_text">Maksymalna odległość wydarzenia: %1$d km</string>
     <string name="apply_filter_text">Zastosuj</string>
+    <string name="delete_game_text">Usuń grę</string>
 </resources>

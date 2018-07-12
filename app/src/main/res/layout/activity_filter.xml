@@ -43,11 +43,21 @@
             android:text="@string/pick_game_text"
             android:textColor="@color/colorPrimary" />
 
+        <Button
+            android:id="@+id/deleteGameButton"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pickGameButton"
+            android:layout_centerHorizontal="true"
+            android:text="@string/delete_game_text"
+            android:textColor="@color/errorRed" />
+
         <TextView
             android:id="@+id/distanceTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/pickGameButton"
+            android:layout_below="@id/deleteGameButton"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="16dp"
             android:text="@string/max_distance_text"

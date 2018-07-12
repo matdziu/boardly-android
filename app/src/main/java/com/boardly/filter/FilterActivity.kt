@@ -14,6 +14,7 @@ import com.boardly.constants.PICK_GAME_REQUEST_CODE
 import com.boardly.constants.SAVED_FILTER
 import com.boardly.factories.FilterViewModelFactory
 import com.boardly.filter.models.Filter
+import com.boardly.injection.modules.GlideApp
 import com.boardly.pickgame.PickGameActivity
 import com.boardly.retrofit.gamesearch.models.SearchResult
 import dagger.android.AndroidInjection
@@ -22,6 +23,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_filter.applyFilterButton
 import kotlinx.android.synthetic.main.activity_filter.boardGameImageView
 import kotlinx.android.synthetic.main.activity_filter.boardGameTextView
+import kotlinx.android.synthetic.main.activity_filter.deleteGameButton
 import kotlinx.android.synthetic.main.activity_filter.distanceSeekBar
 import kotlinx.android.synthetic.main.activity_filter.distanceTextView
 import kotlinx.android.synthetic.main.activity_filter.pickGameButton
@@ -60,7 +62,17 @@ class FilterActivity : BaseActivity(), FilterView {
 
         filterViewModel = ViewModelProviders.of(this, filterViewModelFactory)[FilterViewModel::class.java]
 
-        pickGameButton.setOnClickListener { launchGamePickScreen() }
+        deleteGameButton.setOnClickListener {
+            GlideApp.with(this).pauseAllRequests()
+            boardGameTextView.text = getString(R.string.game_text_placeholder)
+            boardGameImageView.setImageResource(R.drawable.board_game_placeholder)
+            currentFilter.gameId = ""
+            currentFilter.gameName = ""
+            gameIdSubject.onNext("")
+        }
+        pickGameButton.setOnClickListener {
+            launchGamePickScreen()
+        }
         applyFilterButton.setOnClickListener {
             val data = Intent()
             data.putExtra(PICKED_FILTER, currentFilter)
