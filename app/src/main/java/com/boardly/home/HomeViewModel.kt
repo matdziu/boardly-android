@@ -13,7 +13,12 @@ class HomeViewModel(private val homeInteractor: HomeInteractor) : ViewModel() {
 
     fun bind(homeView: HomeView) {
         val filteredFetchObservable = homeView.filteredFetchTriggerEmitter()
-                .flatMap { homeInteractor.fetchEvents(it.radius, it.gameId).startWith(PartialHomeViewState.ProgressState()) }
+                .flatMap {
+                    val userLocation = it.first
+                    val filter = it.second
+                    homeInteractor.fetchEvents(userLocation, filter.radius, filter.gameId)
+                            .startWith(PartialHomeViewState.ProgressState())
+                }
 
         val mergedObservable = Observable.merge(listOf(filteredFetchObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))

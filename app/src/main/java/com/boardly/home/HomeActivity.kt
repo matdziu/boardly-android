@@ -1,6 +1,7 @@
 package com.boardly.home
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -19,6 +20,8 @@ import com.boardly.factories.HomeViewModelFactory
 import com.boardly.filter.FilterActivity
 import com.boardly.filter.models.Filter
 import com.boardly.home.list.EventsAdapter
+import com.boardly.home.models.UserLocation
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.tbruyelle.rxpermissions2.RxPermissions
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
@@ -37,7 +40,8 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
     private lateinit var homeViewModel: HomeViewModel
 
-    private lateinit var filteredFetchSubject: PublishSubject<Filter>
+    private lateinit var filteredFetchSubject: PublishSubject<Pair<UserLocation, Filter>>
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private val eventsAdapter = EventsAdapter()
 
@@ -50,6 +54,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         setContentView(R.layout.activity_home)
         super.onCreate(savedInstanceState)
         initRecyclerView()
+        fusedLocationClient = FusedLocationProviderClient(this)
 
         homeViewModel = ViewModelProviders.of(this, homeViewModelFactory)[HomeViewModel::class.java]
         addEventButton.setOnClickListener { startActivity(Intent(this, AddEventActivity::class.java)) }
@@ -62,12 +67,15 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         eventsRecyclerView.adapter = eventsAdapter
     }
 
+    @SuppressLint("MissingPermission")
     override fun onStart() {
         super.onStart()
         initEmitters()
         homeViewModel.bind(this)
-        if (emitFilter) {
-            filteredFetchSubject.onNext(selectedFilter)
+        if (emitFilter && isLocationPermissionGranted()) {
+            fusedLocationClient.lastLocation.addOnSuccessListener {
+                filteredFetchSubject.onNext(Pair(UserLocation(it.latitude, it.longitude), selectedFilter))
+            }
             emitFilter = false
         }
     }
@@ -116,7 +124,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         }
     }
 
-    override fun filteredFetchTriggerEmitter(): Observable<Filter> = filteredFetchSubject
+    override fun filteredFetchTriggerEmitter(): Observable<Pair<UserLocation, Filter>> = filteredFetchSubject
 
     override fun render(homeViewState: HomeViewState) {
         with(homeViewState) {
@@ -148,6 +156,10 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
             contentViewGroup.visibility = View.VISIBLE
             noEventsTextView.visibility = View.GONE
         }
+    }
+
+    private fun isLocationPermissionGranted(): Boolean {
+        return RxPermissions(this).isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)
     }
 
     private fun requestLocationPermission() {
