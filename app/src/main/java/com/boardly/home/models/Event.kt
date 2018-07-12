@@ -2,6 +2,7 @@ package com.boardly.home.models
 
 data class Event(var eventId: String = "",
                  val eventName: String = "",
+                 val gameId: String = "",
                  val gameName: String = "",
                  val levelId: String = "",
                  val placeName: String = "",

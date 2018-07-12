@@ -20,7 +20,9 @@ class HomeInteractor : BaseInteractor() {
         getGeoFire(EVENTS_NODE).queryAtLocation(GeoLocation(userLocation.latitude, userLocation.longitude), radius)
                 .addGeoQueryDataEventListener(object : GeoQueryDataEventListener {
                     override fun onDataEntered(dataSnapshot: DataSnapshot, location: GeoLocation) {
-                        dataSnapshot.getValue(Event::class.java)?.let { fetchedEventsList.add(it) }
+                        dataSnapshot.getValue(Event::class.java)?.let {
+                            if (gameId.isEmpty() || it.gameId == gameId) fetchedEventsList.add(it)
+                        }
                     }
 
                     override fun onGeoQueryReady() {
