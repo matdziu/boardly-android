@@ -35,6 +35,7 @@ import kotlinx.android.synthetic.main.activity_home.contentViewGroup
 import kotlinx.android.synthetic.main.activity_home.eventsRecyclerView
 import kotlinx.android.synthetic.main.activity_home.lookingForEventsTextView
 import kotlinx.android.synthetic.main.activity_home.noEventsTextView
+import kotlinx.android.synthetic.main.activity_home.noLocationPermissionTextView
 import javax.inject.Inject
 
 class HomeActivity : BaseDrawerActivity(), HomeView {
@@ -72,21 +73,25 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         eventsRecyclerView.adapter = eventsAdapter
     }
 
-    @SuppressLint("MissingPermission")
     override fun onStart() {
         super.onStart()
         initEmitters()
         homeViewModel.bind(this)
         if (emitFilter && isLocationPermissionGranted()) {
-            fusedLocationClient.lastLocation.addOnSuccessListener {
-                filteredFetchSubject.onNext(Pair(UserLocation(it.latitude, it.longitude), selectedFilter))
-            }
+            emitFilteredFetchTrigger()
             emitFilter = false
         }
     }
 
     private fun initEmitters() {
         filteredFetchSubject = PublishSubject.create()
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun emitFilteredFetchTrigger() {
+        fusedLocationClient.lastLocation.addOnSuccessListener {
+            filteredFetchSubject.onNext(Pair(UserLocation(it.latitude, it.longitude), selectedFilter))
+        }
     }
 
     override fun onResume() {
@@ -134,10 +139,11 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
     override fun render(homeViewState: HomeViewState) {
         with(homeViewState) {
             showNoEventsFoundText(false)
+            showNoLocationPermissionText(!isLocationPermissionGranted() && !progress)
             showLookingForEventsText(progress)
             if (eventList.isNotEmpty() && !progress) {
                 eventsAdapter.submitList(eventList)
-            } else if (!progress) {
+            } else if (!progress && isLocationPermissionGranted()) {
                 showNoEventsFoundText(true)
             }
         }
@@ -163,6 +169,14 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         }
     }
 
+    private fun showNoLocationPermissionText(show: Boolean) {
+        if (show) {
+            noLocationPermissionTextView.visibility = View.VISIBLE
+        } else {
+            noLocationPermissionTextView.visibility = View.GONE
+        }
+    }
+
     private fun isLocationPermissionGranted(): Boolean {
         return RxPermissions(this).isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)
     }
@@ -174,6 +188,8 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
                     if (!it) {
                         finish()
                         Toast.makeText(this, R.string.location_permission_denied_text, Toast.LENGTH_LONG).show()
+                    } else {
+                        emitFilteredFetchTrigger()
                     }
                 }
     }

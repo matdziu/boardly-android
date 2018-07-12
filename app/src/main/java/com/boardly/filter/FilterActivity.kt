@@ -129,6 +129,9 @@ class FilterActivity : BaseActivity(), FilterView {
 
     private fun initDistanceFilter(initialProgress: Int) {
         val seekBarMin = 1
+        val actualInitialProgress = initialProgress - seekBarMin
+        distanceTextView.text = getString(R.string.max_distance_text, initialProgress)
+        distanceSeekBar.progress = actualInitialProgress
         distanceSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 val actualProgress = progress + seekBarMin
@@ -144,8 +147,6 @@ class FilterActivity : BaseActivity(), FilterView {
                 // unused
             }
         })
-        val actualInitialProgress = initialProgress - seekBarMin
-        distanceSeekBar.progress = actualInitialProgress
     }
 
     private fun initGameFilter(gameName: String) {
