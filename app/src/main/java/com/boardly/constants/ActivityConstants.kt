@@ -8,3 +8,5 @@ const val PICK_FILTER_REQUEST_CODE = 4
 const val SHOW_HAMBURGER_MENU = "showHamburgerMenu"
 const val PICKED_GAME = "pickedGame"
 const val PICKED_FILTER = "pickedFilter"
+const val SAVED_RADIUS = "savedRadius"
+const val SAVED_GAME_ID = "savedGameId"

@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -16,6 +17,8 @@ import com.boardly.addevent.AddEventActivity
 import com.boardly.base.BaseDrawerActivity
 import com.boardly.constants.PICKED_FILTER
 import com.boardly.constants.PICK_FILTER_REQUEST_CODE
+import com.boardly.constants.SAVED_GAME_ID
+import com.boardly.constants.SAVED_RADIUS
 import com.boardly.factories.HomeViewModelFactory
 import com.boardly.filter.FilterActivity
 import com.boardly.filter.models.Filter
@@ -55,6 +58,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         super.onCreate(savedInstanceState)
         initRecyclerView()
         fusedLocationClient = FusedLocationProviderClient(this)
+        selectedFilter = getSavedFilter()
 
         homeViewModel = ViewModelProviders.of(this, homeViewModelFactory)[HomeViewModel::class.java]
         addEventButton.setOnClickListener { startActivity(Intent(this, AddEventActivity::class.java)) }
@@ -171,5 +175,12 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
                         Toast.makeText(this, R.string.location_permission_denied_text, Toast.LENGTH_LONG).show()
                     }
                 }
+    }
+
+    private fun getSavedFilter(): Filter {
+        val sharedPrefs = getPreferences(Context.MODE_PRIVATE)
+        val savedRadius = sharedPrefs.getInt(SAVED_RADIUS, 50)
+        val savedGameId = sharedPrefs.getString(SAVED_GAME_ID, "")
+        return Filter(savedRadius.toDouble(), savedGameId)
     }
 }
