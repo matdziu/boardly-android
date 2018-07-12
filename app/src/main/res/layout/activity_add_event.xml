@@ -53,7 +53,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/numberOfPlayersHintTextView" />
 
             <TextView
-                android:id="@+id/descriptionTextVieHint"
+                android:id="@+id/descriptionTextViewHint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -69,7 +69,7 @@
                 android:maxHeight="100dp"
                 android:maxLength="300"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/descriptionTextVieHint" />
+                app:layout_constraintTop_toBottomOf="@+id/descriptionTextViewHint" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/boardGameImageView"

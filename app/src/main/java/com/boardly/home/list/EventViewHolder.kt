@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.item_event.view.gameTextView
 import kotlinx.android.synthetic.main.item_event.view.levelTextView
 import kotlinx.android.synthetic.main.item_event.view.locationTextView
 import kotlinx.android.synthetic.main.item_event.view.numberOfPlayersTextView
+import kotlinx.android.synthetic.main.item_event.view.seeDescriptionButton
 import kotlinx.android.synthetic.main.item_event.view.timeTextView
 import java.util.*
 
@@ -31,6 +32,16 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             timeTextView.text = Date(event.timestamp).formatForDisplay()
             numberOfPlayersTextView.text = event.currentNumberOfPlayers.toString().formatForMaxOf(event.maxPlayers.toString())
             parentActivity.loadImageFromUrl(boardGameImageView, event.gameImageUrl, R.drawable.board_game_placeholder)
+            seeDescriptionButton.setOnClickListener { launchDescriptionDialog(event.description) }
         }
+    }
+
+    private fun launchDescriptionDialog(description: String) {
+        android.app.AlertDialog.Builder(parentActivity)
+                .setMessage(description)
+                .setTitle(R.string.description_text)
+                .setPositiveButton(R.string.close_dialog) { dialog, _ -> dialog.cancel() }
+                .create()
+                .show()
     }
 }
