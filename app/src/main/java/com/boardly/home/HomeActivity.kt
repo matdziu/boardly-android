@@ -123,6 +123,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         when (resultCode) {
             Activity.RESULT_OK -> {
                 selectedFilter = data.getParcelableExtra(PICKED_FILTER)
+                saveFilter(selectedFilter)
                 emitFilter = true
             }
         }
@@ -182,5 +183,13 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         val savedRadius = sharedPrefs.getInt(SAVED_RADIUS, 50)
         val savedGameId = sharedPrefs.getString(SAVED_GAME_ID, "")
         return Filter(savedRadius.toDouble(), savedGameId)
+    }
+
+    private fun saveFilter(filter: Filter) {
+        val sharedPrefs = getPreferences(Context.MODE_PRIVATE)
+        sharedPrefs.edit()
+                .putInt(SAVED_RADIUS, selectedFilter.radius.toInt())
+                .putString(SAVED_GAME_ID, filter.gameId)
+                .apply()
     }
 }
