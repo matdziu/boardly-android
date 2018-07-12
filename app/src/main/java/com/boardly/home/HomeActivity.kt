@@ -18,6 +18,7 @@ import com.boardly.base.BaseDrawerActivity
 import com.boardly.constants.PICKED_FILTER
 import com.boardly.constants.PICK_FILTER_REQUEST_CODE
 import com.boardly.constants.SAVED_GAME_ID
+import com.boardly.constants.SAVED_GAME_NAME
 import com.boardly.constants.SAVED_RADIUS
 import com.boardly.factories.HomeViewModelFactory
 import com.boardly.filter.FilterActivity
@@ -105,8 +106,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.filter_events_item -> startActivityForResult(
-                    Intent(this, FilterActivity::class.java), PICK_FILTER_REQUEST_CODE)
+            R.id.filter_events_item -> FilterActivity.start(this, selectedFilter)
         }
         return false
     }
@@ -182,7 +182,8 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         val sharedPrefs = getPreferences(Context.MODE_PRIVATE)
         val savedRadius = sharedPrefs.getInt(SAVED_RADIUS, 50)
         val savedGameId = sharedPrefs.getString(SAVED_GAME_ID, "")
-        return Filter(savedRadius.toDouble(), savedGameId)
+        val savedGameName = sharedPrefs.getString(SAVED_GAME_NAME, "")
+        return Filter(savedRadius.toDouble(), savedGameId, savedGameName)
     }
 
     private fun saveFilter(filter: Filter) {
@@ -190,6 +191,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         sharedPrefs.edit()
                 .putInt(SAVED_RADIUS, selectedFilter.radius.toInt())
                 .putString(SAVED_GAME_ID, filter.gameId)
+                .putString(SAVED_GAME_NAME, filter.gameName)
                 .apply()
     }
 }
