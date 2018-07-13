@@ -60,4 +60,5 @@
     <string name="description_text">Opis</string>
     <string name="close_dialog">Zamknij</string>
     <string name="enable_location_permission">Włącz lokalizację i zezwól Boardly na dostęp do niej żeby wyświetlić wydarzenia w okolicy.</string>
+    <string name="date_to_be_added">Do ustalenia</string>
 </resources>

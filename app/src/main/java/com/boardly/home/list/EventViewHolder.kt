@@ -26,13 +26,13 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         with(itemView) {
             eventNameTextView.text = event.eventName
             gameTextView.text = event.gameName
-            levelTextView.text = context.getString(LEVEL_STRINGS_MAP[event.levelId]
-                    ?: R.string.empty)
             locationTextView.text = event.placeName
-            timeTextView.text = Date(event.timestamp).formatForDisplay()
             numberOfPlayersTextView.text = event.currentNumberOfPlayers.toString().formatForMaxOf(event.maxPlayers.toString())
             parentActivity.loadImageFromUrl(boardGameImageView, event.gameImageUrl, R.drawable.board_game_placeholder)
-            seeDescriptionButton.setOnClickListener { launchDescriptionDialog(event.description) }
+
+            setSeeDescriptionButton(event.description, itemView)
+            setLevelTextView(event.levelId, itemView)
+            setDateTextView(event.timestamp, itemView)
         }
     }
 
@@ -43,5 +43,32 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 .setPositiveButton(R.string.close_dialog) { dialog, _ -> dialog.cancel() }
                 .create()
                 .show()
+    }
+
+    private fun setSeeDescriptionButton(description: String, itemView: View) {
+        with(itemView) {
+            if (description.isNotEmpty()) {
+                seeDescriptionButton.visibility = View.VISIBLE
+                seeDescriptionButton.setOnClickListener { launchDescriptionDialog(description) }
+            } else {
+                seeDescriptionButton.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun setLevelTextView(levelId: String, itemView: View) {
+        with(itemView) {
+            levelTextView.text = context.getString(LEVEL_STRINGS_MAP[levelId] ?: R.string.empty)
+        }
+    }
+
+    private fun setDateTextView(timestamp: Long, itemView: View) {
+        with(itemView) {
+            if (timestamp > 0) {
+                timeTextView.text = Date(timestamp).formatForDisplay()
+            } else {
+                timeTextView.text = context.getString(R.string.date_to_be_added)
+            }
+        }
     }
 }
