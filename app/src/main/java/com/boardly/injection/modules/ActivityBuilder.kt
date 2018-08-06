@@ -6,6 +6,7 @@ import com.boardly.filter.FilterActivity
 import com.boardly.home.HomeActivity
 import com.boardly.injection.ActivityScope
 import com.boardly.login.LoginActivity
+import com.boardly.myevents.MyEventsActivity
 import com.boardly.pickgame.PickGameActivity
 import com.boardly.signup.SignUpActivity
 import dagger.Module
@@ -42,4 +43,8 @@ abstract class ActivityBuilder {
     @ActivityScope
     @ContributesAndroidInjector(modules = [FilterActivityModule::class])
     abstract fun bindFilterActivity(): FilterActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [MyEventsActivityModule::class])
+    abstract fun bindMyEventsActivity(): MyEventsActivity
 }
