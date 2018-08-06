@@ -9,4 +9,6 @@
     <color name="facebookBlueDark">#3949ab</color>
     <color name="lightGrey">#D8D8D8</color>
     <color name="errorRed">#F44336</color>
+    <color name="green">#2ebd2e</color>
+    <color name="yellow">#eae22a</color>
 </resources>

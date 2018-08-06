@@ -63,4 +63,7 @@
     <string name="date_to_be_added">Do ustalenia</string>
     <string name="my_events_text">Moje wydarzenia</string>
     <string name="no_my_events_found_text">Nie znaleziono żadnych wydarzeń</string>
+    <string name="created_text">STWORZONE</string>
+    <string name="pending_text">OCZEKUJĄCE</string>
+    <string name="accepted_text">ZAAKCEPTOWANE</string>
 </resources>
