@@ -14,5 +14,5 @@ data class Event(var eventId: String = "",
                  var type: EventType = EventType.DEFAULT)
 
 enum class EventType {
-    MINE, ACCEPTED, PENDING, DEFAULT
+    CREATED, ACCEPTED, PENDING, DEFAULT
 }

@@ -2,7 +2,7 @@ package com.boardly.base
 
 import com.boardly.constants.ACCEPTED_EVENTS_NODE
 import com.boardly.constants.EVENTS_NODE
-import com.boardly.constants.MINE_EVENTS_NODE
+import com.boardly.constants.CREATED_EVENTS_NODE
 import com.boardly.constants.PENDING_EVENTS_NODE
 import com.boardly.constants.USERS_NODE
 import com.firebase.geofire.GeoFire
@@ -47,7 +47,7 @@ open class BaseInteractor {
         return firebaseDatabase.getReference("$USERS_NODE/$userId/$EVENTS_NODE/$ACCEPTED_EVENTS_NODE")
     }
 
-    protected fun getUserMineEventsNodeRef(userId: String): DatabaseReference {
-        return firebaseDatabase.getReference("$USERS_NODE/$userId/$EVENTS_NODE/$MINE_EVENTS_NODE")
+    protected fun getUserCreatedEventsNodeRef(userId: String): DatabaseReference {
+        return firebaseDatabase.getReference("$USERS_NODE/$userId/$EVENTS_NODE/$CREATED_EVENTS_NODE")
     }
 }

@@ -16,12 +16,12 @@ class MyEventsInteractor : BaseInteractor() {
     fun fetchEvents(): Observable<PartialMyEventsViewState> {
         val pendingEventsObservable = pendingEventIdsList().flatMap { events(it) }
         val acceptedEventsObservable = acceptedEventIdsList().flatMap { events(it) }
-        val mineEventsObservable = mineEventIdsList().flatMap { events(it) }
+        val createdEventsObservable = createdEventIdsList().flatMap { events(it) }
 
         return Observable.zip(pendingEventsObservable,
                 acceptedEventsObservable,
-                mineEventsObservable,
-                Function3<List<Event>, List<Event>, List<Event>, PartialMyEventsViewState> { pending, accepted, mine ->
+                createdEventsObservable,
+                Function3<List<Event>, List<Event>, List<Event>, PartialMyEventsViewState> { pending, accepted, created ->
                     PartialMyEventsViewState.EventsFetchedState(
                             pending.map {
                                 it.type = EventType.PENDING
@@ -31,8 +31,8 @@ class MyEventsInteractor : BaseInteractor() {
                                 it.type = EventType.ACCEPTED
                                 it
                             }
-                                    + mine.map {
-                                it.type = EventType.MINE
+                                    + created.map {
+                                it.type = EventType.CREATED
                                 it
                             })
                 })
@@ -46,8 +46,8 @@ class MyEventsInteractor : BaseInteractor() {
         return idsList(getUserAcceptedEventsNodeRef(currentUserId))
     }
 
-    private fun mineEventIdsList(): Observable<List<String>> {
-        return idsList(getUserMineEventsNodeRef(currentUserId))
+    private fun createdEventIdsList(): Observable<List<String>> {
+        return idsList(getUserCreatedEventsNodeRef(currentUserId))
     }
 
     private fun idsList(idsDatabaseReference: DatabaseReference): Observable<List<String>> {
