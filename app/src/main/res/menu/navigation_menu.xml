@@ -8,6 +8,12 @@
         android:title="@string/events_text" />
 
     <item
+        android:id="@+id/my_events_item"
+        android:checkable="true"
+        android:icon="@drawable/ic_event_available_white_18"
+        android:title="@string/my_events_text" />
+
+    <item
         android:id="@+id/profile_item"
         android:checkable="true"
         android:icon="@drawable/ic_account_circle_white_18dp"
