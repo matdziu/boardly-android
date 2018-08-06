@@ -1,3 +1,6 @@
 package com.boardly.myevents
 
-data class MyEventsViewState(val progress: Boolean = false)
+import com.boardly.myevents.models.Event
+
+data class MyEventsViewState(val progress: Boolean = false,
+                             val eventsList: List<Event> = listOf())

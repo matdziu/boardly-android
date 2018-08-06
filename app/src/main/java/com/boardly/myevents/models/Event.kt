@@ -1,6 +1,6 @@
-package com.boardly.home.models
+package com.boardly.myevents.models
 
-data class Event(val eventId: String = "",
+data class Event(var eventId: String = "",
                  val eventName: String = "",
                  val gameId: String = "",
                  val gameName: String = "",
@@ -10,4 +10,9 @@ data class Event(val eventId: String = "",
                  val maxPlayers: Int = 0,
                  val currentNumberOfPlayers: Int = 0,
                  val gameImageUrl: String = "",
-                 val description: String = "")
+                 val description: String = "",
+                 var type: EventType)
+
+enum class EventType {
+    MINE, ACCEPTED, PENDING
+}
