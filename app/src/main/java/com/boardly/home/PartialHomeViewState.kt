@@ -1,6 +1,6 @@
 package com.boardly.home
 
-import com.boardly.home.models.Event
+import com.boardly.common.events.models.Event
 
 sealed class PartialHomeViewState {
 

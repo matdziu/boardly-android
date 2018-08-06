@@ -1,7 +1,7 @@
 package com.boardly.home
 
+import com.boardly.common.events.models.Event
 import com.boardly.filter.models.Filter
-import com.boardly.home.models.Event
 import com.boardly.home.models.UserLocation
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn

@@ -1,13 +1,13 @@
-package com.boardly.home.list
+package com.boardly.common.events.list
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.boardly.R
+import com.boardly.common.events.models.Event
 import com.boardly.constants.LEVEL_STRINGS_MAP
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.formatForMaxOf
 import com.boardly.home.HomeActivity
-import com.boardly.home.models.Event
 import kotlinx.android.synthetic.main.item_event.view.boardGameImageView
 import kotlinx.android.synthetic.main.item_event.view.eventNameTextView
 import kotlinx.android.synthetic.main.item_event.view.gameTextView

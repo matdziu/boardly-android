@@ -1,6 +1,6 @@
 package com.boardly.myevents
 
-import com.boardly.myevents.models.Event
+import com.boardly.common.events.models.Event
 
 sealed class PartialMyEventsViewState {
 

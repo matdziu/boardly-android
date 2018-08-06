@@ -1,8 +1,8 @@
 package com.boardly.home
 
 import com.boardly.base.BaseInteractor
+import com.boardly.common.events.models.Event
 import com.boardly.constants.EVENTS_NODE
-import com.boardly.home.models.Event
 import com.boardly.home.models.UserLocation
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQueryDataEventListener

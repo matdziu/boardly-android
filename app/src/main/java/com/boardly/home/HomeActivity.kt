@@ -23,7 +23,7 @@ import com.boardly.constants.SAVED_RADIUS
 import com.boardly.factories.HomeViewModelFactory
 import com.boardly.filter.FilterActivity
 import com.boardly.filter.models.Filter
-import com.boardly.home.list.EventsAdapter
+import com.boardly.common.events.list.EventsAdapter
 import com.boardly.home.models.UserLocation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.tbruyelle.rxpermissions2.RxPermissions

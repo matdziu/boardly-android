@@ -1,8 +1,8 @@
 package com.boardly.myevents
 
 import com.boardly.base.BaseInteractor
-import com.boardly.myevents.models.Event
-import com.boardly.myevents.models.EventType
+import com.boardly.common.events.models.Event
+import com.boardly.common.events.models.EventType
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference

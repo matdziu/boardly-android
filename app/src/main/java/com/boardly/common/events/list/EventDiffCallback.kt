@@ -1,7 +1,7 @@
-package com.boardly.home.list
+package com.boardly.common.events.list
 
 import android.support.v7.util.DiffUtil
-import com.boardly.home.models.Event
+import com.boardly.common.events.models.Event
 
 class EventDiffCallback : DiffUtil.ItemCallback<Event>() {
 

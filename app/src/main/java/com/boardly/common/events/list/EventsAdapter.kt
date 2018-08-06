@@ -1,10 +1,10 @@
-package com.boardly.home.list
+package com.boardly.common.events.list
 
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.boardly.R
-import com.boardly.home.models.Event
+import com.boardly.common.events.models.Event
 
 class EventsAdapter : ListAdapter<Event, EventViewHolder>(EventDiffCallback()) {
 
