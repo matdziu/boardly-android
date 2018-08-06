@@ -27,6 +27,10 @@ open class BaseInteractor {
         return firebaseDatabase.getReference(EVENTS_NODE)
     }
 
+    protected fun getSingleEventNode(eventId: String): DatabaseReference {
+        return firebaseDatabase.getReference("$EVENTS_NODE/$eventId")
+    }
+
     protected fun getStorageProfilePictureRef(userId: String): StorageReference {
         return firebaseStorage.reference.child(userId)
     }
