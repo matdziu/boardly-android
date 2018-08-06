@@ -4,6 +4,9 @@ import com.boardly.R
 
 const val USERS_NODE = "users"
 const val EVENTS_NODE = "events"
+const val PENDING_EVENTS_NODE = "pending"
+const val ACCEPTED_EVENTS_NODE = "accepted"
+const val MINE_EVENTS_NODE = "mine"
 
 const val NAME_CHILD = "name"
 const val PROFILE_PICTURE_CHILD = "profilePicture"
