@@ -11,8 +11,8 @@ data class Event(var eventId: String = "",
                  val currentNumberOfPlayers: Int = 0,
                  val gameImageUrl: String = "",
                  val description: String = "",
-                 var type: EventType)
+                 var type: EventType = EventType.DEFAULT)
 
 enum class EventType {
-    MINE, ACCEPTED, PENDING
+    MINE, ACCEPTED, PENDING, DEFAULT
 }

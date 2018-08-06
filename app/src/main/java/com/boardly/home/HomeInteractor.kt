@@ -21,7 +21,10 @@ class HomeInteractor : BaseInteractor() {
                 .addGeoQueryDataEventListener(object : GeoQueryDataEventListener {
                     override fun onDataEntered(dataSnapshot: DataSnapshot, location: GeoLocation) {
                         dataSnapshot.getValue(Event::class.java)?.let {
-                            if (gameId.isEmpty() || it.gameId == gameId) fetchedEventsList.add(it)
+                            if (gameId.isEmpty() || it.gameId == gameId) {
+                                it.eventId = dataSnapshot.key ?: ""
+                                fetchedEventsList.add(it)
+                            }
                         }
                     }
 

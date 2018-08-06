@@ -77,7 +77,10 @@ class MyEventsInteractor : BaseInteractor() {
         for (id in idsList) {
             getSingleEventNode(id).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    dataSnapshot.getValue(Event::class.java)?.let { eventList.add(it) }
+                    dataSnapshot.getValue(Event::class.java)?.let {
+                        it.eventId = id
+                        eventList.add(it)
+                    }
                     if (eventList.size == idsList.size) resultSubject.onNext(eventList)
                 }
 
