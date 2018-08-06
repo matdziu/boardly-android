@@ -11,15 +11,30 @@
 
         <include layout="@layout/toolbar" />
 
-        <LinearLayout
-            android:id="@+id/contentViewGroup"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/eventsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/toolbar"
-            android:orientation="vertical">
+            android:layout_below="@id/toolbar" />
 
+        <TextView
+            android:id="@+id/noEventsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="16dp"
+            android:text="@string/no_my_events_found_text"
+            android:textAlignment="center"
+            android:visibility="gone" />
 
-        </LinearLayout>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

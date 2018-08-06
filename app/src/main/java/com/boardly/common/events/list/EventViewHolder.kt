@@ -3,11 +3,11 @@ package com.boardly.common.events.list
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.boardly.R
+import com.boardly.base.BaseActivity
 import com.boardly.common.events.models.Event
 import com.boardly.constants.LEVEL_STRINGS_MAP
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.formatForMaxOf
-import com.boardly.home.HomeActivity
 import kotlinx.android.synthetic.main.item_event.view.boardGameImageView
 import kotlinx.android.synthetic.main.item_event.view.eventNameTextView
 import kotlinx.android.synthetic.main.item_event.view.gameTextView
@@ -20,7 +20,7 @@ import java.util.*
 
 class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private val parentActivity = itemView.context as HomeActivity
+    private val parentActivity = itemView.context as BaseActivity
 
     fun bind(event: Event) {
         with(itemView) {

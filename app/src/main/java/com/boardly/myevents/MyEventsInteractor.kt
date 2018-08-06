@@ -74,6 +74,8 @@ class MyEventsInteractor : BaseInteractor() {
         val resultSubject = PublishSubject.create<List<Event>>()
         val eventList = arrayListOf<Event>()
 
+        if (idsList.isEmpty()) return Observable.just(eventList)
+
         for (id in idsList) {
             getSingleEventNode(id).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
