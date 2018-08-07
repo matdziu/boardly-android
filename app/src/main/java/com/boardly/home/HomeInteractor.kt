@@ -9,12 +9,29 @@ import com.firebase.geofire.GeoQueryDataEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import io.reactivex.Observable
+import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function3
 import io.reactivex.subjects.PublishSubject
 
 class HomeInteractor : BaseInteractor() {
 
     fun fetchEvents(userLocation: UserLocation, radius: Double, gameId: String): Observable<PartialHomeViewState> {
-        val resultSubject = PublishSubject.create<PartialHomeViewState>()
+        return Observable.zip(fetchUserEventIds(), fetchAllEvents(userLocation, radius, gameId),
+                BiFunction<List<String>, List<Event>, PartialHomeViewState>
+                { userEventIds, allEvents ->
+                    val filteredEventList = allEvents.filter { !userEventIds.contains(it.eventId) }
+                    PartialHomeViewState.EventsFetchedState(filteredEventList)
+                })
+    }
+
+    private fun fetchUserEventIds(): Observable<List<String>> {
+        return Observable.zip(pendingEventIdsList(), acceptedEventIdsList(), createdEventIdsList(),
+                Function3<List<String>, List<String>, List<String>, List<String>>
+                { pending, accepted, created -> pending + accepted + created })
+    }
+
+    private fun fetchAllEvents(userLocation: UserLocation, radius: Double, gameId: String): Observable<List<Event>> {
+        val resultSubject = PublishSubject.create<List<Event>>()
         val fetchedEventsList = arrayListOf<Event>()
 
         getGeoFire(EVENTS_NODE).queryAtLocation(GeoLocation(userLocation.latitude, userLocation.longitude), radius)
@@ -29,7 +46,7 @@ class HomeInteractor : BaseInteractor() {
                     }
 
                     override fun onGeoQueryReady() {
-                        resultSubject.onNext(PartialHomeViewState.EventsFetchedState(fetchedEventsList))
+                        resultSubject.onNext(fetchedEventsList)
                     }
 
                     override fun onDataExited(dataSnapshot: DataSnapshot) {

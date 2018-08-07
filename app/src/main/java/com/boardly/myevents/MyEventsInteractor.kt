@@ -5,7 +5,6 @@ import com.boardly.common.events.models.Event
 import com.boardly.common.events.models.EventType
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
@@ -36,38 +35,6 @@ class MyEventsInteractor : BaseInteractor() {
                                 it
                             })
                 })
-    }
-
-    private fun pendingEventIdsList(): Observable<List<String>> {
-        return idsList(getUserPendingEventsNodeRef(currentUserId))
-    }
-
-    private fun acceptedEventIdsList(): Observable<List<String>> {
-        return idsList(getUserAcceptedEventsNodeRef(currentUserId))
-    }
-
-    private fun createdEventIdsList(): Observable<List<String>> {
-        return idsList(getUserCreatedEventsNodeRef(currentUserId))
-    }
-
-    private fun idsList(idsDatabaseReference: DatabaseReference): Observable<List<String>> {
-        val resultSubject = PublishSubject.create<List<String>>()
-
-        idsDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val idsList = arrayListOf<String>()
-                for (childSnapshot in dataSnapshot.children) {
-                    childSnapshot.getValue(String::class.java)?.let { idsList.add(it) }
-                }
-                resultSubject.onNext(idsList)
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                resultSubject.onError(databaseError.toException())
-            }
-        })
-
-        return resultSubject
     }
 
     private fun events(idsList: List<String>): Observable<List<Event>> {
