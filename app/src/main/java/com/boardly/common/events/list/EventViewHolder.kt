@@ -55,7 +55,22 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private fun setDefaultClickAction(event: Event) {
         val homeActivity = parentActivity as HomeActivity
-        itemView.joinEventButton.setOnClickListener { homeActivity.joinEventSubject.onNext(event.eventId) }
+        itemView.joinEventButton.setOnClickListener { launchHelloDialog { homeActivity.joinEventSubject.onNext(event.eventId) } }
+    }
+
+    private fun launchHelloDialog(positiveButtonHandler: () -> Unit) {
+        android.app.AlertDialog.Builder(parentActivity)
+                .setTitle(R.string.hello_dialog_title)
+                .setPositiveButton(R.string.hello_dialog_positive_text) { dialog, _ ->
+                    positiveButtonHandler()
+                    dialog.cancel()
+                }
+                .setNegativeButton(R.string.hello_dialog_negative_text) { dialog, _ ->
+                    dialog.cancel()
+                }
+                .setView(R.layout.view_hello_dialog)
+                .create()
+                .show()
     }
 
     private fun setCreatedClickAction() {

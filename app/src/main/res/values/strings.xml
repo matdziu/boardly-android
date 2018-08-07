@@ -66,4 +66,8 @@
     <string name="created_text">STWORZONE</string>
     <string name="pending_text">OCZEKUJĄCE</string>
     <string name="accepted_text">ZAAKCEPTOWANE</string>
+    <string name="hello_dialog_title">Dołącz</string>
+    <string name="hello_hint_text">Napisz krótko coś o sobie (np. jaki jest Twój poziom doświadczenia wybranej planszówki albo czego się spodziewasz podczas gry). Pomoże to organizatorowi wybrać właśnie Ciebie!</string>
+    <string name="hello_dialog_positive_text">Dołącz</string>
+    <string name="hello_dialog_negative_text">Anuluj</string>
 </resources>
