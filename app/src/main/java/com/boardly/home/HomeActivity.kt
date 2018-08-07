@@ -15,6 +15,7 @@ import android.widget.Toast
 import com.boardly.R
 import com.boardly.addevent.AddEventActivity
 import com.boardly.base.BaseDrawerActivity
+import com.boardly.common.events.list.EventsAdapter
 import com.boardly.constants.PICKED_FILTER
 import com.boardly.constants.PICK_FILTER_REQUEST_CODE
 import com.boardly.constants.SAVED_GAME_ID
@@ -23,7 +24,6 @@ import com.boardly.constants.SAVED_RADIUS
 import com.boardly.factories.HomeViewModelFactory
 import com.boardly.filter.FilterActivity
 import com.boardly.filter.models.Filter
-import com.boardly.common.events.list.EventsAdapter
 import com.boardly.home.models.UserLocation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -46,6 +46,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
     private lateinit var homeViewModel: HomeViewModel
 
     private lateinit var filteredFetchSubject: PublishSubject<Pair<UserLocation, Filter>>
+    lateinit var joinEventSubject: PublishSubject<String>
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private val eventsAdapter = EventsAdapter()
@@ -85,6 +86,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
     private fun initEmitters() {
         filteredFetchSubject = PublishSubject.create()
+        joinEventSubject = PublishSubject.create()
     }
 
     @SuppressLint("MissingPermission")
@@ -135,6 +137,8 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
     }
 
     override fun filteredFetchTriggerEmitter(): Observable<Pair<UserLocation, Filter>> = filteredFetchSubject
+
+    override fun joinEventEmitter(): Observable<String> = joinEventSubject
 
     override fun render(homeViewState: HomeViewState) {
         with(homeViewState) {

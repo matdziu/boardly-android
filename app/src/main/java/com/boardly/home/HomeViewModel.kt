@@ -1,6 +1,7 @@
 package com.boardly.home
 
 import android.arch.lifecycle.ViewModel
+import com.boardly.common.events.models.Event
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
@@ -10,6 +11,7 @@ class HomeViewModel(private val homeInteractor: HomeInteractor) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     private val stateSubject = BehaviorSubject.createDefault(HomeViewState())
+    private var eventList = listOf<Event>()
 
     fun bind(homeView: HomeView) {
         val filteredFetchObservable = homeView.filteredFetchTriggerEmitter()
@@ -17,14 +19,32 @@ class HomeViewModel(private val homeInteractor: HomeInteractor) : ViewModel() {
                     val userLocation = it.first
                     val filter = it.second
                     homeInteractor.fetchEvents(userLocation, filter.radius, filter.gameId)
+                            .doOnNext { saveEventList(it) }
                             .startWith(PartialHomeViewState.ProgressState())
                 }
 
-        val mergedObservable = Observable.merge(listOf(filteredFetchObservable))
+        val joinEventObservable = homeView.joinEventEmitter()
+                .flatMap { homeInteractor.joinEvent(it) }
+
+        val updateEventListObservable = homeView.joinEventEmitter()
+                .map { jointEventId ->
+                    eventList = eventList.filter { jointEventId != it.eventId }
+                    PartialHomeViewState.EventListState(eventList)
+                }
+
+        val mergedObservable = Observable.merge(listOf(
+                filteredFetchObservable,
+                joinEventObservable,
+                updateEventListObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 
         compositeDisposable.add(mergedObservable.subscribe { homeView.render(it) })
+    }
+
+    private fun saveEventList(partialState: PartialHomeViewState) {
+        val eventListState = partialState as PartialHomeViewState.EventListState
+        eventList = eventListState.eventsList
     }
 
     private fun reduce(previousState: HomeViewState, partialState: PartialHomeViewState): HomeViewState {

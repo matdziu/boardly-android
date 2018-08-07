@@ -9,4 +9,6 @@ interface HomeView {
     fun render(homeViewState: HomeViewState)
 
     fun filteredFetchTriggerEmitter(): Observable<Pair<UserLocation, Filter>>
+
+    fun joinEventEmitter(): Observable<String>
 }

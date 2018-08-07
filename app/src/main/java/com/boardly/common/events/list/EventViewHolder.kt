@@ -9,6 +9,8 @@ import com.boardly.common.events.models.EventType
 import com.boardly.constants.LEVEL_STRINGS_MAP
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.formatForMaxOf
+import com.boardly.home.HomeActivity
+import com.boardly.myevents.MyEventsActivity
 import kotlinx.android.synthetic.main.item_event.view.acceptedTextView
 import kotlinx.android.synthetic.main.item_event.view.boardGameImageView
 import kotlinx.android.synthetic.main.item_event.view.createdTextView
@@ -35,11 +37,38 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             numberOfPlayersTextView.text = event.currentNumberOfPlayers.toString().formatForMaxOf(event.maxPlayers.toString())
             parentActivity.loadImageFromUrl(boardGameImageView, event.gameImageUrl, R.drawable.board_game_placeholder)
 
-            setSeeDescriptionButton(event.description, itemView)
-            setLevelTextView(event.levelId, itemView)
-            setDateTextView(event.timestamp, itemView)
-            setTypeLabel(event.type, itemView)
+            setSeeDescriptionButton(event.description)
+            setLevelTextView(event.levelId)
+            setDateTextView(event.timestamp)
+            setTypeLabel(event.type)
+            setClickAction(event)
         }
+    }
+
+    private fun setClickAction(event: Event) {
+        when (event.type) {
+            EventType.DEFAULT -> setDefaultClickAction(event)
+            EventType.CREATED -> setCreatedClickAction()
+            EventType.PENDING -> setPendingClickAction()
+            EventType.ACCEPTED -> setAcceptedClickAction()
+        }
+    }
+
+    private fun setDefaultClickAction(event: Event) {
+        val homeActivity = parentActivity as HomeActivity
+        itemView.joinEventButton.setOnClickListener { homeActivity.joinEventSubject.onNext(event.eventId) }
+    }
+
+    private fun setCreatedClickAction() {
+        val myEventsActivity = parentActivity as MyEventsActivity
+    }
+
+    private fun setPendingClickAction() {
+        val myEventsActivity = parentActivity as MyEventsActivity
+    }
+
+    private fun setAcceptedClickAction() {
+        val myEventsActivity = parentActivity as MyEventsActivity
     }
 
     private fun launchDescriptionDialog(description: String) {
@@ -51,7 +80,7 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 .show()
     }
 
-    private fun setSeeDescriptionButton(description: String, itemView: View) {
+    private fun setSeeDescriptionButton(description: String) {
         with(itemView) {
             if (description.isNotEmpty()) {
                 seeDescriptionButton.visibility = View.VISIBLE
@@ -62,13 +91,13 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
     }
 
-    private fun setLevelTextView(levelId: String, itemView: View) {
+    private fun setLevelTextView(levelId: String) {
         with(itemView) {
             levelTextView.text = context.getString(LEVEL_STRINGS_MAP[levelId] ?: R.string.empty)
         }
     }
 
-    private fun setDateTextView(timestamp: Long, itemView: View) {
+    private fun setDateTextView(timestamp: Long) {
         with(itemView) {
             if (timestamp > 0) {
                 timeTextView.text = Date(timestamp).formatForDisplay()
@@ -78,18 +107,18 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
     }
 
-    private fun setTypeLabel(type: EventType, itemView: View) {
+    private fun setTypeLabel(type: EventType) {
         with(itemView) {
             when (type) {
-                EventType.DEFAULT -> makeVisibleOnly(joinEventButton, itemView)
-                EventType.CREATED -> makeVisibleOnly(createdTextView, itemView)
-                EventType.PENDING -> makeVisibleOnly(pendingTextView, itemView)
-                EventType.ACCEPTED -> makeVisibleOnly(acceptedTextView, itemView)
+                EventType.DEFAULT -> makeVisibleOnly(joinEventButton)
+                EventType.CREATED -> makeVisibleOnly(createdTextView)
+                EventType.PENDING -> makeVisibleOnly(pendingTextView)
+                EventType.ACCEPTED -> makeVisibleOnly(acceptedTextView)
             }
         }
     }
 
-    private fun makeVisibleOnly(selectedView: View, itemView: View) {
+    private fun makeVisibleOnly(selectedView: View) {
         with(itemView) {
             val viewsList = listOf(joinEventButton, acceptedTextView, pendingTextView, createdTextView)
             for (view in viewsList) {

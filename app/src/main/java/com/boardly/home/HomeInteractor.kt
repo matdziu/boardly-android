@@ -20,8 +20,12 @@ class HomeInteractor : BaseInteractor() {
                 BiFunction<List<String>, List<Event>, PartialHomeViewState>
                 { userEventIds, allEvents ->
                     val filteredEventList = allEvents.filter { !userEventIds.contains(it.eventId) }
-                    PartialHomeViewState.EventsFetchedState(filteredEventList)
+                    PartialHomeViewState.EventListState(filteredEventList)
                 })
+    }
+
+    fun joinEvent(eventId: String): Observable<PartialHomeViewState> {
+        return Observable.just(PartialHomeViewState.JoinRequestSent())
     }
 
     private fun fetchUserEventIds(): Observable<List<String>> {

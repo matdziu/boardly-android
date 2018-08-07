@@ -14,7 +14,7 @@ class HomeViewModelTest {
     private val testEventList = listOf(Event("1", "TestEvent", "testGameId"))
     private val homeInteractor: HomeInteractor = mock {
         on { it.fetchEvents(any(), any(), any()) } doReturn
-                Observable.just(PartialHomeViewState.EventsFetchedState(testEventList))
+                Observable.just(PartialHomeViewState.EventListState(testEventList))
                         .cast(PartialHomeViewState::class.java)
     }
     private val homeViewModel = HomeViewModel(homeInteractor)

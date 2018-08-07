@@ -10,7 +10,13 @@ sealed class PartialHomeViewState {
         override fun reduce(previousState: HomeViewState) = HomeViewState(progress = true)
     }
 
-    class EventsFetchedState(private val eventsList: List<Event>) : PartialHomeViewState() {
+    class EventListState(val eventsList: List<Event>) : PartialHomeViewState() {
         override fun reduce(previousState: HomeViewState): HomeViewState = HomeViewState(eventList = eventsList)
+    }
+
+    class JoinRequestSent : PartialHomeViewState() {
+        override fun reduce(previousState: HomeViewState): HomeViewState {
+            return previousState
+        }
     }
 }
