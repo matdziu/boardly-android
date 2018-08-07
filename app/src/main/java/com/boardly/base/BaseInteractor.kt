@@ -44,7 +44,7 @@ open class BaseInteractor {
         return GeoFire(firebaseDatabase.getReference(childPath))
     }
 
-    private fun getUserPendingEventsNodeRef(userId: String): DatabaseReference {
+    protected fun getUserPendingEventsNodeRef(userId: String): DatabaseReference {
         return firebaseDatabase.getReference("$USERS_NODE/$userId/$EVENTS_NODE/$PENDING_EVENTS_NODE")
     }
 

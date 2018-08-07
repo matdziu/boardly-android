@@ -25,7 +25,14 @@ class HomeInteractor : BaseInteractor() {
     }
 
     fun joinEvent(eventId: String): Observable<PartialHomeViewState> {
-        return Observable.just(PartialHomeViewState.JoinRequestSent())
+        val resultSubject = PublishSubject.create<PartialHomeViewState>()
+
+        getUserPendingEventsNodeRef(currentUserId)
+                .push()
+                .setValue(eventId)
+                .addOnSuccessListener { resultSubject.onNext(PartialHomeViewState.JoinRequestSent()) }
+
+        return resultSubject
     }
 
     private fun fetchUserEventIds(): Observable<List<String>> {

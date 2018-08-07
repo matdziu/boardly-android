@@ -10,7 +10,6 @@ import com.boardly.constants.LEVEL_STRINGS_MAP
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.formatForMaxOf
 import com.boardly.home.HomeActivity
-import com.boardly.myevents.MyEventsActivity
 import kotlinx.android.synthetic.main.item_event.view.acceptedTextView
 import kotlinx.android.synthetic.main.item_event.view.boardGameImageView
 import kotlinx.android.synthetic.main.item_event.view.createdTextView
@@ -60,15 +59,15 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     private fun setCreatedClickAction() {
-        val myEventsActivity = parentActivity as MyEventsActivity
+
     }
 
     private fun setPendingClickAction() {
-        val myEventsActivity = parentActivity as MyEventsActivity
+
     }
 
     private fun setAcceptedClickAction() {
-        val myEventsActivity = parentActivity as MyEventsActivity
+
     }
 
     private fun launchDescriptionDialog(description: String) {
