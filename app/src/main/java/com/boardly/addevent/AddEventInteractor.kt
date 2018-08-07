@@ -7,6 +7,7 @@ import com.boardly.retrofit.gamesearch.models.DetailsResponse
 import com.firebase.geofire.GeoLocation
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
+import com.google.android.gms.tasks.Tasks
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.util.*
@@ -29,9 +30,13 @@ class AddEventInteractor @Inject constructor(private val gameSearchService: Game
 
         setGeoLocationTask(eventKey, geoLocation)
                 .continueWithTask {
-                    getEventsNode()
-                            .child(eventKey)
-                            .updateChildren(inputData.toMap())
+                    Tasks.whenAllComplete(
+                            getEventsNode()
+                                    .child(eventKey)
+                                    .updateChildren(inputData.toMap()),
+                            getUserCreatedEventsNodeRef(currentUserId)
+                                    .push()
+                                    .setValue(eventKey))
                 }
                 .addOnCompleteListener { resultSubject.onNext(PartialAddEventViewState.SuccessState()) }
 

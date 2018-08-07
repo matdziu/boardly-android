@@ -52,7 +52,7 @@ open class BaseInteractor {
         return firebaseDatabase.getReference("$USERS_NODE/$userId/$EVENTS_NODE/$ACCEPTED_EVENTS_NODE")
     }
 
-    private fun getUserCreatedEventsNodeRef(userId: String): DatabaseReference {
+    protected fun getUserCreatedEventsNodeRef(userId: String): DatabaseReference {
         return firebaseDatabase.getReference("$USERS_NODE/$userId/$EVENTS_NODE/$CREATED_EVENTS_NODE")
     }
 
