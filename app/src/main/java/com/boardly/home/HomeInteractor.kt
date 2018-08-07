@@ -22,7 +22,7 @@ class HomeInteractor : BaseInteractor() {
                     override fun onDataEntered(dataSnapshot: DataSnapshot, location: GeoLocation) {
                         dataSnapshot.getValue(Event::class.java)?.let {
                             if (gameId.isEmpty() || it.gameId == gameId) {
-                                it.eventId = dataSnapshot.key ?: ""
+                                it.eventId = dataSnapshot.key.orEmpty()
                                 fetchedEventsList.add(it)
                             }
                         }

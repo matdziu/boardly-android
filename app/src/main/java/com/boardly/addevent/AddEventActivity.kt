@@ -183,7 +183,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
                 .setItems(levelNames.map { getString(it) }.toTypedArray(), { _, which ->
                     val itemNameResId = levelNames[which]
                     val clickedItemName = getString(itemNameResId)
-                    inputData.levelId = LEVEL_IDS_MAP[itemNameResId] ?: ""
+                    inputData.levelId = LEVEL_IDS_MAP[itemNameResId].orEmpty()
                     levelTextView.text = clickedItemName
                 })
                 .create()
