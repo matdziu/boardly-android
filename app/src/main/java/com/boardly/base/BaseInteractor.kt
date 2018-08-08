@@ -28,10 +28,6 @@ open class BaseInteractor {
         return firebaseDatabase.getReference("$USERS_NODE/$userId")
     }
 
-    protected fun getEventsNode(): DatabaseReference {
-        return firebaseDatabase.getReference(EVENTS_NODE)
-    }
-
     protected fun getSingleEventNode(eventId: String): DatabaseReference {
         return firebaseDatabase.getReference("$EVENTS_NODE/$eventId")
     }

@@ -31,8 +31,7 @@ class AddEventInteractor @Inject constructor(private val gameSearchService: Game
         setGeoLocationTask(eventKey, geoLocation)
                 .continueWithTask {
                     Tasks.whenAllComplete(
-                            getEventsNode()
-                                    .child(eventKey)
+                            getSingleEventNode(eventKey)
                                     .updateChildren(inputData.toMap()),
                             getUserCreatedEventsNodeRef(currentUserId)
                                     .push()
