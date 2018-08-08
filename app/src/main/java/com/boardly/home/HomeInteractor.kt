@@ -1,6 +1,6 @@
 package com.boardly.home
 
-import com.boardly.base.BaseInteractor
+import com.boardly.base.BaseServiceImpl
 import com.boardly.common.events.models.Event
 import com.boardly.constants.EVENTS_NODE
 import com.boardly.constants.PENDING_EVENTS_NODE
@@ -16,7 +16,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.functions.Function3
 import io.reactivex.subjects.PublishSubject
 
-class HomeInteractor : BaseInteractor() {
+class HomeInteractor : BaseServiceImpl() {
 
     fun fetchEvents(userLocation: UserLocation, radius: Double, gameId: String): Observable<PartialHomeViewState> {
         return Observable.zip(fetchUserEventIds(), fetchAllEvents(userLocation, radius, gameId),

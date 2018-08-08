@@ -1,6 +1,6 @@
 package com.boardly.addevent
 
-import com.boardly.base.BaseInteractor
+import com.boardly.base.BaseServiceImpl
 import com.boardly.constants.EVENTS_NODE
 import com.boardly.retrofit.gamesearch.GameSearchService
 import com.boardly.retrofit.gamesearch.models.DetailsResponse
@@ -14,7 +14,7 @@ import java.util.*
 import javax.inject.Inject
 
 
-class AddEventInteractor @Inject constructor(private val gameSearchService: GameSearchService) : BaseInteractor() {
+class AddEventInteractor @Inject constructor(private val gameSearchService: GameSearchService) : BaseServiceImpl() {
 
     fun fetchGameDetails(gameId: String): Observable<PartialAddEventViewState> {
         return gameSearchService.details(gameId)

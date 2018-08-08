@@ -17,7 +17,7 @@ import com.google.firebase.storage.StorageReference
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-open class BaseInteractor {
+open class BaseServiceImpl {
 
     protected val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()

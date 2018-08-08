@@ -1,7 +1,8 @@
 package com.boardly.injection.modules
 
 import com.boardly.injection.ActivityScope
-import com.boardly.signup.SignUpInteractor
+import com.boardly.signup.network.SignUpService
+import com.boardly.signup.network.SignUpServiceImpl
 import dagger.Module
 import dagger.Provides
 
@@ -10,7 +11,7 @@ class SignUpActivityModule {
 
     @Provides
     @ActivityScope
-    fun provideSignUpInteractor(): SignUpInteractor {
-        return SignUpInteractor()
+    fun provideSignUpService(): SignUpService {
+        return SignUpServiceImpl()
     }
 }

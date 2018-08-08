@@ -1,6 +1,6 @@
 package com.boardly.myevents
 
-import com.boardly.base.BaseInteractor
+import com.boardly.base.BaseServiceImpl
 import com.boardly.common.events.models.Event
 import com.boardly.common.events.models.EventType
 import com.google.firebase.database.DataSnapshot
@@ -10,7 +10,7 @@ import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import io.reactivex.subjects.PublishSubject
 
-class MyEventsInteractor : BaseInteractor() {
+class MyEventsInteractor : BaseServiceImpl() {
 
     fun fetchEvents(): Observable<PartialMyEventsViewState> {
         val pendingEventsObservable = pendingEventIdsList().flatMap { events(it) }

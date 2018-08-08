@@ -1,6 +1,6 @@
 package com.boardly.login
 
-import com.boardly.base.BaseInteractor
+import com.boardly.base.BaseServiceImpl
 import com.boardly.constants.NAME_CHILD
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -18,7 +18,7 @@ import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 
 
-class LoginInteractor : BaseInteractor() {
+class LoginInteractor : BaseServiceImpl() {
 
     fun login(email: String, password: String): Observable<PartialLoginViewState> {
         val stateSubject: Subject<PartialLoginViewState> = PublishSubject.create()

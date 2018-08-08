@@ -1,7 +1,7 @@
 package com.boardly.editprofile
 
 import android.net.Uri
-import com.boardly.base.BaseInteractor
+import com.boardly.base.BaseServiceImpl
 import com.boardly.constants.NAME_CHILD
 import com.boardly.constants.PROFILE_PICTURE_CHILD
 import com.boardly.editprofile.models.InputData
@@ -15,7 +15,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.io.File
 
-class EditProfileInteractor : BaseInteractor() {
+class EditProfileInteractor : BaseServiceImpl() {
 
     fun fetchProfileData(): Observable<PartialEditProfileViewState> {
         val resultSubject = PublishSubject.create<PartialEditProfileViewState>()
