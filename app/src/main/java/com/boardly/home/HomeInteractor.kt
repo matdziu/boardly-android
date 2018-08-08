@@ -3,6 +3,7 @@ package com.boardly.home
 import com.boardly.base.BaseInteractor
 import com.boardly.common.events.models.Event
 import com.boardly.constants.EVENTS_NODE
+import com.boardly.home.models.JoinEventData
 import com.boardly.home.models.UserLocation
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQueryDataEventListener
@@ -24,12 +25,12 @@ class HomeInteractor : BaseInteractor() {
                 })
     }
 
-    fun joinEvent(eventId: String): Observable<PartialHomeViewState> {
+    fun joinEvent(joinEventData: JoinEventData): Observable<PartialHomeViewState> {
         val resultSubject = PublishSubject.create<PartialHomeViewState>()
 
         getUserPendingEventsNodeRef(currentUserId)
                 .push()
-                .setValue(eventId)
+                .setValue(joinEventData.eventId)
                 .addOnSuccessListener { resultSubject.onNext(PartialHomeViewState.JoinRequestSent()) }
 
         return resultSubject

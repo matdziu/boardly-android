@@ -14,6 +14,7 @@ import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.formatForMaxOf
 import com.boardly.home.HomeActivity
 import com.boardly.home.JoinDialogValidator
+import com.boardly.home.models.JoinEventData
 import kotlinx.android.synthetic.main.item_event.view.acceptedTextView
 import kotlinx.android.synthetic.main.item_event.view.boardGameImageView
 import kotlinx.android.synthetic.main.item_event.view.createdTextView
@@ -51,19 +52,18 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private fun setClickAction(event: Event) {
         when (event.type) {
-            EventType.DEFAULT -> setDefaultClickAction(event)
+            EventType.DEFAULT -> setDefaultClickAction(event.eventId)
             EventType.CREATED -> setCreatedClickAction()
             EventType.PENDING -> setPendingClickAction()
             EventType.ACCEPTED -> setAcceptedClickAction()
         }
     }
 
-    private fun setDefaultClickAction(event: Event) {
-        val homeActivity = parentActivity as HomeActivity
-        itemView.joinEventButton.setOnClickListener { launchHelloDialog { homeActivity.joinEventSubject.onNext(event.eventId) } }
+    private fun setDefaultClickAction(eventId: String) {
+        itemView.joinEventButton.setOnClickListener { launchHelloDialog(eventId) }
     }
 
-    private fun launchHelloDialog(positiveButtonHandler: () -> Unit) {
+    private fun launchHelloDialog(eventId: String) {
         val dialogView = LayoutInflater.from(itemView.context)
                 .inflate(R.layout.view_hello_dialog, itemView.parent as ViewGroup, false)
 
@@ -80,8 +80,9 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             with(dialogView) {
-                if (joinDialogValidator.validate(helloEditText.text.toString())) {
-                    positiveButtonHandler()
+                val helloText = helloEditText.text.toString()
+                if (joinDialogValidator.validate(helloText)) {
+                    emitJoinEventData(JoinEventData(eventId, helloText))
                     dialog.cancel()
                 } else {
                     helloEditText.showError(true)
@@ -89,6 +90,11 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
 
         }
+    }
+
+    private fun emitJoinEventData(joinEventData: JoinEventData) {
+        val homeActivity = parentActivity as HomeActivity
+        homeActivity.joinEventSubject.onNext(joinEventData)
     }
 
     private fun setCreatedClickAction() {

@@ -24,6 +24,7 @@ import com.boardly.constants.SAVED_RADIUS
 import com.boardly.factories.HomeViewModelFactory
 import com.boardly.filter.FilterActivity
 import com.boardly.filter.models.Filter
+import com.boardly.home.models.JoinEventData
 import com.boardly.home.models.UserLocation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -46,7 +47,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
     private lateinit var homeViewModel: HomeViewModel
 
     private lateinit var filteredFetchSubject: PublishSubject<Pair<UserLocation, Filter>>
-    lateinit var joinEventSubject: PublishSubject<String>
+    lateinit var joinEventSubject: PublishSubject<JoinEventData>
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private val eventsAdapter = EventsAdapter()
@@ -138,7 +139,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
     override fun filteredFetchTriggerEmitter(): Observable<Pair<UserLocation, Filter>> = filteredFetchSubject
 
-    override fun joinEventEmitter(): Observable<String> = joinEventSubject
+    override fun joinEventEmitter(): Observable<JoinEventData> = joinEventSubject
 
     override fun render(homeViewState: HomeViewState) {
         with(homeViewState) {

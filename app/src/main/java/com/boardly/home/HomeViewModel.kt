@@ -27,8 +27,8 @@ class HomeViewModel(private val homeInteractor: HomeInteractor) : ViewModel() {
                 .flatMap { homeInteractor.joinEvent(it) }
 
         val updateEventListObservable = homeView.joinEventEmitter()
-                .map { jointEventId ->
-                    eventList = eventList.filter { jointEventId != it.eventId }
+                .map { joinEventData ->
+                    eventList = eventList.filter { joinEventData.eventId != it.eventId }
                     PartialHomeViewState.EventListState(eventList)
                 }
 
