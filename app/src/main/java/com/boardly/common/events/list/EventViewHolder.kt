@@ -1,7 +1,10 @@
 package com.boardly.common.events.list
 
+import android.app.AlertDialog
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.boardly.R
 import com.boardly.base.BaseActivity
 import com.boardly.common.events.models.Event
@@ -10,6 +13,7 @@ import com.boardly.constants.LEVEL_STRINGS_MAP
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.formatForMaxOf
 import com.boardly.home.HomeActivity
+import com.boardly.home.JoinDialogValidator
 import kotlinx.android.synthetic.main.item_event.view.acceptedTextView
 import kotlinx.android.synthetic.main.item_event.view.boardGameImageView
 import kotlinx.android.synthetic.main.item_event.view.createdTextView
@@ -22,6 +26,7 @@ import kotlinx.android.synthetic.main.item_event.view.numberOfPlayersTextView
 import kotlinx.android.synthetic.main.item_event.view.pendingTextView
 import kotlinx.android.synthetic.main.item_event.view.seeDescriptionButton
 import kotlinx.android.synthetic.main.item_event.view.timeTextView
+import kotlinx.android.synthetic.main.view_hello_dialog.view.helloEditText
 import java.util.*
 
 class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -59,18 +64,31 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     private fun launchHelloDialog(positiveButtonHandler: () -> Unit) {
-        android.app.AlertDialog.Builder(parentActivity)
+        val dialogView = LayoutInflater.from(itemView.context)
+                .inflate(R.layout.view_hello_dialog, itemView.parent as ViewGroup, false)
+
+        val joinDialogValidator = JoinDialogValidator()
+
+        val dialog = android.app.AlertDialog.Builder(parentActivity)
                 .setTitle(R.string.hello_dialog_title)
-                .setPositiveButton(R.string.hello_dialog_positive_text) { dialog, _ ->
+                .setPositiveButton(R.string.hello_dialog_positive_text, null)
+                .setNegativeButton(R.string.hello_dialog_negative_text, null)
+                .setView(dialogView)
+                .create()
+
+        dialog.show()
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            with(dialogView) {
+                if (joinDialogValidator.validate(helloEditText.text.toString())) {
                     positiveButtonHandler()
                     dialog.cancel()
+                } else {
+                    helloEditText.showError(true)
                 }
-                .setNegativeButton(R.string.hello_dialog_negative_text) { dialog, _ ->
-                    dialog.cancel()
-                }
-                .setView(R.layout.view_hello_dialog)
-                .create()
-                .show()
+            }
+
+        }
     }
 
     private fun setCreatedClickAction() {
