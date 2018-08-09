@@ -1,7 +1,8 @@
 package com.boardly.injection.modules
 
 import com.boardly.injection.ActivityScope
-import com.boardly.login.LoginInteractor
+import com.boardly.login.network.LoginService
+import com.boardly.login.network.LoginServiceImpl
 import dagger.Module
 import dagger.Provides
 
@@ -10,7 +11,7 @@ class LoginActivityModule {
 
     @Provides
     @ActivityScope
-    fun provideLoginInteractor(): LoginInteractor {
-        return LoginInteractor()
+    fun provideLoginService(): LoginService {
+        return LoginServiceImpl()
     }
 }

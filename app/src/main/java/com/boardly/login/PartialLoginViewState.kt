@@ -47,7 +47,7 @@ sealed class PartialLoginViewState {
         }
     }
 
-    class LoginSuccess(private val isProfileFilled: Boolean = true) : PartialLoginViewState() {
+    data class LoginSuccess(private val isProfileFilled: Boolean = true) : PartialLoginViewState() {
         override fun reduce(previousState: LoginViewState) = LoginViewState(
                 inProgress = true,
                 loginSuccess = true,
