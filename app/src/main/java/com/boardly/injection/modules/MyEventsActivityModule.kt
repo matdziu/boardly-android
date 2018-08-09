@@ -1,7 +1,8 @@
 package com.boardly.injection.modules
 
 import com.boardly.injection.ActivityScope
-import com.boardly.myevents.MyEventsInteractor
+import com.boardly.myevents.network.MyEventsService
+import com.boardly.myevents.network.MyEventsServiceImpl
 import dagger.Module
 import dagger.Provides
 
@@ -10,7 +11,7 @@ class MyEventsActivityModule {
 
     @Provides
     @ActivityScope
-    fun provideMyEventsInteractor(): MyEventsInteractor {
-        return MyEventsInteractor()
+    fun provideMyEventsService(): MyEventsService {
+        return MyEventsServiceImpl()
     }
 }

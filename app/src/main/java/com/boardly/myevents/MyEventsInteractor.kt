@@ -1,21 +1,18 @@
 package com.boardly.myevents
 
-import com.boardly.base.BaseServiceImpl
 import com.boardly.common.events.models.Event
 import com.boardly.common.events.models.EventType
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
+import com.boardly.myevents.network.MyEventsService
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
-import io.reactivex.subjects.PublishSubject
+import javax.inject.Inject
 
-class MyEventsInteractor : BaseServiceImpl() {
+class MyEventsInteractor @Inject constructor(private val myEventsService: MyEventsService) {
 
     fun fetchEvents(): Observable<PartialMyEventsViewState> {
-        val pendingEventsObservable = pendingEventIdsList().flatMap { events(it) }
-        val acceptedEventsObservable = acceptedEventIdsList().flatMap { events(it) }
-        val createdEventsObservable = createdEventIdsList().flatMap { events(it) }
+        val pendingEventsObservable = myEventsService.getPendingEvents()
+        val acceptedEventsObservable = myEventsService.getAcceptedEvents()
+        val createdEventsObservable = myEventsService.getCreatedEvents()
 
         return Observable.zip(pendingEventsObservable,
                 acceptedEventsObservable,
@@ -35,30 +32,5 @@ class MyEventsInteractor : BaseServiceImpl() {
                                 it
                             })
                 })
-    }
-
-    private fun events(idsList: List<String>): Observable<List<Event>> {
-        val resultSubject = PublishSubject.create<List<Event>>()
-        val eventList = arrayListOf<Event>()
-
-        if (idsList.isEmpty()) return Observable.just(eventList)
-
-        for (id in idsList) {
-            getSingleEventNode(id).addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    dataSnapshot.getValue(Event::class.java)?.let {
-                        it.eventId = id
-                        eventList.add(it)
-                    }
-                    if (eventList.size == idsList.size) resultSubject.onNext(eventList)
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    resultSubject.onError(databaseError.toException())
-                }
-            })
-        }
-
-        return resultSubject
     }
 }
