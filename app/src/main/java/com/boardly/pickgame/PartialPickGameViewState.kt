@@ -10,13 +10,13 @@ sealed class PartialPickGameViewState {
         override fun reduce(previousState: PickGameViewState) = PickGameViewState(progress = true)
     }
 
-    class ResultsFetchedState(private val searchResults: List<SearchResult>) : PartialPickGameViewState() {
+    data class ResultsFetchedState(private val searchResults: List<SearchResult>) : PartialPickGameViewState() {
         override fun reduce(previousState: PickGameViewState): PickGameViewState {
             return PickGameViewState(searchResults = searchResults)
         }
     }
 
-    class ErrorState(private val throwable: Throwable, private val unacceptedQuery: String) : PartialPickGameViewState() {
+    data class ErrorState(private val throwable: Throwable, private val unacceptedQuery: String) : PartialPickGameViewState() {
         override fun reduce(previousState: PickGameViewState): PickGameViewState {
             return PickGameViewState(error = throwable, unacceptedQuery = unacceptedQuery)
         }

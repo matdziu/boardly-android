@@ -1,12 +1,10 @@
 package com.boardly.pickgame
 
-import com.boardly.base.BaseServiceImpl
 import com.boardly.retrofit.gamesearch.GameSearchService
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class PickGameInteractor @Inject constructor(private val gameSearchService: GameSearchService)
-    : BaseServiceImpl() {
+class PickGameInteractor @Inject constructor(private val gameSearchService: GameSearchService) {
 
     private var latestQuery = ""
 
