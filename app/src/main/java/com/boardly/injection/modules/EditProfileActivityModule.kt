@@ -1,6 +1,7 @@
 package com.boardly.injection.modules
 
-import com.boardly.editprofile.EditProfileInteractor
+import com.boardly.editprofile.network.EditProfileService
+import com.boardly.editprofile.network.EditProfileServiceImpl
 import com.boardly.injection.ActivityScope
 import dagger.Module
 import dagger.Provides
@@ -10,7 +11,7 @@ class EditProfileActivityModule {
 
     @Provides
     @ActivityScope
-    fun provideEditProfileInteractor(): EditProfileInteractor {
-        return EditProfileInteractor()
+    fun provideEditProfileService(): EditProfileService {
+        return EditProfileServiceImpl()
     }
 }
