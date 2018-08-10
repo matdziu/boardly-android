@@ -10,6 +10,7 @@ import com.boardly.base.BaseActivity
 import com.boardly.common.events.models.Event
 import com.boardly.common.events.models.EventType
 import com.boardly.constants.LEVEL_STRINGS_MAP
+import com.boardly.eventdetails.EventDetailsActivity
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.formatForMaxOf
 import com.boardly.home.HomeActivity
@@ -53,9 +54,9 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private fun setClickAction(event: Event) {
         when (event.type) {
             EventType.DEFAULT -> setDefaultClickAction(event.eventId)
-            EventType.CREATED -> setCreatedClickAction()
+            EventType.CREATED -> setCreatedClickAction(event.eventId)
             EventType.PENDING -> setPendingClickAction()
-            EventType.ACCEPTED -> setAcceptedClickAction()
+            EventType.ACCEPTED -> setAcceptedClickAction(event.eventId)
         }
     }
 
@@ -97,16 +98,16 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         homeActivity.joinEventSubject.onNext(joinEventData)
     }
 
-    private fun setCreatedClickAction() {
-
+    private fun setCreatedClickAction(eventId: String) {
+        itemView.setOnClickListener { EventDetailsActivity.start(parentActivity, eventId) }
     }
 
     private fun setPendingClickAction() {
 
     }
 
-    private fun setAcceptedClickAction() {
-
+    private fun setAcceptedClickAction(eventId: String) {
+        itemView.setOnClickListener { EventDetailsActivity.start(parentActivity, eventId) }
     }
 
     private fun launchDescriptionDialog(description: String) {

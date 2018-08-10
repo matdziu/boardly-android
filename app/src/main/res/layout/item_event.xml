@@ -107,7 +107,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:background="@color/colorPrimary"
-        android:src="@drawable/ic_people_white"
+        android:src="@drawable/ic_people_white_outline"
         app:layout_constraintBottom_toBottomOf="@+id/numberOfPlayersTextView"
         app:layout_constraintEnd_toStartOf="@+id/numberOfPlayersTextView"
         app:layout_constraintHorizontal_bias="0.0"
