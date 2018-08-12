@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.boardly.R
 import com.boardly.common.events.models.Event
-import com.boardly.constants.EVENT_ID
+import com.boardly.constants.EVENT
 import com.boardly.constants.LEVEL_STRINGS_MAP
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.formatForMaxOf
@@ -39,15 +39,15 @@ class PlayersFragment : Fragment(), PlayersView {
 
     private lateinit var playersViewModel: PlayersViewModel
 
-    private lateinit var fetchEventInfoTriggerSubject: PublishSubject<String>
+    private lateinit var fetchEventPlayersTriggerSubject: PublishSubject<String>
     private var init = true
-    private var eventId = ""
+    private var event = Event()
 
     companion object {
-        fun newInstance(eventId: String): PlayersFragment {
+        fun newInstance(event: Event): PlayersFragment {
             val playersFragment = PlayersFragment()
             val arguments = Bundle()
-            arguments.putString(EVENT_ID, eventId)
+            arguments.putParcelable(EVENT, event)
             playersFragment.arguments = arguments
             return playersFragment
         }
@@ -56,7 +56,7 @@ class PlayersFragment : Fragment(), PlayersView {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-        eventId = arguments?.getString(EVENT_ID).orEmpty()
+        event = arguments?.getParcelable(EVENT) ?: Event()
 
         playersViewModel = ViewModelProviders.of(this, playersViewModelFactory)[PlayersViewModel::class.java]
     }
@@ -65,12 +65,17 @@ class PlayersFragment : Fragment(), PlayersView {
         return inflater.inflate(R.layout.fragment_players, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        displayEventInfo(event)
+    }
+
     override fun onStart() {
         super.onStart()
         initEmitters()
         playersViewModel.bind(this)
         if (init) {
-            fetchEventInfoTriggerSubject.onNext(eventId)
+            fetchEventPlayersTriggerSubject.onNext(event.eventId)
             init = false
         }
     }
@@ -81,17 +86,16 @@ class PlayersFragment : Fragment(), PlayersView {
     }
 
     private fun initEmitters() {
-        fetchEventInfoTriggerSubject = PublishSubject.create()
+        fetchEventPlayersTriggerSubject = PublishSubject.create()
     }
 
     override fun render(playersViewState: PlayersViewState) {
         with(playersViewState) {
             showProgressBar(progress)
-            displayEventInfo(event)
         }
     }
 
-    override fun fetchEventInfoTriggerEmitter(): Observable<String> = fetchEventInfoTriggerSubject
+    override fun fetchEventPlayersTriggerEmitter(): Observable<String> = fetchEventPlayersTriggerSubject
 
     private fun displayEventInfo(event: Event) {
         with(event) {

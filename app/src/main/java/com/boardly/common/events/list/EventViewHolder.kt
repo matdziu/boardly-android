@@ -54,9 +54,9 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private fun setClickAction(event: Event) {
         when (event.type) {
             EventType.DEFAULT -> setDefaultClickAction(event.eventId)
-            EventType.CREATED -> setCreatedClickAction(event.eventId)
+            EventType.CREATED -> setCreatedClickAction(event)
             EventType.PENDING -> setPendingClickAction()
-            EventType.ACCEPTED -> setAcceptedClickAction(event.eventId)
+            EventType.ACCEPTED -> setAcceptedClickAction(event)
         }
     }
 
@@ -98,16 +98,16 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         homeActivity.joinEventSubject.onNext(joinEventData)
     }
 
-    private fun setCreatedClickAction(eventId: String) {
-        itemView.setOnClickListener { EventDetailsActivity.start(parentActivity, eventId) }
+    private fun setCreatedClickAction(event: Event) {
+        itemView.setOnClickListener { EventDetailsActivity.start(parentActivity, event) }
     }
 
     private fun setPendingClickAction() {
 
     }
 
-    private fun setAcceptedClickAction(eventId: String) {
-        itemView.setOnClickListener { EventDetailsActivity.start(parentActivity, eventId) }
+    private fun setAcceptedClickAction(event: Event) {
+        itemView.setOnClickListener { EventDetailsActivity.start(parentActivity, event) }
     }
 
     private fun launchDescriptionDialog(description: String) {
