@@ -1,3 +1,6 @@
 package com.boardly.eventdetails.players
 
-data class PlayersViewState(val progress: Boolean = false)
+import com.boardly.common.events.models.Player
+
+data class PlayersViewState(val progress: Boolean = false,
+                            val acceptedPlayersList: List<Player> = listOf())

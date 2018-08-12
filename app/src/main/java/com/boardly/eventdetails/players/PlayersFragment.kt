@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.annotation.DrawableRes
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import com.boardly.R
 import com.boardly.common.events.models.Event
 import com.boardly.constants.EVENT
 import com.boardly.constants.LEVEL_STRINGS_MAP
+import com.boardly.eventdetails.players.list.AcceptedPlayersAdapter
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.formatForMaxOf
 import com.boardly.factories.PlayersViewModelFactory
@@ -19,7 +21,8 @@ import com.boardly.injection.modules.GlideApp
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.fragment_players.contentViewGroup
+import kotlinx.android.synthetic.main.fragment_players.acceptedPlayersRecyclerView
+import kotlinx.android.synthetic.main.fragment_players.noPlayersTextView
 import kotlinx.android.synthetic.main.fragment_players.progressBar
 import kotlinx.android.synthetic.main.layout_event.boardGameImageView
 import kotlinx.android.synthetic.main.layout_event.eventNameTextView
@@ -42,6 +45,8 @@ class PlayersFragment : Fragment(), PlayersView {
     private lateinit var fetchEventPlayersTriggerSubject: PublishSubject<String>
     private var init = true
     private var event = Event()
+
+    private val acceptedPlayersAdapter = AcceptedPlayersAdapter()
 
     companion object {
         fun newInstance(event: Event): PlayersFragment {
@@ -68,6 +73,7 @@ class PlayersFragment : Fragment(), PlayersView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         displayEventInfo(event)
+        initRecyclerView()
     }
 
     override fun onStart() {
@@ -89,9 +95,20 @@ class PlayersFragment : Fragment(), PlayersView {
         fetchEventPlayersTriggerSubject = PublishSubject.create()
     }
 
+    private fun initRecyclerView() {
+        acceptedPlayersRecyclerView.layoutManager = LinearLayoutManager(context)
+        acceptedPlayersRecyclerView.adapter = acceptedPlayersAdapter
+    }
+
     override fun render(playersViewState: PlayersViewState) {
         with(playersViewState) {
+            showNoPlayersText(false)
             showProgressBar(progress)
+            if (acceptedPlayersList.isNotEmpty() && !progress) {
+                acceptedPlayersAdapter.submitList(acceptedPlayersList)
+            } else if (!progress) {
+                showNoPlayersText(true)
+            }
         }
     }
 
@@ -151,11 +168,21 @@ class PlayersFragment : Fragment(), PlayersView {
 
     private fun showProgressBar(show: Boolean) {
         if (show) {
-            contentViewGroup.visibility = View.GONE
+            acceptedPlayersRecyclerView.visibility = View.GONE
             progressBar.visibility = View.VISIBLE
         } else {
-            contentViewGroup.visibility = View.VISIBLE
+            acceptedPlayersRecyclerView.visibility = View.VISIBLE
             progressBar.visibility = View.GONE
+        }
+    }
+
+    private fun showNoPlayersText(show: Boolean) {
+        if (show) {
+            acceptedPlayersRecyclerView.visibility = View.GONE
+            noPlayersTextView.visibility = View.VISIBLE
+        } else {
+            acceptedPlayersRecyclerView.visibility = View.VISIBLE
+            noPlayersTextView.visibility = View.GONE
         }
     }
 }
