@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="8dp"
+    android:paddingEnd="16dp"
+    android:paddingStart="16dp"
+    android:paddingTop="16dp">
+
+    <TextView
+        android:id="@+id/eventNameTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toStartOf="@+id/boardGameImageView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Welcome everyone" />
+
+    <TextView
+        android:id="@+id/gameTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="16dp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toStartOf="@+id/boardGameImageView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventNameTextView"
+        tools:text="Eurobusiness" />
+
+    <TextView
+        android:id="@+id/levelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14dp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gameTextView"
+        tools:text="Beginner" />
+
+    <ImageView
+        android:id="@+id/locationImageView"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/ic_location_white"
+        app:layout_constraintBottom_toBottomOf="@+id/locationTextView"
+        app:layout_constraintEnd_toStartOf="@+id/locationTextView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/locationTextView" />
+
+    <TextView
+        android:id="@+id/locationTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/locationImageView"
+        app:layout_constraintTop_toBottomOf="@+id/levelTextView"
+        tools:text="Domówka" />
+
+    <ImageView
+        android:id="@+id/timeImageView"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/ic_time_white"
+        app:layout_constraintBottom_toBottomOf="@+id/timeTextView"
+        app:layout_constraintEnd_toStartOf="@+id/timeTextView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/timeTextView" />
+
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/timeImageView"
+        app:layout_constraintTop_toBottomOf="@+id/locationTextView"
+        tools:text="12:00" />
+
+    <ImageView
+        android:id="@+id/peopleImageView"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/ic_people_white_outline"
+        app:layout_constraintBottom_toBottomOf="@+id/numberOfPlayersTextView"
+        app:layout_constraintEnd_toStartOf="@+id/numberOfPlayersTextView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/numberOfPlayersTextView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/numberOfPlayersTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/peopleImageView"
+        app:layout_constraintTop_toBottomOf="@+id/timeImageView"
+        tools:text="2/4" />
+
+    <Button
+        android:id="@+id/seeDescriptionButton"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/description_text"
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/numberOfPlayersTextView" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/boardGameImageView"
+        android:layout_width="66dp"
+        android:layout_height="66dp"
+        android:src="@drawable/board_game_placeholder"
+        app:civ_border_color="@color/lightGrey"
+        app:civ_border_width="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
