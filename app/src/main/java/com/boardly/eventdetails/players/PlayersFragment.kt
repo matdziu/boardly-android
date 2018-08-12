@@ -1,5 +1,6 @@
 package com.boardly.eventdetails.players
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.annotation.DrawableRes
 import android.support.v4.app.Fragment
@@ -9,10 +10,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.boardly.R
 import com.boardly.common.events.models.Event
+import com.boardly.constants.EVENT_ID
 import com.boardly.constants.LEVEL_STRINGS_MAP
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.formatForMaxOf
+import com.boardly.factories.PlayersViewModelFactory
 import com.boardly.injection.modules.GlideApp
+import dagger.android.support.AndroidSupportInjection
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_players.contentViewGroup
 import kotlinx.android.synthetic.main.fragment_players.progressBar
 import kotlinx.android.synthetic.main.layout_event.boardGameImageView
@@ -24,16 +30,68 @@ import kotlinx.android.synthetic.main.layout_event.numberOfPlayersTextView
 import kotlinx.android.synthetic.main.layout_event.seeDescriptionButton
 import kotlinx.android.synthetic.main.layout_event.timeTextView
 import java.util.*
+import javax.inject.Inject
 
-class PlayersFragment : Fragment() {
+class PlayersFragment : Fragment(), PlayersView {
+
+    @Inject
+    lateinit var playersViewModelFactory: PlayersViewModelFactory
+
+    private lateinit var playersViewModel: PlayersViewModel
+
+    private lateinit var fetchEventInfoTriggerSubject: PublishSubject<String>
+    private var init = true
+    private var eventId = ""
 
     companion object {
-        fun newInstance() = PlayersFragment()
+        fun newInstance(eventId: String): PlayersFragment {
+            val playersFragment = PlayersFragment()
+            val arguments = Bundle()
+            arguments.putString(EVENT_ID, eventId)
+            playersFragment.arguments = arguments
+            return playersFragment
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidSupportInjection.inject(this)
+        super.onCreate(savedInstanceState)
+        eventId = arguments?.getString(EVENT_ID).orEmpty()
+
+        playersViewModel = ViewModelProviders.of(this, playersViewModelFactory)[PlayersViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_players, container, false)
     }
+
+    override fun onStart() {
+        super.onStart()
+        initEmitters()
+        playersViewModel.bind(this)
+        if (init) {
+            fetchEventInfoTriggerSubject.onNext(eventId)
+            init = false
+        }
+    }
+
+    override fun onStop() {
+        playersViewModel.unbind()
+        super.onStop()
+    }
+
+    private fun initEmitters() {
+        fetchEventInfoTriggerSubject = PublishSubject.create()
+    }
+
+    override fun render(playersViewState: PlayersViewState) {
+        with(playersViewState) {
+            showProgressBar(progress)
+            displayEventInfo(event)
+        }
+    }
+
+    override fun fetchEventInfoTriggerEmitter(): Observable<String> = fetchEventInfoTriggerSubject
 
     private fun displayEventInfo(event: Event) {
         with(event) {
@@ -48,7 +106,6 @@ class PlayersFragment : Fragment() {
             setDateTextView(timestamp)
         }
     }
-
 
     private fun loadImageFromUrl(imageView: ImageView, pictureUrl: String, @DrawableRes placeholderId: Int) {
         GlideApp.with(this)

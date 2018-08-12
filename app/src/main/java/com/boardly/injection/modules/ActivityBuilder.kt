@@ -2,6 +2,7 @@ package com.boardly.injection.modules
 
 import com.boardly.addevent.AddEventActivity
 import com.boardly.editprofile.EditProfileActivity
+import com.boardly.eventdetails.EventDetailsActivity
 import com.boardly.filter.FilterActivity
 import com.boardly.home.HomeActivity
 import com.boardly.injection.ActivityScope
@@ -47,4 +48,8 @@ abstract class ActivityBuilder {
     @ActivityScope
     @ContributesAndroidInjector(modules = [MyEventsActivityModule::class])
     abstract fun bindMyEventsActivity(): MyEventsActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [FragmentBuilder::class])
+    abstract fun bindEventDetailsActivity(): EventDetailsActivity
 }
