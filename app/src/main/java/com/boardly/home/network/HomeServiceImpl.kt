@@ -68,7 +68,7 @@ class HomeServiceImpl : HomeService, BaseServiceImpl() {
                 getUserPendingEventsNodeRef(currentUserId)
                         .push()
                         .setValue(joinEventData.eventId),
-                getSingleEventNode(joinEventData.eventId)
+                getPlayersNode(joinEventData.eventId)
                         .child(PENDING_EVENTS_NODE)
                         .child(currentUserId)
                         .setValue(joinEventData.helloText))

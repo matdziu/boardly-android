@@ -4,6 +4,7 @@ import com.boardly.constants.ACCEPTED_EVENTS_NODE
 import com.boardly.constants.CREATED_EVENTS_NODE
 import com.boardly.constants.EVENTS_NODE
 import com.boardly.constants.PENDING_EVENTS_NODE
+import com.boardly.constants.PLAYERS_NODE
 import com.boardly.constants.USERS_NODE
 import com.firebase.geofire.GeoFire
 import com.google.firebase.auth.FirebaseAuth
@@ -30,6 +31,10 @@ open class BaseServiceImpl {
 
     protected fun getSingleEventNode(eventId: String): DatabaseReference {
         return firebaseDatabase.getReference("$EVENTS_NODE/$eventId")
+    }
+
+    protected fun getPlayersNode(eventId: String): DatabaseReference {
+        return firebaseDatabase.getReference("$PLAYERS_NODE/$eventId")
     }
 
     protected fun getStorageProfilePictureRef(userId: String): StorageReference {

@@ -24,17 +24,6 @@
                 android:clipToPadding="false"
                 android:paddingBottom="64dp" />
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/addEventButton"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="16dp"
-                android:src="@drawable/ic_add_white_24dp"
-                app:elevation="4dp" />
-
         </RelativeLayout>
 
         <TextView
@@ -66,6 +55,17 @@
             android:text="@string/looking_for_events_text"
             android:textAlignment="center"
             android:visibility="gone" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/addEventButton"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_add_white_24dp"
+            app:elevation="4dp" />
 
     </RelativeLayout>
 
