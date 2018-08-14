@@ -23,9 +23,10 @@
 
         <TextView
             android:id="@+id/nameTextView"
-            android:layout_width="wrap_content"
+            android:layout_width="66dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:textAlignment="center"
             android:textSize="16dp"
             android:textStyle="bold"
             tools:text="Mateusz" />
