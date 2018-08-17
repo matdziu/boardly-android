@@ -1,4 +1,4 @@
-package com.boardly.common.events.models
+package com.boardly.common.players.models
 
 data class Player(var id: String = "",
                   val name: String = "",

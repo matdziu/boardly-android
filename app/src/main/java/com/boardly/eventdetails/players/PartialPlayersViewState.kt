@@ -1,6 +1,6 @@
 package com.boardly.eventdetails.players
 
-import com.boardly.common.events.models.Player
+import com.boardly.common.players.models.Player
 
 sealed class PartialPlayersViewState {
 

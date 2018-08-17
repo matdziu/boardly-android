@@ -2,19 +2,19 @@ package com.boardly.injection.modules
 
 import android.support.v7.app.AppCompatActivity
 import com.boardly.eventdetails.EventDetailsActivity
-import com.boardly.eventdetails.players.network.PlayersService
-import com.boardly.eventdetails.players.network.PlayersServiceImpl
+import com.boardly.eventdetails.admin.network.AdminService
+import com.boardly.eventdetails.admin.network.AdminServiceImpl
 import com.boardly.injection.FragmentScope
 import dagger.Module
 import dagger.Provides
 
 @Module
-class PlayersFragmentModule {
+class AdminFragmentModule {
 
     @Provides
     @FragmentScope
-    fun providePlayersService(): PlayersService {
-        return PlayersServiceImpl()
+    fun provideAdminService(): AdminService {
+        return AdminServiceImpl()
     }
 
     @Provides

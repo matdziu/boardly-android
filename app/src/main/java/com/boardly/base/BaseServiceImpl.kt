@@ -1,5 +1,6 @@
 package com.boardly.base
 
+import com.boardly.common.players.models.Player
 import com.boardly.constants.ACCEPTED_EVENTS_NODE
 import com.boardly.constants.CREATED_EVENTS_NODE
 import com.boardly.constants.EVENTS_NODE
@@ -16,7 +17,9 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.SingleSubject
 
 open class BaseServiceImpl {
 
@@ -79,6 +82,47 @@ open class BaseServiceImpl {
                     childSnapshot.getValue(String::class.java)?.let { idsList.add(it) }
                 }
                 resultSubject.onNext(idsList)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                resultSubject.onError(databaseError.toException())
+            }
+        })
+
+        return resultSubject
+    }
+
+    protected fun getPartialPlayerProfiles(databaseReference: DatabaseReference)
+            : Single<List<Player>> {
+        val resultSubject = SingleSubject.create<List<Player>>()
+
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val partialPlayersList = arrayListOf<Player>()
+                for (childSnapshot in dataSnapshot.children) {
+                    partialPlayersList.add(Player(id = childSnapshot.key.orEmpty(), helloText = childSnapshot.value.toString()))
+                }
+                resultSubject.onSuccess(partialPlayersList)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                resultSubject.onError(databaseError.toException())
+            }
+        })
+
+        return resultSubject
+    }
+
+    protected fun completePlayerProfile(partialPlayer: Player): Single<Player> {
+        val resultSubject = SingleSubject.create<Player>()
+
+        getUserNodeRef(partialPlayer.id).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                dataSnapshot.getValue(Player::class.java)?.let {
+                    it.helloText = partialPlayer.helloText
+                    it.id = partialPlayer.id
+                    resultSubject.onSuccess(it)
+                }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {

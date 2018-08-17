@@ -7,13 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.boardly.R
 import com.boardly.base.BaseActivity
+import com.boardly.common.events.EventUIRenderer
 import com.boardly.common.events.models.Event
 import com.boardly.common.events.models.EventType
-import com.boardly.constants.LEVEL_STRINGS_MAP
 import com.boardly.eventdetails.EventDetailsActivity
-import com.boardly.extensions.formatForDisplay
-import com.boardly.extensions.formatForMaxOf
-import com.boardly.extensions.loadImageFromUrl
 import com.boardly.home.HomeActivity
 import com.boardly.home.JoinDialogValidator
 import com.boardly.home.models.JoinEventData
@@ -30,23 +27,23 @@ import kotlinx.android.synthetic.main.item_event.view.pendingTextView
 import kotlinx.android.synthetic.main.item_event.view.seeDescriptionButton
 import kotlinx.android.synthetic.main.item_event.view.timeTextView
 import kotlinx.android.synthetic.main.view_hello_dialog.view.helloEditText
-import java.util.*
 
 class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val parentActivity = itemView.context as BaseActivity
+    private val eventUIRenderer = EventUIRenderer(parentActivity)
 
     fun bind(event: Event) {
         with(itemView) {
-            eventNameTextView.text = event.eventName
-            gameTextView.text = event.gameName
-            locationTextView.text = event.placeName
-            numberOfPlayersTextView.text = event.currentNumberOfPlayers.toString().formatForMaxOf(event.maxPlayers.toString())
-            context.loadImageFromUrl(boardGameImageView, event.gameImageUrl, R.drawable.board_game_placeholder)
-
-            setSeeDescriptionButton(event.description)
-            setLevelTextView(event.levelId)
-            setDateTextView(event.timestamp)
+            eventUIRenderer.displayEventInfo(event,
+                    eventNameTextView,
+                    gameTextView,
+                    locationTextView,
+                    numberOfPlayersTextView,
+                    boardGameImageView,
+                    seeDescriptionButton,
+                    levelTextView,
+                    timeTextView)
             setTypeLabel(event.type)
             setClickAction(event)
         }
@@ -109,42 +106,6 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private fun setAcceptedClickAction(event: Event) {
         itemView.setOnClickListener { EventDetailsActivity.start(parentActivity, event) }
-    }
-
-    private fun launchDescriptionDialog(description: String) {
-        android.app.AlertDialog.Builder(parentActivity)
-                .setMessage(description)
-                .setTitle(R.string.description_text)
-                .setPositiveButton(R.string.close_dialog) { dialog, _ -> dialog.cancel() }
-                .create()
-                .show()
-    }
-
-    private fun setSeeDescriptionButton(description: String) {
-        with(itemView) {
-            if (description.isNotEmpty()) {
-                seeDescriptionButton.visibility = View.VISIBLE
-                seeDescriptionButton.setOnClickListener { launchDescriptionDialog(description) }
-            } else {
-                seeDescriptionButton.visibility = View.GONE
-            }
-        }
-    }
-
-    private fun setLevelTextView(levelId: String) {
-        with(itemView) {
-            levelTextView.text = context.getString(LEVEL_STRINGS_MAP[levelId] ?: R.string.empty)
-        }
-    }
-
-    private fun setDateTextView(timestamp: Long) {
-        with(itemView) {
-            if (timestamp > 0) {
-                timeTextView.text = Date(timestamp).formatForDisplay()
-            } else {
-                timeTextView.text = context.getString(R.string.date_to_be_added)
-            }
-        }
     }
 
     private fun setTypeLabel(type: EventType) {

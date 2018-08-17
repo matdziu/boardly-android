@@ -72,4 +72,5 @@
     <string name="hello_dialog_negative_text">Anuluj</string>
     <string name="accepted_players_text">Zaakceptowani gracze:</string>
     <string name="no_players_text">Na razie nie ma tutaj nikogo</string>
+    <string name="pending_players_text">Oczekujący gracze:</string>
 </resources>

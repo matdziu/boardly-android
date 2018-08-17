@@ -1,7 +1,7 @@
-package com.boardly.eventdetails.players.list
+package com.boardly.common.players.list
 
 import android.support.v7.util.DiffUtil
-import com.boardly.common.events.models.Player
+import com.boardly.common.players.models.Player
 
 class PlayersDiffCallback : DiffUtil.ItemCallback<Player>() {
 
