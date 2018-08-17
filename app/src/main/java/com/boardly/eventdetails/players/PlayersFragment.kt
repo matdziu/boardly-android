@@ -2,13 +2,11 @@ package com.boardly.eventdetails.players
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.annotation.DrawableRes
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import com.boardly.R
 import com.boardly.common.events.models.Event
 import com.boardly.constants.EVENT
@@ -16,8 +14,8 @@ import com.boardly.constants.LEVEL_STRINGS_MAP
 import com.boardly.eventdetails.players.list.AcceptedPlayersAdapter
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.formatForMaxOf
+import com.boardly.extensions.loadImageFromUrl
 import com.boardly.factories.PlayersViewModelFactory
-import com.boardly.injection.modules.GlideApp
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -120,19 +118,12 @@ class PlayersFragment : Fragment(), PlayersView {
             gameTextView.text = gameName
             locationTextView.text = placeName
             numberOfPlayersTextView.text = currentNumberOfPlayers.toString().formatForMaxOf(maxPlayers.toString())
-            loadImageFromUrl(boardGameImageView, gameImageUrl, R.drawable.board_game_placeholder)
+            context?.loadImageFromUrl(boardGameImageView, gameImageUrl, R.drawable.board_game_placeholder)
 
             setSeeDescriptionButton(description)
             setLevelTextView(levelId)
             setDateTextView(timestamp)
         }
-    }
-
-    private fun loadImageFromUrl(imageView: ImageView, pictureUrl: String, @DrawableRes placeholderId: Int) {
-        GlideApp.with(this)
-                .load(pictureUrl)
-                .placeholder(placeholderId)
-                .into(imageView)
     }
 
     private fun setSeeDescriptionButton(description: String) {

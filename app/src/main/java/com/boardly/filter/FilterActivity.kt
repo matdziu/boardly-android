@@ -12,6 +12,7 @@ import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_FILTER_REQUEST_CODE
 import com.boardly.constants.PICK_GAME_REQUEST_CODE
 import com.boardly.constants.SAVED_FILTER
+import com.boardly.extensions.loadImageFromUrl
 import com.boardly.factories.FilterViewModelFactory
 import com.boardly.filter.models.Filter
 import com.boardly.injection.modules.GlideApp

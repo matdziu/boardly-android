@@ -5,15 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseDrawerActivity
 import com.boardly.constants.SHOW_HAMBURGER_MENU
 import com.boardly.editprofile.models.InputData
+import com.boardly.extensions.loadImageFromFile
+import com.boardly.extensions.loadImageFromUrl
 import com.boardly.factories.EditProfileViewModelFactory
 import com.boardly.home.HomeActivity
-import com.boardly.injection.modules.GlideApp
 import com.jakewharton.rxbinding2.view.RxView
 import com.theartofdev.edmodo.cropper.CropImage
 import dagger.android.AndroidInjection
@@ -144,11 +144,5 @@ class EditProfileActivity : BaseDrawerActivity(), EditProfileView {
             contentViewGroup.visibility = View.VISIBLE
             progressBar.visibility = View.GONE
         }
-    }
-
-    private fun loadImageFromFile(imageView: ImageView, pictureFile: File) {
-        GlideApp.with(this)
-                .load(pictureFile)
-                .into(imageView)
     }
 }

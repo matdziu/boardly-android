@@ -41,13 +41,6 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun loadImageFromUrl(imageView: ImageView, pictureUrl: String, @DrawableRes placeholderId: Int) {
-        GlideApp.with(this)
-                .load(pictureUrl)
-                .placeholder(placeholderId)
-                .into(imageView)
-    }
-
     fun signOut() {
         FirebaseAuth.getInstance().signOut()
         val intent = Intent(this, LoginActivity::class.java)

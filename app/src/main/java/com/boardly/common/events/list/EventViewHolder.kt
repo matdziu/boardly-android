@@ -13,6 +13,7 @@ import com.boardly.constants.LEVEL_STRINGS_MAP
 import com.boardly.eventdetails.EventDetailsActivity
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.formatForMaxOf
+import com.boardly.extensions.loadImageFromUrl
 import com.boardly.home.HomeActivity
 import com.boardly.home.JoinDialogValidator
 import com.boardly.home.models.JoinEventData
@@ -41,7 +42,7 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             gameTextView.text = event.gameName
             locationTextView.text = event.placeName
             numberOfPlayersTextView.text = event.currentNumberOfPlayers.toString().formatForMaxOf(event.maxPlayers.toString())
-            parentActivity.loadImageFromUrl(boardGameImageView, event.gameImageUrl, R.drawable.board_game_placeholder)
+            context.loadImageFromUrl(boardGameImageView, event.gameImageUrl, R.drawable.board_game_placeholder)
 
             setSeeDescriptionButton(event.description)
             setLevelTextView(event.levelId)

@@ -7,11 +7,10 @@
     android:orientation="horizontal"
     android:padding="16dp">
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/playerImageView"
@@ -19,7 +18,9 @@
             android:layout_height="66dp"
             android:src="@drawable/profile_picture_shape"
             app:civ_border_color="@color/lightGrey"
-            app:civ_border_width="1dp" />
+            app:civ_border_width="1dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/nameTextView"
@@ -29,9 +30,36 @@
             android:textAlignment="center"
             android:textSize="16dp"
             android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/playerImageView"
             tools:text="Mateusz" />
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/ratingImageView"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/colorPrimary"
+            android:src="@drawable/ic_star_white"
+            app:layout_constraintEnd_toStartOf="@+id/ratingTextView"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nameTextView" />
+
+        <TextView
+            android:id="@+id/ratingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ratingImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/ratingImageView"
+            app:layout_constraintTop_toTopOf="@+id/ratingImageView"
+            tools:text="4.5" />
+
+    </android.support.constraint.ConstraintLayout>
 
     <TextView
         android:id="@+id/helloTextView"
