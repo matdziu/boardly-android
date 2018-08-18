@@ -52,7 +52,7 @@ open class BaseServiceImpl {
         return firebaseDatabase.getReference("$USERS_NODE/$userId/$EVENTS_NODE/$PENDING_EVENTS_NODE")
     }
 
-    private fun getUserAcceptedEventsNodeRef(userId: String): DatabaseReference {
+    protected fun getUserAcceptedEventsNodeRef(userId: String): DatabaseReference {
         return firebaseDatabase.getReference("$USERS_NODE/$userId/$EVENTS_NODE/$ACCEPTED_EVENTS_NODE")
     }
 
