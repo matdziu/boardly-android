@@ -8,4 +8,8 @@ interface AdminService {
     fun getAcceptedPlayers(eventId: String): Observable<List<Player>>
 
     fun getPendingPlayers(eventId: String): Observable<List<Player>>
+
+    fun acceptPlayer(eventId: String, playerId: String): Observable<Boolean>
+
+    fun kickPlayer(eventId: String, playerId: String): Observable<Boolean>
 }

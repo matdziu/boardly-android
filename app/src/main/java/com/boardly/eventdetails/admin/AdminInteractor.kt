@@ -8,11 +8,21 @@ class AdminInteractor @Inject constructor(private val adminService: AdminService
 
     fun fetchAcceptedPlayers(eventId: String): Observable<PartialAdminViewState> {
         return adminService.getAcceptedPlayers(eventId)
-                .map { PartialAdminViewState.AcceptedPlayersFetched(it) }
+                .map { PartialAdminViewState.AcceptedListState(it) }
     }
 
     fun fetchPendingPlayers(eventId: String): Observable<PartialAdminViewState> {
         return adminService.getPendingPlayers(eventId)
-                .map { PartialAdminViewState.PendingPlayersFetched(it) }
+                .map { PartialAdminViewState.PendingListState(it) }
+    }
+
+    fun acceptPlayer(eventId: String, playerId: String): Observable<PartialAdminViewState> {
+        return adminService.acceptPlayer(eventId, playerId)
+                .map { PartialAdminViewState.PlayerAccepted() }
+    }
+
+    fun kickPlayer(eventId: String, playerId: String): Observable<PartialAdminViewState> {
+        return adminService.kickPlayer(eventId, playerId)
+                .map { PartialAdminViewState.PlayerKicked() }
     }
 }

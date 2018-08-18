@@ -43,12 +43,15 @@ class AdminFragment : Fragment(), AdminView {
 
     lateinit var adminViewModel: AdminViewModel
 
-    private lateinit var fetchEventPlayersTriggerSubject: PublishSubject<String>
+    private lateinit var fetchEventPlayersTriggerSubject: PublishSubject<Boolean>
     private var init = true
     private var event = Event()
 
-    private val acceptedPlayersAdapter = AcceptedPlayersAdapter()
-    private val pendingPlayersAdapter = PendingPlayersAdapter()
+    lateinit var acceptPlayerSubject: PublishSubject<String>
+    lateinit var kickPlayerSubject: PublishSubject<String>
+
+    private val acceptedPlayersAdapter = AcceptedPlayersAdapter(this)
+    private val pendingPlayersAdapter = PendingPlayersAdapter(this)
 
     companion object {
         fun newInstance(event: Event): AdminFragment {
@@ -97,21 +100,21 @@ class AdminFragment : Fragment(), AdminView {
     override fun onStart() {
         super.onStart()
         initEmitters()
-        adminViewModel.bind(this)
+        adminViewModel.bind(this, event.eventId)
 
-        if (init) {
-            fetchEventPlayersTriggerSubject.onNext(event.eventId)
-            init = false
-        }
+        fetchEventPlayersTriggerSubject.onNext(init)
     }
 
     override fun onStop() {
+        init = false
         adminViewModel.unbind()
         super.onStop()
     }
 
     private fun initEmitters() {
         fetchEventPlayersTriggerSubject = PublishSubject.create()
+        acceptPlayerSubject = PublishSubject.create()
+        kickPlayerSubject = PublishSubject.create()
     }
 
     override fun render(adminViewState: AdminViewState) {
@@ -176,5 +179,9 @@ class AdminFragment : Fragment(), AdminView {
         }
     }
 
-    override fun fetchEventPlayersTriggerEmitter(): Observable<String> = fetchEventPlayersTriggerSubject
+    override fun kickPlayerEmitter(): Observable<String> = kickPlayerSubject
+
+    override fun acceptPlayerEmitter(): Observable<String> = acceptPlayerSubject
+
+    override fun fetchEventPlayersTriggerEmitter(): Observable<Boolean> = fetchEventPlayersTriggerSubject
 }

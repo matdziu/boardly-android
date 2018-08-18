@@ -8,6 +8,14 @@ import io.reactivex.Observable
 
 class AdminServiceImpl : BaseServiceImpl(), AdminService {
 
+    override fun acceptPlayer(eventId: String, playerId: String): Observable<Boolean> {
+        return Observable.just(true)
+    }
+
+    override fun kickPlayer(eventId: String, playerId: String): Observable<Boolean> {
+        return Observable.just(true)
+    }
+
     override fun getAcceptedPlayers(eventId: String): Observable<List<Player>> {
         return getPartialPlayerProfiles(getPlayersNode(eventId).child(ACCEPTED_EVENTS_NODE))
                 .flattenAsObservable { it }

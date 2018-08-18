@@ -11,14 +11,42 @@ class AdminViewModel(private val adminInteractor: AdminInteractor) : ViewModel()
     private val compositeDisposable = CompositeDisposable()
     private val stateSubject = BehaviorSubject.createDefault(AdminViewState())
 
-    fun bind(adminView: AdminView) {
+    fun bind(adminView: AdminView, eventId: String) {
         val fetchPendingPlayersObservable = adminView.fetchEventPlayersTriggerEmitter()
-                .flatMap { adminInteractor.fetchPendingPlayers(it).startWith(PartialAdminViewState.PendingProgressState()) }
+                .filter { it }
+                .flatMap { adminInteractor.fetchPendingPlayers(eventId).startWith(PartialAdminViewState.PendingProgressState()) }
 
         val fetchAcceptedPlayersObservable = adminView.fetchEventPlayersTriggerEmitter()
-                .flatMap { adminInteractor.fetchAcceptedPlayers(it).startWith(PartialAdminViewState.AcceptedProgressState()) }
+                .filter { it }
+                .flatMap { adminInteractor.fetchAcceptedPlayers(eventId).startWith(PartialAdminViewState.AcceptedProgressState()) }
 
-        val mergedObservable = Observable.merge(fetchPendingPlayersObservable, fetchAcceptedPlayersObservable)
+        val acceptPlayerObservable = adminView.acceptPlayerEmitter()
+                .flatMap { adminInteractor.acceptPlayer(eventId, it) }
+
+        val updatePendingListObservable = adminView.acceptPlayerEmitter()
+                .map { playerId ->
+                    val currentState = stateSubject.value ?: AdminViewState()
+                    val pendingList = currentState.pendingPlayersList.filter { playerId != it.id }
+                    PartialAdminViewState.PendingListState(pendingList)
+                }
+
+        val kickPlayerObservable = adminView.kickPlayerEmitter()
+                .flatMap { adminInteractor.kickPlayer(eventId, it) }
+
+        val updateAcceptedListObservable = adminView.kickPlayerEmitter()
+                .map { playerId ->
+                    val currentState = stateSubject.value ?: AdminViewState()
+                    val acceptedList = currentState.acceptedPlayersList.filter { playerId != it.id }
+                    PartialAdminViewState.AcceptedListState(acceptedList)
+                }
+
+        val mergedObservable = Observable.merge(listOf(
+                fetchPendingPlayersObservable,
+                fetchAcceptedPlayersObservable,
+                acceptPlayerObservable,
+                kickPlayerObservable,
+                updatePendingListObservable,
+                updateAcceptedListObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 
