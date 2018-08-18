@@ -51,18 +51,12 @@ class AdminServiceImpl : BaseServiceImpl(), AdminService {
 
     override fun getAcceptedPlayers(eventId: String): Observable<List<Player>> {
         return getPartialPlayerProfiles(getPlayersNode(eventId).child(ACCEPTED_EVENTS_NODE))
-                .flattenAsObservable { it }
-                .flatMapSingle { completePlayerProfile(it) }
-                .toList()
-                .toObservable()
+                .flatMap { completePlayerProfiles(it) }
     }
 
     override fun getPendingPlayers(eventId: String): Observable<List<Player>> {
         return getPartialPlayerProfiles(getPlayersNode(eventId).child(PENDING_EVENTS_NODE))
-                .flattenAsObservable { it }
-                .flatMapSingle { completePlayerProfile(it) }
-                .toList()
-                .toObservable()
+                .flatMap { completePlayerProfiles(it) }
     }
 
     private fun deleteNodesTask(userEventsNode: DatabaseReference,

@@ -17,9 +17,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.SingleSubject
 
 open class BaseServiceImpl {
 
@@ -93,16 +91,16 @@ open class BaseServiceImpl {
     }
 
     protected fun getPartialPlayerProfiles(databaseReference: DatabaseReference)
-            : Single<List<Player>> {
-        val resultSubject = SingleSubject.create<List<Player>>()
+            : Observable<List<Player>> {
+        val resultSubject = PublishSubject.create<List<Player>>()
 
-        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+        databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val partialPlayersList = arrayListOf<Player>()
                 for (childSnapshot in dataSnapshot.children) {
                     partialPlayersList.add(Player(id = childSnapshot.key.orEmpty(), helloText = childSnapshot.value.toString()))
                 }
-                resultSubject.onSuccess(partialPlayersList)
+                resultSubject.onNext(partialPlayersList)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -113,22 +111,28 @@ open class BaseServiceImpl {
         return resultSubject
     }
 
-    protected fun completePlayerProfile(partialPlayer: Player): Single<Player> {
-        val resultSubject = SingleSubject.create<Player>()
+    protected fun completePlayerProfiles(partialPlayersList: List<Player>): Observable<List<Player>> {
+        val resultSubject = PublishSubject.create<List<Player>>()
+        val playersList = arrayListOf<Player>()
 
-        getUserNodeRef(partialPlayer.id).addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                dataSnapshot.getValue(Player::class.java)?.let {
-                    it.helloText = partialPlayer.helloText
-                    it.id = partialPlayer.id
-                    resultSubject.onSuccess(it)
+        if (partialPlayersList.isEmpty()) return Observable.just(playersList)
+
+        for (partialPlayer in partialPlayersList) {
+            getUserNodeRef(partialPlayer.id).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    dataSnapshot.getValue(Player::class.java)?.let {
+                        it.helloText = partialPlayer.helloText
+                        it.id = partialPlayer.id
+                        playersList.add(it)
+                        if (partialPlayersList.size == playersList.size) resultSubject.onNext(playersList)
+                    }
                 }
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                resultSubject.onError(databaseError.toException())
-            }
-        })
+                override fun onCancelled(databaseError: DatabaseError) {
+                    resultSubject.onError(databaseError.toException())
+                }
+            })
+        }
 
         return resultSubject
     }

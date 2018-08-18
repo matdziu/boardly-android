@@ -9,9 +9,6 @@ class PlayersServiceImpl : BaseServiceImpl(), PlayersService {
 
     override fun getAcceptedPlayers(eventId: String): Observable<List<Player>> {
         return getPartialPlayerProfiles(getPlayersNode(eventId).child(ACCEPTED_EVENTS_NODE))
-                .flattenAsObservable { it }
-                .flatMapSingle { completePlayerProfile(it) }
-                .toList()
-                .toObservable()
+                .flatMap { completePlayerProfiles(it) }
     }
 }
