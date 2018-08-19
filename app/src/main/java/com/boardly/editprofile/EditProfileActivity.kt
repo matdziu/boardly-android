@@ -12,6 +12,7 @@ import com.boardly.constants.SHOW_HAMBURGER_MENU
 import com.boardly.editprofile.models.InputData
 import com.boardly.extensions.loadImageFromFile
 import com.boardly.extensions.loadImageFromUrl
+import com.boardly.extensions.toString
 import com.boardly.factories.EditProfileViewModelFactory
 import com.boardly.home.HomeActivity
 import com.jakewharton.rxbinding2.view.RxView
@@ -117,7 +118,7 @@ class EditProfileActivity : BaseDrawerActivity(), EditProfileView {
             if (render) {
                 nameEditText.setText(profileData.name)
                 profileData.profilePicture?.let { loadImageFromUrl(profilePictureImageView, it, R.drawable.profile_picture_shape) }
-                ratingTextView.text = profileData.rating?.toString() ?: "-"
+                ratingTextView.text = profileData.rating?.toString("#.#") ?: "-"
             }
         }
     }

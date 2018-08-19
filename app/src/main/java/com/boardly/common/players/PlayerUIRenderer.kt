@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.boardly.common.players.models.Player
 import com.boardly.extensions.loadImageFromUrl
+import com.boardly.extensions.toString
 
 open class PlayerUIRenderer(private val activity: AppCompatActivity) {
 
@@ -25,7 +26,7 @@ open class PlayerUIRenderer(private val activity: AppCompatActivity) {
         if (rating != null) {
             ratingTextView.visibility = View.VISIBLE
             ratingImageView.visibility = View.VISIBLE
-            ratingTextView.text = rating.toString()
+            ratingTextView.text = rating.toString("#.#")
         } else {
             ratingTextView.visibility = View.GONE
             ratingImageView.visibility = View.GONE
