@@ -10,7 +10,8 @@ data class InputData(var eventName: String = "",
                      var placeLatitude: Double = 0.0,
                      var placeLongitude: Double = 0.0,
                      var levelId: String = "",
-                     var timestamp: Long = 0) {
+                     var timestamp: Long = 0,
+                     var adminId: String = "") {
 
     fun toMap(): Map<String, Any> {
         return mapOf(
@@ -24,6 +25,7 @@ data class InputData(var eventName: String = "",
                 "placeLatitude" to placeLatitude,
                 "placeLongitude" to placeLongitude,
                 "levelId" to levelId,
-                "timestamp" to timestamp)
+                "timestamp" to timestamp,
+                "adminId" to adminId)
     }
 }

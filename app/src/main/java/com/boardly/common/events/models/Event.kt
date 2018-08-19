@@ -15,6 +15,7 @@ data class Event(var eventId: String = "",
                  val currentNumberOfPlayers: Int = 0,
                  val gameImageUrl: String = "",
                  val description: String = "",
+                 val adminId: String = "",
                  var type: EventType = EventType.DEFAULT) : Parcelable
 
 enum class EventType {

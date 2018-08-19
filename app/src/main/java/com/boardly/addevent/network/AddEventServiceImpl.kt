@@ -14,6 +14,7 @@ import java.util.*
 class AddEventServiceImpl : AddEventService, BaseServiceImpl() {
 
     override fun addEvent(inputData: InputData): Observable<Boolean> {
+        inputData.adminId = currentUserId
         val resultSubject = PublishSubject.create<Boolean>()
 
         val eventKey = UUID.randomUUID().toString()
