@@ -7,10 +7,11 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 
-class AdminViewModel(private val adminInteractor: AdminInteractor) : ViewModel() {
+class AdminViewModel(private val adminInteractor: AdminInteractor,
+                     initialState: AdminViewState = AdminViewState()) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-    private val stateSubject = BehaviorSubject.createDefault(AdminViewState())
+    private val stateSubject = BehaviorSubject.createDefault(initialState)
 
     fun bind(adminView: AdminView, eventId: String) {
         val fetchPendingPlayersObservable = adminView.fetchEventPlayersTriggerEmitter()

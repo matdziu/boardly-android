@@ -7,10 +7,11 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 
-class PlayersViewModel(private val playersInteractor: PlayersInteractor) : ViewModel() {
+class PlayersViewModel(private val playersInteractor: PlayersInteractor,
+                       initialState: PlayersViewState = PlayersViewState()) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-    private val stateSubject = BehaviorSubject.createDefault(PlayersViewState())
+    private val stateSubject = BehaviorSubject.createDefault(initialState)
 
     fun bind(playersView: PlayersView) {
         val fetchEventPlayersObservable = playersView.fetchEventPlayersTriggerEmitter()
