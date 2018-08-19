@@ -18,14 +18,14 @@ sealed class PartialAdminViewState {
         }
     }
 
-    class AcceptedListState(private val acceptedPlayers: List<Player>) : PartialAdminViewState() {
+    data class AcceptedListState(private val acceptedPlayers: List<Player>) : PartialAdminViewState() {
         override fun reduce(previousState: AdminViewState): AdminViewState {
             return previousState.copy(acceptedProgress = false,
                     acceptedPlayersList = acceptedPlayers)
         }
     }
 
-    class PendingListState(private val pendingPlayers: List<Player>) : PartialAdminViewState() {
+    data class PendingListState(private val pendingPlayers: List<Player>) : PartialAdminViewState() {
         override fun reduce(previousState: AdminViewState): AdminViewState {
             return previousState.copy(pendingProgress = false,
                     pendingPlayersList = pendingPlayers)
