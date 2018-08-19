@@ -3,7 +3,6 @@ package com.boardly.home.network
 import com.boardly.base.BaseServiceImpl
 import com.boardly.common.events.models.Event
 import com.boardly.constants.EVENTS_NODE
-import com.boardly.constants.PENDING_EVENTS_NODE
 import com.boardly.home.models.JoinEventData
 import com.boardly.home.models.UserLocation
 import com.firebase.geofire.GeoLocation
@@ -68,8 +67,7 @@ class HomeServiceImpl : HomeService, BaseServiceImpl() {
                 getUserPendingEventsNodeRef(currentUserId)
                         .push()
                         .setValue(joinEventData.eventId),
-                getPlayersNode(joinEventData.eventId)
-                        .child(PENDING_EVENTS_NODE)
+                getPendingPlayersNode(joinEventData.eventId)
                         .child(currentUserId)
                         .setValue(joinEventData.helloText))
                 .addOnSuccessListener { resultSubject.onNext(true) }

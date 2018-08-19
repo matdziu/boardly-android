@@ -21,7 +21,7 @@ import io.reactivex.subjects.PublishSubject
 
 open class BaseServiceImpl {
 
-    protected val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
+    private val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     protected val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     protected val currentUserId = firebaseAuth.currentUser?.uid.orEmpty()
@@ -34,8 +34,12 @@ open class BaseServiceImpl {
         return firebaseDatabase.getReference("$EVENTS_NODE/$eventId")
     }
 
-    protected fun getPlayersNode(eventId: String): DatabaseReference {
-        return firebaseDatabase.getReference("$PLAYERS_NODE/$eventId")
+    protected fun getAcceptedPlayersNode(eventId: String): DatabaseReference {
+        return firebaseDatabase.getReference("$PLAYERS_NODE/$eventId/$ACCEPTED_EVENTS_NODE")
+    }
+
+    protected fun getPendingPlayersNode(eventId: String): DatabaseReference {
+        return firebaseDatabase.getReference("$PLAYERS_NODE/$eventId/$PENDING_EVENTS_NODE")
     }
 
     protected fun getStorageProfilePictureRef(userId: String): StorageReference {

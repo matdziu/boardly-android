@@ -2,8 +2,6 @@ package com.boardly.eventdetails.admin.network
 
 import com.boardly.base.BaseServiceImpl
 import com.boardly.common.players.models.Player
-import com.boardly.constants.ACCEPTED_EVENTS_NODE
-import com.boardly.constants.PENDING_EVENTS_NODE
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.android.gms.tasks.Tasks
@@ -21,14 +19,14 @@ class AdminServiceImpl : BaseServiceImpl(), AdminService {
 
         deleteNodesTask(
                 getUserPendingEventsNodeRef(playerId),
-                getPlayersNode(eventId).child(PENDING_EVENTS_NODE),
+                getPendingPlayersNode(eventId),
                 eventId,
                 playerId)
                 .continueWithTask {
                     moveNodesTask(
                             it.result[1].result as String,
                             getUserAcceptedEventsNodeRef(playerId),
-                            getPlayersNode(eventId).child(ACCEPTED_EVENTS_NODE),
+                            getAcceptedPlayersNode(eventId),
                             playerId,
                             eventId)
                 }
@@ -41,7 +39,7 @@ class AdminServiceImpl : BaseServiceImpl(), AdminService {
         val resultSubject = PublishSubject.create<Boolean>()
 
         deleteNodesTask(getUserAcceptedEventsNodeRef(playerId),
-                getPlayersNode(eventId).child(ACCEPTED_EVENTS_NODE),
+                getAcceptedPlayersNode(eventId),
                 eventId,
                 playerId)
                 .addOnSuccessListener { resultSubject.onNext(true) }
@@ -50,12 +48,12 @@ class AdminServiceImpl : BaseServiceImpl(), AdminService {
     }
 
     override fun getAcceptedPlayers(eventId: String): Observable<List<Player>> {
-        return getPartialPlayerProfiles(getPlayersNode(eventId).child(ACCEPTED_EVENTS_NODE))
+        return getPartialPlayerProfiles(getAcceptedPlayersNode(eventId))
                 .flatMap { completePlayerProfiles(it) }
     }
 
     override fun getPendingPlayers(eventId: String): Observable<List<Player>> {
-        return getPartialPlayerProfiles(getPlayersNode(eventId).child(PENDING_EVENTS_NODE))
+        return getPartialPlayerProfiles(getPendingPlayersNode(eventId))
                 .flatMap { completePlayerProfiles(it) }
     }
 
