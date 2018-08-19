@@ -43,4 +43,10 @@ sealed class PartialAdminViewState {
             return previousState
         }
     }
+
+    class RatingSent : PartialAdminViewState() {
+        override fun reduce(previousState: AdminViewState): AdminViewState {
+            return previousState
+        }
+    }
 }

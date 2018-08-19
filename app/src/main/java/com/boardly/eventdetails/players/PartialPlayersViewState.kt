@@ -12,9 +12,15 @@ sealed class PartialPlayersViewState {
         }
     }
 
-    class AcceptedPlayersFetchedState(private val playersList: List<Player>) : PartialPlayersViewState() {
+    class AcceptedListState(private val playersList: List<Player>) : PartialPlayersViewState() {
         override fun reduce(previousState: PlayersViewState): PlayersViewState {
             return PlayersViewState(acceptedPlayersList = playersList)
+        }
+    }
+
+    class RatingSent : PartialPlayersViewState() {
+        override fun reduce(previousState: PlayersViewState): PlayersViewState {
+            return previousState
         }
     }
 }

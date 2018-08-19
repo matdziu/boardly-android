@@ -134,6 +134,7 @@ open class BaseServiceImpl {
             completePlayerProfileTask(partialPlayer)
                     .continueWithTask { checkIfRatedOrSelfTask(it.result, currentRatingHash) }
                     .addOnSuccessListener {
+                        it.eventId = eventId
                         playersList.add(it)
                         if (partialPlayersList.size == playersList.size) resultSubject.onNext(playersList)
                     }

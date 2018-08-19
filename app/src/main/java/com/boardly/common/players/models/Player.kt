@@ -5,4 +5,5 @@ data class Player(var id: String = "",
                   val profilePicture: String = "",
                   val rating: Double? = null,
                   var helloText: String = "",
-                  var ratedOrSelf: Boolean = false)
+                  var ratedOrSelf: Boolean = false,
+                  var eventId: String = "")

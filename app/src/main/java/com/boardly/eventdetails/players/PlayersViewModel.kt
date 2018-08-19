@@ -1,6 +1,7 @@
 package com.boardly.eventdetails.players
 
 import android.arch.lifecycle.ViewModel
+import com.boardly.extensions.mapToRatedPlayerCopy
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
@@ -15,7 +16,21 @@ class PlayersViewModel(private val playersInteractor: PlayersInteractor) : ViewM
         val fetchEventPlayersObservable = playersView.fetchEventPlayersTriggerEmitter()
                 .flatMap { playersInteractor.fetchAcceptedPlayers(it).startWith(PartialPlayersViewState.ProgressState()) }
 
-        val mergedObservable = Observable.merge(listOf(fetchEventPlayersObservable))
+        val sendRatingObservable = playersView.ratingEmitter()
+                .flatMap { playersInteractor.sendRating(it) }
+
+        val updateRatedOrSelfObservable = playersView.ratingEmitter()
+                .map { rateInput ->
+                    val currentState = stateSubject.value ?: PlayersViewState()
+                    val acceptedList = currentState.acceptedPlayersList
+                            .mapToRatedPlayerCopy { it.id == rateInput.playerId }
+                    PartialPlayersViewState.AcceptedListState(acceptedList)
+                }
+
+        val mergedObservable = Observable.merge(listOf(
+                fetchEventPlayersObservable,
+                sendRatingObservable,
+                updateRatedOrSelfObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 

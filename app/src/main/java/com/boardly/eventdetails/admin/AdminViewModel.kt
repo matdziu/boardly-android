@@ -1,6 +1,7 @@
 package com.boardly.eventdetails.admin
 
 import android.arch.lifecycle.ViewModel
+import com.boardly.extensions.mapToRatedPlayerCopy
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
@@ -40,13 +41,26 @@ class AdminViewModel(private val adminInteractor: AdminInteractor) : ViewModel()
                     PartialAdminViewState.AcceptedListState(acceptedList)
                 }
 
+        val sendRatingObservable = adminView.ratingEmitter()
+                .flatMap { adminInteractor.sendRating(it) }
+
+        val updateRatedOrSelfObservable = adminView.ratingEmitter()
+                .map { rateInput ->
+                    val currentState = stateSubject.value ?: AdminViewState()
+                    val acceptedList = currentState.acceptedPlayersList
+                            .mapToRatedPlayerCopy { it.id == rateInput.playerId }
+                    PartialAdminViewState.AcceptedListState(acceptedList)
+                }
+
         val mergedObservable = Observable.merge(listOf(
                 fetchPendingPlayersObservable,
                 fetchAcceptedPlayersObservable,
                 acceptPlayerObservable,
                 kickPlayerObservable,
                 updatePendingListObservable,
-                updateAcceptedListObservable))
+                updateAcceptedListObservable,
+                sendRatingObservable,
+                updateRatedOrSelfObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 
