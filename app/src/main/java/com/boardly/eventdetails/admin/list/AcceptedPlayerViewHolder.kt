@@ -8,6 +8,7 @@ import com.boardly.common.players.models.Player
 import com.boardly.eventdetails.admin.AdminFragment
 import kotlinx.android.synthetic.main.item_admin_accepted_player.view.helloTextView
 import kotlinx.android.synthetic.main.item_admin_accepted_player.view.kickButton
+import kotlinx.android.synthetic.main.item_admin_accepted_player.view.rateButton
 import kotlinx.android.synthetic.main.layout_player.view.nameTextView
 import kotlinx.android.synthetic.main.layout_player.view.playerImageView
 import kotlinx.android.synthetic.main.layout_player.view.ratingImageView
@@ -26,7 +27,8 @@ class AcceptedPlayerViewHolder(itemView: View,
                     nameTextView,
                     helloTextView,
                     ratingTextView,
-                    ratingImageView)
+                    ratingImageView,
+                    rateButton)
             kickButton.setOnClickListener { adminFragment.kickPlayerSubject.onNext(player.id) }
         }
     }
