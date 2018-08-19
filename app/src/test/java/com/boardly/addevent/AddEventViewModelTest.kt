@@ -41,7 +41,6 @@ class AddEventViewModelTest {
         val inputData = InputData(
                 eventName = "  ",
                 gameId = "1",
-                maxPlayers = 1,
                 placeName = "Domowka")
 
         addEventViewRobot.emitInputData(inputData)
@@ -52,26 +51,10 @@ class AddEventViewModelTest {
     }
 
     @Test
-    fun whenNumberOfPlayersIsZeroShowNumberOfPlayersError() {
-        val inputData = InputData(
-                eventName = "Let's go",
-                gameId = "1",
-                maxPlayers = 0,
-                placeName = "Domowka")
-
-        addEventViewRobot.emitInputData(inputData)
-
-        addEventViewRobot.assertViewStates(
-                AddEventViewState(),
-                AddEventViewState(numberOfPlayersValid = false))
-    }
-
-    @Test
     fun whenNoGameIsSelectedShowSelectedGameError() {
         val inputData = InputData(
                 eventName = "Let's go",
                 gameId = "",
-                maxPlayers = 1,
                 placeName = "Domowka")
 
         addEventViewRobot.emitInputData(inputData)
@@ -85,8 +68,7 @@ class AddEventViewModelTest {
     fun whenNoPlaceIsSelectedShowSelectedPlaceError() {
         val inputData = InputData(
                 eventName = "Let's go",
-                gameId = "1",
-                maxPlayers = 1)
+                gameId = "1")
 
         addEventViewRobot.emitInputData(inputData)
 
@@ -100,7 +82,6 @@ class AddEventViewModelTest {
         val inputData = InputData(
                 eventName = "Let's go",
                 gameId = "1",
-                maxPlayers = 1,
                 placeName = "Domowka")
         whenever(addEventInteractor.addEvent(any())).thenReturn(Observable.just(PartialAddEventViewState.SuccessState()))
 
