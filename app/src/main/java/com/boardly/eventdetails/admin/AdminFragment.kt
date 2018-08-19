@@ -2,12 +2,12 @@ package com.boardly.eventdetails.admin
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.boardly.R
+import com.boardly.base.BaseRateFragment
 import com.boardly.common.events.EventUIRenderer
 import com.boardly.common.events.models.Event
 import com.boardly.constants.EVENT
@@ -32,7 +32,7 @@ import kotlinx.android.synthetic.main.layout_event.locationTextView
 import kotlinx.android.synthetic.main.layout_event.timeTextView
 import javax.inject.Inject
 
-class AdminFragment : Fragment(), AdminView {
+class AdminFragment : BaseRateFragment(), AdminView {
 
     @Inject
     lateinit var eventUIRenderer: EventUIRenderer
@@ -48,8 +48,6 @@ class AdminFragment : Fragment(), AdminView {
 
     lateinit var acceptPlayerSubject: PublishSubject<String>
     lateinit var kickPlayerSubject: PublishSubject<String>
-
-    private lateinit var ratingSubject: PublishSubject<Int>
 
     private val acceptedPlayersAdapter = AcceptedPlayersAdapter(this)
     private val pendingPlayersAdapter = PendingPlayersAdapter(this)
@@ -111,11 +109,11 @@ class AdminFragment : Fragment(), AdminView {
         super.onStop()
     }
 
-    private fun initEmitters() {
+    override fun initEmitters() {
+        super.initEmitters()
         fetchEventPlayersTriggerSubject = PublishSubject.create()
         acceptPlayerSubject = PublishSubject.create()
         kickPlayerSubject = PublishSubject.create()
-        ratingSubject = PublishSubject.create()
     }
 
     override fun render(adminViewState: AdminViewState) {
@@ -185,10 +183,4 @@ class AdminFragment : Fragment(), AdminView {
     override fun acceptPlayerEmitter(): Observable<String> = acceptPlayerSubject
 
     override fun fetchEventPlayersTriggerEmitter(): Observable<Boolean> = fetchEventPlayersTriggerSubject
-
-    override fun ratingEmitter(): Observable<Int> = ratingSubject
-
-    override fun emitRating(rating: Int) {
-        ratingSubject.onNext(rating)
-    }
 }

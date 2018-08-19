@@ -2,12 +2,12 @@ package com.boardly.eventdetails.players
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.boardly.R
+import com.boardly.base.BaseRateFragment
 import com.boardly.common.events.EventUIRenderer
 import com.boardly.common.events.models.Event
 import com.boardly.constants.EVENT
@@ -28,7 +28,7 @@ import kotlinx.android.synthetic.main.layout_event.locationTextView
 import kotlinx.android.synthetic.main.layout_event.timeTextView
 import javax.inject.Inject
 
-class PlayersFragment : Fragment(), PlayersView {
+class PlayersFragment : BaseRateFragment(), PlayersView {
 
     @Inject
     lateinit var playersViewModelFactory: PlayersViewModelFactory
@@ -41,8 +41,6 @@ class PlayersFragment : Fragment(), PlayersView {
     private lateinit var fetchEventPlayersTriggerSubject: PublishSubject<String>
     private var init = true
     private var event = Event()
-
-    private lateinit var ratingSubject: PublishSubject<Int>
 
     private val acceptedPlayersAdapter = AcceptedPlayersAdapter(this)
 
@@ -96,9 +94,9 @@ class PlayersFragment : Fragment(), PlayersView {
         super.onStop()
     }
 
-    private fun initEmitters() {
+    override fun initEmitters() {
+        super.initEmitters()
         fetchEventPlayersTriggerSubject = PublishSubject.create()
-        ratingSubject = PublishSubject.create()
     }
 
     private fun initRecyclerView() {
@@ -119,12 +117,6 @@ class PlayersFragment : Fragment(), PlayersView {
     }
 
     override fun fetchEventPlayersTriggerEmitter(): Observable<String> = fetchEventPlayersTriggerSubject
-
-    override fun ratingEmitter(): Observable<Int> = ratingSubject
-
-    override fun emitRating(rating: Int) {
-        ratingSubject.onNext(rating)
-    }
 
     private fun showProgressBar(show: Boolean) {
         if (show) {

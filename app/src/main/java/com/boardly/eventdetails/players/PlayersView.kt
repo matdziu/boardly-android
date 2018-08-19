@@ -1,9 +1,8 @@
 package com.boardly.eventdetails.players
 
-import com.boardly.base.RateView
 import io.reactivex.Observable
 
-interface PlayersView : RateView {
+interface PlayersView {
 
     fun render(playersViewState: PlayersViewState)
 
