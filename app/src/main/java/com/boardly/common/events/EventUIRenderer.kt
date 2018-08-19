@@ -9,7 +9,6 @@ import com.boardly.R
 import com.boardly.common.events.models.Event
 import com.boardly.constants.LEVEL_STRINGS_MAP
 import com.boardly.extensions.formatForDisplay
-import com.boardly.extensions.formatForMaxOf
 import com.boardly.extensions.loadImageFromUrl
 import java.util.*
 import javax.inject.Inject
@@ -20,7 +19,6 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
                          eventNameTextView: TextView,
                          gameTextView: TextView,
                          locationTextView: TextView,
-                         numberOfPlayersTextView: TextView,
                          boardGameImageView: ImageView,
                          seeDescriptionButton: Button,
                          levelTextView: TextView,
@@ -29,7 +27,6 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
             eventNameTextView.text = eventName
             gameTextView.text = gameName
             locationTextView.text = placeName
-            numberOfPlayersTextView.text = currentNumberOfPlayers.toString().formatForMaxOf(maxPlayers.toString())
             activity.loadImageFromUrl(boardGameImageView, gameImageUrl, R.drawable.board_game_placeholder)
 
             setSeeDescriptionButton(description, seeDescriptionButton)

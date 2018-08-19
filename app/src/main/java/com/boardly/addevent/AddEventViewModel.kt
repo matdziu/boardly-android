@@ -22,12 +22,10 @@ class AddEventViewModel(private val addEventInteractor: AddEventInteractor) : Vi
         val inputDataObservable = addEventView.inputDataEmitter()
                 .flatMap {
                     val eventNameValid = it.eventName.isNotBlank()
-                    val numberOfPlayersValid = it.maxPlayers > 0
                     val selectedGameValid = it.gameId.isNotBlank()
                     val selectedPlaceValid = it.placeName.isNotBlank()
 
                     if (eventNameValid
-                            && numberOfPlayersValid
                             && selectedGameValid
                             && selectedPlaceValid) {
                         addEventInteractor.addEvent(it)
@@ -35,7 +33,6 @@ class AddEventViewModel(private val addEventInteractor: AddEventInteractor) : Vi
                     } else {
                         Observable.just(PartialAddEventViewState.LocalValidation(
                                 eventNameValid,
-                                numberOfPlayersValid,
                                 selectedGameValid,
                                 selectedPlaceValid))
                     }

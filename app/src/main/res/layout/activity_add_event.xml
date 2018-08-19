@@ -36,30 +36,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/eventNameHintTextView" />
 
             <TextView
-                android:id="@+id/numberOfPlayersHintTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/number_of_players_hint"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/eventNameEditText" />
-
-            <com.boardly.customviews.BoardlyEditText
-                android:id="@+id/numberOfPlayersEditText"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/numberOfPlayersHintTextView" />
-
-            <TextView
                 android:id="@+id/descriptionTextViewHint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="@string/description_hint"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/numberOfPlayersEditText" />
+                app:layout_constraintTop_toBottomOf="@id/eventNameEditText" />
 
             <com.boardly.customviews.BoardlyEditText
                 android:id="@+id/descriptionEditText"

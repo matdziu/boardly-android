@@ -29,13 +29,11 @@ sealed class PartialAddEventViewState {
     }
 
     data class LocalValidation(private val eventNameValid: Boolean = true,
-                               private val numberOfPlayersValid: Boolean = true,
                                private val selectedGameValid: Boolean = true,
                                private val selectedPlaceValid: Boolean = true) : PartialAddEventViewState() {
         override fun reduce(previousState: AddEventViewState): AddEventViewState {
             return previousState.copy(
                     eventNameValid = eventNameValid,
-                    numberOfPlayersValid = numberOfPlayersValid,
                     selectedGameValid = selectedGameValid,
                     selectedPlaceValid = selectedPlaceValid)
         }

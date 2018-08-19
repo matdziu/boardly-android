@@ -29,7 +29,6 @@ import kotlinx.android.synthetic.main.layout_event.eventNameTextView
 import kotlinx.android.synthetic.main.layout_event.gameTextView
 import kotlinx.android.synthetic.main.layout_event.levelTextView
 import kotlinx.android.synthetic.main.layout_event.locationTextView
-import kotlinx.android.synthetic.main.layout_event.numberOfPlayersTextView
 import kotlinx.android.synthetic.main.layout_event.timeTextView
 import javax.inject.Inject
 
@@ -81,7 +80,6 @@ class AdminFragment : Fragment(), AdminView {
                 eventNameTextView,
                 gameTextView,
                 locationTextView,
-                numberOfPlayersTextView,
                 boardGameImageView,
                 seeDescriptionButton,
                 levelTextView,

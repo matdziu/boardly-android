@@ -99,43 +99,19 @@
         app:layout_constraintTop_toBottomOf="@+id/locationTextView"
         tools:text="12:00" />
 
-    <ImageView
-        android:id="@+id/peopleImageView"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:background="@color/colorPrimary"
-        android:src="@drawable/ic_people_white_outline"
-        app:layout_constraintBottom_toBottomOf="@+id/numberOfPlayersTextView"
-        app:layout_constraintEnd_toStartOf="@+id/numberOfPlayersTextView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/numberOfPlayersTextView"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/numberOfPlayersTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/peopleImageView"
-        app:layout_constraintTop_toBottomOf="@+id/timeImageView"
-        tools:text="2/4" />
-
     <Button
         android:id="@+id/seeDescriptionButton"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="@string/description_text"
         android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/numberOfPlayersTextView" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeImageView" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/boardGameImageView"

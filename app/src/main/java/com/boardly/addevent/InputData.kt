@@ -1,7 +1,6 @@
 package com.boardly.addevent
 
 data class InputData(var eventName: String = "",
-                     var maxPlayers: Int = 0,
                      var description: String = "",
                      var gameName: String = "",
                      var gameId: String = "",
@@ -16,7 +15,6 @@ data class InputData(var eventName: String = "",
     fun toMap(): Map<String, Any> {
         return mapOf(
                 "eventName" to eventName,
-                "maxPlayers" to maxPlayers,
                 "description" to description,
                 "gameName" to gameName,
                 "gameId" to gameId,

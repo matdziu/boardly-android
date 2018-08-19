@@ -37,7 +37,6 @@ import kotlinx.android.synthetic.main.activity_add_event.dateTextView
 import kotlinx.android.synthetic.main.activity_add_event.descriptionEditText
 import kotlinx.android.synthetic.main.activity_add_event.eventNameEditText
 import kotlinx.android.synthetic.main.activity_add_event.levelTextView
-import kotlinx.android.synthetic.main.activity_add_event.numberOfPlayersEditText
 import kotlinx.android.synthetic.main.activity_add_event.pickDateButton
 import kotlinx.android.synthetic.main.activity_add_event.pickGameButton
 import kotlinx.android.synthetic.main.activity_add_event.pickLevelButton
@@ -115,7 +114,6 @@ class AddEventActivity : BaseActivity(), AddEventView {
             inputData.gameImageUrl = selectedGame.image
             loadImageFromUrl(boardGameImageView, selectedGame.image, R.drawable.board_game_placeholder)
             eventNameEditText.showError(!eventNameValid)
-            numberOfPlayersEditText.showError(!numberOfPlayersValid)
             showProgressBar(progress)
             showPickedGameError(!selectedGameValid)
             showPickedPlaceError(!selectedPlaceValid)
@@ -232,7 +230,6 @@ class AddEventActivity : BaseActivity(), AddEventView {
             .map {
                 inputData.apply {
                     eventName = eventNameEditText.text.toString().trim()
-                    maxPlayers = numberOfPlayersEditText.text.toString().toIntOrNull() ?: 0
                     description = descriptionEditText.text.toString().trim()
                 }
             }
