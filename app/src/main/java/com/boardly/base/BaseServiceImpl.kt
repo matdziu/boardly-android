@@ -6,8 +6,11 @@ import com.boardly.constants.CREATED_EVENTS_NODE
 import com.boardly.constants.EVENTS_NODE
 import com.boardly.constants.PENDING_EVENTS_NODE
 import com.boardly.constants.PLAYERS_NODE
+import com.boardly.constants.RATING_HASHES
 import com.boardly.constants.USERS_NODE
 import com.firebase.geofire.GeoFire
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -115,27 +118,85 @@ open class BaseServiceImpl {
         return resultSubject
     }
 
-    protected fun completePlayerProfiles(partialPlayersList: List<Player>): Observable<List<Player>> {
+    protected fun completePlayerProfilesWithRating(partialPlayersList: List<Player>, eventId: String)
+            : Observable<List<Player>> {
+        val resultSubject = PublishSubject.create<List<Player>>()
+        val playersList = arrayListOf<Player>()
+        val currentRatingHash = eventId + currentUserId
+
+        if (partialPlayersList.isEmpty()) return Observable.just(playersList)
+
+        for (partialPlayer in partialPlayersList) {
+            completePlayerProfileTask(partialPlayer)
+                    .continueWithTask { checkIfRatedOrSelfTask(it.result, currentRatingHash) }
+                    .addOnSuccessListener {
+                        playersList.add(it)
+                        if (partialPlayersList.size == playersList.size) resultSubject.onNext(playersList)
+                    }
+        }
+
+        return resultSubject
+    }
+
+    private fun completePlayerProfileTask(partialPlayer: Player): Task<Player> {
+        val dbSource = TaskCompletionSource<Player>()
+        val dbTask = dbSource.task
+
+        getUserNodeRef(partialPlayer.id).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val player = dataSnapshot.getValue(Player::class.java)?.apply {
+                    helloText = partialPlayer.helloText
+                    id = partialPlayer.id
+                }
+                dbSource.setResult(player)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                dbSource.setException(databaseError.toException())
+            }
+        })
+
+        return dbTask
+    }
+
+    private fun checkIfRatedOrSelfTask(player: Player, currentRatingHash: String): Task<Player> {
+        val dbSource = TaskCompletionSource<Player>()
+        val dbTask = dbSource.task
+
+        if (player.id == currentUserId) {
+            dbSource.setResult(player.apply { ratedOrSelf = true })
+            return dbTask
+        }
+
+        getUserNodeRef(player.id)
+                .child(RATING_HASHES)
+                .child(currentRatingHash)
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        dbSource.setResult(player.apply { ratedOrSelf = dataSnapshot.value != null })
+                    }
+
+                    override fun onCancelled(databaseError: DatabaseError) {
+                        dbSource.setException(databaseError.toException())
+                    }
+                })
+
+        return dbTask
+    }
+
+    protected fun completePlayerProfiles(partialPlayersList: List<Player>)
+            : Observable<List<Player>> {
         val resultSubject = PublishSubject.create<List<Player>>()
         val playersList = arrayListOf<Player>()
 
         if (partialPlayersList.isEmpty()) return Observable.just(playersList)
 
         for (partialPlayer in partialPlayersList) {
-            getUserNodeRef(partialPlayer.id).addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    dataSnapshot.getValue(Player::class.java)?.let {
-                        it.helloText = partialPlayer.helloText
-                        it.id = partialPlayer.id
+            completePlayerProfileTask(partialPlayer)
+                    .addOnSuccessListener {
                         playersList.add(it)
                         if (partialPlayersList.size == playersList.size) resultSubject.onNext(playersList)
                     }
-                }
-
-                override fun onCancelled(databaseError: DatabaseError) {
-                    resultSubject.onError(databaseError.toException())
-                }
-            })
         }
 
         return resultSubject

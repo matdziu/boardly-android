@@ -76,4 +76,7 @@
     <string name="kick_text">Wyrzuć</string>
     <string name="accept_text">Akceptuj</string>
     <string name="rate_text">Oceń</string>
+    <string name="rate_dialog_title">Oceń gracza</string>
+    <string name="rate_dialog_positive_text">Oceń</string>
+    <string name="rate_dialog_negative_text">Anuluj</string>
 </resources>

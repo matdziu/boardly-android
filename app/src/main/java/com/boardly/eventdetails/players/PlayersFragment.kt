@@ -42,7 +42,9 @@ class PlayersFragment : Fragment(), PlayersView {
     private var init = true
     private var event = Event()
 
-    private val acceptedPlayersAdapter = AcceptedPlayersAdapter()
+    private lateinit var ratingSubject: PublishSubject<Int>
+
+    private val acceptedPlayersAdapter = AcceptedPlayersAdapter(this)
 
     companion object {
         fun newInstance(event: Event): PlayersFragment {
@@ -96,6 +98,7 @@ class PlayersFragment : Fragment(), PlayersView {
 
     private fun initEmitters() {
         fetchEventPlayersTriggerSubject = PublishSubject.create()
+        ratingSubject = PublishSubject.create()
     }
 
     private fun initRecyclerView() {
@@ -116,6 +119,12 @@ class PlayersFragment : Fragment(), PlayersView {
     }
 
     override fun fetchEventPlayersTriggerEmitter(): Observable<String> = fetchEventPlayersTriggerSubject
+
+    override fun ratingEmitter(): Observable<Int> = ratingSubject
+
+    override fun emitRating(rating: Int) {
+        ratingSubject.onNext(rating)
+    }
 
     private fun showProgressBar(show: Boolean) {
         if (show) {

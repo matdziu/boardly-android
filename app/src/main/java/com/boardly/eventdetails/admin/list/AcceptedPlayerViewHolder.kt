@@ -3,7 +3,7 @@ package com.boardly.eventdetails.admin.list
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.boardly.base.BaseActivity
-import com.boardly.common.players.PlayerUIRenderer
+import com.boardly.common.players.RatingPlayerUIRenderer
 import com.boardly.common.players.models.Player
 import com.boardly.eventdetails.admin.AdminFragment
 import kotlinx.android.synthetic.main.item_admin_accepted_player.view.helloTextView
@@ -18,7 +18,7 @@ class AcceptedPlayerViewHolder(itemView: View,
                                private val adminFragment: AdminFragment) : RecyclerView.ViewHolder(itemView) {
 
     private val parentActivity = itemView.context as BaseActivity
-    private val playerUIRenderer = PlayerUIRenderer(parentActivity)
+    private val playerUIRenderer = RatingPlayerUIRenderer(parentActivity)
 
     fun bind(player: Player) {
         with(itemView) {
@@ -28,7 +28,8 @@ class AcceptedPlayerViewHolder(itemView: View,
                     helloTextView,
                     ratingTextView,
                     ratingImageView,
-                    rateButton)
+                    rateButton,
+                    adminFragment)
             kickButton.setOnClickListener { adminFragment.kickPlayerSubject.onNext(player.id) }
         }
     }

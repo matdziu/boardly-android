@@ -8,6 +8,6 @@ class PlayersServiceImpl : BaseServiceImpl(), PlayersService {
 
     override fun getAcceptedPlayers(eventId: String): Observable<List<Player>> {
         return getPartialPlayerProfiles(getAcceptedPlayersNode(eventId))
-                .flatMap { completePlayerProfiles(it) }
+                .flatMap { completePlayerProfilesWithRating(it, eventId) }
     }
 }

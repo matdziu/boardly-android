@@ -1,8 +1,9 @@
 package com.boardly.eventdetails.admin
 
+import com.boardly.base.RateView
 import io.reactivex.Observable
 
-interface AdminView {
+interface AdminView : RateView {
 
     fun render(adminViewState: AdminViewState)
 

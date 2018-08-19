@@ -40,7 +40,7 @@ class AdminFragment : Fragment(), AdminView {
     @Inject
     lateinit var adminViewModelFactory: AdminViewModelFactory
 
-    lateinit var adminViewModel: AdminViewModel
+    private lateinit var adminViewModel: AdminViewModel
 
     private lateinit var fetchEventPlayersTriggerSubject: PublishSubject<Boolean>
     private var init = true
@@ -48,6 +48,8 @@ class AdminFragment : Fragment(), AdminView {
 
     lateinit var acceptPlayerSubject: PublishSubject<String>
     lateinit var kickPlayerSubject: PublishSubject<String>
+
+    private lateinit var ratingSubject: PublishSubject<Int>
 
     private val acceptedPlayersAdapter = AcceptedPlayersAdapter(this)
     private val pendingPlayersAdapter = PendingPlayersAdapter(this)
@@ -113,6 +115,7 @@ class AdminFragment : Fragment(), AdminView {
         fetchEventPlayersTriggerSubject = PublishSubject.create()
         acceptPlayerSubject = PublishSubject.create()
         kickPlayerSubject = PublishSubject.create()
+        ratingSubject = PublishSubject.create()
     }
 
     override fun render(adminViewState: AdminViewState) {
@@ -182,4 +185,10 @@ class AdminFragment : Fragment(), AdminView {
     override fun acceptPlayerEmitter(): Observable<String> = acceptPlayerSubject
 
     override fun fetchEventPlayersTriggerEmitter(): Observable<Boolean> = fetchEventPlayersTriggerSubject
+
+    override fun ratingEmitter(): Observable<Int> = ratingSubject
+
+    override fun emitRating(rating: Int) {
+        ratingSubject.onNext(rating)
+    }
 }

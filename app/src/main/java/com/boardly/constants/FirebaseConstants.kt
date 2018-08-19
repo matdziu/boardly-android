@@ -11,6 +11,7 @@ const val CREATED_EVENTS_NODE = "created"
 
 const val NAME_CHILD = "name"
 const val PROFILE_PICTURE_CHILD = "profilePicture"
+const val RATING_HASHES = "ratingHashes"
 
 val LEVEL_IDS_MAP = mapOf(
         R.string.beginner_level to "1",

@@ -49,7 +49,7 @@ class AdminServiceImpl : BaseServiceImpl(), AdminService {
 
     override fun getAcceptedPlayers(eventId: String): Observable<List<Player>> {
         return getPartialPlayerProfiles(getAcceptedPlayersNode(eventId))
-                .flatMap { completePlayerProfiles(it) }
+                .flatMap { completePlayerProfilesWithRating(it, eventId) }
     }
 
     override fun getPendingPlayers(eventId: String): Observable<List<Player>> {
