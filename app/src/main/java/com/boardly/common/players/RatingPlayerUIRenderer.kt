@@ -11,6 +11,7 @@ import com.boardly.R
 import com.boardly.base.rating.RateView
 import com.boardly.base.rating.models.RateInput
 import com.boardly.common.players.models.Player
+import kotlinx.android.synthetic.main.view_rate_dialog.view.ratingBar
 
 class RatingPlayerUIRenderer(private val activity: AppCompatActivity) : PlayerUIRenderer(activity) {
 
@@ -43,7 +44,7 @@ class RatingPlayerUIRenderer(private val activity: AppCompatActivity) : PlayerUI
                     .setTitle(R.string.rate_dialog_title)
                     .setPositiveButton(R.string.rate_dialog_positive_text) { _, _ ->
                         with(dialogView) {
-                            rateView.emitRating(RateInput(1, player.id, player.eventId))
+                            rateView.emitRating(RateInput(ratingBar.rating.toInt(), player.id, player.eventId))
                         }
                     }
                     .setNegativeButton(R.string.rate_dialog_negative_text, null)

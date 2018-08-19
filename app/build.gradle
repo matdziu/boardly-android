@@ -70,6 +70,7 @@ dependencies {
     implementation 'com.tickaroo.tikxml:annotation:0.8.13'
     implementation 'com.tickaroo.tikxml:core:0.8.13'
     implementation 'com.firebase:geofire-android:2.3.1'
+    implementation 'com.github.ome450901:SimpleRatingBar:1.4.2'
 
     kapt 'com.tickaroo.tikxml:processor:0.8.13'
     kapt 'com.google.dagger:dagger-android-processor:2.15'

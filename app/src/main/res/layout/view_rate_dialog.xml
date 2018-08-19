@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+    <com.willy.ratingbar.ScaleRatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srb_clearRatingEnabled="true"
+        app:srb_clickable="true"
+        app:srb_isIndicator="false"
+        app:srb_minimumStars="1"
+        app:srb_numStars="5"
+        app:srb_scrollable="true"
+        app:srb_starHeight="30dp"
+        app:srb_starWidth="30dp"
+        app:srb_stepSize="1" />
+
+</LinearLayout>
