@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.boardly.R
-import com.boardly.base.RateView
+import com.boardly.base.rating.RateView
 import com.boardly.common.players.models.Player
 
 class RatingPlayerUIRenderer(private val activity: AppCompatActivity) : PlayerUIRenderer(activity) {

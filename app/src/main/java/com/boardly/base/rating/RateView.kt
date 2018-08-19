@@ -1,4 +1,4 @@
-package com.boardly.base
+package com.boardly.base.rating
 
 import io.reactivex.Observable
 

@@ -1,4 +1,4 @@
-package com.boardly.base
+package com.boardly.base.rating
 
 import android.support.v4.app.Fragment
 import io.reactivex.Observable

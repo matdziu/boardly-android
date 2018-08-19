@@ -33,6 +33,10 @@ open class BaseServiceImpl {
         return firebaseDatabase.getReference("$USERS_NODE/$userId")
     }
 
+    protected fun getUserRatingHashesRef(userId: String): DatabaseReference {
+        return firebaseDatabase.getReference("$USERS_NODE/$userId/$RATING_HASHES")
+    }
+
     protected fun getSingleEventNode(eventId: String): DatabaseReference {
         return firebaseDatabase.getReference("$EVENTS_NODE/$eventId")
     }
@@ -168,8 +172,7 @@ open class BaseServiceImpl {
             return dbTask
         }
 
-        getUserNodeRef(player.id)
-                .child(RATING_HASHES)
+        getUserRatingHashesRef(player.id)
                 .child(currentRatingHash)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {

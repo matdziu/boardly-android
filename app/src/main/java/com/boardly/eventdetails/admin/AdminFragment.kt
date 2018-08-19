@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.boardly.R
-import com.boardly.base.BaseRateFragment
+import com.boardly.base.rating.BaseRateFragment
 import com.boardly.common.events.EventUIRenderer
 import com.boardly.common.events.models.Event
 import com.boardly.constants.EVENT
