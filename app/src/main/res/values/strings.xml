@@ -75,4 +75,5 @@
     <string name="pending_players_text">Oczekujący gracze:</string>
     <string name="kick_text">Wyrzuć</string>
     <string name="accept_text">Akceptuj</string>
+    <string name="rate_text">Oceń</string>
 </resources>
