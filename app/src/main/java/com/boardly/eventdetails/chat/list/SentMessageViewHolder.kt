@@ -9,9 +9,9 @@ import kotlinx.android.synthetic.main.item_sent_message.view.messageTextView
 class SentMessageViewHolder(itemView: View) : MessageViewHolder(itemView) {
 
     override fun bind(message: Message) {
-        with(message) {
-            itemView.messageTextView.text = text
-            if (type == MessageType.SENT) setMessageBackground(R.drawable.round_full_background_blue)
+        with(itemView) {
+            messageTextView.text = message.text
+            if (message.isSent) setMessageBackground(R.drawable.round_full_background_blue)
             else setMessageBackground(R.drawable.round_full_dim_blue_background)
         }
     }
