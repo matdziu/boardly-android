@@ -25,4 +25,6 @@ class MessagesAdapter : ListAdapter<Message, MessageViewHolder>(MessagesDiffCall
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
+
+    fun getLastTimestamp(): String = getItem(0).timestamp
 }
