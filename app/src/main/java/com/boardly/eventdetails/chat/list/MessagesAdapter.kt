@@ -9,7 +9,7 @@ import com.boardly.R
 
 class MessagesAdapter : ListAdapter<Message, MessageViewHolder>(MessagesDiffCallback()) {
 
-    override fun getItemViewType(position: Int) = getItem(position).messageType.ordinal
+    override fun getItemViewType(position: Int) = getItem(position).type.ordinal
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         return when (MessageType.values()[viewType]) {
