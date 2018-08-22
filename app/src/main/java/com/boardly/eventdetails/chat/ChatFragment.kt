@@ -3,13 +3,18 @@ package com.boardly.eventdetails.chat
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.boardly.R
+import com.boardly.common.utils.MessagesAdapterObserver
 import com.boardly.constants.EVENT_ID
+import com.boardly.eventdetails.chat.list.MessagesAdapter
 import com.boardly.factories.ChatViewModelFactory
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.fragment_chat.messagesRecyclerView
 import javax.inject.Inject
 
 class ChatFragment : Fragment(), ChatView {
@@ -18,6 +23,21 @@ class ChatFragment : Fragment(), ChatView {
     lateinit var chatViewModelFactory: ChatViewModelFactory
 
     private lateinit var chatViewModel: ChatViewModel
+
+    private var isBatchLoading = false
+    private val messagesAdapter = MessagesAdapter()
+
+    private var eventId = ""
+
+    private val messagesAdapterObserver: MessagesAdapterObserver by lazy {
+        MessagesAdapterObserver { lastItemPosition ->
+            if (lastItemPosition == 0) {
+                isBatchLoading = false
+            } else {
+                messagesRecyclerView.scrollToPosition(lastItemPosition)
+            }
+        }
+    }
 
     companion object {
         fun newInstance(eventId: String): ChatFragment {
@@ -32,6 +52,7 @@ class ChatFragment : Fragment(), ChatView {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
+        eventId = arguments?.getString(EVENT_ID) ?: ""
 
         chatViewModel = ViewModelProviders.of(this, chatViewModelFactory)[ChatViewModel::class.java]
     }
@@ -40,10 +61,32 @@ class ChatFragment : Fragment(), ChatView {
         return inflater.inflate(R.layout.fragment_chat, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initRecyclerView()
+    }
+
+    private fun initRecyclerView() {
+        val layoutManager = LinearLayoutManager(context)
+        layoutManager.stackFromEnd = true
+
+        messagesRecyclerView.layoutManager = layoutManager
+        messagesRecyclerView.adapter = messagesAdapter
+
+        messagesRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (!recyclerView.canScrollVertically(-1) && !isBatchLoading) {
+                    isBatchLoading = true
+                    // here you should emit batch trigger with last timestamp key
+                }
+            }
+        })
+    }
+
     override fun onStart() {
         super.onStart()
         initEmitters()
         chatViewModel.bind(this)
+        messagesAdapter.registerAdapterDataObserver(messagesAdapterObserver)
     }
 
     private fun initEmitters() {
@@ -52,6 +95,7 @@ class ChatFragment : Fragment(), ChatView {
 
     override fun onStop() {
         chatViewModel.unbind()
+        messagesAdapter.unregisterAdapterDataObserver(messagesAdapterObserver)
         super.onStop()
     }
 
