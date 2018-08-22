@@ -11,4 +11,6 @@
     <color name="errorRed">#F44336</color>
     <color name="green">#2ebd2e</color>
     <color name="yellow">#eae22a</color>
+    <color name="colorDimPrimary">#a1a7f4</color>
+    <color name="colorGray">#C9C9C9</color>
 </resources>

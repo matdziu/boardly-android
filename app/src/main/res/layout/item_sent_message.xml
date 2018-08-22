@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:gravity="end"
+    android:padding="8dp">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/messageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_full_dim_blue_background"
+        android:maxWidth="300dp"
+        android:padding="8dp"
+        android:textColor="@android:color/white"
+        android:textSize="16dp"
+        tools:text="Hello, how are you? I'm glad to meet you!" />
+
+</LinearLayout>
