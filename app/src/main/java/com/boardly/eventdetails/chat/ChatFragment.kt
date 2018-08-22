@@ -12,8 +12,12 @@ import com.boardly.R
 import com.boardly.common.utils.MessagesAdapterObserver
 import com.boardly.constants.EVENT_ID
 import com.boardly.eventdetails.chat.list.MessagesAdapter
+import com.boardly.extensions.getCurrentISODate
 import com.boardly.factories.ChatViewModelFactory
+import com.jakewharton.rxbinding2.view.RxView
 import dagger.android.support.AndroidSupportInjection
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_chat.messageInputEditText
 import kotlinx.android.synthetic.main.fragment_chat.messagesRecyclerView
 import kotlinx.android.synthetic.main.fragment_chat.progressBar
@@ -31,6 +35,11 @@ class ChatFragment : Fragment(), ChatView {
     private val messagesAdapter = MessagesAdapter()
 
     private var eventId = ""
+
+    private var init = true
+
+    private lateinit var newMessagesListenerToggleSubject: PublishSubject<Boolean>
+    private lateinit var batchFetchTriggerSubject: PublishSubject<String>
 
     private val messagesAdapterObserver: MessagesAdapterObserver by lazy {
         MessagesAdapterObserver { lastItemPosition ->
@@ -79,7 +88,7 @@ class ChatFragment : Fragment(), ChatView {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (!recyclerView.canScrollVertically(-1) && !isBatchLoading) {
                     isBatchLoading = true
-                    // here you should emit batch trigger with last timestamp key
+                    batchFetchTriggerSubject.onNext(messagesAdapter.getLastTimestamp())
                 }
             }
         })
@@ -90,16 +99,28 @@ class ChatFragment : Fragment(), ChatView {
         initEmitters()
         chatViewModel.bind(this)
         messagesAdapter.registerAdapterDataObserver(messagesAdapterObserver)
+
+        if (init) {
+            newMessagesListenerToggleSubject.onNext(true)
+            batchFetchTriggerSubject.onNext(getCurrentISODate())
+            init = false
+        }
     }
 
     private fun initEmitters() {
-
+        newMessagesListenerToggleSubject = PublishSubject.create()
+        batchFetchTriggerSubject = PublishSubject.create()
     }
 
     override fun onStop() {
         chatViewModel.unbind()
         messagesAdapter.unregisterAdapterDataObserver(messagesAdapterObserver)
         super.onStop()
+    }
+
+    override fun onDestroy() {
+        newMessagesListenerToggleSubject.onNext(false)
+        super.onDestroy()
     }
 
     override fun render(chatViewState: ChatViewState) {
@@ -121,5 +142,15 @@ class ChatFragment : Fragment(), ChatView {
             sendMessageButton.visibility = View.VISIBLE
             progressBar.visibility = View.GONE
         }
+    }
+
+    override fun newMessagesListenerToggleEmitter(): Observable<Boolean> = newMessagesListenerToggleSubject
+
+    override fun batchFetchTriggerEmitter(): Observable<String> = batchFetchTriggerSubject
+
+    override fun messageEmitter(): Observable<String> {
+        return RxView.clicks(sendMessageButton)
+                .map { messageInputEditText.text.toString() }
+                .doOnNext { messageInputEditText.setText("") }
     }
 }
