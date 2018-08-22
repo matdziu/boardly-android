@@ -97,7 +97,7 @@ class ChatFragment : Fragment(), ChatView {
     override fun onStart() {
         super.onStart()
         initEmitters()
-        chatViewModel.bind(this)
+        chatViewModel.bind(this, eventId)
         messagesAdapter.registerAdapterDataObserver(messagesAdapterObserver)
 
         if (init) {
