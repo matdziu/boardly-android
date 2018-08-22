@@ -10,12 +10,12 @@ data class RawMessage(val id: String = "",
                       var senderName: String = "",
                       var senderImageUrl: String = "") {
 
-    fun toMessage(currentUserId: String): Message {
+    fun toMessage(currentUserId: String, isSent: Boolean = true): Message {
         return Message(
                 id = id,
                 text = text,
                 type = if (senderId == currentUserId) MessageType.SENT else MessageType.RECEIVED,
-                isSent = true,
+                isSent = isSent,
                 senderName = senderName,
                 senderImageUrl = senderImageUrl,
                 timestamp = timestamp)
