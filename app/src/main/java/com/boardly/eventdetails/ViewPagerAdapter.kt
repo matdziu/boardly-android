@@ -15,7 +15,7 @@ class ViewPagerAdapter(fragmentManager: FragmentManager,
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            0 -> ChatFragment.newInstance()
+            0 -> ChatFragment.newInstance(event.eventId)
             1 -> if (event.type == EventType.CREATED) AdminFragment.newInstance(event) else PlayersFragment.newInstance(event)
             else -> PlayersFragment.newInstance(event)
         }
