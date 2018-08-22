@@ -14,7 +14,10 @@ import com.boardly.constants.EVENT_ID
 import com.boardly.eventdetails.chat.list.MessagesAdapter
 import com.boardly.factories.ChatViewModelFactory
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.fragment_chat.messageInputEditText
 import kotlinx.android.synthetic.main.fragment_chat.messagesRecyclerView
+import kotlinx.android.synthetic.main.fragment_chat.progressBar
+import kotlinx.android.synthetic.main.fragment_chat.sendMessageButton
 import javax.inject.Inject
 
 class ChatFragment : Fragment(), ChatView {
@@ -100,6 +103,23 @@ class ChatFragment : Fragment(), ChatView {
     }
 
     override fun render(chatViewState: ChatViewState) {
+        with(chatViewState) {
+            showProgressBar(progress)
+            messagesAdapter.submitList(messagesList)
+        }
+    }
 
+    private fun showProgressBar(show: Boolean) {
+        if (show) {
+            messagesRecyclerView.visibility = View.GONE
+            messageInputEditText.visibility = View.GONE
+            sendMessageButton.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
+        } else {
+            messagesRecyclerView.visibility = View.VISIBLE
+            messageInputEditText.visibility = View.VISIBLE
+            sendMessageButton.visibility = View.VISIBLE
+            progressBar.visibility = View.GONE
+        }
     }
 }
