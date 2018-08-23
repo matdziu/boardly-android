@@ -9,6 +9,18 @@ class ChatServiceImpl : ChatService, BaseServiceImpl() {
     override val userId: String = currentUserId
 
     override fun listenForNewMessages(eventId: String): Observable<RawMessage> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+    }
+
+    override fun stopListeningForNewMessages(eventId: String): Observable<Boolean> {
+
+    }
+
+    override fun fetchMessagesBatch(eventId: String, fromTimestamp: String): Observable<List<RawMessage>> {
+
+    }
+
+    override fun sendMessage(rawMessage: RawMessage, eventId: String) {
+
     }
 }
