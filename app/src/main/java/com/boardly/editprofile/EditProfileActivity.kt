@@ -117,7 +117,7 @@ class EditProfileActivity : BaseDrawerActivity(), EditProfileView {
 
             if (render) {
                 nameEditText.setText(profileData.name)
-                profileData.profilePicture?.let { loadImageFromUrl(profilePictureImageView, it, R.drawable.profile_picture_shape) }
+                loadImageFromUrl(profilePictureImageView, profileData.profilePicture, R.drawable.profile_picture_shape)
                 ratingTextView.text = profileData.rating?.toString("#.#") ?: "-"
             }
         }

@@ -2,6 +2,7 @@ package com.boardly.base
 
 import com.boardly.common.players.models.Player
 import com.boardly.constants.ACCEPTED_EVENTS_NODE
+import com.boardly.constants.CHATS_NODE
 import com.boardly.constants.CREATED_EVENTS_NODE
 import com.boardly.constants.EVENTS_NODE
 import com.boardly.constants.PENDING_EVENTS_NODE
@@ -28,6 +29,10 @@ open class BaseServiceImpl {
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     protected val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     protected val currentUserId = firebaseAuth.currentUser?.uid.orEmpty()
+
+    protected fun getChatNodeReference(eventId: String): DatabaseReference {
+        return firebaseDatabase.getReference("$CHATS_NODE/$eventId")
+    }
 
     protected fun getUserNodeRef(userId: String): DatabaseReference {
         return firebaseDatabase.getReference("$USERS_NODE/$userId")
