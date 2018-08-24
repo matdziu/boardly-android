@@ -7,9 +7,10 @@ import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
 
-class ChatInteractor @Inject constructor(private val chatService: ChatService) {
+class ChatInteractor @Inject constructor(private val chatService: ChatService,
+                                         initialMessagesList: List<Message>) {
 
-    private var currentMessagesList = listOf<Message>()
+    private var currentMessagesList = initialMessagesList
 
     fun listenForNewMessages(eventId: String): Observable<PartialChatViewState> {
         return chatService.listenForNewMessages(eventId)
@@ -32,9 +33,9 @@ class ChatInteractor @Inject constructor(private val chatService: ChatService) {
                 .map { PartialChatViewState.MessagesListChanged(currentMessagesList) }
     }
 
-    fun sendMessage(message: String, eventId: String): Observable<PartialChatViewState> {
+    fun sendMessage(message: String, eventId: String, messageId: String = ""): Observable<PartialChatViewState> {
         val rawMessage = RawMessage(
-                id = UUID.randomUUID().toString(),
+                id = if (messageId.isEmpty()) UUID.randomUUID().toString() else messageId,
                 text = message,
                 senderId = chatService.userId)
 

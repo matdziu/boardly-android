@@ -6,7 +6,7 @@ sealed class PartialChatViewState {
 
     abstract fun reduce(previousState: ChatViewState): ChatViewState
 
-    class MessagesListChanged(private val newMessagesList: List<Message>) : PartialChatViewState() {
+    data class MessagesListChanged(private val newMessagesList: List<Message>) : PartialChatViewState() {
         override fun reduce(previousState: ChatViewState): ChatViewState {
             return previousState.copy(
                     progress = false,
