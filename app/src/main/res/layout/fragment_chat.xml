@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/messagesRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/messageInputEditText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        android:layout_height="match_parent"
+        android:layout_above="@id/messageInputEditText"
+        android:layout_alignParentTop="true"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp" />
 
     <com.boardly.customviews.BoardlyEditText
         android:id="@+id/messageInputEditText"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -27,31 +26,24 @@
         android:hint="@string/chat_message_hint"
         android:maxHeight="100dp"
         android:minHeight="38dp"
-        android:textSize="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sendMessageButton"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textSize="16dp" />
 
     <ImageButton
         android:id="@+id/sendMessageButton"
         android:layout_width="38dp"
         android:layout_height="38dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/red_button_background"
-        android:src="@drawable/ic_send_white_18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:src="@drawable/ic_send_white_18dp" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>

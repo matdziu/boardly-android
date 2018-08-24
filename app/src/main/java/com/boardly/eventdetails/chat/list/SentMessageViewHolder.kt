@@ -11,8 +11,8 @@ class SentMessageViewHolder(itemView: View) : MessageViewHolder(itemView) {
     override fun bind(message: Message) {
         with(itemView) {
             messageTextView.text = message.text
-            if (message.isSent) setMessageBackground(R.drawable.round_full_background_blue)
-            else setMessageBackground(R.drawable.round_full_dim_blue_background)
+            if (message.isSent) setMessageBackground(R.drawable.sent_message_background)
+            else setMessageBackground(R.drawable.not_sent_message_background)
         }
     }
 

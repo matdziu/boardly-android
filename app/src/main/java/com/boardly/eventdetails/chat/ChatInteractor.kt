@@ -26,7 +26,9 @@ class ChatInteractor @Inject constructor(private val chatService: ChatService) {
     fun fetchChatMessagesBatch(eventId: String, fromTimestamp: String): Observable<PartialChatViewState> {
         return chatService.fetchMessagesBatch(eventId, fromTimestamp)
                 .map { it.map { it.toMessage(chatService.userId) } }
-                .doOnNext { messagesBatchList -> currentMessagesList = (messagesBatchList + currentMessagesList).distinctBy { it.id } }
+                .doOnNext { messagesBatchList ->
+                    currentMessagesList = (messagesBatchList.sortedBy { it.timestamp } + currentMessagesList).distinctBy { it.id }
+                }
                 .map { PartialChatViewState.MessagesListChanged(currentMessagesList) }
     }
 
