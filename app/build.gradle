@@ -28,7 +28,7 @@ android {
             versionNameSuffix "-debug"
         }
         release {
-            minifyEnabled true
+            buildConfigField "String", OAUTH_CLIENT_ID, "\"73058153525-774qk36ttm3qaokbsjuidp6099js6u4i.apps.googleusercontent.com\""
             buildConfigField "String", BGG_API_URL, "\"https://www.boardgamegeek.com/xmlapi2/\""
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

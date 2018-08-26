@@ -81,4 +81,7 @@
     <string name="rate_dialog_negative_text">Anuluj</string>
     <string name="chat_message_hint">Aa</string>
     <string name="you_were_kicked_text">Wyrzucono Cię z tego wydarzenia</string>
+    <string name="facebook_app_id">2102145790001665</string>
+    <string name="fb_login_protocol_scheme">fb2102145790001665</string>
+    <string name="places_api_key">AIzaSyDMVFtuVTLC2LrPfDLchpPDRyS82fjQSog</string>
 </resources>
