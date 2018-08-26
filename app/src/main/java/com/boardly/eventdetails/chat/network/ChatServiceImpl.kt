@@ -25,7 +25,7 @@ class ChatServiceImpl : ChatService, BaseServiceImpl() {
 
         newMessageAddedListener = object : NewMessageAddedListener() {
             override fun onNewMessageAdded(newMessage: RawMessage) {
-                resultSubject.onNext(newMessage)
+                completeRawMessageTask(newMessage).addOnSuccessListener { resultSubject.onNext(it) }
             }
         }
 
