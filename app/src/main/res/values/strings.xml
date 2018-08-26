@@ -80,4 +80,5 @@
     <string name="rate_dialog_positive_text">Oceń</string>
     <string name="rate_dialog_negative_text">Anuluj</string>
     <string name="chat_message_hint">Aa</string>
+    <string name="you_were_kicked_text">Wyrzucono Cię z tego wydarzenia</string>
 </resources>

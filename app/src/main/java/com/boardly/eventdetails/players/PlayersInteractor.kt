@@ -9,7 +9,10 @@ class PlayersInteractor @Inject constructor(private val playersService: PlayersS
 
     fun fetchAcceptedPlayers(eventId: String): Observable<PartialPlayersViewState> {
         return playersService.getAcceptedPlayers(eventId)
-                .map { PartialPlayersViewState.AcceptedListState(it) }
+                .map {
+                    if (it.find { it.id == playersService.userId } == null) PartialPlayersViewState.KickState()
+                    else PartialPlayersViewState.AcceptedListState(it)
+                }
     }
 
     fun sendRating(rateInput: RateInput): Observable<PartialPlayersViewState> {

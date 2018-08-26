@@ -6,5 +6,7 @@ import io.reactivex.Observable
 
 interface PlayersService : RateService {
 
+    val userId: String
+
     fun getAcceptedPlayers(eventId: String): Observable<List<Player>>
 }

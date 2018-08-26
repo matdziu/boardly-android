@@ -6,6 +6,8 @@ import io.reactivex.Observable
 
 class PlayersServiceImpl : RateServiceImpl(), PlayersService {
 
+    override val userId: String = currentUserId
+
     override fun getAcceptedPlayers(eventId: String): Observable<List<Player>> {
         return getPartialPlayerProfiles(getAcceptedPlayersNode(eventId))
                 .flatMap { completePlayerProfilesWithRating(it, eventId) }

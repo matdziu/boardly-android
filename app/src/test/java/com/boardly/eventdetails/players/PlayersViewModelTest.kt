@@ -14,7 +14,9 @@ class PlayersViewModelTest {
             id = "acceptedTestId",
             rating = 5.0))
     private val playersInteractor: PlayersInteractor = mock {
-        on { it.fetchAcceptedPlayers(any()) } doReturn Observable.just(PartialPlayersViewState.AcceptedListState(testAcceptedPlayersList))
+        on { it.fetchAcceptedPlayers("testEventId") } doReturn Observable.just(PartialPlayersViewState.AcceptedListState(testAcceptedPlayersList))
+                .cast(PartialPlayersViewState::class.java)
+        on { it.fetchAcceptedPlayers("testEventIdWithKicking") } doReturn Observable.just(PartialPlayersViewState.KickState())
                 .cast(PartialPlayersViewState::class.java)
         on { it.sendRating(any()) } doReturn Observable.just(PartialPlayersViewState.RatingSent())
                 .cast(PartialPlayersViewState::class.java)
@@ -46,5 +48,17 @@ class PlayersViewModelTest {
                 PlayersViewState(
                         acceptedPlayersList = modifiedAcceptedPlayersList)
         )
+    }
+
+    @Test
+    fun testSuccessfulUserKicking() {
+        val playersViewRobot = PlayersViewRobot(PlayersViewModel(playersInteractor))
+        playersViewRobot.triggerEventPlayersFetching("testEventIdWithKicking")
+        playersViewRobot.assertViewStates(
+                PlayersViewState(),
+                PlayersViewState(
+                        progress = true),
+                PlayersViewState(
+                        kick = true))
     }
 }

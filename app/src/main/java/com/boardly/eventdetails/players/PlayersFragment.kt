@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.rating.BaseRateFragment
 import com.boardly.common.events.EventUIRenderer
@@ -112,6 +113,10 @@ class PlayersFragment : BaseRateFragment(), PlayersView {
                 acceptedPlayersAdapter.submitList(acceptedPlayersList)
             } else if (!progress) {
                 showNoPlayersText(true)
+            }
+            if (kick) {
+                Toast.makeText(context, getString(R.string.you_were_kicked_text), Toast.LENGTH_SHORT).show()
+                activity?.finish()
             }
         }
     }

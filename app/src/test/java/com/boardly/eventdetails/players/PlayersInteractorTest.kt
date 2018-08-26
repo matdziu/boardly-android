@@ -11,20 +11,32 @@ import org.junit.Test
 
 class PlayersInteractorTest {
 
-    private val testAcceptedPlayersList = listOf(Player(
+    private val testAcceptedPlayersList1 = listOf(Player(
             id = "acceptedTestId",
             rating = 5.0,
             ratedOrSelf = true))
+    private val testAcceptedPlayersList2 = listOf(Player(
+            id = "test",
+            rating = 5.0,
+            ratedOrSelf = true))
     private val playersService: PlayersService = mock {
-        on { it.getAcceptedPlayers(any()) } doReturn Observable.just(testAcceptedPlayersList)
+        on { it.getAcceptedPlayers("testEventId1") } doReturn Observable.just(testAcceptedPlayersList1)
+        on { it.getAcceptedPlayers("testEventId2") } doReturn Observable.just(testAcceptedPlayersList2)
         on { it.sendRating(any()) } doReturn Observable.just(true)
+        on { it.userId } doReturn "acceptedTestId"
     }
     private val playersInteractor = PlayersInteractor(playersService)
 
     @Test
     fun testSuccessfulAcceptedPlayersFetching() {
-        playersInteractor.fetchAcceptedPlayers("testEventId").test()
-                .assertValue(PartialPlayersViewState.AcceptedListState(testAcceptedPlayersList))
+        playersInteractor.fetchAcceptedPlayers("testEventId1").test()
+                .assertValue(PartialPlayersViewState.AcceptedListState(testAcceptedPlayersList1))
+    }
+
+    @Test
+    fun testSuccessfulPlayerKick() {
+        playersInteractor.fetchAcceptedPlayers("testEventId2").test()
+                .assertValue { it is PartialPlayersViewState.KickState }
     }
 
     @Test
