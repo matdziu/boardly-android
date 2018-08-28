@@ -85,4 +85,5 @@
     <string name="fb_login_protocol_scheme">fb2102145790001665</string>
     <string name="places_api_key">AIzaSyDMVFtuVTLC2LrPfDLchpPDRyS82fjQSog</string>
     <string name="location_processing_text">Trwa ustalanie Twojej lokalizacji…</string>
+    <string name="show_on_map_text">Pokaż na mapie</string>
 </resources>

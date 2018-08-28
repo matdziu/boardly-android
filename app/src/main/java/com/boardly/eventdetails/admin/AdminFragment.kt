@@ -29,6 +29,7 @@ import kotlinx.android.synthetic.main.layout_event.eventNameTextView
 import kotlinx.android.synthetic.main.layout_event.gameTextView
 import kotlinx.android.synthetic.main.layout_event.levelTextView
 import kotlinx.android.synthetic.main.layout_event.locationTextView
+import kotlinx.android.synthetic.main.layout_event.mapButton
 import kotlinx.android.synthetic.main.layout_event.timeTextView
 import javax.inject.Inject
 
@@ -83,7 +84,8 @@ class AdminFragment : BaseRateFragment(), AdminView {
                 boardGameImageView,
                 seeDescriptionButton,
                 levelTextView,
-                timeTextView)
+                timeTextView,
+                mapButton)
         initRecyclerViews()
     }
 

@@ -13,6 +13,8 @@ data class Event(var eventId: String = "",
                  val timestamp: Long = 0,
                  val gameImageUrl: String = "",
                  val description: String = "",
+                 val placeLatitude: Double = 0.0,
+                 val placeLongitude: Double = 0.0,
                  val adminId: String = "",
                  var type: EventType = EventType.DEFAULT) : Parcelable
 

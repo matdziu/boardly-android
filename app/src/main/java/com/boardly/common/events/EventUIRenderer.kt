@@ -1,5 +1,7 @@
 package com.boardly.common.events
 
+import android.content.Intent
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
@@ -13,6 +15,7 @@ import com.boardly.extensions.loadImageFromUrl
 import java.util.*
 import javax.inject.Inject
 
+
 class EventUIRenderer @Inject constructor(private val activity: AppCompatActivity) {
 
     fun displayEventInfo(event: Event,
@@ -22,7 +25,8 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
                          boardGameImageView: ImageView,
                          seeDescriptionButton: Button,
                          levelTextView: TextView,
-                         timeTextView: TextView) {
+                         timeTextView: TextView,
+                         mapButton: Button) {
         with(event) {
             eventNameTextView.text = eventName
             gameTextView.text = gameName
@@ -32,6 +36,19 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
             setSeeDescriptionButton(description, seeDescriptionButton)
             setLevelTextView(levelId, levelTextView)
             setDateTextView(timestamp, timeTextView)
+
+            mapButton.setOnClickListener { openMap(placeLatitude, placeLongitude) }
+        }
+    }
+
+    private fun openMap(latitude: Double, longitude: Double) {
+        with(activity) {
+            val gmmIntentUri = Uri.parse("google.navigation:q=$latitude,$longitude")
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+            mapIntent.`package` = "com.google.android.apps.maps"
+            if (mapIntent.resolveActivity(packageManager) != null) {
+                startActivity(mapIntent)
+            }
         }
     }
 

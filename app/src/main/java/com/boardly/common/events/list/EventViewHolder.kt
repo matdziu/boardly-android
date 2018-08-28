@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.item_event.view.gameTextView
 import kotlinx.android.synthetic.main.item_event.view.joinEventButton
 import kotlinx.android.synthetic.main.item_event.view.levelTextView
 import kotlinx.android.synthetic.main.item_event.view.locationTextView
+import kotlinx.android.synthetic.main.item_event.view.mapButton
 import kotlinx.android.synthetic.main.item_event.view.pendingTextView
 import kotlinx.android.synthetic.main.item_event.view.seeDescriptionButton
 import kotlinx.android.synthetic.main.item_event.view.timeTextView
@@ -41,7 +42,8 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     boardGameImageView,
                     seeDescriptionButton,
                     levelTextView,
-                    timeTextView)
+                    timeTextView,
+                    mapButton)
             setTypeLabel(event.type)
             setClickAction(event)
         }
