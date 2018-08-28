@@ -30,10 +30,15 @@ class HomeViewModel(private val homeInteractor: HomeInteractor) : ViewModel() {
                     PartialHomeViewState.EventListState(eventList)
                 }
 
+        val locationProcessingObservable = homeView
+                .locationProcessingEmitter()
+                .map { PartialHomeViewState.LocationProcessingState() }
+
         val mergedObservable = Observable.merge(listOf(
                 filteredFetchObservable,
                 joinEventObservable,
-                updateEventListObservable))
+                updateEventListObservable,
+                locationProcessingObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 

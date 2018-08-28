@@ -6,6 +6,7 @@ import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
@@ -16,6 +17,7 @@ import com.boardly.R
 import com.boardly.addevent.AddEventActivity
 import com.boardly.base.BaseDrawerActivity
 import com.boardly.common.events.list.EventsAdapter
+import com.boardly.constants.LOCATION_SETTINGS_REQUEST_CODE
 import com.boardly.constants.PICKED_FILTER
 import com.boardly.constants.PICK_FILTER_REQUEST_CODE
 import com.boardly.constants.SAVED_GAME_ID
@@ -26,7 +28,14 @@ import com.boardly.filter.FilterActivity
 import com.boardly.filter.models.Filter
 import com.boardly.home.models.JoinEventData
 import com.boardly.home.models.UserLocation
+import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
 import com.tbruyelle.rxpermissions2.RxPermissions
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
@@ -34,6 +43,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_home.addEventButton
 import kotlinx.android.synthetic.main.activity_home.contentViewGroup
 import kotlinx.android.synthetic.main.activity_home.eventsRecyclerView
+import kotlinx.android.synthetic.main.activity_home.locationProcessingTextView
 import kotlinx.android.synthetic.main.activity_home.lookingForEventsTextView
 import kotlinx.android.synthetic.main.activity_home.noEventsTextView
 import kotlinx.android.synthetic.main.activity_home.noLocationPermissionTextView
@@ -47,14 +57,17 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
     private lateinit var homeViewModel: HomeViewModel
 
     private lateinit var filteredFetchSubject: PublishSubject<Pair<UserLocation, Filter>>
+    private lateinit var locationProcessingSubject: PublishSubject<Boolean>
     lateinit var joinEventSubject: PublishSubject<JoinEventData>
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     private val eventsAdapter = EventsAdapter()
+    private val locationRequest = LocationRequest().apply {
+        numUpdates = 1
+        priority = PRIORITY_BALANCED_POWER_ACCURACY
+    }
 
     private var selectedFilter = Filter()
-
-    private var emitFilter = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -67,7 +80,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         homeViewModel = ViewModelProviders.of(this, homeViewModelFactory)[HomeViewModel::class.java]
         addEventButton.setOnClickListener { startActivity(Intent(this, AddEventActivity::class.java)) }
 
-        requestLocationPermission()
+        checkLocationSettings()
     }
 
     private fun initRecyclerView() {
@@ -79,22 +92,46 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         super.onStart()
         initEmitters()
         homeViewModel.bind(this)
-        if (emitFilter && isLocationPermissionGranted()) {
-            emitFilteredFetchTrigger()
-            emitFilter = false
-        }
     }
 
     private fun initEmitters() {
         filteredFetchSubject = PublishSubject.create()
         joinEventSubject = PublishSubject.create()
+        locationProcessingSubject = PublishSubject.create()
+    }
+
+    private fun checkLocationSettings() {
+        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+        LocationServices.getSettingsClient(this)
+                .checkLocationSettings(builder.build())
+                .addOnSuccessListener { checkLocationPermission() }
+                .addOnFailureListener {
+                    if (it is ResolvableApiException) {
+                        it.startResolutionForResult(this, LOCATION_SETTINGS_REQUEST_CODE)
+                    }
+                }
     }
 
     @SuppressLint("MissingPermission")
     private fun emitFilteredFetchTrigger() {
-        fusedLocationClient.lastLocation.addOnSuccessListener {
-            filteredFetchSubject.onNext(Pair(UserLocation(it.latitude, it.longitude), selectedFilter))
+        locationProcessingSubject.onNext(true)
+        val onLocationFound = { location: Location ->
+            filteredFetchSubject.onNext(Pair(UserLocation(location.latitude, location.longitude), selectedFilter))
         }
+        fusedLocationClient.lastLocation.addOnSuccessListener {
+            if (it != null) onLocationFound(it)
+            else waitForLocation(onLocationFound)
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun waitForLocation(onLocationFound: (location: Location) -> Unit) {
+        val locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                onLocationFound(locationResult.lastLocation)
+            }
+        }
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
     }
 
     override fun onResume() {
@@ -123,7 +160,15 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         if (data != null) {
             when (requestCode) {
                 PICK_FILTER_REQUEST_CODE -> handlePickFilterResult(resultCode, data)
+                LOCATION_SETTINGS_REQUEST_CODE -> handleLocationSettingsResult(resultCode)
             }
+        }
+    }
+
+    private fun handleLocationSettingsResult(resultCode: Int) {
+        when (resultCode) {
+            Activity.RESULT_OK -> checkLocationPermission()
+            else -> finishWithLocationToast()
         }
     }
 
@@ -132,7 +177,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
             Activity.RESULT_OK -> {
                 selectedFilter = data.getParcelableExtra(PICKED_FILTER)
                 saveFilter(selectedFilter)
-                emitFilter = true
+                emitFilteredFetchTrigger()
             }
         }
     }
@@ -141,16 +186,29 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
     override fun joinEventEmitter(): Observable<JoinEventData> = joinEventSubject
 
+    override fun locationProcessingEmitter(): Observable<Boolean> = locationProcessingSubject
+
     override fun render(homeViewState: HomeViewState) {
         with(homeViewState) {
             showNoEventsFoundText(false)
             showNoLocationPermissionText(!isLocationPermissionGranted() && !progress)
             showLookingForEventsText(progress)
-            if (eventList.isNotEmpty() && !progress) {
+            showLocationProcessingText(locationProcessing)
+            if (eventList.isNotEmpty() && !progress && !locationProcessing) {
                 eventsAdapter.submitList(eventList)
-            } else if (!progress && isLocationPermissionGranted()) {
+            } else if (!progress && !locationProcessing && isLocationPermissionGranted()) {
                 showNoEventsFoundText(true)
             }
+        }
+    }
+
+    private fun showLocationProcessingText(locationProcessing: Boolean) {
+        if (locationProcessing) {
+            locationProcessingTextView.visibility = View.VISIBLE
+            contentViewGroup.visibility = View.GONE
+        } else {
+            locationProcessingTextView.visibility = View.GONE
+            contentViewGroup.visibility = View.VISIBLE
         }
     }
 
@@ -183,20 +241,24 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
     }
 
     private fun isLocationPermissionGranted(): Boolean {
-        return RxPermissions(this).isGranted(Manifest.permission.ACCESS_COARSE_LOCATION)
+        return RxPermissions(this).isGranted(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 
-    private fun requestLocationPermission() {
+    private fun checkLocationPermission() {
         RxPermissions(this)
-                .request(Manifest.permission.ACCESS_COARSE_LOCATION)
+                .request(Manifest.permission.ACCESS_FINE_LOCATION)
                 .subscribe {
                     if (!it) {
-                        finish()
-                        Toast.makeText(this, R.string.location_permission_denied_text, Toast.LENGTH_LONG).show()
+                        finishWithLocationToast()
                     } else {
                         emitFilteredFetchTrigger()
                     }
                 }
+    }
+
+    private fun finishWithLocationToast() {
+        finish()
+        Toast.makeText(this, R.string.location_denied_text, Toast.LENGTH_LONG).show()
     }
 
     private fun getSavedFilter(): Filter {

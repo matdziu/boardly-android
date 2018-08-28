@@ -46,4 +46,12 @@ class HomeViewModelTest {
                 HomeViewState(eventList = testEventList),
                 HomeViewState())
     }
+
+    @Test
+    fun whenLocationIsProcessedViewStateIndicatesIt() {
+        homeViewRobot.processLocation()
+        homeViewRobot.assertViewStates(
+                HomeViewState(),
+                HomeViewState(locationProcessing = true))
+    }
 }

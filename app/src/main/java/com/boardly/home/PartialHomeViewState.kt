@@ -19,4 +19,10 @@ sealed class PartialHomeViewState {
             return previousState
         }
     }
+
+    class LocationProcessingState : PartialHomeViewState() {
+        override fun reduce(previousState: HomeViewState): HomeViewState {
+            return HomeViewState(locationProcessing = true)
+        }
+    }
 }

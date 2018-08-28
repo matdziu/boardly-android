@@ -38,7 +38,7 @@
     <string name="search_title">Szukaj</string>
     <string name="gps_not_available">Google Play Services nie są dostępne</string>
     <string name="gps_update_needed">Zaktualizuj lub włącz Google Play Services</string>
-    <string name="location_permission_denied_text">Dzięki informacji o lokalizacji możemy znaleźć odpowiednie wydarzenia</string>
+    <string name="location_denied_text">Włącz lokalizację. Dzięki niej możemy znaleźć odpowiednie wydarzenia</string>
     <string name="description_hint">Opis wydarzenia (opcjonalnie)</string>
     <string name="no_search_results_text">Brak wyników</string>
     <string name="be_more_specific_error_text">Dla \'%1$s\' jest zbyt dużo wyników. Spróbuj sprecyzować.</string>
@@ -84,4 +84,5 @@
     <string name="facebook_app_id">2102145790001665</string>
     <string name="fb_login_protocol_scheme">fb2102145790001665</string>
     <string name="places_api_key">AIzaSyDMVFtuVTLC2LrPfDLchpPDRyS82fjQSog</string>
+    <string name="location_processing_text">Trwa ustalanie Twojej lokalizacji…</string>
 </resources>

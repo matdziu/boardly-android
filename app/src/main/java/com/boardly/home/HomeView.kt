@@ -12,4 +12,6 @@ interface HomeView {
     fun filteredFetchTriggerEmitter(): Observable<Pair<UserLocation, Filter>>
 
     fun joinEventEmitter(): Observable<JoinEventData>
+
+    fun locationProcessingEmitter(): Observable<Boolean>
 }
