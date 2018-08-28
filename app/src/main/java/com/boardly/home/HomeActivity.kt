@@ -205,10 +205,8 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
     private fun showLocationProcessingText(locationProcessing: Boolean) {
         if (locationProcessing) {
             locationProcessingTextView.visibility = View.VISIBLE
-            contentViewGroup.visibility = View.GONE
         } else {
             locationProcessingTextView.visibility = View.GONE
-            contentViewGroup.visibility = View.VISIBLE
         }
     }
 
