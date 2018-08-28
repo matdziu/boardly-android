@@ -65,6 +65,7 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/fb_background_selector"
             android:text="@string/sign_in_with_facebook_text"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/loginWithGoogleButton"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
