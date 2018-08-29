@@ -38,6 +38,7 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
             setDateTextView(timestamp, timeTextView)
 
             setOnClickListener({ openMap(placeLatitude, placeLongitude) }, locationTextView, locationImageView)
+            setOnClickListener({ openBoardgameInfoPage(gameId) }, gameTextView, boardGameImageView)
         }
     }
 
@@ -49,6 +50,13 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
             if (mapIntent.resolveActivity(packageManager) != null) {
                 startActivity(mapIntent)
             }
+        }
+    }
+
+    private fun openBoardgameInfoPage(gameId: String) {
+        with(activity) {
+            val infoPageIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://boardgamegeek.com/boardgame/$gameId"))
+            startActivity(infoPageIntent)
         }
     }
 
