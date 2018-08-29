@@ -23,13 +23,13 @@ import kotlinx.android.synthetic.main.fragment_admin.noAcceptedPlayersTextView
 import kotlinx.android.synthetic.main.fragment_admin.noPendingPlayersTextView
 import kotlinx.android.synthetic.main.fragment_admin.pendingPlayersRecyclerView
 import kotlinx.android.synthetic.main.fragment_admin.pendingProgressBar
+import kotlinx.android.synthetic.main.item_event.locationImageView
 import kotlinx.android.synthetic.main.item_event.seeDescriptionButton
 import kotlinx.android.synthetic.main.layout_event.boardGameImageView
 import kotlinx.android.synthetic.main.layout_event.eventNameTextView
 import kotlinx.android.synthetic.main.layout_event.gameTextView
 import kotlinx.android.synthetic.main.layout_event.levelTextView
 import kotlinx.android.synthetic.main.layout_event.locationTextView
-import kotlinx.android.synthetic.main.layout_event.mapButton
 import kotlinx.android.synthetic.main.layout_event.timeTextView
 import javax.inject.Inject
 
@@ -81,11 +81,11 @@ class AdminFragment : BaseRateFragment(), AdminView {
                 eventNameTextView,
                 gameTextView,
                 locationTextView,
+                locationImageView,
                 boardGameImageView,
                 seeDescriptionButton,
                 levelTextView,
-                timeTextView,
-                mapButton)
+                timeTextView)
         initRecyclerViews()
     }
 

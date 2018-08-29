@@ -20,13 +20,13 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_players.acceptedPlayersRecyclerView
 import kotlinx.android.synthetic.main.fragment_players.noPlayersTextView
 import kotlinx.android.synthetic.main.fragment_players.progressBar
+import kotlinx.android.synthetic.main.item_event.locationImageView
 import kotlinx.android.synthetic.main.item_event.seeDescriptionButton
 import kotlinx.android.synthetic.main.layout_event.boardGameImageView
 import kotlinx.android.synthetic.main.layout_event.eventNameTextView
 import kotlinx.android.synthetic.main.layout_event.gameTextView
 import kotlinx.android.synthetic.main.layout_event.levelTextView
 import kotlinx.android.synthetic.main.layout_event.locationTextView
-import kotlinx.android.synthetic.main.layout_event.mapButton
 import kotlinx.android.synthetic.main.layout_event.timeTextView
 import javax.inject.Inject
 
@@ -74,11 +74,11 @@ class PlayersFragment : BaseRateFragment(), PlayersView {
                 eventNameTextView,
                 gameTextView,
                 locationTextView,
+                locationImageView,
                 boardGameImageView,
                 seeDescriptionButton,
                 levelTextView,
-                timeTextView,
-                mapButton)
+                timeTextView)
         initRecyclerView()
     }
 

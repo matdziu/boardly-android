@@ -30,22 +30,27 @@
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp"
         android:textSize="16dp"
         android:textStyle="italic"
         app:layout_constraintEnd_toStartOf="@+id/boardGameImageView"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventNameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/levelTextView"
         tools:text="Eurobusiness" />
 
     <TextView
         android:id="@+id/levelTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:textSize="14dp"
         android:textStyle="italic"
+        app:layout_constraintEnd_toStartOf="@+id/boardGameImageView"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/eventNameTextView"
         tools:text="Beginner" />
 
     <ImageView
@@ -66,13 +71,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp"
         android:textSize="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/locationImageView"
-        app:layout_constraintTop_toBottomOf="@+id/levelTextView"
+        app:layout_constraintTop_toBottomOf="@+id/gameTextView"
         tools:text="Domówka" />
 
     <ImageView
@@ -93,9 +99,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:maxLines="1"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp"
         android:textSize="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/timeImageView"
@@ -176,13 +183,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/mapButton"
+        android:id="@+id/openEventScreenButton"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
-        android:text="@string/show_on_map_text"
+        android:text="@string/open_event_screen_text"
         android:textColor="@color/colorPrimary"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/joinEventButton" />
 

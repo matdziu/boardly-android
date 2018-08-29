@@ -21,8 +21,9 @@ import kotlinx.android.synthetic.main.item_event.view.eventNameTextView
 import kotlinx.android.synthetic.main.item_event.view.gameTextView
 import kotlinx.android.synthetic.main.item_event.view.joinEventButton
 import kotlinx.android.synthetic.main.item_event.view.levelTextView
+import kotlinx.android.synthetic.main.item_event.view.locationImageView
 import kotlinx.android.synthetic.main.item_event.view.locationTextView
-import kotlinx.android.synthetic.main.item_event.view.mapButton
+import kotlinx.android.synthetic.main.item_event.view.openEventScreenButton
 import kotlinx.android.synthetic.main.item_event.view.pendingTextView
 import kotlinx.android.synthetic.main.item_event.view.seeDescriptionButton
 import kotlinx.android.synthetic.main.item_event.view.timeTextView
@@ -39,11 +40,11 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     eventNameTextView,
                     gameTextView,
                     locationTextView,
+                    locationImageView,
                     boardGameImageView,
                     seeDescriptionButton,
                     levelTextView,
-                    timeTextView,
-                    mapButton)
+                    timeTextView)
             setTypeLabel(event.type)
             setClickAction(event)
         }
@@ -59,7 +60,10 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     private fun setDefaultClickAction(eventId: String) {
-        itemView.joinEventButton.setOnClickListener { launchHelloDialog(eventId) }
+        with(itemView) {
+            openEventScreenButton.visibility = View.GONE
+            joinEventButton.setOnClickListener { launchHelloDialog(eventId) }
+        }
     }
 
     private fun launchHelloDialog(eventId: String) {
@@ -97,15 +101,23 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     private fun setCreatedClickAction(event: Event) {
-        itemView.setOnClickListener { EventDetailsActivity.start(parentActivity, event) }
+        with(itemView) {
+            openEventScreenButton.visibility = View.VISIBLE
+            openEventScreenButton.setOnClickListener { EventDetailsActivity.start(parentActivity, event) }
+        }
     }
 
     private fun setPendingClickAction() {
-
+        with(itemView) {
+            openEventScreenButton.visibility = View.GONE
+        }
     }
 
     private fun setAcceptedClickAction(event: Event) {
-        itemView.setOnClickListener { EventDetailsActivity.start(parentActivity, event) }
+        with(itemView) {
+            openEventScreenButton.visibility = View.VISIBLE
+            openEventScreenButton.setOnClickListener { EventDetailsActivity.start(parentActivity, event) }
+        }
     }
 
     private fun setTypeLabel(type: EventType) {

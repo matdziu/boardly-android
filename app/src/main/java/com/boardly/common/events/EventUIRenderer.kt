@@ -22,11 +22,11 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
                          eventNameTextView: TextView,
                          gameTextView: TextView,
                          locationTextView: TextView,
+                         locationImageView: ImageView,
                          boardGameImageView: ImageView,
                          seeDescriptionButton: Button,
                          levelTextView: TextView,
-                         timeTextView: TextView,
-                         mapButton: Button) {
+                         timeTextView: TextView) {
         with(event) {
             eventNameTextView.text = eventName
             gameTextView.text = gameName
@@ -37,7 +37,7 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
             setLevelTextView(levelId, levelTextView)
             setDateTextView(timestamp, timeTextView)
 
-            mapButton.setOnClickListener { openMap(placeLatitude, placeLongitude) }
+            setOnClickListener({ openMap(placeLatitude, placeLongitude) }, locationTextView, locationImageView)
         }
     }
 
@@ -80,6 +80,12 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
             timeTextView.text = Date(timestamp).formatForDisplay()
         } else {
             timeTextView.text = activity.getString(R.string.date_to_be_added)
+        }
+    }
+
+    private fun setOnClickListener(clickAction: () -> Unit, vararg views: View) {
+        for (view in views) {
+            view.setOnClickListener { clickAction() }
         }
     }
 }
