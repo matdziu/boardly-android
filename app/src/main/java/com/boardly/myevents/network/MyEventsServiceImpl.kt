@@ -27,7 +27,7 @@ class MyEventsServiceImpl : MyEventsService, BaseServiceImpl() {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                     dataSnapshot.getValue(Event::class.java)?.let {
                         it.eventId = id
-                        eventList.add(it)
+                        eventList.add(0, it)
                     }
                     if (eventList.size == idsList.size) resultSubject.onNext(eventList)
                 }

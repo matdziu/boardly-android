@@ -19,16 +19,16 @@ class MyEventsInteractor @Inject constructor(private val myEventsService: MyEven
                 createdEventsObservable,
                 Function3<List<Event>, List<Event>, List<Event>, PartialMyEventsViewState> { pending, accepted, created ->
                     PartialMyEventsViewState.EventsFetchedState(
-                            pending.map {
-                                it.type = EventType.PENDING
-                                it
-                            }
-                                    + accepted.map {
+                            accepted.map {
                                 it.type = EventType.ACCEPTED
                                 it
                             }
                                     + created.map {
                                 it.type = EventType.CREATED
+                                it
+                            }
+                                    + pending.map {
+                                it.type = EventType.PENDING
                                 it
                             })
                 })
