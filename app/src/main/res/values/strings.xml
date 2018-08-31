@@ -87,4 +87,6 @@
     <string name="location_processing_text">Trwa ustalanie Twojej lokalizacji…</string>
     <string name="show_on_map_text">Pokaż na mapie</string>
     <string name="open_event_screen_text">Przejdź do wydarzenia</string>
+    <string name="delete_event">Usuń wydarzenie</string>
+    <string name="edit_event">Edytuj wydarzenie</string>
 </resources>

@@ -11,6 +11,7 @@ import com.boardly.base.rating.BaseRateFragment
 import com.boardly.common.events.EventUIRenderer
 import com.boardly.common.events.models.Event
 import com.boardly.constants.EVENT
+import com.boardly.event.EventActivity
 import com.boardly.eventdetails.admin.list.AcceptedPlayersAdapter
 import com.boardly.eventdetails.admin.list.PendingPlayersAdapter
 import com.boardly.factories.AdminViewModelFactory
@@ -19,6 +20,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_admin.acceptedPlayersRecyclerView
 import kotlinx.android.synthetic.main.fragment_admin.acceptedProgressBar
+import kotlinx.android.synthetic.main.fragment_admin.editEventButton
 import kotlinx.android.synthetic.main.fragment_admin.noAcceptedPlayersTextView
 import kotlinx.android.synthetic.main.fragment_admin.noPendingPlayersTextView
 import kotlinx.android.synthetic.main.fragment_admin.pendingPlayersRecyclerView
@@ -77,6 +79,7 @@ class AdminFragment : BaseRateFragment(), AdminView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        editEventButton.setOnClickListener { EventActivity.startEditMode(view.context, event) }
         eventUIRenderer.displayEventInfo(event,
                 eventNameTextView,
                 gameTextView,

@@ -14,7 +14,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.boardly.R
-import com.boardly.event.EventActivity
 import com.boardly.base.BaseDrawerActivity
 import com.boardly.common.events.list.EventsAdapter
 import com.boardly.constants.LOCATION_SETTINGS_REQUEST_CODE
@@ -23,6 +22,7 @@ import com.boardly.constants.PICK_FILTER_REQUEST_CODE
 import com.boardly.constants.SAVED_GAME_ID
 import com.boardly.constants.SAVED_GAME_NAME
 import com.boardly.constants.SAVED_RADIUS
+import com.boardly.event.EventActivity
 import com.boardly.factories.HomeViewModelFactory
 import com.boardly.filter.FilterActivity
 import com.boardly.filter.models.Filter
@@ -78,7 +78,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         selectedFilter = getSavedFilter()
 
         homeViewModel = ViewModelProviders.of(this, homeViewModelFactory)[HomeViewModel::class.java]
-        addEventButton.setOnClickListener { startActivity(Intent(this, EventActivity::class.java)) }
+        addEventButton.setOnClickListener { EventActivity.startAddMode(this@HomeActivity) }
 
         checkLocationSettings()
     }

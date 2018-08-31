@@ -3,6 +3,7 @@ package com.boardly.event
 import android.app.Activity
 import android.app.AlertDialog
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
@@ -10,13 +11,18 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.Toast
 import com.boardly.R
-import com.boardly.event.dialogs.DatePickerFragment
-import com.boardly.event.dialogs.TimePickerFragment
 import com.boardly.base.BaseActivity
+import com.boardly.common.events.models.Event
+import com.boardly.constants.EVENT
 import com.boardly.constants.LEVEL_IDS_MAP
+import com.boardly.constants.LEVEL_STRINGS_MAP
+import com.boardly.constants.MODE
 import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
+import com.boardly.event.dialogs.DatePickerFragment
+import com.boardly.event.dialogs.TimePickerFragment
+import com.boardly.event.models.Mode
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.loadImageFromUrl
 import com.boardly.factories.EventViewModelFactory
@@ -29,23 +35,24 @@ import com.jakewharton.rxbinding2.view.RxView
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.activity_add_event.addEventButton
-import kotlinx.android.synthetic.main.activity_add_event.boardGameImageView
-import kotlinx.android.synthetic.main.activity_add_event.boardGameTextView
-import kotlinx.android.synthetic.main.activity_add_event.contentViewGroup
-import kotlinx.android.synthetic.main.activity_add_event.dateTextView
-import kotlinx.android.synthetic.main.activity_add_event.descriptionEditText
-import kotlinx.android.synthetic.main.activity_add_event.eventNameEditText
-import kotlinx.android.synthetic.main.activity_add_event.levelTextView
-import kotlinx.android.synthetic.main.activity_add_event.pickDateButton
-import kotlinx.android.synthetic.main.activity_add_event.pickGameButton
-import kotlinx.android.synthetic.main.activity_add_event.pickLevelButton
-import kotlinx.android.synthetic.main.activity_add_event.pickPlaceButton
-import kotlinx.android.synthetic.main.activity_add_event.placeTextView
-import kotlinx.android.synthetic.main.activity_add_event.progressBar
+import kotlinx.android.synthetic.main.activity_event.addEventButton
+import kotlinx.android.synthetic.main.activity_event.boardGameImageView
+import kotlinx.android.synthetic.main.activity_event.boardGameTextView
+import kotlinx.android.synthetic.main.activity_event.contentViewGroup
+import kotlinx.android.synthetic.main.activity_event.dateTextView
+import kotlinx.android.synthetic.main.activity_event.deleteEventButton
+import kotlinx.android.synthetic.main.activity_event.descriptionEditText
+import kotlinx.android.synthetic.main.activity_event.eventNameEditText
+import kotlinx.android.synthetic.main.activity_event.levelTextView
+import kotlinx.android.synthetic.main.activity_event.pickDateButton
+import kotlinx.android.synthetic.main.activity_event.pickGameButton
+import kotlinx.android.synthetic.main.activity_event.pickLevelButton
+import kotlinx.android.synthetic.main.activity_event.pickPlaceButton
+import kotlinx.android.synthetic.main.activity_event.placeTextView
+import kotlinx.android.synthetic.main.activity_event.progressBar
+import kotlinx.android.synthetic.main.activity_event.saveChangesButton
 import java.util.*
 import javax.inject.Inject
-
 
 class EventActivity : BaseActivity(), EventView {
 
@@ -66,11 +73,31 @@ class EventActivity : BaseActivity(), EventView {
             R.string.intermediate_level,
             R.string.advanced_level)
 
+    private lateinit var mode: Mode
+
+    companion object {
+        fun startAddMode(context: Context) {
+            val intent = Intent(context, EventActivity::class.java)
+            intent.putExtra(MODE, Mode.ADD)
+            context.startActivity(intent)
+        }
+
+        fun startEditMode(context: Context, event: Event) {
+            val intent = Intent(context, EventActivity::class.java)
+            intent.putExtra(MODE, Mode.EDIT)
+            intent.putExtra(EVENT, event)
+            context.startActivity(intent)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
-        setContentView(R.layout.activity_add_event)
+        setContentView(R.layout.activity_event)
         super.onCreate(savedInstanceState)
         showBackToolbarArrow(true, this::finish)
+
+        mode = intent.getSerializableExtra(MODE) as Mode
+        prepareMode(mode)
 
         eventViewModel = ViewModelProviders.of(this, eventViewModelFactory)[EventViewModel::class.java]
 
@@ -78,6 +105,47 @@ class EventActivity : BaseActivity(), EventView {
         pickPlaceButton.setOnClickListener { launchPlacePickScreen() }
         pickLevelButton.setOnClickListener { launchLevelDialog() }
         pickDateButton.setOnClickListener { launchDatePickerDialog() }
+    }
+
+    private fun prepareMode(mode: Mode) {
+        if (mode == Mode.ADD) {
+            addEventButton.visibility = View.VISIBLE
+            saveChangesButton.visibility = View.GONE
+            deleteEventButton.visibility = View.GONE
+        } else if (mode == Mode.EDIT) {
+            addEventButton.visibility = View.GONE
+            saveChangesButton.visibility = View.VISIBLE
+            deleteEventButton.visibility = View.VISIBLE
+
+            val event = intent.getParcelableExtra<Event>(EVENT)
+            renderEventData(event)
+            updateInputData(event)
+        }
+    }
+
+    private fun renderEventData(event: Event) {
+        with(event) {
+            eventNameEditText.setText(eventName)
+            descriptionEditText.setText(description)
+            loadImageFromUrl(boardGameImageView, gameImageUrl, R.drawable.board_game_placeholder)
+            boardGameTextView.text = gameName
+            placeTextView.text = placeName
+            LEVEL_STRINGS_MAP[levelId]?.let { levelTextView.text = getString(it) }
+            if (timestamp > 0) dateTextView.text = Date(timestamp).formatForDisplay()
+        }
+    }
+
+    private fun updateInputData(event: Event) {
+        inputData.apply {
+            gameName = event.gameName
+            gameId = event.gameId
+            gameImageUrl = event.gameImageUrl
+            placeName = event.placeName
+            placeLatitude = event.placeLatitude
+            placeLongitude = event.placeLongitude
+            levelId = event.levelId
+            timestamp = event.timestamp
+        }
     }
 
     override fun onStart() {
@@ -112,7 +180,6 @@ class EventActivity : BaseActivity(), EventView {
     override fun render(eventViewState: EventViewState) {
         with(eventViewState) {
             inputData.gameImageUrl = selectedGame.image
-            loadImageFromUrl(boardGameImageView, selectedGame.image, R.drawable.board_game_placeholder)
             eventNameEditText.showError(!eventNameValid)
             showProgressBar(progress)
             showPickedGameError(!selectedGameValid)
@@ -120,6 +187,9 @@ class EventActivity : BaseActivity(), EventView {
             if (success) {
                 Toast.makeText(this@EventActivity, R.string.event_added_text, Toast.LENGTH_SHORT).show()
                 finish()
+            }
+            if (selectedGame.id > 0) {
+                loadImageFromUrl(boardGameImageView, selectedGame.image, R.drawable.board_game_placeholder)
             }
         }
     }

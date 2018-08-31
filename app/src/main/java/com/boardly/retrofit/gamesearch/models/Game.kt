@@ -6,7 +6,7 @@ import com.tickaroo.tikxml.annotation.PropertyElement
 import com.tickaroo.tikxml.annotation.Xml
 
 @Xml(name = "item")
-data class Game @JvmOverloads constructor(@field:Attribute var id: Int = 0,
+data class Game @JvmOverloads constructor(@field:Attribute var id: Int = -1,
 
                                           @field:Path("name")
                                           @field:Attribute(name = "value")

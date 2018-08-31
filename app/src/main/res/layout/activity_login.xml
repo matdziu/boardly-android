@@ -75,7 +75,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/gmail_background_selector"
+            android:background="@drawable/red_background_selector"
             android:text="@string/sign_in_with_google_text"
             app:layout_constraintBottom_toTopOf="@id/createAccountButton"
             app:layout_constraintLeft_toLeftOf="parent"
