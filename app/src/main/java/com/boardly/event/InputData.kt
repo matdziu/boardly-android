@@ -1,5 +1,7 @@
 package com.boardly.event
 
+import com.boardly.common.events.models.Event
+
 data class InputData(var eventId: String = "",
                      var eventName: String = "",
                      var description: String = "",
@@ -26,5 +28,21 @@ data class InputData(var eventId: String = "",
                 "levelId" to levelId,
                 "timestamp" to timestamp,
                 "adminId" to adminId)
+    }
+
+    fun toEvent(): Event {
+        return Event(
+                eventId = eventId,
+                eventName = eventName,
+                description = description,
+                gameName = gameName,
+                gameId = gameId,
+                gameImageUrl = gameImageUrl,
+                placeName = placeName,
+                placeLatitude = placeLatitude,
+                placeLongitude = placeLongitude,
+                levelId = levelId,
+                timestamp = timestamp,
+                adminId = adminId)
     }
 }

@@ -5,6 +5,10 @@ const val PLACE_AUTOCOMPLETE_REQUEST_CODE = 2
 const val PICK_GAME_REQUEST_CODE = 3
 const val PICK_FILTER_REQUEST_CODE = 4
 const val LOCATION_SETTINGS_REQUEST_CODE = 5
+const val EDIT_EVENT_REQUEST_CODE = 6
+
+const val EVENT_EDITED_RESULT_CODE = 7
+const val EVENT_REMOVED_RESULT_CODE = 8
 
 const val SHOW_HAMBURGER_MENU = "showHamburgerMenu"
 const val PICKED_GAME = "pickedGame"

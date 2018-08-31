@@ -7,13 +7,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseActivity
 import com.boardly.common.events.models.Event
+import com.boardly.constants.EDIT_EVENT_REQUEST_CODE
 import com.boardly.constants.EVENT
+import com.boardly.constants.EVENT_EDITED_RESULT_CODE
+import com.boardly.constants.EVENT_REMOVED_RESULT_CODE
 import com.boardly.constants.LEVEL_IDS_MAP
 import com.boardly.constants.LEVEL_STRINGS_MAP
 import com.boardly.constants.MODE
@@ -83,11 +87,11 @@ class EventActivity : BaseActivity(), EventView {
             context.startActivity(intent)
         }
 
-        fun startEditMode(context: Context, event: Event) {
-            val intent = Intent(context, EventActivity::class.java)
+        fun startEditMode(fragment: Fragment, event: Event) {
+            val intent = Intent(fragment.context, EventActivity::class.java)
             intent.putExtra(MODE, Mode.EDIT)
             intent.putExtra(EVENT, event)
-            context.startActivity(intent)
+            fragment.startActivityForResult(intent, EDIT_EVENT_REQUEST_CODE)
         }
     }
 
@@ -187,6 +191,16 @@ class EventActivity : BaseActivity(), EventView {
             showPickedPlaceError(!selectedPlaceValid)
             if (success) {
                 Toast.makeText(this@EventActivity, R.string.everything_went_ok, Toast.LENGTH_SHORT).show()
+
+                val data = Intent()
+                data.putExtra(EVENT, inputData.toEvent())
+                setResult(EVENT_EDITED_RESULT_CODE, data)
+
+                finish()
+            }
+            if (removed) {
+                Toast.makeText(this@EventActivity, R.string.everything_went_ok, Toast.LENGTH_SHORT).show()
+                setResult(EVENT_REMOVED_RESULT_CODE)
                 finish()
             }
             if (selectedGame.id > 0) {

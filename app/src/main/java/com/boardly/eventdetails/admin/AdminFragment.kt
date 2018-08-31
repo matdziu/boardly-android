@@ -1,6 +1,7 @@
 package com.boardly.eventdetails.admin
 
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -10,7 +11,10 @@ import com.boardly.R
 import com.boardly.base.rating.BaseRateFragment
 import com.boardly.common.events.EventUIRenderer
 import com.boardly.common.events.models.Event
+import com.boardly.constants.EDIT_EVENT_REQUEST_CODE
 import com.boardly.constants.EVENT
+import com.boardly.constants.EVENT_EDITED_RESULT_CODE
+import com.boardly.constants.EVENT_REMOVED_RESULT_CODE
 import com.boardly.event.EventActivity
 import com.boardly.eventdetails.admin.list.AcceptedPlayersAdapter
 import com.boardly.eventdetails.admin.list.PendingPlayersAdapter
@@ -79,7 +83,12 @@ class AdminFragment : BaseRateFragment(), AdminView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        editEventButton.setOnClickListener { EventActivity.startEditMode(view.context, event) }
+        editEventButton.setOnClickListener { EventActivity.startEditMode(this, event) }
+        initEventView(event)
+        initRecyclerViews()
+    }
+
+    private fun initEventView(event: Event) {
         eventUIRenderer.displayEventInfo(event,
                 eventNameTextView,
                 gameTextView,
@@ -89,7 +98,6 @@ class AdminFragment : BaseRateFragment(), AdminView {
                 seeDescriptionButton,
                 levelTextView,
                 timeTextView)
-        initRecyclerViews()
     }
 
     private fun initRecyclerViews() {
@@ -112,6 +120,22 @@ class AdminFragment : BaseRateFragment(), AdminView {
         init = false
         adminViewModel.unbind()
         super.onStop()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            EDIT_EVENT_REQUEST_CODE -> handleEditEventResult(resultCode, data)
+        }
+    }
+
+    private fun handleEditEventResult(resultCode: Int, data: Intent?) {
+        when (resultCode) {
+            EVENT_EDITED_RESULT_CODE -> data?.let {
+                event = it.getParcelableExtra(EVENT)
+                initEventView(event)
+            }
+            EVENT_REMOVED_RESULT_CODE -> activity?.finish()
+        }
     }
 
     override fun initEmitters() {
