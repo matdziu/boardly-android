@@ -1,6 +1,7 @@
 package com.boardly.event
 
-data class InputData(var eventName: String = "",
+data class InputData(var eventId: String = "",
+                     var eventName: String = "",
                      var description: String = "",
                      var gameName: String = "",
                      var gameId: String = "",

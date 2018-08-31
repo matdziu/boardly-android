@@ -11,7 +11,7 @@ class EventViewRobot(eventViewModel: EventViewModel) : BaseViewRobot<EventViewSt
     private val placePickEventSubject = PublishSubject.create<Boolean>()
 
     private val eventView = object : EventView {
-        override fun inputDataEmitter(): Observable<InputData> = inputDataSubject
+        override fun addEventEmitter(): Observable<InputData> = inputDataSubject
 
         override fun gamePickEventEmitter(): Observable<String> = gamePickEventSubject
 

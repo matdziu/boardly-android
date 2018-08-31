@@ -1,8 +1,8 @@
 package com.boardly.event.network
 
-import com.boardly.event.InputData
 import com.boardly.base.BaseServiceImpl
 import com.boardly.constants.EVENTS_NODE
+import com.boardly.event.InputData
 import com.firebase.geofire.GeoLocation
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
@@ -12,6 +12,21 @@ import io.reactivex.subjects.PublishSubject
 import java.util.*
 
 class EventServiceImpl : EventService, BaseServiceImpl() {
+
+    override fun editEvent(inputData: InputData): Observable<Boolean> {
+        val resultSubject = PublishSubject.create<Boolean>()
+
+        val geoLocation = GeoLocation(inputData.placeLatitude, inputData.placeLongitude)
+        setGeoLocationTask(inputData.eventId, geoLocation)
+                .continueWithTask { getSingleEventNode(inputData.eventId).updateChildren(inputData.toMap()) }
+                .addOnCompleteListener { resultSubject.onNext(true) }
+
+        return resultSubject
+    }
+
+    override fun deleteEvent(eventId: String): Observable<Boolean> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun addEvent(inputData: InputData): Observable<Boolean> {
         inputData.adminId = currentUserId

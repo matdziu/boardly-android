@@ -6,7 +6,11 @@ interface EventView {
 
     fun render(eventViewState: EventViewState)
 
-    fun inputDataEmitter(): Observable<InputData>
+    fun addEventEmitter(): Observable<InputData>
+
+    fun editEventEmitter(): Observable<InputData>
+
+    fun deleteEventEmitter(): Observable<String>
 
     fun gamePickEventEmitter(): Observable<String>
 

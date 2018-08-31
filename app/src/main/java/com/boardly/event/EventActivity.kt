@@ -65,6 +65,7 @@ class EventActivity : BaseActivity(), EventView {
     private lateinit var placePickEventSubject: PublishSubject<Boolean>
 
     private val inputData = InputData()
+    private var event = Event()
 
     private var gamePickEvent = false
 
@@ -117,7 +118,7 @@ class EventActivity : BaseActivity(), EventView {
             saveChangesButton.visibility = View.VISIBLE
             deleteEventButton.visibility = View.VISIBLE
 
-            val event = intent.getParcelableExtra<Event>(EVENT)
+            event = intent.getParcelableExtra(EVENT)
             renderEventData(event)
             updateInputData(event)
         }
@@ -137,6 +138,7 @@ class EventActivity : BaseActivity(), EventView {
 
     private fun updateInputData(event: Event) {
         inputData.apply {
+            eventId = event.eventId
             gameName = event.gameName
             gameId = event.gameId
             gameImageUrl = event.gameImageUrl
@@ -145,6 +147,7 @@ class EventActivity : BaseActivity(), EventView {
             placeLongitude = event.placeLongitude
             levelId = event.levelId
             timestamp = event.timestamp
+            adminId = event.adminId
         }
     }
 
@@ -176,19 +179,18 @@ class EventActivity : BaseActivity(), EventView {
         }
     }
 
-
     override fun render(eventViewState: EventViewState) {
         with(eventViewState) {
-            inputData.gameImageUrl = selectedGame.image
             eventNameEditText.showError(!eventNameValid)
             showProgressBar(progress)
             showPickedGameError(!selectedGameValid)
             showPickedPlaceError(!selectedPlaceValid)
             if (success) {
-                Toast.makeText(this@EventActivity, R.string.event_added_text, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@EventActivity, R.string.everything_went_ok, Toast.LENGTH_SHORT).show()
                 finish()
             }
             if (selectedGame.id > 0) {
+                inputData.gameImageUrl = selectedGame.image
                 loadImageFromUrl(boardGameImageView, selectedGame.image, R.drawable.board_game_placeholder)
             }
         }
@@ -296,7 +298,7 @@ class EventActivity : BaseActivity(), EventView {
         Toast.makeText(this, errorTextId, Toast.LENGTH_LONG).show()
     }
 
-    override fun inputDataEmitter(): Observable<InputData> = RxView.clicks(addEventButton)
+    override fun addEventEmitter(): Observable<InputData> = RxView.clicks(addEventButton)
             .map {
                 inputData.apply {
                     eventName = eventNameEditText.text.toString().trim()
@@ -307,6 +309,16 @@ class EventActivity : BaseActivity(), EventView {
     override fun placePickEventEmitter(): Observable<Boolean> = placePickEventSubject
 
     override fun gamePickEventEmitter(): Observable<String> = gamePickEventSubject
+
+    override fun editEventEmitter(): Observable<InputData> = RxView.clicks(saveChangesButton)
+            .map {
+                inputData.apply {
+                    eventName = eventNameEditText.text.toString().trim()
+                    description = descriptionEditText.text.toString().trim()
+                }
+            }
+
+    override fun deleteEventEmitter(): Observable<String> = RxView.clicks(deleteEventButton).map { event.eventId }
 
     private fun showPickedGameError(show: Boolean) {
         if (show) {

@@ -19,34 +19,48 @@ class EventViewModel(private val eventInteractor: EventInteractor) : ViewModel()
         val placePickEventObservable = eventView.placePickEventEmitter()
                 .map { PartialEventViewState.PlacePickedState() }
 
-        val inputDataObservable = eventView.inputDataEmitter()
+        val addEventObservable = eventView.addEventEmitter()
                 .flatMap {
-                    val eventNameValid = it.eventName.isNotBlank()
-                    val selectedGameValid = it.gameId.isNotBlank()
-                    val selectedPlaceValid = it.placeName.isNotBlank()
-
-                    if (eventNameValid
-                            && selectedGameValid
-                            && selectedPlaceValid) {
-                        eventInteractor.addEvent(it)
-                                .startWith(PartialEventViewState.ProgressState())
-                    } else {
-                        Observable.just(PartialEventViewState.LocalValidation(
-                                eventNameValid,
-                                selectedGameValid,
-                                selectedPlaceValid))
-                    }
+                    validateInputData(it, { eventInteractor.addEvent(it) })
                 }
+
+        val editEventObservable = eventView.editEventEmitter()
+                .flatMap { validateInputData(it, { eventInteractor.editEvent(it) }) }
+
+        val removeEventObservable = eventView.deleteEventEmitter()
+                .flatMap { eventInteractor.deleteEvent(it) }
 
         val mergedObservable = Observable.merge(listOf(
                 gamePickEventObservable,
                 placePickEventObservable,
-                inputDataObservable))
+                addEventObservable,
+                editEventObservable,
+                removeEventObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(stateSubject)
 
         compositeDisposable.add(mergedObservable.subscribe { eventView.render(it) })
+    }
+
+    private fun validateInputData(inputData: InputData, actionWhenValid: (InputData) -> Observable<PartialEventViewState>)
+            : Observable<PartialEventViewState> {
+        return with(inputData) {
+            val eventNameValid = eventName.isNotBlank()
+            val selectedGameValid = gameId.isNotBlank()
+            val selectedPlaceValid = placeName.isNotBlank()
+
+            if (eventNameValid
+                    && selectedGameValid
+                    && selectedPlaceValid) {
+                actionWhenValid(this).startWith(PartialEventViewState.ProgressState())
+            } else {
+                Observable.just(PartialEventViewState.LocalValidation(
+                        eventNameValid,
+                        selectedGameValid,
+                        selectedPlaceValid))
+            }
+        }
     }
 
     private fun reduce(previousState: EventViewState, partialState: PartialEventViewState)
