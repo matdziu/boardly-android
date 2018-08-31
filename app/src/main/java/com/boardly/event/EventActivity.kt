@@ -1,4 +1,4 @@
-package com.boardly.addevent
+package com.boardly.event
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -10,8 +10,8 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.Toast
 import com.boardly.R
-import com.boardly.addevent.dialogs.DatePickerFragment
-import com.boardly.addevent.dialogs.TimePickerFragment
+import com.boardly.event.dialogs.DatePickerFragment
+import com.boardly.event.dialogs.TimePickerFragment
 import com.boardly.base.BaseActivity
 import com.boardly.constants.LEVEL_IDS_MAP
 import com.boardly.constants.PICKED_GAME
@@ -19,7 +19,7 @@ import com.boardly.constants.PICK_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.loadImageFromUrl
-import com.boardly.factories.AddEventViewModelFactory
+import com.boardly.factories.EventViewModelFactory
 import com.boardly.pickgame.PickGameActivity
 import com.boardly.retrofit.gamesearch.models.SearchResult
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
@@ -47,12 +47,12 @@ import java.util.*
 import javax.inject.Inject
 
 
-class AddEventActivity : BaseActivity(), AddEventView {
+class EventActivity : BaseActivity(), EventView {
 
     @Inject
-    lateinit var addEventViewModelFactory: AddEventViewModelFactory
+    lateinit var eventViewModelFactory: EventViewModelFactory
 
-    private lateinit var addEventViewModel: AddEventViewModel
+    private lateinit var eventViewModel: EventViewModel
 
     private lateinit var gamePickEventSubject: PublishSubject<String>
     private lateinit var placePickEventSubject: PublishSubject<Boolean>
@@ -72,7 +72,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
         super.onCreate(savedInstanceState)
         showBackToolbarArrow(true, this::finish)
 
-        addEventViewModel = ViewModelProviders.of(this, addEventViewModelFactory)[AddEventViewModel::class.java]
+        eventViewModel = ViewModelProviders.of(this, eventViewModelFactory)[EventViewModel::class.java]
 
         pickGameButton.setOnClickListener { launchGamePickScreen() }
         pickPlaceButton.setOnClickListener { launchPlacePickScreen() }
@@ -83,7 +83,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
     override fun onStart() {
         super.onStart()
         initEmitters()
-        addEventViewModel.bind(this)
+        eventViewModel.bind(this)
 
         if (gamePickEvent) gamePickEventSubject.onNext(inputData.gameId)
         gamePickEvent = false
@@ -95,7 +95,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
     }
 
     override fun onStop() {
-        addEventViewModel.unbind()
+        eventViewModel.unbind()
         super.onStop()
     }
 
@@ -109,8 +109,8 @@ class AddEventActivity : BaseActivity(), AddEventView {
     }
 
 
-    override fun render(addEventViewState: AddEventViewState) {
-        with(addEventViewState) {
+    override fun render(eventViewState: EventViewState) {
+        with(eventViewState) {
             inputData.gameImageUrl = selectedGame.image
             loadImageFromUrl(boardGameImageView, selectedGame.image, R.drawable.board_game_placeholder)
             eventNameEditText.showError(!eventNameValid)
@@ -118,7 +118,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
             showPickedGameError(!selectedGameValid)
             showPickedPlaceError(!selectedPlaceValid)
             if (success) {
-                Toast.makeText(this@AddEventActivity, R.string.event_added_text, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@EventActivity, R.string.event_added_text, Toast.LENGTH_SHORT).show()
                 finish()
             }
         }
@@ -134,7 +134,7 @@ class AddEventActivity : BaseActivity(), AddEventView {
                     inputData.placeName = address.toString()
                     placeTextView.text = address
 
-                    // Somehow default Places API Activity does not trigger onStop() of AddEventActivity
+                    // Somehow default Places API Activity does not trigger onStop() of EventActivity
                     // so it's ok to emit event here
                     placePickEventSubject.onNext(true)
                 }

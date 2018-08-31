@@ -1,29 +1,29 @@
-package com.boardly.addevent
+package com.boardly.event
 
 import com.boardly.base.BaseViewRobot
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class AddEventViewRobot(addEventViewModel: AddEventViewModel) : BaseViewRobot<AddEventViewState>() {
+class EventViewRobot(eventViewModel: EventViewModel) : BaseViewRobot<EventViewState>() {
 
     private val inputDataSubject = PublishSubject.create<InputData>()
     private val gamePickEventSubject = PublishSubject.create<String>()
     private val placePickEventSubject = PublishSubject.create<Boolean>()
 
-    private val addEventView = object : AddEventView {
+    private val eventView = object : EventView {
         override fun inputDataEmitter(): Observable<InputData> = inputDataSubject
 
         override fun gamePickEventEmitter(): Observable<String> = gamePickEventSubject
 
         override fun placePickEventEmitter(): Observable<Boolean> = placePickEventSubject
 
-        override fun render(addEventViewState: AddEventViewState) {
-            renderedStates.add(addEventViewState)
+        override fun render(eventViewState: EventViewState) {
+            renderedStates.add(eventViewState)
         }
     }
 
     init {
-        addEventViewModel.bind(addEventView)
+        eventViewModel.bind(eventView)
     }
 
     fun emitInputData(inputData: InputData) {

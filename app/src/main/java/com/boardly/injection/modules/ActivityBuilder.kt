@@ -1,6 +1,6 @@
 package com.boardly.injection.modules
 
-import com.boardly.addevent.AddEventActivity
+import com.boardly.event.EventActivity
 import com.boardly.editprofile.EditProfileActivity
 import com.boardly.eventdetails.EventDetailsActivity
 import com.boardly.filter.FilterActivity
@@ -34,8 +34,8 @@ abstract class ActivityBuilder {
     abstract fun bindHomeActivity(): HomeActivity
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = [AddEventActivityModule::class])
-    abstract fun bindAddEventActivity(): AddEventActivity
+    @ContributesAndroidInjector(modules = [EventActivityModule::class])
+    abstract fun bindAddEventActivity(): EventActivity
 
     @ActivityScope
     @ContributesAndroidInjector(modules = [PickGameActivityModule::class])

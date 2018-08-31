@@ -14,7 +14,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.boardly.R
-import com.boardly.addevent.AddEventActivity
+import com.boardly.event.EventActivity
 import com.boardly.base.BaseDrawerActivity
 import com.boardly.common.events.list.EventsAdapter
 import com.boardly.constants.LOCATION_SETTINGS_REQUEST_CODE
@@ -78,7 +78,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         selectedFilter = getSavedFilter()
 
         homeViewModel = ViewModelProviders.of(this, homeViewModelFactory)[HomeViewModel::class.java]
-        addEventButton.setOnClickListener { startActivity(Intent(this, AddEventActivity::class.java)) }
+        addEventButton.setOnClickListener { startActivity(Intent(this, EventActivity::class.java)) }
 
         checkLocationSettings()
     }

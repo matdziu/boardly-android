@@ -1,10 +1,10 @@
-package com.boardly.addevent
+package com.boardly.event
 
 import io.reactivex.Observable
 
-interface AddEventView {
+interface EventView {
 
-    fun render(addEventViewState: AddEventViewState)
+    fun render(eventViewState: EventViewState)
 
     fun inputDataEmitter(): Observable<InputData>
 

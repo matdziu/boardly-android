@@ -1,6 +1,6 @@
-package com.boardly.addevent.network
+package com.boardly.event.network
 
-import com.boardly.addevent.InputData
+import com.boardly.event.InputData
 import com.boardly.base.BaseServiceImpl
 import com.boardly.constants.EVENTS_NODE
 import com.firebase.geofire.GeoLocation
@@ -11,7 +11,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.util.*
 
-class AddEventServiceImpl : AddEventService, BaseServiceImpl() {
+class EventServiceImpl : EventService, BaseServiceImpl() {
 
     override fun addEvent(inputData: InputData): Observable<Boolean> {
         inputData.adminId = currentUserId

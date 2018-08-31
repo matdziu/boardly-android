@@ -1,4 +1,4 @@
-package com.boardly.addevent
+package com.boardly.event
 
 import android.arch.lifecycle.ViewModel
 import io.reactivex.Observable
@@ -7,19 +7,19 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 
-class AddEventViewModel(private val addEventInteractor: AddEventInteractor) : ViewModel() {
+class EventViewModel(private val eventInteractor: EventInteractor) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
-    private val stateSubject = BehaviorSubject.createDefault(AddEventViewState())
+    private val stateSubject = BehaviorSubject.createDefault(EventViewState())
 
-    fun bind(addEventView: AddEventView) {
-        val gamePickEventObservable = addEventView.gamePickEventEmitter()
-                .flatMap { addEventInteractor.fetchGameDetails(it).startWith(PartialAddEventViewState.GamePickedState()) }
+    fun bind(eventView: EventView) {
+        val gamePickEventObservable = eventView.gamePickEventEmitter()
+                .flatMap { eventInteractor.fetchGameDetails(it).startWith(PartialEventViewState.GamePickedState()) }
 
-        val placePickEventObservable = addEventView.placePickEventEmitter()
-                .map { PartialAddEventViewState.PlacePickedState() }
+        val placePickEventObservable = eventView.placePickEventEmitter()
+                .map { PartialEventViewState.PlacePickedState() }
 
-        val inputDataObservable = addEventView.inputDataEmitter()
+        val inputDataObservable = eventView.inputDataEmitter()
                 .flatMap {
                     val eventNameValid = it.eventName.isNotBlank()
                     val selectedGameValid = it.gameId.isNotBlank()
@@ -28,10 +28,10 @@ class AddEventViewModel(private val addEventInteractor: AddEventInteractor) : Vi
                     if (eventNameValid
                             && selectedGameValid
                             && selectedPlaceValid) {
-                        addEventInteractor.addEvent(it)
-                                .startWith(PartialAddEventViewState.ProgressState())
+                        eventInteractor.addEvent(it)
+                                .startWith(PartialEventViewState.ProgressState())
                     } else {
-                        Observable.just(PartialAddEventViewState.LocalValidation(
+                        Observable.just(PartialEventViewState.LocalValidation(
                                 eventNameValid,
                                 selectedGameValid,
                                 selectedPlaceValid))
@@ -46,11 +46,11 @@ class AddEventViewModel(private val addEventInteractor: AddEventInteractor) : Vi
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(stateSubject)
 
-        compositeDisposable.add(mergedObservable.subscribe { addEventView.render(it) })
+        compositeDisposable.add(mergedObservable.subscribe { eventView.render(it) })
     }
 
-    private fun reduce(previousState: AddEventViewState, partialState: PartialAddEventViewState)
-            : AddEventViewState {
+    private fun reduce(previousState: EventViewState, partialState: PartialEventViewState)
+            : EventViewState {
         return partialState.reduce(previousState)
     }
 

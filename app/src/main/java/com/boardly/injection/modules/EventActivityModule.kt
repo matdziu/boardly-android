@@ -1,7 +1,7 @@
 package com.boardly.injection.modules
 
-import com.boardly.addevent.network.AddEventService
-import com.boardly.addevent.network.AddEventServiceImpl
+import com.boardly.event.network.EventService
+import com.boardly.event.network.EventServiceImpl
 import com.boardly.injection.ActivityScope
 import com.boardly.retrofit.gamesearch.GameSearchService
 import dagger.Module
@@ -9,7 +9,7 @@ import dagger.Provides
 import retrofit2.Retrofit
 
 @Module
-class AddEventActivityModule {
+class EventActivityModule {
 
     @Provides
     @ActivityScope
@@ -19,7 +19,7 @@ class AddEventActivityModule {
 
     @Provides
     @ActivityScope
-    fun provideAddEventService(): AddEventService {
-        return AddEventServiceImpl()
+    fun provideEventService(): EventService {
+        return EventServiceImpl()
     }
 }

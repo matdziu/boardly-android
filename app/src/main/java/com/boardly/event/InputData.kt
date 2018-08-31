@@ -1,4 +1,4 @@
-package com.boardly.addevent
+package com.boardly.event
 
 data class InputData(var eventName: String = "",
                      var description: String = "",

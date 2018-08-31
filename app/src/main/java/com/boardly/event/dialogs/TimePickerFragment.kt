@@ -1,4 +1,4 @@
-package com.boardly.addevent.dialogs
+package com.boardly.event.dialogs
 
 import android.app.Dialog
 import android.app.TimePickerDialog
