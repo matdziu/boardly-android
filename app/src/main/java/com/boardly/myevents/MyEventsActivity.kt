@@ -27,8 +27,6 @@ class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
     @Inject
     lateinit var myEventsViewModelFactory: MyEventsViewModelFactory
 
-    private var init = true
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         setContentView(R.layout.activity_my_events)
@@ -53,8 +51,7 @@ class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
         initEmitters()
         myEventsViewModel.bind(this)
 
-        fetchEventsSubject.onNext(init)
-        init = false
+        fetchEventsSubject.onNext(true)
     }
 
     override fun onStop() {
