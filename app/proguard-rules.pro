@@ -19,3 +19,25 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-dontwarn com.google.errorprone.annotations.**
+-keep class com.boardly.common.events.models.** { *; }
+-keep class com.boardly.common.players.models.** { *; }
+-keep class com.boardly.eventdetails.chat.models.** { *; }
+-keep class com.boardly.editprofile.models.** { *; }
+-keep class com.boardly.retrofit.gamesearch.models.** { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
+-keepattributes Signature, InnerClasses
+-keepclassmembers,allowshrinking,allowobfuscation interface * {
+    @retrofit2.http.* <methods>;
+}
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-dontwarn javax.annotation.**
+-dontwarn kotlin.Unit
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+-dontwarn org.codehaus.mojo.animal_sniffer.*
+-dontwarn okhttp3.internal.platform.ConscryptPlatform
+-dontwarn com.firebase.**
+-keep class com.firebase.** { *; }
+-keep interface com.firebase.** { *; }
