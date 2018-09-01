@@ -37,13 +37,13 @@ class EventViewModelTest {
     }
 
     @Test
-    fun whenEventNameIsBlankShowEventNameError() {
+    fun givenUserAddsEventWhenEventNameIsBlankThenShowEventNameError() {
         val inputData = InputData(
                 eventName = "  ",
                 gameId = "1",
                 placeName = "Domowka")
 
-        eventViewRobot.emitInputData(inputData)
+        eventViewRobot.addEvent(inputData)
 
         eventViewRobot.assertViewStates(
                 EventViewState(),
@@ -51,13 +51,13 @@ class EventViewModelTest {
     }
 
     @Test
-    fun whenNoGameIsSelectedShowSelectedGameError() {
+    fun givenUserAddsEventWhenNoGameIsSelectedThenShowSelectedGameError() {
         val inputData = InputData(
                 eventName = "Let's go",
                 gameId = "",
                 placeName = "Domowka")
 
-        eventViewRobot.emitInputData(inputData)
+        eventViewRobot.addEvent(inputData)
 
         eventViewRobot.assertViewStates(
                 EventViewState(),
@@ -65,12 +65,12 @@ class EventViewModelTest {
     }
 
     @Test
-    fun whenNoPlaceIsSelectedShowSelectedPlaceError() {
+    fun givenUserAddsEventWhenNoPlaceIsSelectedThenShowSelectedPlaceError() {
         val inputData = InputData(
                 eventName = "Let's go",
                 gameId = "1")
 
-        eventViewRobot.emitInputData(inputData)
+        eventViewRobot.addEvent(inputData)
 
         eventViewRobot.assertViewStates(
                 EventViewState(),
@@ -78,18 +78,87 @@ class EventViewModelTest {
     }
 
     @Test
-    fun whenAllFieldsAreValidShowSuccess() {
+    fun givenUserAddsEventWhenAllFieldsAreValidThenShowSuccess() {
         val inputData = InputData(
                 eventName = "Let's go",
                 gameId = "1",
                 placeName = "Domowka")
         whenever(eventInteractor.addEvent(any())).thenReturn(Observable.just(PartialEventViewState.SuccessState()))
 
-        eventViewRobot.emitInputData(inputData)
+        eventViewRobot.addEvent(inputData)
 
         eventViewRobot.assertViewStates(
                 EventViewState(),
                 EventViewState(progress = true),
                 EventViewState(success = true))
+    }
+
+
+    @Test
+    fun givenUserEditsEventWhenEventNameIsBlankThenShowEventNameError() {
+        val inputData = InputData(
+                eventName = "  ",
+                gameId = "1",
+                placeName = "Domowka")
+
+        eventViewRobot.editEvent(inputData)
+
+        eventViewRobot.assertViewStates(
+                EventViewState(),
+                EventViewState(eventNameValid = false))
+    }
+
+    @Test
+    fun givenUserEditsEventWhenNoGameIsSelectedThenShowSelectedGameError() {
+        val inputData = InputData(
+                eventName = "Let's go",
+                gameId = "",
+                placeName = "Domowka")
+
+        eventViewRobot.editEvent(inputData)
+
+        eventViewRobot.assertViewStates(
+                EventViewState(),
+                EventViewState(selectedGameValid = false))
+    }
+
+    @Test
+    fun givenUserEditsEventWhenNoPlaceIsSelectedThenShowSelectedPlaceError() {
+        val inputData = InputData(
+                eventName = "Let's go",
+                gameId = "1")
+
+        eventViewRobot.editEvent(inputData)
+
+        eventViewRobot.assertViewStates(
+                EventViewState(),
+                EventViewState(selectedPlaceValid = false))
+    }
+
+    @Test
+    fun givenUserEditsEventWhenAllFieldsAreValidThenShowSuccess() {
+        val inputData = InputData(
+                eventName = "Let's go",
+                gameId = "1",
+                placeName = "Domowka")
+        whenever(eventInteractor.editEvent(any())).thenReturn(Observable.just(PartialEventViewState.SuccessState()))
+
+        eventViewRobot.editEvent(inputData)
+
+        eventViewRobot.assertViewStates(
+                EventViewState(),
+                EventViewState(progress = true),
+                EventViewState(success = true))
+    }
+
+    @Test
+    fun givenUserEditsEventWhenDeletingEventThenShowRemovedViewState() {
+        whenever(eventInteractor.deleteEvent(any())).thenReturn(Observable.just(PartialEventViewState.RemovedState()))
+
+        eventViewRobot.deleteEvent("testEventId")
+
+        eventViewRobot.assertViewStates(
+                EventViewState(),
+                EventViewState(removed = true))
     }
 }

@@ -6,12 +6,18 @@ import io.reactivex.subjects.PublishSubject
 
 class EventViewRobot(eventViewModel: EventViewModel) : BaseViewRobot<EventViewState>() {
 
-    private val inputDataSubject = PublishSubject.create<InputData>()
+    private val addEventSubject = PublishSubject.create<InputData>()
     private val gamePickEventSubject = PublishSubject.create<String>()
     private val placePickEventSubject = PublishSubject.create<Boolean>()
+    private val editEventSubject = PublishSubject.create<InputData>()
+    private val deleteEventSubject = PublishSubject.create<String>()
 
     private val eventView = object : EventView {
-        override fun addEventEmitter(): Observable<InputData> = inputDataSubject
+        override fun deleteEventEmitter(): Observable<String> = deleteEventSubject
+
+        override fun editEventEmitter(): Observable<InputData> = editEventSubject
+
+        override fun addEventEmitter(): Observable<InputData> = addEventSubject
 
         override fun gamePickEventEmitter(): Observable<String> = gamePickEventSubject
 
@@ -26,8 +32,8 @@ class EventViewRobot(eventViewModel: EventViewModel) : BaseViewRobot<EventViewSt
         eventViewModel.bind(eventView)
     }
 
-    fun emitInputData(inputData: InputData) {
-        inputDataSubject.onNext(inputData)
+    fun addEvent(inputData: InputData) {
+        addEventSubject.onNext(inputData)
     }
 
     fun pickGame(gameId: String) {
@@ -36,5 +42,13 @@ class EventViewRobot(eventViewModel: EventViewModel) : BaseViewRobot<EventViewSt
 
     fun pickPlace() {
         placePickEventSubject.onNext(true)
+    }
+
+    fun editEvent(inputData: InputData) {
+        editEventSubject.onNext(inputData)
+    }
+
+    fun deleteEvent(eventId: String) {
+        deleteEventSubject.onNext(eventId)
     }
 }

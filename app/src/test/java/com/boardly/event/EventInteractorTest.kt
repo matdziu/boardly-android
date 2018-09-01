@@ -50,4 +50,28 @@ class EventInteractorTest {
         eventInteractor.addEvent(InputData()).test()
                 .assertValue { it is PartialEventViewState.SuccessState }
     }
+
+    @Test
+    fun testSuccessfulEventEditing() {
+        val gameSearchService: GameSearchService = mock()
+        val eventService: EventService = mock {
+            on { it.editEvent(any()) } doReturn Observable.just(true)
+        }
+        val eventInteractor = EventInteractor(gameSearchService, eventService)
+
+        eventInteractor.editEvent(InputData()).test()
+                .assertValue { it is PartialEventViewState.SuccessState }
+    }
+
+    @Test
+    fun testSuccessfulEventDeletion() {
+        val gameSearchService: GameSearchService = mock()
+        val eventService: EventService = mock {
+            on { it.deleteEvent(any()) } doReturn Observable.just(true)
+        }
+        val eventInteractor = EventInteractor(gameSearchService, eventService)
+
+        eventInteractor.deleteEvent("testEventId").test()
+                .assertValue { it is PartialEventViewState.RemovedState }
+    }
 }
