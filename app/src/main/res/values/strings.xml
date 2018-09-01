@@ -89,4 +89,6 @@
     <string name="open_event_screen_text">Przejdź do wydarzenia</string>
     <string name="delete_event">Usuń wydarzenie</string>
     <string name="edit_event">Edytuj wydarzenie</string>
+    <string name="delete_event_title">Usuń wydarzenie</string>
+    <string name="are_you_sure_to_delete">Na pewno chcesz usunać to wydarzenie?</string>
 </resources>

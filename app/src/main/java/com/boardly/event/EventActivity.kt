@@ -67,6 +67,7 @@ class EventActivity : BaseActivity(), EventView {
 
     private lateinit var gamePickEventSubject: PublishSubject<String>
     private lateinit var placePickEventSubject: PublishSubject<Boolean>
+    private lateinit var deleteEventSubject: PublishSubject<String>
 
     private val inputData = InputData()
     private var event = Event()
@@ -110,6 +111,18 @@ class EventActivity : BaseActivity(), EventView {
         pickPlaceButton.setOnClickListener { launchPlacePickScreen() }
         pickLevelButton.setOnClickListener { launchLevelDialog() }
         pickDateButton.setOnClickListener { launchDatePickerDialog() }
+
+        deleteEventButton.setOnClickListener { launchDeleteEventDialog() }
+    }
+
+    private fun launchDeleteEventDialog() {
+        AlertDialog.Builder(this)
+                .setTitle(getString(R.string.delete_event_title))
+                .setMessage(getString(R.string.are_you_sure_to_delete))
+                .setPositiveButton(R.string.delete_event, { _, _ -> deleteEventSubject.onNext(event.eventId) })
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .create()
+                .show()
     }
 
     private fun prepareMode(mode: Mode) {
@@ -167,6 +180,7 @@ class EventActivity : BaseActivity(), EventView {
     private fun initEmitters() {
         gamePickEventSubject = PublishSubject.create()
         placePickEventSubject = PublishSubject.create()
+        deleteEventSubject = PublishSubject.create()
     }
 
     override fun onStop() {
@@ -332,7 +346,7 @@ class EventActivity : BaseActivity(), EventView {
                 }
             }
 
-    override fun deleteEventEmitter(): Observable<String> = RxView.clicks(deleteEventButton).map { event.eventId }
+    override fun deleteEventEmitter(): Observable<String> = deleteEventSubject
 
     private fun showPickedGameError(show: Boolean) {
         if (show) {
