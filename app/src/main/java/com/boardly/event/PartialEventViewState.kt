@@ -46,4 +46,10 @@ sealed class PartialEventViewState {
                     selectedGame = previousState.selectedGame)
         }
     }
+
+    class RemovedState : PartialEventViewState() {
+        override fun reduce(previousState: EventViewState): EventViewState {
+            return EventViewState(removed = true)
+        }
+    }
 }

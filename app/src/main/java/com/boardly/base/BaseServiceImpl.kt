@@ -106,6 +106,27 @@ open class BaseServiceImpl {
         return resultSubject
     }
 
+    protected fun getKeysTask(databaseReference: DatabaseReference): Task<List<String>> {
+        val dbSource = TaskCompletionSource<List<String>>()
+        val dbTask = dbSource.task
+
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val keysList = arrayListOf<String>()
+                for (childSnapshot in dataSnapshot.children) {
+                    childSnapshot.key?.let { keysList.add(it) }
+                }
+                dbSource.setResult(keysList)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                dbSource.setException(databaseError.toException())
+            }
+        })
+
+        return dbTask
+    }
+
     protected fun getPartialPlayerProfiles(databaseReference: DatabaseReference)
             : Observable<List<Player>> {
         val resultSubject = PublishSubject.create<List<Player>>()

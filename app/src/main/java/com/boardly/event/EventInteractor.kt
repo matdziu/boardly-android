@@ -31,6 +31,6 @@ class EventInteractor @Inject constructor(private val gameSearchService: GameSea
     fun deleteEvent(eventId: String): Observable<PartialEventViewState> {
         return eventService.deleteEvent(eventId)
                 .filter { it }
-                .map { PartialEventViewState.SuccessState() }
+                .map { PartialEventViewState.RemovedState() }
     }
 }
