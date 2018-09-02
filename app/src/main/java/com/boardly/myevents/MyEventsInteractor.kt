@@ -2,6 +2,7 @@ package com.boardly.myevents
 
 import com.boardly.common.events.models.Event
 import com.boardly.common.events.models.EventType
+import com.boardly.extensions.isOlderThanOneHour
 import com.boardly.myevents.network.MyEventsService
 import io.reactivex.Observable
 import io.reactivex.functions.Function3
@@ -22,15 +23,15 @@ class MyEventsInteractor @Inject constructor(private val myEventsService: MyEven
                             accepted.map {
                                 it.type = EventType.ACCEPTED
                                 it
-                            }
+                            }.filter { !isOlderThanOneHour(it.timestamp) }
                                     + created.map {
                                 it.type = EventType.CREATED
                                 it
-                            }
+                            }.filter { !isOlderThanOneHour(it.timestamp) }
                                     + pending.map {
                                 it.type = EventType.PENDING
                                 it
-                            })
+                            }.filter { !isOlderThanOneHour(it.timestamp) })
                 })
     }
 }

@@ -1,6 +1,7 @@
 package com.boardly.home
 
 import com.boardly.common.events.models.Event
+import com.boardly.extensions.isOlderThanOneHour
 import com.boardly.home.models.JoinEventData
 import com.boardly.home.models.UserLocation
 import com.boardly.home.network.HomeService
@@ -14,7 +15,7 @@ class HomeInteractor @Inject constructor(private val homeService: HomeService) {
         return Observable.zip(homeService.fetchUserEventIds(), homeService.fetchAllEvents(userLocation, radius, gameId),
                 BiFunction<List<String>, List<Event>, PartialHomeViewState>
                 { userEventIds, allEvents ->
-                    val filteredEventList = allEvents.filter { !userEventIds.contains(it.eventId) }
+                    val filteredEventList = allEvents.filter { !userEventIds.contains(it.eventId) && !isOlderThanOneHour(it.timestamp) }
                     PartialHomeViewState.EventListState(filteredEventList)
                 })
     }

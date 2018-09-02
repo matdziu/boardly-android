@@ -12,7 +12,14 @@ import org.junit.Test
 
 class HomeInteractorTest {
 
-    private val testEventList = listOf(Event("1", "testEvent1"), Event("2", "testEvent2"))
+    private val testEventList = listOf(
+            Event(eventId = "1",
+                    eventName = "testEvent1"),
+            Event(eventId = "2",
+                    eventName = "testEvent2"),
+            Event(eventId = "3",
+                    eventName = "testEvent3",
+                    timestamp = 1000))
     private val testEventIdsList = listOf("1")
     private val homeService: HomeService = mock {
         on { it.fetchAllEvents(any(), any(), any()) } doReturn Observable.just(testEventList)

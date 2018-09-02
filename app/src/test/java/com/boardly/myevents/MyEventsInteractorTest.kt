@@ -11,9 +11,16 @@ class MyEventsInteractorTest {
 
     @Test
     fun testSuccessfulPendingAcceptedAndCreatedEventsMerging() {
-        val acceptedEventsList = listOf(Event(eventId = "1", eventName = "sampleAcceptedEvent"))
-        val pendingEventsList = listOf(Event(eventId = "2", eventName = "samplePendingEvent"))
-        val createdEventsList = listOf(Event(eventId = "3", eventName = "sampleCreatedEvent"))
+        val acceptedEventsList = listOf(
+                Event(eventId = "1",
+                        eventName = "sampleAcceptedEvent"))
+        val pendingEventsList = listOf(
+                Event(eventId = "2",
+                        eventName = "samplePendingEvent"))
+        val createdEventsList = listOf(
+                Event(eventId = "3",
+                        eventName = "sampleCreatedEvent",
+                        timestamp = 1000))
         val myEventsService: MyEventsService = mock {
             on { it.getAcceptedEvents() } doReturn Observable.just(acceptedEventsList)
             on { it.getPendingEvents() } doReturn Observable.just(pendingEventsList)
@@ -22,6 +29,6 @@ class MyEventsInteractorTest {
         val myEventsInteractor = MyEventsInteractor(myEventsService)
 
         myEventsInteractor.fetchEvents().test()
-                .assertValue(PartialMyEventsViewState.EventsFetchedState(acceptedEventsList + createdEventsList + pendingEventsList))
+                .assertValue(PartialMyEventsViewState.EventsFetchedState(acceptedEventsList + pendingEventsList))
     }
 }
