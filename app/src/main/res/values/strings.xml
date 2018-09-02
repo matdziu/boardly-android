@@ -95,4 +95,10 @@
     <string name="new_join_request_channel">Nowa prośba o dołączenie</string>
     <string name="accepted_request_channel">Zaakceptowanie prośby o dołączenie</string>
     <string name="logout_connection_prompt">Włącz internet żeby się wylogować</string>
+    <string name="chat_message_notification_title">Wydarzenie %1$s</string>
+    <string name="chat_message_notification_body">Nowa wiadomość od %1$s.</string>
+    <string name="join_request_notification_title">Wydarzenie %1$s</string>
+    <string name="join_request_notification_body">Prośba o dołączenie od %1$s.</string>
+    <string name="accepted_request_notification_title">Wydarzenie %1$s</string>
+    <string name="accepted_request_notification_body">Zostałeś zaakceptowany. Przywitaj się z innymi graczami.</string>
 </resources>

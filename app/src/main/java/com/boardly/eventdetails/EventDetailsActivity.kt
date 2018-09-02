@@ -23,7 +23,8 @@ class EventDetailsActivity : BaseActivity(), HasSupportFragmentInjector {
     @Inject
     lateinit var fragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
 
-    private var eventId = ""
+    var eventId = ""
+        private set
     private var eventType = EventType.ACCEPTED
 
     companion object {

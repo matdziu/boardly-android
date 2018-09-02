@@ -41,3 +41,7 @@
 -dontwarn com.firebase.**
 -keep class com.firebase.** { *; }
 -keep interface com.firebase.** { *; }
+-dontwarn sun.misc.**
+-keep class * implements com.google.gson.TypeAdapterFactory
+-keep class * implements com.google.gson.JsonSerializer
+-keep class * implements com.google.gson.JsonDeserializer
