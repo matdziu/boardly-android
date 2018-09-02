@@ -14,11 +14,15 @@ class AdminViewModel(private val adminInteractor: AdminInteractor,
     private val stateSubject = BehaviorSubject.createDefault(initialState)
 
     fun bind(adminView: AdminView, eventId: String) {
-        val fetchPendingPlayersObservable = adminView.fetchEventPlayersTriggerEmitter()
+        val fetchEventTriggerObservable = adminView.fetchEventDetailsTriggerEmitter()
+                .filter { it }
+                .flatMap { adminInteractor.fetchEvent(eventId).startWith(PartialAdminViewState.EventProgressState()) }
+
+        val fetchPendingPlayersObservable = adminView.fetchEventDetailsTriggerEmitter()
                 .filter { it }
                 .flatMap { adminInteractor.fetchPendingPlayers(eventId).startWith(PartialAdminViewState.PendingProgressState()) }
 
-        val fetchAcceptedPlayersObservable = adminView.fetchEventPlayersTriggerEmitter()
+        val fetchAcceptedPlayersObservable = adminView.fetchEventDetailsTriggerEmitter()
                 .filter { it }
                 .flatMap { adminInteractor.fetchAcceptedPlayers(eventId).startWith(PartialAdminViewState.AcceptedProgressState()) }
 
@@ -53,9 +57,8 @@ class AdminViewModel(private val adminInteractor: AdminInteractor,
                     PartialAdminViewState.AcceptedListState(acceptedList)
                 }
 
-        val fetchEventTriggerObservable = adminInteractor.fetchEvent(eventId).startWith(PartialAdminViewState.EventProgressState())
-
         val mergedObservable = Observable.merge(listOf(
+                fetchEventTriggerObservable,
                 fetchPendingPlayersObservable,
                 fetchAcceptedPlayersObservable,
                 acceptPlayerObservable,
@@ -63,8 +66,7 @@ class AdminViewModel(private val adminInteractor: AdminInteractor,
                 updatePendingListObservable,
                 updateAcceptedListObservable,
                 sendRatingObservable,
-                updateRatedOrSelfObservable,
-                fetchEventTriggerObservable))
+                updateRatedOrSelfObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 

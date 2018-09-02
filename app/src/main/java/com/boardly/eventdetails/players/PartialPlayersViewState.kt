@@ -13,7 +13,7 @@ sealed class PartialPlayersViewState {
         }
     }
 
-    class EventProgressStaate : PartialPlayersViewState() {
+    class EventProgressState : PartialPlayersViewState() {
         override fun reduce(previousState: PlayersViewState): PlayersViewState {
             return previousState.copy(eventProgress = true)
         }
@@ -38,7 +38,7 @@ sealed class PartialPlayersViewState {
         }
     }
 
-    class EventFetched(private val event: Event) : PartialPlayersViewState() {
+    data class EventFetched(private val event: Event) : PartialPlayersViewState() {
         override fun reduce(previousState: PlayersViewState): PlayersViewState {
             return previousState.copy(eventProgress = false,
                     event = event)

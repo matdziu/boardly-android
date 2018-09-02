@@ -7,5 +7,5 @@ interface PlayersView : EventDetailsView {
 
     fun render(playersViewState: PlayersViewState)
 
-    fun fetchEventPlayersTriggerEmitter(): Observable<Boolean>
+    fun fetchEventDetailsTriggerEmitter(): Observable<Boolean>
 }

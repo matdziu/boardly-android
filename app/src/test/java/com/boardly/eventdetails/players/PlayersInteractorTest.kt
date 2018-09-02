@@ -1,6 +1,7 @@
 package com.boardly.eventdetails.players
 
 import com.boardly.base.eventdetails.models.RateInput
+import com.boardly.common.events.models.Event
 import com.boardly.common.players.models.Player
 import com.boardly.eventdetails.players.network.PlayersService
 import com.nhaarman.mockito_kotlin.any
@@ -19,11 +20,13 @@ class PlayersInteractorTest {
             id = "test",
             rating = 5.0,
             ratedOrSelf = true))
+    private val testEvent = Event("testEventId", "testEventName", "testGameId")
     private val playersService: PlayersService = mock {
         on { it.getAcceptedPlayers("testEventId1") } doReturn Observable.just(testAcceptedPlayersList1)
         on { it.getAcceptedPlayers("testEventId2") } doReturn Observable.just(testAcceptedPlayersList2)
         on { it.sendRating(any()) } doReturn Observable.just(true)
         on { it.userId } doReturn "acceptedTestId"
+        on { it.fetchEventDetails(any()) } doReturn Observable.just(testEvent)
     }
     private val playersInteractor = PlayersInteractor(playersService)
 
@@ -43,5 +46,11 @@ class PlayersInteractorTest {
     fun testSuccessfulRatingSending() {
         playersInteractor.sendRating(RateInput(5, "testPlayerId", "testEventId")).test()
                 .assertValue { it is PartialPlayersViewState.RatingSent }
+    }
+
+    @Test
+    fun testSuccessfulEventFetching() {
+        playersInteractor.fetchEvent("testEventId").test()
+                .assertValue(PartialPlayersViewState.EventFetched(testEvent))
     }
 }

@@ -52,7 +52,7 @@ class AdminFragment : BaseEventDetailsFragment(), AdminView {
 
     private lateinit var adminViewModel: AdminViewModel
 
-    private lateinit var fetchEventPlayersTriggerSubject: PublishSubject<Boolean>
+    private lateinit var fetchEventDetailsTriggerSubject: PublishSubject<Boolean>
     private var init = true
 
     private var eventId = ""
@@ -118,7 +118,7 @@ class AdminFragment : BaseEventDetailsFragment(), AdminView {
         initEmitters()
         adminViewModel.bind(this, eventId)
 
-        fetchEventPlayersTriggerSubject.onNext(init)
+        fetchEventDetailsTriggerSubject.onNext(init)
     }
 
     override fun onStop() {
@@ -145,7 +145,7 @@ class AdminFragment : BaseEventDetailsFragment(), AdminView {
 
     override fun initEmitters() {
         super.initEmitters()
-        fetchEventPlayersTriggerSubject = PublishSubject.create()
+        fetchEventDetailsTriggerSubject = PublishSubject.create()
         acceptPlayerSubject = PublishSubject.create()
         kickPlayerSubject = PublishSubject.create()
     }
@@ -229,5 +229,5 @@ class AdminFragment : BaseEventDetailsFragment(), AdminView {
 
     override fun acceptPlayerEmitter(): Observable<String> = acceptPlayerSubject
 
-    override fun fetchEventPlayersTriggerEmitter(): Observable<Boolean> = fetchEventPlayersTriggerSubject
+    override fun fetchEventDetailsTriggerEmitter(): Observable<Boolean> = fetchEventDetailsTriggerSubject
 }

@@ -7,7 +7,7 @@ interface AdminView : EventDetailsView {
 
     fun render(adminViewState: AdminViewState)
 
-    fun fetchEventPlayersTriggerEmitter(): Observable<Boolean>
+    fun fetchEventDetailsTriggerEmitter(): Observable<Boolean>
 
     fun kickPlayerEmitter(): Observable<String>
 

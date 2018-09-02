@@ -5,9 +5,9 @@ import com.boardly.base.eventdetails.models.RateInput
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class PlayersViewRobot(playersViewModel: PlayersViewModel) : BaseViewRobot<PlayersViewState>() {
+class PlayersViewRobot(private val playersViewModel: PlayersViewModel) : BaseViewRobot<PlayersViewState>() {
 
-    private val fetchEventPlayersSubject = PublishSubject.create<String>()
+    private val fetchEventPlayersSubject = PublishSubject.create<Boolean>()
     private val emitRatingSubject = PublishSubject.create<RateInput>()
 
     private val playersView = object : PlayersView {
@@ -15,7 +15,7 @@ class PlayersViewRobot(playersViewModel: PlayersViewModel) : BaseViewRobot<Playe
             renderedStates.add(playersViewState)
         }
 
-        override fun fetchEventPlayersTriggerEmitter(): Observable<String> = fetchEventPlayersSubject
+        override fun fetchEventDetailsTriggerEmitter(): Observable<Boolean> = fetchEventPlayersSubject
 
         override fun ratingEmitter(): Observable<RateInput> = emitRatingSubject
 
@@ -24,12 +24,12 @@ class PlayersViewRobot(playersViewModel: PlayersViewModel) : BaseViewRobot<Playe
         }
     }
 
-    init {
-        playersViewModel.bind(playersView)
+    fun init(eventId: String) {
+        playersViewModel.bind(playersView, eventId)
     }
 
-    fun triggerEventPlayersFetching(eventId: String) {
-        fetchEventPlayersSubject.onNext(eventId)
+    fun triggerEventPlayersFetching() {
+        fetchEventPlayersSubject.onNext(true)
     }
 
     fun emitRating(rateInput: RateInput) {

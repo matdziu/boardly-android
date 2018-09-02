@@ -43,7 +43,7 @@ class PlayersFragment : BaseEventDetailsFragment(), PlayersView {
 
     private lateinit var playersViewModel: PlayersViewModel
 
-    private lateinit var fetchEventPlayersTriggerSubject: PublishSubject<Boolean>
+    private lateinit var fetchEventDetailsTriggerSubject: PublishSubject<Boolean>
     private var init = true
 
     private var eventId = ""
@@ -81,20 +81,18 @@ class PlayersFragment : BaseEventDetailsFragment(), PlayersView {
         super.onStart()
         initEmitters()
         playersViewModel.bind(this, eventId)
-        if (init) {
-            fetchEventPlayersTriggerSubject.onNext(true)
-            init = false
-        }
+        fetchEventDetailsTriggerSubject.onNext(init)
     }
 
     override fun onStop() {
+        init = false
         playersViewModel.unbind()
         super.onStop()
     }
 
     override fun initEmitters() {
         super.initEmitters()
-        fetchEventPlayersTriggerSubject = PublishSubject.create()
+        fetchEventDetailsTriggerSubject = PublishSubject.create()
     }
 
     private fun initRecyclerView() {
@@ -132,7 +130,7 @@ class PlayersFragment : BaseEventDetailsFragment(), PlayersView {
                 timeTextView)
     }
 
-    override fun fetchEventPlayersTriggerEmitter(): Observable<Boolean> = fetchEventPlayersTriggerSubject
+    override fun fetchEventDetailsTriggerEmitter(): Observable<Boolean> = fetchEventDetailsTriggerSubject
 
     private fun showPlayersProgressBar(show: Boolean) {
         if (show) {

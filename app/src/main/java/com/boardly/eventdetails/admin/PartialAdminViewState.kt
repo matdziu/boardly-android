@@ -57,7 +57,7 @@ sealed class PartialAdminViewState {
         }
     }
 
-    class EventFetched(private val event: Event) : PartialAdminViewState() {
+    data class EventFetched(private val event: Event) : PartialAdminViewState() {
         override fun reduce(previousState: AdminViewState): AdminViewState {
             return previousState.copy(eventProgress = false,
                     event = event)

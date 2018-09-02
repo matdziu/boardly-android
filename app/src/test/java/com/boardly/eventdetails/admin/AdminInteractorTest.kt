@@ -1,6 +1,7 @@
 package com.boardly.eventdetails.admin
 
 import com.boardly.base.eventdetails.models.RateInput
+import com.boardly.common.events.models.Event
 import com.boardly.common.players.models.Player
 import com.boardly.eventdetails.admin.network.AdminService
 import com.nhaarman.mockito_kotlin.any
@@ -19,12 +20,14 @@ class AdminInteractorTest {
             id = "pendingTestId",
             rating = 5.0,
             ratedOrSelf = true))
+    private val testEvent = Event("testEventId", "testEventName", "testGameId")
     private val adminService: AdminService = mock {
         on { it.getAcceptedPlayers(any()) } doReturn Observable.just(testAcceptedPlayersList)
         on { it.getPendingPlayers(any()) } doReturn Observable.just(testPendingPlayersList)
         on { it.acceptPlayer(any(), any()) } doReturn Observable.just(true)
         on { it.kickPlayer(any(), any()) } doReturn Observable.just(true)
         on { it.sendRating(any()) } doReturn Observable.just(true)
+        on { it.fetchEventDetails(any()) } doReturn Observable.just(testEvent)
     }
 
     private val adminInteractor = AdminInteractor(adminService)
@@ -57,5 +60,11 @@ class AdminInteractorTest {
     fun testSuccessfulRatingSending() {
         adminInteractor.sendRating(RateInput(5, "testPlayerId", "testEventId")).test()
                 .assertValue { it is PartialAdminViewState.RatingSent }
+    }
+
+    @Test
+    fun testSuccessfulEventFetching() {
+        adminInteractor.fetchEvent("testEventId").test()
+                .assertValue(PartialAdminViewState.EventFetched(testEvent))
     }
 }

@@ -1,6 +1,7 @@
 package com.boardly.eventdetails.players
 
 import com.boardly.base.eventdetails.models.RateInput
+import com.boardly.common.events.models.Event
 import com.boardly.common.players.models.Player
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
@@ -13,6 +14,7 @@ class PlayersViewModelTest {
     private val testAcceptedPlayersList = listOf(Player(
             id = "acceptedTestId",
             rating = 5.0))
+    private val testEvent = Event("testEventId", "testEventName", "testGameId")
     private val playersInteractor: PlayersInteractor = mock {
         on { it.fetchAcceptedPlayers("testEventId") } doReturn Observable.just(PartialPlayersViewState.AcceptedListState(testAcceptedPlayersList))
                 .cast(PartialPlayersViewState::class.java)
@@ -20,16 +22,29 @@ class PlayersViewModelTest {
                 .cast(PartialPlayersViewState::class.java)
         on { it.sendRating(any()) } doReturn Observable.just(PartialPlayersViewState.RatingSent())
                 .cast(PartialPlayersViewState::class.java)
+        on { it.fetchEvent("testEventId") } doReturn Observable.just(PartialPlayersViewState.EventFetched(testEvent))
+                .cast(PartialPlayersViewState::class.java)
+        on { it.fetchEvent("testEventIdWithKicking") } doReturn Observable.just(PartialPlayersViewState.EventFetched(testEvent))
+                .cast(PartialPlayersViewState::class.java)
     }
 
     @Test
     fun whenPlayersFetchTriggerIsEmittedAcceptedListIsFetched() {
         val playersViewRobot = PlayersViewRobot(PlayersViewModel(playersInteractor))
-        playersViewRobot.triggerEventPlayersFetching("testEventId")
+        playersViewRobot.init("testEventId")
+        playersViewRobot.triggerEventPlayersFetching()
         playersViewRobot.assertViewStates(
                 PlayersViewState(),
-                PlayersViewState(progress = true),
-                PlayersViewState(acceptedPlayersList = testAcceptedPlayersList))
+                PlayersViewState(
+                        eventProgress = true),
+                PlayersViewState(
+                        event = testEvent),
+                PlayersViewState(
+                        playersProgress = true,
+                        event = testEvent),
+                PlayersViewState(
+                        acceptedPlayersList = testAcceptedPlayersList,
+                        event = testEvent))
     }
 
     @Test
@@ -39,6 +54,7 @@ class PlayersViewModelTest {
                 rating = 5.0,
                 ratedOrSelf = true))
         val playersViewRobot = PlayersViewRobot(PlayersViewModel(playersInteractor, PlayersViewState(acceptedPlayersList = testAcceptedPlayersList)))
+        playersViewRobot.init("testEventId")
         playersViewRobot.emitRating(RateInput(5, "acceptedTestId", "testEventId"))
         playersViewRobot.assertViewStates(
                 PlayersViewState(
@@ -53,11 +69,17 @@ class PlayersViewModelTest {
     @Test
     fun testSuccessfulUserKicking() {
         val playersViewRobot = PlayersViewRobot(PlayersViewModel(playersInteractor))
-        playersViewRobot.triggerEventPlayersFetching("testEventIdWithKicking")
+        playersViewRobot.init("testEventIdWithKicking")
+        playersViewRobot.triggerEventPlayersFetching()
         playersViewRobot.assertViewStates(
                 PlayersViewState(),
                 PlayersViewState(
-                        progress = true),
+                        eventProgress = true),
+                PlayersViewState(
+                        event = testEvent),
+                PlayersViewState(
+                        playersProgress = true,
+                        event = testEvent),
                 PlayersViewState(
                         kick = true))
     }

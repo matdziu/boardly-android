@@ -17,7 +17,7 @@ class AdminViewRobot(adminViewModel: AdminViewModel) : BaseViewRobot<AdminViewSt
             renderedStates.add(adminViewState)
         }
 
-        override fun fetchEventPlayersTriggerEmitter(): Observable<Boolean> = fetchEventPlayersSubject
+        override fun fetchEventDetailsTriggerEmitter(): Observable<Boolean> = fetchEventPlayersSubject
 
         override fun kickPlayerEmitter(): Observable<String> = kickPlayerSubject
 

@@ -14,7 +14,12 @@ class PlayersViewModel(private val playersInteractor: PlayersInteractor,
     private val stateSubject = BehaviorSubject.createDefault(initialState)
 
     fun bind(playersView: PlayersView, eventId: String) {
-        val fetchEventPlayersObservable = playersView.fetchEventPlayersTriggerEmitter()
+        val fetchEventTriggerObservable = playersView.fetchEventDetailsTriggerEmitter()
+                .filter { it }
+                .flatMap { playersInteractor.fetchEvent(eventId).startWith(PartialPlayersViewState.EventProgressState()) }
+
+        val fetchEventPlayersObservable = playersView.fetchEventDetailsTriggerEmitter()
+                .filter { it }
                 .flatMap { playersInteractor.fetchAcceptedPlayers(eventId).startWith(PartialPlayersViewState.PlayersProgressState()) }
 
         val sendRatingObservable = playersView.ratingEmitter()
@@ -28,13 +33,11 @@ class PlayersViewModel(private val playersInteractor: PlayersInteractor,
                     PartialPlayersViewState.AcceptedListState(acceptedList)
                 }
 
-        val fetchEventTriggerObservable = playersInteractor.fetchEvent(eventId).startWith(PartialPlayersViewState.EventProgressStaate())
-
         val mergedObservable = Observable.merge(listOf(
+                fetchEventTriggerObservable,
                 fetchEventPlayersObservable,
                 sendRatingObservable,
-                updateRatedOrSelfObservable,
-                fetchEventTriggerObservable))
+                updateRatedOrSelfObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 

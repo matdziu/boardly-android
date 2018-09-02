@@ -1,6 +1,7 @@
 package com.boardly.eventdetails.admin
 
 import com.boardly.base.eventdetails.models.RateInput
+import com.boardly.common.events.models.Event
 import com.boardly.common.players.models.Player
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
@@ -16,6 +17,7 @@ class AdminViewModelTest {
     private val testPendingPlayersList = listOf(Player(
             id = "pendingTestId",
             rating = 5.0))
+    private val testEvent = Event("testEventId", "testEventName", "testGameId")
     private val adminInteractor: AdminInteractor = mock {
         on { it.sendRating(any()) } doReturn Observable.just(PartialAdminViewState.RatingSent())
                 .cast(PartialAdminViewState::class.java)
@@ -27,6 +29,8 @@ class AdminViewModelTest {
                 .cast(PartialAdminViewState::class.java)
         on { it.fetchAcceptedPlayers(any()) } doReturn Observable.just(PartialAdminViewState.AcceptedListState(testAcceptedPlayersList))
                 .cast(PartialAdminViewState::class.java)
+        on { it.fetchEvent(any()) } doReturn Observable.just(PartialAdminViewState.EventFetched(testEvent))
+                .cast(PartialAdminViewState::class.java)
     }
 
     @Test
@@ -36,15 +40,23 @@ class AdminViewModelTest {
         adminViewRobot.assertViewStates(
                 AdminViewState(),
                 AdminViewState(
-                        pendingProgress = true),
+                        eventProgress = true),
                 AdminViewState(
-                        pendingPlayersList = testPendingPlayersList),
+                        event = testEvent),
+                AdminViewState(
+                        pendingProgress = true,
+                        event = testEvent),
                 AdminViewState(
                         pendingPlayersList = testPendingPlayersList,
-                        acceptedProgress = true),
+                        event = testEvent),
                 AdminViewState(
                         pendingPlayersList = testPendingPlayersList,
-                        acceptedPlayersList = testAcceptedPlayersList))
+                        acceptedProgress = true,
+                        event = testEvent),
+                AdminViewState(
+                        pendingPlayersList = testPendingPlayersList,
+                        acceptedPlayersList = testAcceptedPlayersList,
+                        event = testEvent))
     }
 
     @Test
