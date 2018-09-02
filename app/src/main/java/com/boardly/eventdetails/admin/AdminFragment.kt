@@ -12,7 +12,6 @@ import com.boardly.base.eventdetails.BaseEventDetailsFragment
 import com.boardly.common.events.EventUIRenderer
 import com.boardly.common.events.models.Event
 import com.boardly.constants.EDIT_EVENT_REQUEST_CODE
-import com.boardly.constants.EVENT
 import com.boardly.constants.EVENT_EDITED_RESULT_CODE
 import com.boardly.constants.EVENT_ID
 import com.boardly.constants.EVENT_REMOVED_RESULT_CODE
@@ -129,16 +128,13 @@ class AdminFragment : BaseEventDetailsFragment(), AdminView {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            EDIT_EVENT_REQUEST_CODE -> handleEditEventResult(resultCode, data)
+            EDIT_EVENT_REQUEST_CODE -> handleEditEventResult(resultCode)
         }
     }
 
-    private fun handleEditEventResult(resultCode: Int, data: Intent?) {
+    private fun handleEditEventResult(resultCode: Int) {
         when (resultCode) {
-            EVENT_EDITED_RESULT_CODE -> data?.let {
-                event = it.getParcelableExtra(EVENT)
-                initEventView(event)
-            }
+            EVENT_EDITED_RESULT_CODE -> init = true
             EVENT_REMOVED_RESULT_CODE -> activity?.finish()
         }
     }

@@ -205,11 +205,7 @@ class EventActivity : BaseActivity(), EventView {
             showPickedPlaceError(!selectedPlaceValid)
             if (success) {
                 Toast.makeText(this@EventActivity, R.string.everything_went_ok, Toast.LENGTH_SHORT).show()
-
-                val data = Intent()
-                data.putExtra(EVENT, inputData.toEvent())
-                setResult(EVENT_EDITED_RESULT_CODE, data)
-
+                setResult(EVENT_EDITED_RESULT_CODE)
                 finish()
             }
             if (removed) {

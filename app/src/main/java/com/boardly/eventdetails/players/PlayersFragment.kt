@@ -11,7 +11,6 @@ import com.boardly.R
 import com.boardly.base.eventdetails.BaseEventDetailsFragment
 import com.boardly.common.events.EventUIRenderer
 import com.boardly.common.events.models.Event
-import com.boardly.constants.EVENT
 import com.boardly.constants.EVENT_ID
 import com.boardly.eventdetails.players.list.AcceptedPlayersAdapter
 import com.boardly.factories.PlayersViewModelFactory
@@ -63,7 +62,7 @@ class PlayersFragment : BaseEventDetailsFragment(), PlayersView {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-        eventId = arguments?.getString(EVENT, "") ?: ""
+        eventId = arguments?.getString(EVENT_ID, "") ?: ""
 
         playersViewModel = ViewModelProviders.of(this, playersViewModelFactory)[PlayersViewModel::class.java]
     }
