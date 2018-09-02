@@ -7,6 +7,8 @@ import io.reactivex.Observable
 
 interface HomeService {
 
+    fun sendClientNotificationToken()
+
     fun fetchAllEvents(userLocation: UserLocation, radius: Double, gameId: String): Observable<List<Event>>
 
     fun fetchUserEventIds(): Observable<List<String>>

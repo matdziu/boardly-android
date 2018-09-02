@@ -91,4 +91,8 @@
     <string name="edit_event">Edytuj wydarzenie</string>
     <string name="delete_event_title">Usuń wydarzenie</string>
     <string name="are_you_sure_to_delete">Na pewno chcesz usunać to wydarzenie?</string>
+    <string name="new_chat_message_channel">Nowa wiadomość na czacie</string>
+    <string name="new_join_request_channel">Nowa prośba o dołączenie</string>
+    <string name="accepted_request_channel">Zaakceptowanie prośby o dołączenie</string>
+    <string name="logout_connection_prompt">Włącz internet żeby się wylogować</string>
 </resources>

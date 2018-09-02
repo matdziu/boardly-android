@@ -11,6 +11,10 @@ import javax.inject.Inject
 
 class HomeInteractor @Inject constructor(private val homeService: HomeService) {
 
+    init {
+        homeService.sendClientNotificationToken()
+    }
+
     fun fetchEvents(userLocation: UserLocation, radius: Double, gameId: String): Observable<PartialHomeViewState> {
         return Observable.zip(homeService.fetchUserEventIds(), homeService.fetchAllEvents(userLocation, radius, gameId),
                 BiFunction<List<String>, List<Event>, PartialHomeViewState>

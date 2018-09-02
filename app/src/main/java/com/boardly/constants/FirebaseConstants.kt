@@ -14,6 +14,7 @@ const val NAME_CHILD = "name"
 const val PROFILE_PICTURE_CHILD = "profilePicture"
 const val RATING_HASHES = "ratingHashes"
 const val TIMESTAMP_CHILD = "timestamp"
+const val NOTIFICATION_TOKEN_CHILD = "notificationToken"
 
 val LEVEL_IDS_MAP = mapOf(
         R.string.beginner_level to "1",

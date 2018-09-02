@@ -28,6 +28,7 @@ import com.boardly.filter.FilterActivity
 import com.boardly.filter.models.Filter
 import com.boardly.home.models.JoinEventData
 import com.boardly.home.models.UserLocation
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -75,6 +76,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         AndroidInjection.inject(this)
         setContentView(R.layout.activity_home)
         super.onCreate(savedInstanceState)
+        GoogleApiAvailability.getInstance().makeGooglePlayServicesAvailable(this)
         initRecyclerView()
         fusedLocationClient = FusedLocationProviderClient(this)
         selectedFilter = getSavedFilter()
