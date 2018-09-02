@@ -63,6 +63,8 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
     private val eventsAdapter = EventsAdapter()
     private val locationRequest = LocationRequest().apply {
+        interval = 1000
+        fastestInterval = 1000
         numUpdates = 1
         priority = PRIORITY_BALANCED_POWER_ACCURACY
     }
