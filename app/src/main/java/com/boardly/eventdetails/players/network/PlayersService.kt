@@ -1,10 +1,10 @@
 package com.boardly.eventdetails.players.network
 
-import com.boardly.base.rating.network.RateService
+import com.boardly.base.eventdetails.network.EventDetailsService
 import com.boardly.common.players.models.Player
 import io.reactivex.Observable
 
-interface PlayersService : RateService {
+interface PlayersService : EventDetailsService {
 
     val userId: String
 

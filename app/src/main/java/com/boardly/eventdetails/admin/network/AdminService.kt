@@ -1,10 +1,10 @@
 package com.boardly.eventdetails.admin.network
 
-import com.boardly.base.rating.network.RateService
+import com.boardly.base.eventdetails.network.EventDetailsService
 import com.boardly.common.players.models.Player
 import io.reactivex.Observable
 
-interface AdminService : RateService {
+interface AdminService : EventDetailsService {
 
     fun getAcceptedPlayers(eventId: String): Observable<List<Player>>
 

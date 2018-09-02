@@ -13,7 +13,16 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include layout="@layout/layout_event" />
+            <include
+                android:id="@+id/eventLayout"
+                layout="@layout/layout_event" />
+
+            <ProgressBar
+                android:id="@+id/eventProgressBar"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/editEventButton"

@@ -8,29 +8,32 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.boardly.R
-import com.boardly.base.rating.BaseRateFragment
+import com.boardly.base.eventdetails.BaseEventDetailsFragment
 import com.boardly.common.events.EventUIRenderer
 import com.boardly.common.events.models.Event
 import com.boardly.constants.EVENT
+import com.boardly.constants.EVENT_ID
 import com.boardly.eventdetails.players.list.AcceptedPlayersAdapter
 import com.boardly.factories.PlayersViewModelFactory
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_players.acceptedPlayersRecyclerView
+import kotlinx.android.synthetic.main.fragment_players.eventLayout
+import kotlinx.android.synthetic.main.fragment_players.eventProgressBar
 import kotlinx.android.synthetic.main.fragment_players.noPlayersTextView
-import kotlinx.android.synthetic.main.fragment_players.progressBar
-import kotlinx.android.synthetic.main.item_event.locationImageView
-import kotlinx.android.synthetic.main.item_event.seeDescriptionButton
+import kotlinx.android.synthetic.main.fragment_players.playersProgressBar
 import kotlinx.android.synthetic.main.layout_event.boardGameImageView
 import kotlinx.android.synthetic.main.layout_event.eventNameTextView
 import kotlinx.android.synthetic.main.layout_event.gameTextView
 import kotlinx.android.synthetic.main.layout_event.levelTextView
+import kotlinx.android.synthetic.main.layout_event.locationImageView
 import kotlinx.android.synthetic.main.layout_event.locationTextView
+import kotlinx.android.synthetic.main.layout_event.seeDescriptionButton
 import kotlinx.android.synthetic.main.layout_event.timeTextView
 import javax.inject.Inject
 
-class PlayersFragment : BaseRateFragment(), PlayersView {
+class PlayersFragment : BaseEventDetailsFragment(), PlayersView {
 
     @Inject
     lateinit var playersViewModelFactory: PlayersViewModelFactory
@@ -40,17 +43,18 @@ class PlayersFragment : BaseRateFragment(), PlayersView {
 
     private lateinit var playersViewModel: PlayersViewModel
 
-    private lateinit var fetchEventPlayersTriggerSubject: PublishSubject<String>
+    private lateinit var fetchEventPlayersTriggerSubject: PublishSubject<Boolean>
     private var init = true
-    private var event = Event()
+
+    private var eventId = ""
 
     private val acceptedPlayersAdapter = AcceptedPlayersAdapter(this)
 
     companion object {
-        fun newInstance(event: Event): PlayersFragment {
+        fun newInstance(eventId: String): PlayersFragment {
             val playersFragment = PlayersFragment()
             val arguments = Bundle()
-            arguments.putParcelable(EVENT, event)
+            arguments.putString(EVENT_ID, eventId)
             playersFragment.arguments = arguments
             return playersFragment
         }
@@ -59,7 +63,7 @@ class PlayersFragment : BaseRateFragment(), PlayersView {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-        event = arguments?.getParcelable(EVENT) ?: Event()
+        eventId = arguments?.getString(EVENT, "") ?: ""
 
         playersViewModel = ViewModelProviders.of(this, playersViewModelFactory)[PlayersViewModel::class.java]
     }
@@ -70,24 +74,15 @@ class PlayersFragment : BaseRateFragment(), PlayersView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        eventUIRenderer.displayEventInfo(event,
-                eventNameTextView,
-                gameTextView,
-                locationTextView,
-                locationImageView,
-                boardGameImageView,
-                seeDescriptionButton,
-                levelTextView,
-                timeTextView)
         initRecyclerView()
     }
 
     override fun onStart() {
         super.onStart()
         initEmitters()
-        playersViewModel.bind(this)
+        playersViewModel.bind(this, eventId)
         if (init) {
-            fetchEventPlayersTriggerSubject.onNext(event.eventId)
+            fetchEventPlayersTriggerSubject.onNext(true)
             init = false
         }
     }
@@ -110,28 +105,52 @@ class PlayersFragment : BaseRateFragment(), PlayersView {
     override fun render(playersViewState: PlayersViewState) {
         with(playersViewState) {
             showNoPlayersText(false)
-            showProgressBar(progress)
-            if (acceptedPlayersList.isNotEmpty() && !progress) {
+            showPlayersProgressBar(playersProgress)
+            showEventProgressBar(eventProgress)
+            if (acceptedPlayersList.isNotEmpty() && !playersProgress) {
                 acceptedPlayersAdapter.submitList(acceptedPlayersList)
-            } else if (!progress) {
+            } else if (!playersProgress) {
                 showNoPlayersText(true)
             }
             if (kick) {
                 Toast.makeText(context, getString(R.string.you_were_kicked_text), Toast.LENGTH_SHORT).show()
                 activity?.finish()
             }
+            initEventView(event)
         }
     }
 
-    override fun fetchEventPlayersTriggerEmitter(): Observable<String> = fetchEventPlayersTriggerSubject
+    private fun initEventView(event: Event) {
+        eventUIRenderer.displayEventInfo(event,
+                eventNameTextView,
+                gameTextView,
+                locationTextView,
+                locationImageView,
+                boardGameImageView,
+                seeDescriptionButton,
+                levelTextView,
+                timeTextView)
+    }
 
-    private fun showProgressBar(show: Boolean) {
+    override fun fetchEventPlayersTriggerEmitter(): Observable<Boolean> = fetchEventPlayersTriggerSubject
+
+    private fun showPlayersProgressBar(show: Boolean) {
         if (show) {
             acceptedPlayersRecyclerView.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
+            playersProgressBar.visibility = View.VISIBLE
         } else {
             acceptedPlayersRecyclerView.visibility = View.VISIBLE
-            progressBar.visibility = View.GONE
+            playersProgressBar.visibility = View.GONE
+        }
+    }
+
+    private fun showEventProgressBar(show: Boolean) {
+        if (show) {
+            eventLayout.visibility = View.GONE
+            eventProgressBar.visibility = View.VISIBLE
+        } else {
+            eventLayout.visibility = View.VISIBLE
+            eventProgressBar.visibility = View.GONE
         }
     }
 

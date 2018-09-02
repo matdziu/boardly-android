@@ -13,7 +13,16 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include layout="@layout/layout_event" />
+            <include
+                android:id="@+id/eventLayout"
+                layout="@layout/layout_event" />
+
+            <ProgressBar
+                android:id="@+id/eventProgressBar"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -32,7 +41,7 @@
                 android:nestedScrollingEnabled="false" />
 
             <ProgressBar
-                android:id="@+id/progressBar"
+                android:id="@+id/playersProgressBar"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:layout_gravity="center_horizontal"

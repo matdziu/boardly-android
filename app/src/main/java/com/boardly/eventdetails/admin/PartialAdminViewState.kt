@@ -1,5 +1,6 @@
 package com.boardly.eventdetails.admin
 
+import com.boardly.common.events.models.Event
 import com.boardly.common.players.models.Player
 
 sealed class PartialAdminViewState {
@@ -15,6 +16,12 @@ sealed class PartialAdminViewState {
     class PendingProgressState : PartialAdminViewState() {
         override fun reduce(previousState: AdminViewState): AdminViewState {
             return previousState.copy(pendingProgress = true)
+        }
+    }
+
+    class EventProgressState : PartialAdminViewState() {
+        override fun reduce(previousState: AdminViewState): AdminViewState {
+            return previousState.copy(eventProgress = true)
         }
     }
 
@@ -47,6 +54,13 @@ sealed class PartialAdminViewState {
     class RatingSent : PartialAdminViewState() {
         override fun reduce(previousState: AdminViewState): AdminViewState {
             return previousState
+        }
+    }
+
+    class EventFetched(private val event: Event) : PartialAdminViewState() {
+        override fun reduce(previousState: AdminViewState): AdminViewState {
+            return previousState.copy(eventProgress = false,
+                    event = event)
         }
     }
 }

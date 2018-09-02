@@ -1,11 +1,11 @@
 package com.boardly.eventdetails.players
 
-import com.boardly.base.rating.RateView
+import com.boardly.base.eventdetails.EventDetailsView
 import io.reactivex.Observable
 
-interface PlayersView : RateView {
+interface PlayersView : EventDetailsView {
 
     fun render(playersViewState: PlayersViewState)
 
-    fun fetchEventPlayersTriggerEmitter(): Observable<String>
+    fun fetchEventPlayersTriggerEmitter(): Observable<Boolean>
 }

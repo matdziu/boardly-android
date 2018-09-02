@@ -1,6 +1,6 @@
 package com.boardly.eventdetails.admin.network
 
-import com.boardly.base.rating.network.RateServiceImpl
+import com.boardly.base.eventdetails.network.EventDetailsServiceImpl
 import com.boardly.common.players.models.Player
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
@@ -12,7 +12,7 @@ import com.google.firebase.database.ValueEventListener
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
-class AdminServiceImpl : RateServiceImpl(), AdminService {
+class AdminServiceImpl : EventDetailsServiceImpl(), AdminService {
 
     override fun acceptPlayer(eventId: String, playerId: String): Observable<Boolean> {
         val resultSubject = PublishSubject.create<Boolean>()

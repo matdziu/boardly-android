@@ -1,7 +1,7 @@
 package com.boardly.eventdetails.players
 
 import com.boardly.base.BaseViewRobot
-import com.boardly.base.rating.models.RateInput
+import com.boardly.base.eventdetails.models.RateInput
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 

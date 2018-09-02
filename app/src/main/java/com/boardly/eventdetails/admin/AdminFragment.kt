@@ -8,12 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.boardly.R
-import com.boardly.base.rating.BaseRateFragment
+import com.boardly.base.eventdetails.BaseEventDetailsFragment
 import com.boardly.common.events.EventUIRenderer
 import com.boardly.common.events.models.Event
 import com.boardly.constants.EDIT_EVENT_REQUEST_CODE
 import com.boardly.constants.EVENT
 import com.boardly.constants.EVENT_EDITED_RESULT_CODE
+import com.boardly.constants.EVENT_ID
 import com.boardly.constants.EVENT_REMOVED_RESULT_CODE
 import com.boardly.event.EventActivity
 import com.boardly.eventdetails.admin.list.AcceptedPlayersAdapter
@@ -25,6 +26,8 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_admin.acceptedPlayersRecyclerView
 import kotlinx.android.synthetic.main.fragment_admin.acceptedProgressBar
 import kotlinx.android.synthetic.main.fragment_admin.editEventButton
+import kotlinx.android.synthetic.main.fragment_admin.eventLayout
+import kotlinx.android.synthetic.main.fragment_admin.eventProgressBar
 import kotlinx.android.synthetic.main.fragment_admin.noAcceptedPlayersTextView
 import kotlinx.android.synthetic.main.fragment_admin.noPendingPlayersTextView
 import kotlinx.android.synthetic.main.fragment_admin.pendingPlayersRecyclerView
@@ -39,7 +42,7 @@ import kotlinx.android.synthetic.main.layout_event.locationTextView
 import kotlinx.android.synthetic.main.layout_event.timeTextView
 import javax.inject.Inject
 
-class AdminFragment : BaseRateFragment(), AdminView {
+class AdminFragment : BaseEventDetailsFragment(), AdminView {
 
     @Inject
     lateinit var eventUIRenderer: EventUIRenderer
@@ -51,6 +54,8 @@ class AdminFragment : BaseRateFragment(), AdminView {
 
     private lateinit var fetchEventPlayersTriggerSubject: PublishSubject<Boolean>
     private var init = true
+
+    private var eventId = ""
     private var event = Event()
 
     lateinit var acceptPlayerSubject: PublishSubject<String>
@@ -60,10 +65,10 @@ class AdminFragment : BaseRateFragment(), AdminView {
     private val pendingPlayersAdapter = PendingPlayersAdapter(this)
 
     companion object {
-        fun newInstance(event: Event): AdminFragment {
+        fun newInstance(eventId: String): AdminFragment {
             val adminFragment = AdminFragment()
             val arguments = Bundle()
-            arguments.putParcelable(EVENT, event)
+            arguments.putString(EVENT_ID, eventId)
             adminFragment.arguments = arguments
             return adminFragment
         }
@@ -72,7 +77,7 @@ class AdminFragment : BaseRateFragment(), AdminView {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-        event = arguments?.getParcelable(EVENT) ?: Event()
+        eventId = arguments?.getString(EVENT_ID, "") ?: ""
 
         adminViewModel = ViewModelProviders.of(this, adminViewModelFactory)[AdminViewModel::class.java]
     }
@@ -84,11 +89,11 @@ class AdminFragment : BaseRateFragment(), AdminView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         editEventButton.setOnClickListener { EventActivity.startEditMode(this, event) }
-        initEventView(event)
         initRecyclerViews()
     }
 
     private fun initEventView(event: Event) {
+        this.event = event
         eventUIRenderer.displayEventInfo(event,
                 eventNameTextView,
                 gameTextView,
@@ -111,7 +116,7 @@ class AdminFragment : BaseRateFragment(), AdminView {
     override fun onStart() {
         super.onStart()
         initEmitters()
-        adminViewModel.bind(this, event.eventId)
+        adminViewModel.bind(this, eventId)
 
         fetchEventPlayersTriggerSubject.onNext(init)
     }
@@ -152,6 +157,7 @@ class AdminFragment : BaseRateFragment(), AdminView {
 
             showAcceptedProgressBar(acceptedProgress)
             showPendingProgressBar(pendingProgress)
+            showEventProgressBar(eventProgress)
 
             if (acceptedPlayersList.isNotEmpty() && !acceptedProgress) {
                 acceptedPlayersAdapter.submitList(acceptedPlayersList)
@@ -164,6 +170,8 @@ class AdminFragment : BaseRateFragment(), AdminView {
             } else if (!pendingProgress) {
                 showNoPendingPlayersText(true)
             }
+
+            initEventView(event)
         }
     }
 
@@ -184,6 +192,16 @@ class AdminFragment : BaseRateFragment(), AdminView {
         } else {
             acceptedPlayersRecyclerView.visibility = View.VISIBLE
             noAcceptedPlayersTextView.visibility = View.GONE
+        }
+    }
+
+    private fun showEventProgressBar(show: Boolean) {
+        if (show) {
+            eventLayout.visibility = View.GONE
+            eventProgressBar.visibility = View.VISIBLE
+        } else {
+            eventLayout.visibility = View.VISIBLE
+            eventProgressBar.visibility = View.GONE
         }
     }
 

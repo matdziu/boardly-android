@@ -8,8 +8,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.boardly.R
-import com.boardly.base.rating.RateView
-import com.boardly.base.rating.models.RateInput
+import com.boardly.base.eventdetails.EventDetailsView
+import com.boardly.base.eventdetails.models.RateInput
 import com.boardly.common.players.models.Player
 import kotlinx.android.synthetic.main.view_rate_dialog.view.ratingBar
 
@@ -22,10 +22,10 @@ class RatingPlayerUIRenderer(private val activity: AppCompatActivity) : PlayerUI
                           ratingTextView: TextView,
                           ratingImageView: ImageView,
                           rateButton: Button,
-                          rateView: RateView) {
+                          eventDetailsView: EventDetailsView) {
         super.displayPlayerInfo(player, playerImageView, nameTextView, helloTextView, ratingTextView, ratingImageView)
         displayRateButton(player.ratedOrSelf, rateButton)
-        setRateButtonOnClick(player, rateButton, rateView)
+        setRateButtonOnClick(player, rateButton, eventDetailsView)
     }
 
     private fun displayRateButton(ratedOrSelf: Boolean, rateButton: Button) {
@@ -35,7 +35,7 @@ class RatingPlayerUIRenderer(private val activity: AppCompatActivity) : PlayerUI
 
     private fun setRateButtonOnClick(player: Player,
                                      rateButton: Button,
-                                     rateView: RateView) {
+                                     eventDetailsView: EventDetailsView) {
         rateButton.setOnClickListener {
             val dialogView = LayoutInflater.from(rateButton.context)
                     .inflate(R.layout.view_rate_dialog, rateButton.parent as ViewGroup, false)
@@ -44,7 +44,7 @@ class RatingPlayerUIRenderer(private val activity: AppCompatActivity) : PlayerUI
                     .setTitle(R.string.rate_dialog_title)
                     .setPositiveButton(R.string.rate_dialog_positive_text) { _, _ ->
                         with(dialogView) {
-                            rateView.emitRating(RateInput(ratingBar.rating.toInt(), player.id, player.eventId))
+                            eventDetailsView.emitRating(RateInput(ratingBar.rating.toInt(), player.id, player.eventId))
                         }
                     }
                     .setNegativeButton(R.string.rate_dialog_negative_text, null)

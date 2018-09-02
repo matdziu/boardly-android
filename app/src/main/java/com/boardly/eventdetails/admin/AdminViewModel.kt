@@ -53,6 +53,8 @@ class AdminViewModel(private val adminInteractor: AdminInteractor,
                     PartialAdminViewState.AcceptedListState(acceptedList)
                 }
 
+        val fetchEventTriggerObservable = adminInteractor.fetchEvent(eventId).startWith(PartialAdminViewState.EventProgressState())
+
         val mergedObservable = Observable.merge(listOf(
                 fetchPendingPlayersObservable,
                 fetchAcceptedPlayersObservable,
@@ -61,7 +63,8 @@ class AdminViewModel(private val adminInteractor: AdminInteractor,
                 updatePendingListObservable,
                 updateAcceptedListObservable,
                 sendRatingObservable,
-                updateRatedOrSelfObservable))
+                updateRatedOrSelfObservable,
+                fetchEventTriggerObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 

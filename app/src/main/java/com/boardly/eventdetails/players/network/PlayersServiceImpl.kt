@@ -1,10 +1,10 @@
 package com.boardly.eventdetails.players.network
 
-import com.boardly.base.rating.network.RateServiceImpl
+import com.boardly.base.eventdetails.network.EventDetailsServiceImpl
 import com.boardly.common.players.models.Player
 import io.reactivex.Observable
 
-class PlayersServiceImpl : RateServiceImpl(), PlayersService {
+class PlayersServiceImpl : EventDetailsServiceImpl(), PlayersService {
 
     override val userId: String = currentUserId
 

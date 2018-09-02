@@ -1,9 +1,9 @@
-package com.boardly.base.rating
+package com.boardly.base.eventdetails
 
-import com.boardly.base.rating.models.RateInput
+import com.boardly.base.eventdetails.models.RateInput
 import io.reactivex.Observable
 
-interface RateView {
+interface EventDetailsView {
 
     fun ratingEmitter(): Observable<RateInput>
 

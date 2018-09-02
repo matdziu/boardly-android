@@ -103,7 +103,7 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private fun setCreatedClickAction(event: Event) {
         with(itemView) {
             openEventScreenButton.visibility = View.VISIBLE
-            openEventScreenButton.setOnClickListener { EventDetailsActivity.start(parentActivity, event) }
+            openEventScreenButton.setOnClickListener { EventDetailsActivity.start(parentActivity, event.eventId, event.type) }
         }
     }
 
@@ -116,7 +116,7 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private fun setAcceptedClickAction(event: Event) {
         with(itemView) {
             openEventScreenButton.visibility = View.VISIBLE
-            openEventScreenButton.setOnClickListener { EventDetailsActivity.start(parentActivity, event) }
+            openEventScreenButton.setOnClickListener { EventDetailsActivity.start(parentActivity, event.eventId, event.type) }
         }
     }
 

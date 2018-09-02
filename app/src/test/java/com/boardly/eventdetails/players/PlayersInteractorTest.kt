@@ -1,6 +1,6 @@
 package com.boardly.eventdetails.players
 
-import com.boardly.base.rating.models.RateInput
+import com.boardly.base.eventdetails.models.RateInput
 import com.boardly.common.players.models.Player
 import com.boardly.eventdetails.players.network.PlayersService
 import com.nhaarman.mockito_kotlin.any
