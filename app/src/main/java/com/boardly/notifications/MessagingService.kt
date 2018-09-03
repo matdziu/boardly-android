@@ -61,7 +61,6 @@ class MessagingService : FirebaseMessagingService() {
                         extras[EXTRAS_EVENT_TYPE] ?: "")
                 NEW_JOIN_REQUEST_NOTIFICATION_TYPE -> handleJoinRequestNotification(
                         titleArgs,
-                        bodyArgs,
                         eventId)
                 ACCEPTED_REQUEST_NOTIFICATION_TYPE -> handleAcceptedRequestNotification(
                         titleArgs,
@@ -83,10 +82,9 @@ class MessagingService : FirebaseMessagingService() {
     }
 
     private fun handleJoinRequestNotification(titleArgs: Array<String>,
-                                              bodyArgs: Array<String>,
                                               eventId: String) {
         val title = getString(R.string.join_request_notification_title, *titleArgs)
-        val body = getString(R.string.join_request_notification_body, *bodyArgs)
+        val body = getString(R.string.join_request_notification_body)
         val notificationId = eventId.hashCode() + NEW_JOIN_REQUEST_REQUEST_CODE
         val eventType = EventType.CREATED
         val pendingIntent = createEventDetailsPendingIntent(eventId, eventType, NEW_JOIN_REQUEST_REQUEST_CODE)

@@ -98,7 +98,7 @@
     <string name="chat_message_notification_title">Wydarzenie %1$s</string>
     <string name="chat_message_notification_body">Nowa wiadomość od %1$s.</string>
     <string name="join_request_notification_title">Wydarzenie %1$s</string>
-    <string name="join_request_notification_body">Prośba o dołączenie od %1$s.</string>
+    <string name="join_request_notification_body">Nowa prośba o dołączenie.</string>
     <string name="accepted_request_notification_title">Wydarzenie %1$s</string>
     <string name="accepted_request_notification_body">Zostałeś zaakceptowany. Przywitaj się z innymi graczami.</string>
 </resources>
