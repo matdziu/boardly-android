@@ -45,6 +45,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_home.addEventButton
 import kotlinx.android.synthetic.main.activity_home.contentViewGroup
 import kotlinx.android.synthetic.main.activity_home.eventsRecyclerView
+import kotlinx.android.synthetic.main.activity_home.inviteFriendsButton
 import kotlinx.android.synthetic.main.activity_home.locationProcessingTextView
 import kotlinx.android.synthetic.main.activity_home.lookingForEventsTextView
 import kotlinx.android.synthetic.main.activity_home.noEventsTextView
@@ -85,6 +86,12 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
         homeViewModel = ViewModelProviders.of(this, homeViewModelFactory)[HomeViewModel::class.java]
         addEventButton.setOnClickListener { EventActivity.startAddMode(this@HomeActivity) }
+        inviteFriendsButton.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.boardly_invite_text))
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.chooser_title_text)))
+        }
     }
 
     private fun initRecyclerView() {

@@ -102,4 +102,6 @@
     <string name="accepted_request_notification_title">Wydarzenie %1$s</string>
     <string name="accepted_request_notification_body">Zostałeś zaakceptowany. Przywitaj się z innymi graczami.</string>
     <string name="invite_friends">Zaproś znajomych</string>
+    <string name="chooser_title_text">Wybierz</string>
+    <string name="boardly_invite_text">Hej! Zapraszam Cię do Boardly - aplikacji, która w prosty sposób łączy ze sobą graczy z okolicy na wspólne granie w planszówki :) \n https://play.google.com/store/apps/details?id=com.boardly&amp;hl=pl</string>
 </resources>
