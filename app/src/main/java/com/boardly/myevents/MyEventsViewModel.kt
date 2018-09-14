@@ -13,9 +13,12 @@ class MyEventsViewModel(private val myEventsInteractor: MyEventsInteractor) : Vi
 
     fun bind(myEventsView: MyEventsView) {
         val eventsFetchObservable = myEventsView.fetchEventsTriggerEmitter()
-                .filter { it }
                 .flatMap {
-                    myEventsInteractor.fetchEvents().startWith(PartialMyEventsViewState.ProgressState())
+                    val myEventsObservable = myEventsInteractor.fetchEvents()
+                    return@flatMap when (it) {
+                        true -> myEventsObservable.startWith(PartialMyEventsViewState.ProgressState())
+                        false -> myEventsObservable
+                    }
                 }
 
         val mergedObservable = Observable.merge(listOf(eventsFetchObservable))
