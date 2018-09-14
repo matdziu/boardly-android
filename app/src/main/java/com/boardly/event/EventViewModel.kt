@@ -1,13 +1,15 @@
 package com.boardly.event
 
 import android.arch.lifecycle.ViewModel
+import com.boardly.analytics.Analytics
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 
-class EventViewModel(private val eventInteractor: EventInteractor) : ViewModel() {
+class EventViewModel(private val eventInteractor: EventInteractor,
+                     private val analytics: Analytics) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     private val stateSubject = BehaviorSubject.createDefault(EventViewState())
@@ -21,7 +23,10 @@ class EventViewModel(private val eventInteractor: EventInteractor) : ViewModel()
 
         val addEventObservable = eventView.addEventEmitter()
                 .flatMap {
-                    validateInputData(it, { eventInteractor.addEvent(it) })
+                    validateInputData(it, {
+                        analytics.logEventAddedEvent(it.gameId, it.placeLatitude, it.placeLongitude)
+                        eventInteractor.addEvent(it)
+                    })
                 }
 
         val editEventObservable = eventView.editEventEmitter()

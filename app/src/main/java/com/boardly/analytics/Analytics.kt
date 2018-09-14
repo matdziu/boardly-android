@@ -2,7 +2,7 @@ package com.boardly.analytics
 
 interface Analytics {
 
-    fun logEventAddedEvent()
+    fun logEventAddedEvent(gameId: String, placeLatitude: Double, placeLongitude: Double)
 
     fun logJoinRequestSentEvent()
 

@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.Toast
 import com.boardly.R
-import com.boardly.analytics.Analytics
 import com.boardly.base.BaseActivity
 import com.boardly.common.events.models.Event
 import com.boardly.constants.EDIT_EVENT_REQUEST_CODE
@@ -63,9 +62,6 @@ class EventActivity : BaseActivity(), EventView {
 
     @Inject
     lateinit var eventViewModelFactory: EventViewModelFactory
-
-    @Inject
-    lateinit var analytics: Analytics
 
     private lateinit var eventViewModel: EventViewModel
 
@@ -208,7 +204,6 @@ class EventActivity : BaseActivity(), EventView {
             showPickedGameError(!selectedGameValid)
             showPickedPlaceError(!selectedPlaceValid)
             if (success) {
-                if (mode == Mode.ADD) analytics.logEventAddedEvent()
                 Toast.makeText(this@EventActivity, R.string.everything_went_ok, Toast.LENGTH_SHORT).show()
                 setResult(EVENT_EDITED_RESULT_CODE)
                 finish()
