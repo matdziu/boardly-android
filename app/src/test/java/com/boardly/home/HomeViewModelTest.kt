@@ -21,7 +21,7 @@ class HomeViewModelTest {
                 Observable.just(PartialHomeViewState.JoinRequestSent())
                         .cast(PartialHomeViewState::class.java)
     }
-    private val homeViewModel = HomeViewModel(homeInteractor)
+    private val homeViewModel = HomeViewModel(homeInteractor, mock())
     private val homeViewRobot = HomeViewRobot(homeViewModel)
 
     @Test

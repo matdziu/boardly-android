@@ -10,7 +10,7 @@ import org.junit.Test
 class EventViewModelTest {
 
     private val eventInteractor: EventInteractor = mock()
-    private val eventViewModel = EventViewModel(eventInteractor)
+    private val eventViewModel = EventViewModel(eventInteractor, mock())
     private val eventViewRobot = EventViewRobot(eventViewModel)
 
     @Test

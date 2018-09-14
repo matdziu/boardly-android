@@ -35,7 +35,7 @@ class AdminViewModelTest {
 
     @Test
     fun whenPlayersFetchTriggerIsEmittedAcceptedAndPendingListsAreFetched() {
-        val adminViewRobot = AdminViewRobot(AdminViewModel(adminInteractor))
+        val adminViewRobot = AdminViewRobot(AdminViewModel(adminInteractor, mock()))
         adminViewRobot.triggerEventPlayersFetching()
         adminViewRobot.assertViewStates(
                 AdminViewState(),
@@ -61,7 +61,7 @@ class AdminViewModelTest {
 
     @Test
     fun whenPlayerIsKickedPlayersListIsUpdated() {
-        val adminViewRobot = AdminViewRobot(AdminViewModel(adminInteractor, AdminViewState(acceptedPlayersList = testAcceptedPlayersList)))
+        val adminViewRobot = AdminViewRobot(AdminViewModel(adminInteractor, mock(), AdminViewState(acceptedPlayersList = testAcceptedPlayersList)))
         adminViewRobot.kickPlayer("acceptedTestId")
         adminViewRobot.assertViewStates(
                 AdminViewState(
@@ -73,7 +73,7 @@ class AdminViewModelTest {
 
     @Test
     fun whenPlayerIsAcceptedPlayersListIsUpdated() {
-        val adminViewRobot = AdminViewRobot(AdminViewModel(adminInteractor, AdminViewState(pendingPlayersList = testPendingPlayersList)))
+        val adminViewRobot = AdminViewRobot(AdminViewModel(adminInteractor, mock(), AdminViewState(pendingPlayersList = testPendingPlayersList)))
         adminViewRobot.acceptPlayer("pendingTestId")
         adminViewRobot.assertViewStates(
                 AdminViewState(
@@ -89,7 +89,7 @@ class AdminViewModelTest {
                 id = "acceptedTestId",
                 rating = 5.0,
                 ratedOrSelf = true))
-        val adminViewRobot = AdminViewRobot(AdminViewModel(adminInteractor, AdminViewState(acceptedPlayersList = testAcceptedPlayersList)))
+        val adminViewRobot = AdminViewRobot(AdminViewModel(adminInteractor, mock(), AdminViewState(acceptedPlayersList = testAcceptedPlayersList)))
         adminViewRobot.emitRating(RateInput(5, "acceptedTestId", "testEventId"))
         adminViewRobot.assertViewStates(
                 AdminViewState(
