@@ -2,6 +2,7 @@ package com.boardly.injection
 
 import com.boardly.BoardlyApplication
 import com.boardly.injection.modules.ActivityBuilder
+import com.boardly.injection.modules.AnalyticsModule
 import com.boardly.injection.modules.AppModule
 import com.boardly.injection.modules.NetworkModule
 import dagger.BindsInstance
@@ -13,7 +14,8 @@ import javax.inject.Singleton
     AndroidInjectionModule::class,
     ActivityBuilder::class,
     AppModule::class,
-    NetworkModule::class])
+    NetworkModule::class,
+    AnalyticsModule::class])
 @Singleton
 interface AppComponent {
 

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.boardly.R
+import com.boardly.analytics.Analytics
 import com.boardly.base.BaseActivity
 import com.boardly.editprofile.EditProfileActivity
 import com.boardly.factories.SignUpViewModelFactory
@@ -25,6 +26,9 @@ class SignUpActivity : BaseActivity(), SignUpView {
 
     @Inject
     lateinit var signUpViewModelFactory: SignUpViewModelFactory
+
+    @Inject
+    lateinit var analytics: Analytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
