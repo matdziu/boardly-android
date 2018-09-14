@@ -1,6 +1,7 @@
 package com.boardly.eventdetails.admin
 
 import android.arch.lifecycle.ViewModel
+import com.boardly.analytics.Analytics
 import com.boardly.extensions.mapToRatedPlayerCopy
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -8,6 +9,7 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 
 class AdminViewModel(private val adminInteractor: AdminInteractor,
+                     private val analytics: Analytics,
                      initialState: AdminViewState = AdminViewState()) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -27,7 +29,10 @@ class AdminViewModel(private val adminInteractor: AdminInteractor,
                 .flatMap { adminInteractor.fetchAcceptedPlayers(eventId).startWith(PartialAdminViewState.AcceptedProgressState()) }
 
         val acceptPlayerObservable = adminView.acceptPlayerEmitter()
-                .flatMap { adminInteractor.acceptPlayer(eventId, it) }
+                .flatMap {
+                    analytics.logJoinRequestAcceptedEvent()
+                    adminInteractor.acceptPlayer(eventId, it)
+                }
 
         val updatePendingListObservable = adminView.acceptPlayerEmitter()
                 .map { playerId ->

@@ -1,12 +1,14 @@
 package com.boardly.home
 
 import android.arch.lifecycle.ViewModel
+import com.boardly.analytics.Analytics
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 
-class HomeViewModel(private val homeInteractor: HomeInteractor) : ViewModel() {
+class HomeViewModel(private val homeInteractor: HomeInteractor,
+                    private val analytics: Analytics) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     private val stateSubject = BehaviorSubject.createDefault(HomeViewState())
@@ -21,7 +23,10 @@ class HomeViewModel(private val homeInteractor: HomeInteractor) : ViewModel() {
                 }
 
         val joinEventObservable = homeView.joinEventEmitter()
-                .flatMap { homeInteractor.joinEvent(it) }
+                .flatMap {
+                    analytics.logJoinRequestSentEvent()
+                    homeInteractor.joinEvent(it)
+                }
 
         val updateEventListObservable = homeView.joinEventEmitter()
                 .map { joinEventData ->
