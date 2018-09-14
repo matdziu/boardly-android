@@ -16,10 +16,13 @@ class HomeViewModel(private val homeInteractor: HomeInteractor,
     fun bind(homeView: HomeView) {
         val filteredFetchObservable = homeView.filteredFetchTriggerEmitter()
                 .flatMap {
-                    val userLocation = it.first
-                    val filter = it.second
-                    homeInteractor.fetchEvents(userLocation, filter.radius, filter.gameId)
-                            .startWith(PartialHomeViewState.ProgressState())
+                    with(it) {
+                        val eventsObservable = homeInteractor.fetchEvents(userLocation, filter.radius, filter.gameId)
+                        return@flatMap when (init) {
+                            true -> eventsObservable.startWith(PartialHomeViewState.ProgressState())
+                            false -> eventsObservable
+                        }
+                    }
                 }
 
         val joinEventObservable = homeView.joinEventEmitter()
@@ -37,6 +40,7 @@ class HomeViewModel(private val homeInteractor: HomeInteractor,
 
         val locationProcessingObservable = homeView
                 .locationProcessingEmitter()
+                .filter { it }
                 .map { PartialHomeViewState.LocationProcessingState() }
 
         val mergedObservable = Observable.merge(listOf(

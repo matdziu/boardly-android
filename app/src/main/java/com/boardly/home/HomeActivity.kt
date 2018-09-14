@@ -26,6 +26,7 @@ import com.boardly.event.EventActivity
 import com.boardly.factories.HomeViewModelFactory
 import com.boardly.filter.FilterActivity
 import com.boardly.filter.models.Filter
+import com.boardly.home.models.FilteredFetchData
 import com.boardly.home.models.JoinEventData
 import com.boardly.home.models.UserLocation
 import com.google.android.gms.common.GoogleApiAvailability
@@ -57,7 +58,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
     private lateinit var homeViewModel: HomeViewModel
 
-    private lateinit var filteredFetchSubject: PublishSubject<Pair<UserLocation, Filter>>
+    private lateinit var filteredFetchSubject: PublishSubject<FilteredFetchData>
     private lateinit var locationProcessingSubject: PublishSubject<Boolean>
     lateinit var joinEventSubject: PublishSubject<JoinEventData>
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -71,6 +72,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
     }
 
     private var selectedFilter = Filter()
+    private var init = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -83,8 +85,6 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
         homeViewModel = ViewModelProviders.of(this, homeViewModelFactory)[HomeViewModel::class.java]
         addEventButton.setOnClickListener { EventActivity.startAddMode(this@HomeActivity) }
-
-        checkLocationSettings()
     }
 
     private fun initRecyclerView() {
@@ -96,6 +96,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         super.onStart()
         initEmitters()
         homeViewModel.bind(this)
+        checkLocationSettings()
     }
 
     private fun initEmitters() {
@@ -118,9 +119,9 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
     @SuppressLint("MissingPermission")
     private fun emitFilteredFetchTrigger() {
-        locationProcessingSubject.onNext(true)
+        locationProcessingSubject.onNext(init)
         val onLocationFound = { location: Location ->
-            filteredFetchSubject.onNext(Pair(UserLocation(location.latitude, location.longitude), selectedFilter))
+            filteredFetchSubject.onNext(FilteredFetchData(selectedFilter, UserLocation(location.latitude, location.longitude), init))
         }
         fusedLocationClient.lastLocation.addOnSuccessListener {
             if (it != null) onLocationFound(it)
@@ -145,6 +146,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
     override fun onStop() {
         homeViewModel.unbind()
+        init = false
         super.onStop()
     }
 
@@ -186,7 +188,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         }
     }
 
-    override fun filteredFetchTriggerEmitter(): Observable<Pair<UserLocation, Filter>> = filteredFetchSubject
+    override fun filteredFetchTriggerEmitter(): Observable<FilteredFetchData> = filteredFetchSubject
 
     override fun joinEventEmitter(): Observable<JoinEventData> = joinEventSubject
 
