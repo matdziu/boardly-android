@@ -20,7 +20,7 @@ class MyEventsViewRobot(myEventsViewModel: MyEventsViewModel) : BaseViewRobot<My
         myEventsViewModel.bind(myEventsView)
     }
 
-    fun triggerEventsFetching() {
-        fetchEventsSubject.onNext(true)
+    fun triggerEventsFetching(showProgress: Boolean) {
+        fetchEventsSubject.onNext(showProgress)
     }
 }

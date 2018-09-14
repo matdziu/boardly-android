@@ -17,12 +17,21 @@ class MyEventsViewModelTest {
     private val myEventsViewRobot = MyEventsViewRobot(myEventsViewModel)
 
     @Test
-    fun testSuccessfulEventFetching() {
-        myEventsViewRobot.triggerEventsFetching()
+    fun testSuccessfulEventFetchingWithProgressBar() {
+        myEventsViewRobot.triggerEventsFetching(true)
 
         myEventsViewRobot.assertViewStates(
                 MyEventsViewState(),
                 MyEventsViewState(progress = true),
+                MyEventsViewState(eventsList = testEventList))
+    }
+
+    @Test
+    fun testSuccessfulEventFetchingWithoutProgressBar() {
+        myEventsViewRobot.triggerEventsFetching(false)
+
+        myEventsViewRobot.assertViewStates(
+                MyEventsViewState(),
                 MyEventsViewState(eventsList = testEventList))
     }
 }

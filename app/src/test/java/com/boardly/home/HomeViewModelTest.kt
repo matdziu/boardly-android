@@ -2,6 +2,7 @@ package com.boardly.home
 
 import com.boardly.common.events.models.Event
 import com.boardly.filter.models.Filter
+import com.boardly.home.models.FilteredFetchData
 import com.boardly.home.models.JoinEventData
 import com.boardly.home.models.UserLocation
 import com.nhaarman.mockito_kotlin.any
@@ -25,8 +26,8 @@ class HomeViewModelTest {
     private val homeViewRobot = HomeViewRobot(homeViewModel)
 
     @Test
-    fun testSuccessfulEventFetching() {
-        homeViewRobot.emitFilteredFetchTrigger(UserLocation(1.0, 2.0), Filter())
+    fun testSuccessfulEventFetchingWithProgressBar() {
+        homeViewRobot.emitFilteredFetchTrigger(FilteredFetchData(Filter(), UserLocation(1.0, 2.0), true))
 
         homeViewRobot.assertViewStates(
                 HomeViewState(),
@@ -35,8 +36,17 @@ class HomeViewModelTest {
     }
 
     @Test
+    fun testSuccessfulEventFetchingWithoutProgressBar() {
+        homeViewRobot.emitFilteredFetchTrigger(FilteredFetchData(Filter(), UserLocation(1.0, 2.0), false))
+
+        homeViewRobot.assertViewStates(
+                HomeViewState(),
+                HomeViewState(eventList = testEventList))
+    }
+
+    @Test
     fun testSuccessfulEventJoining() {
-        homeViewRobot.emitFilteredFetchTrigger(UserLocation(1.0, 2.0), Filter())
+        homeViewRobot.emitFilteredFetchTrigger(FilteredFetchData(Filter(), UserLocation(1.0, 2.0), true))
         homeViewRobot.joinEvent(JoinEventData("1", "This is test hello message"))
 
         homeViewRobot.assertViewStates(
