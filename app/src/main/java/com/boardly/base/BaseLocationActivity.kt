@@ -61,6 +61,7 @@ open class BaseLocationActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             LOCATION_SETTINGS_REQUEST_CODE -> handleLocationSettingsResult(resultCode)
         }
