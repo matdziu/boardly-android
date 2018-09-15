@@ -166,9 +166,10 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
             showNoLocationPermissionText(!isLocationPermissionGranted() && !progress)
             showLookingForEventsText(progress)
             showLocationProcessingText(locationProcessing)
-            if (eventList.isNotEmpty() && !progress && !locationProcessing) {
-                eventsAdapter.submitList(eventList)
-            } else if (!progress && !locationProcessing && isLocationPermissionGranted()) {
+            eventsAdapter.submitList(eventList)
+            if (!progress && !locationProcessing && eventList.isNotEmpty()) {
+                showNoLocationPermissionText(false)
+            } else if (eventList.isEmpty() && !progress && !locationProcessing && isLocationPermissionGranted()) {
                 showNoEventsFoundText(true)
             }
         }
