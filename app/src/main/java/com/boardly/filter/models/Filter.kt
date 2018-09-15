@@ -8,4 +8,5 @@ import kotlinx.android.parcel.Parcelize
 data class Filter(var radius: Double = 50.0,
                   var gameId: String = "",
                   var gameName: String = "",
-                  var userLocation: UserLocation? = null) : Parcelable
+                  var userLocation: UserLocation? = null,
+                  var locationName: String = "") : Parcelable

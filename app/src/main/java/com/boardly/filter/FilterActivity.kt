@@ -4,13 +4,17 @@ import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.support.annotation.StringRes
 import android.widget.SeekBar
+import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseActivity
+import com.boardly.common.location.UserLocation
 import com.boardly.constants.PICKED_FILTER
 import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_FILTER_REQUEST_CODE
 import com.boardly.constants.PICK_GAME_REQUEST_CODE
+import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
 import com.boardly.constants.SAVED_FILTER
 import com.boardly.extensions.loadImageFromUrl
 import com.boardly.factories.FilterViewModelFactory
@@ -18,6 +22,9 @@ import com.boardly.filter.models.Filter
 import com.boardly.injection.modules.GlideApp
 import com.boardly.pickgame.PickGameActivity
 import com.boardly.retrofit.gamesearch.models.SearchResult
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+import com.google.android.gms.common.GooglePlayServicesRepairableException
+import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -27,7 +34,9 @@ import kotlinx.android.synthetic.main.activity_filter.boardGameTextView
 import kotlinx.android.synthetic.main.activity_filter.deleteGameButton
 import kotlinx.android.synthetic.main.activity_filter.distanceSeekBar
 import kotlinx.android.synthetic.main.activity_filter.distanceTextView
+import kotlinx.android.synthetic.main.activity_filter.locationTextView
 import kotlinx.android.synthetic.main.activity_filter.pickGameButton
+import kotlinx.android.synthetic.main.activity_filter.pickPlaceButton
 import javax.inject.Inject
 
 class FilterActivity : BaseActivity(), FilterView {
@@ -60,6 +69,7 @@ class FilterActivity : BaseActivity(), FilterView {
         currentFilter = intent.getParcelableExtra(SAVED_FILTER)
         initDistanceFilter(currentFilter.radius.toInt())
         initGameFilter(currentFilter.gameName)
+        initLocationFilter(currentFilter.locationName)
 
         filterViewModel = ViewModelProviders.of(this, filterViewModelFactory)[FilterViewModel::class.java]
 
@@ -80,6 +90,7 @@ class FilterActivity : BaseActivity(), FilterView {
             setResult(Activity.RESULT_OK, data)
             finish()
         }
+        pickPlaceButton.setOnClickListener { launchPlacePickScreen() }
     }
 
     override fun onStart() {
@@ -110,6 +121,7 @@ class FilterActivity : BaseActivity(), FilterView {
         if (data != null) {
             when (requestCode) {
                 PICK_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data)
+                PLACE_AUTOCOMPLETE_REQUEST_CODE -> handleAutoCompleteResult(resultCode, data)
             }
         }
     }
@@ -126,6 +138,39 @@ class FilterActivity : BaseActivity(), FilterView {
                 }
             }
         }
+    }
+
+    private fun launchPlacePickScreen() {
+        try {
+            val placeSearchIntent = PlaceAutocomplete
+                    .IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
+                    .build(this)
+            startActivityForResult(placeSearchIntent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
+        } catch (e: GooglePlayServicesRepairableException) {
+            showErrorToast(R.string.gps_update_needed)
+        } catch (e: GooglePlayServicesNotAvailableException) {
+            showErrorToast(R.string.gps_not_available)
+        }
+    }
+
+    private fun handleAutoCompleteResult(resultCode: Int, data: Intent) {
+        when (resultCode) {
+            Activity.RESULT_OK -> {
+                val place = PlaceAutocomplete.getPlace(this, data)
+                with(place) {
+                    val userLocation = UserLocation(latLng.latitude, latLng.longitude)
+                    currentFilter.userLocation = userLocation
+                    currentFilter.locationName = place.address.toString()
+                    locationTextView.text = place.address
+                }
+            }
+            PlaceAutocomplete.RESULT_ERROR -> showErrorToast(R.string.generic_error)
+            Activity.RESULT_CANCELED -> hideSoftKeyboard()
+        }
+    }
+
+    private fun showErrorToast(@StringRes errorTextId: Int) {
+        Toast.makeText(this, errorTextId, Toast.LENGTH_LONG).show()
     }
 
     private fun initDistanceFilter(initialProgress: Int) {
@@ -152,6 +197,10 @@ class FilterActivity : BaseActivity(), FilterView {
 
     private fun initGameFilter(gameName: String) {
         if (gameName.isNotEmpty()) boardGameTextView.text = gameName
+    }
+
+    private fun initLocationFilter(locationName: String) {
+        if (locationName.isNotEmpty()) locationTextView.text = locationName
     }
 
     override fun gameIdEmitter(): Observable<String> = gameIdSubject
