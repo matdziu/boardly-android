@@ -36,7 +36,7 @@ open class BaseLocationActivity : AppCompatActivity() {
         fusedLocationClient = FusedLocationProviderClient(this)
     }
 
-    fun checkLocationSettings(locationGranted: () -> Unit, locationDenied: () -> Unit) {
+    fun checkLocationSettings(locationGranted: () -> Unit, locationDenied: () -> Unit = {}) {
         this.locationGranted = locationGranted
         this.locationDenied = locationDenied
 

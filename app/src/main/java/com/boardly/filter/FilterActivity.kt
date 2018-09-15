@@ -3,6 +3,7 @@ package com.boardly.filter
 import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.widget.SeekBar
@@ -31,6 +32,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_filter.applyFilterButton
 import kotlinx.android.synthetic.main.activity_filter.boardGameImageView
 import kotlinx.android.synthetic.main.activity_filter.boardGameTextView
+import kotlinx.android.synthetic.main.activity_filter.currentLocationButton
 import kotlinx.android.synthetic.main.activity_filter.deleteGameButton
 import kotlinx.android.synthetic.main.activity_filter.distanceSeekBar
 import kotlinx.android.synthetic.main.activity_filter.distanceTextView
@@ -91,6 +93,16 @@ class FilterActivity : BaseActivity(), FilterView {
             finish()
         }
         pickPlaceButton.setOnClickListener { launchPlacePickScreen() }
+        currentLocationButton.setOnClickListener {
+            checkLocationSettings({
+                val onLocationFound = { location: Location ->
+                    currentFilter.userLocation = UserLocation(location.latitude, location.longitude)
+                    currentFilter.locationName = getString(R.string.current_location_info)
+                    locationTextView.text = getString(R.string.current_location_info)
+                }
+                getLastKnownLocation { onLocationFound(it) }
+            })
+        }
     }
 
     override fun onStart() {

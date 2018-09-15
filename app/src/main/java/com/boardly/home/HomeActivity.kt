@@ -105,8 +105,10 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
     private fun getLocationAndEmitFilter() {
         locationProcessingSubject.onNext(init)
         val onLocationFound = { location: Location ->
-            filteredFetchSubject.onNext(FilteredFetchData(selectedFilter
-                    .apply { userLocation = UserLocation(location.latitude, location.longitude) }, init))
+            selectedFilter.userLocation = UserLocation(location.latitude, location.longitude)
+            selectedFilter.locationName = getString(R.string.current_location_info)
+            saveFilter(selectedFilter)
+            filteredFetchSubject.onNext(FilteredFetchData(selectedFilter, init))
         }
         getLastKnownLocation { onLocationFound(it) }
     }
