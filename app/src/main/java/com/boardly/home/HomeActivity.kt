@@ -81,12 +81,16 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         super.onStart()
         initEmitters()
         homeViewModel.bind(this)
-        checkLocationSettings({
-            showNoLocationPermissionText(false)
-            emitFilteredFetchTrigger()
-        }, {
-            showNoLocationPermissionText(true)
-        })
+        if (selectedFilter.userLocation == null) {
+            checkLocationSettings({
+                showNoLocationPermissionText(false)
+                getLocationAndEmitFilter()
+            }, {
+                showNoLocationPermissionText(true)
+            })
+        } else {
+            filteredFetchSubject.onNext(FilteredFetchData(selectedFilter, init))
+        }
     }
 
     private fun initEmitters() {
@@ -95,10 +99,11 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         locationProcessingSubject = PublishSubject.create()
     }
 
-    private fun emitFilteredFetchTrigger() {
+    private fun getLocationAndEmitFilter() {
         locationProcessingSubject.onNext(init)
         val onLocationFound = { location: Location ->
-            filteredFetchSubject.onNext(FilteredFetchData(selectedFilter, UserLocation(location.latitude, location.longitude), init))
+            filteredFetchSubject.onNext(FilteredFetchData(selectedFilter
+                    .apply { userLocation = UserLocation(location.latitude, location.longitude) }, init))
         }
         getLastKnownLocation { onLocationFound(it) }
     }
@@ -140,7 +145,6 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
             Activity.RESULT_OK -> {
                 selectedFilter = data.getParcelableExtra(PICKED_FILTER)
                 saveFilter(selectedFilter)
-                emitFilteredFetchTrigger()
             }
         }
     }

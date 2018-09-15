@@ -17,7 +17,7 @@ class HomeViewModel(private val homeInteractor: HomeInteractor,
         val filteredFetchObservable = homeView.filteredFetchTriggerEmitter()
                 .flatMap {
                     with(it) {
-                        val eventsObservable = homeInteractor.fetchEvents(userLocation, filter.radius, filter.gameId)
+                        val eventsObservable = homeInteractor.fetchEvents(filter.userLocation, filter.radius, filter.gameId)
                         return@flatMap when (init) {
                             true -> eventsObservable.startWith(PartialHomeViewState.ProgressState())
                             false -> eventsObservable
