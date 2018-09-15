@@ -12,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseDrawerActivity
 import com.boardly.common.events.list.EventsAdapter
@@ -181,7 +180,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
     private fun handleLocationSettingsResult(resultCode: Int) {
         when (resultCode) {
             Activity.RESULT_OK -> checkLocationPermission()
-            else -> finishWithLocationToast()
+            else -> showNoLocationPermissionText(true)
         }
     }
 
@@ -260,16 +259,12 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
                 .request(Manifest.permission.ACCESS_FINE_LOCATION)
                 .subscribe {
                     if (!it) {
-                        finishWithLocationToast()
+                        showNoLocationPermissionText(true)
                     } else {
+                        showNoLocationPermissionText(false)
                         emitFilteredFetchTrigger()
                     }
                 }
-    }
-
-    private fun finishWithLocationToast() {
-        finish()
-        Toast.makeText(this, R.string.location_denied_text, Toast.LENGTH_LONG).show()
     }
 
     private fun getSavedFilter(): Filter {
