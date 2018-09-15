@@ -1,6 +1,7 @@
 package com.boardly.filter
 
 import android.arch.lifecycle.ViewModel
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
@@ -12,12 +13,17 @@ class FilterViewModel @Inject constructor(private val filterInteractor: FilterIn
     private val stateSubject = BehaviorSubject.createDefault(FilterViewState())
 
     fun bind(filterView: FilterView) {
-        filterView.gameIdEmitter()
+        val gameDetailsObservable = filterView.gameIdEmitter()
                 .flatMap { filterInteractor.fetchGameDetails(it) }
-                .scan(stateSubject.value, BiFunction(this::reduce))
-                .subscribe(stateSubject)
 
-        compositeDisposable.add(stateSubject.subscribe { filterView.render(it) })
+        val locationProcessingObservable = filterView.locationProcessingEmitter()
+                .map { PartialFilterViewState.LocationProcessingState(it) }
+
+        val mergedObservable = Observable.merge(locationProcessingObservable, gameDetailsObservable)
+                .scan(stateSubject.value, BiFunction(this::reduce))
+                .subscribeWith(stateSubject)
+
+        compositeDisposable.add(mergedObservable.subscribe { filterView.render(it) })
     }
 
     private fun reduce(previousState: FilterViewState, partialState: PartialFilterViewState):

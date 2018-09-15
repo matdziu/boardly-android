@@ -46,6 +46,7 @@ class FilterActivity : BaseActivity(), FilterView {
     private var currentFilter = Filter()
 
     private lateinit var gameIdSubject: PublishSubject<String>
+    private lateinit var locationProcessingSubject: PublishSubject<Boolean>
 
     @Inject
     lateinit var filterViewModelFactory: FilterViewModelFactory
@@ -95,10 +96,12 @@ class FilterActivity : BaseActivity(), FilterView {
         pickPlaceButton.setOnClickListener { launchPlacePickScreen() }
         currentLocationButton.setOnClickListener {
             checkLocationSettings({
+                locationProcessingSubject.onNext(true)
                 val onLocationFound = { location: Location ->
                     currentFilter.userLocation = UserLocation(location.latitude, location.longitude)
                     currentFilter.locationName = getString(R.string.current_location_info)
                     locationTextView.text = getString(R.string.current_location_info)
+                    locationProcessingSubject.onNext(false)
                 }
                 getLastKnownLocation { onLocationFound(it) }
             })
@@ -117,6 +120,7 @@ class FilterActivity : BaseActivity(), FilterView {
 
     private fun initEmitters() {
         gameIdSubject = PublishSubject.create()
+        locationProcessingSubject = PublishSubject.create()
     }
 
     override fun onStop() {
@@ -217,7 +221,17 @@ class FilterActivity : BaseActivity(), FilterView {
 
     override fun gameIdEmitter(): Observable<String> = gameIdSubject
 
+    override fun locationProcessingEmitter(): Observable<Boolean> = locationProcessingSubject
+
     override fun render(filterViewState: FilterViewState) {
-        loadImageFromUrl(boardGameImageView, filterViewState.gameImageUrl, R.drawable.board_game_placeholder)
+        with(filterViewState) {
+            loadImageFromUrl(boardGameImageView, gameImageUrl, R.drawable.board_game_placeholder)
+            if (locationProcessing) {
+                locationTextView.text = getString(R.string.location_processing_text)
+                pickPlaceButton.isClickable = false
+            } else {
+                pickPlaceButton.isClickable = true
+            }
+        }
     }
 }

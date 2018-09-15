@@ -7,4 +7,6 @@ interface FilterView {
     fun render(filterViewState: FilterViewState)
 
     fun gameIdEmitter(): Observable<String>
+
+    fun locationProcessingEmitter(): Observable<Boolean>
 }

@@ -11,4 +11,10 @@ sealed class PartialFilterViewState {
             return FilterViewState(game.image)
         }
     }
+
+    class LocationProcessingState(private val processing: Boolean) : PartialFilterViewState() {
+        override fun reduce(previousState: FilterViewState): FilterViewState {
+            return previousState.copy(locationProcessing = processing)
+        }
+    }
 }
