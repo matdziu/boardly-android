@@ -18,6 +18,9 @@ import com.boardly.constants.PICKED_FILTER
 import com.boardly.constants.PICK_FILTER_REQUEST_CODE
 import com.boardly.constants.SAVED_GAME_ID
 import com.boardly.constants.SAVED_GAME_NAME
+import com.boardly.constants.SAVED_LOCATION_LATITUDE
+import com.boardly.constants.SAVED_LOCATION_LONGITUDE
+import com.boardly.constants.SAVED_LOCATION_NAME
 import com.boardly.constants.SAVED_RADIUS
 import com.boardly.event.EventActivity
 import com.boardly.factories.HomeViewModelFactory
@@ -210,15 +213,27 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         val savedRadius = sharedPrefs.getInt(SAVED_RADIUS, 50)
         val savedGameId = sharedPrefs.getString(SAVED_GAME_ID, "")
         val savedGameName = sharedPrefs.getString(SAVED_GAME_NAME, "")
-        return Filter(savedRadius.toDouble(), savedGameId, savedGameName)
+        val savedLocationName = sharedPrefs.getString(SAVED_LOCATION_NAME, "")
+        val savedLocationLongitude = sharedPrefs.getString(SAVED_LOCATION_LONGITUDE, "")
+        val savedLocationLatitude = sharedPrefs.getString(SAVED_LOCATION_LATITUDE, "")
+        val userLocation = getUserLocationFromString(savedLocationLongitude, savedLocationLatitude)
+        return Filter(savedRadius.toDouble(), savedGameId, savedGameName, userLocation, savedLocationName)
+    }
+
+    private fun getUserLocationFromString(longitude: String, latitude: String): UserLocation? {
+        return if (longitude.isNotEmpty() && latitude.isNotEmpty()) UserLocation(latitude.toDouble(), longitude.toDouble())
+        else null
     }
 
     private fun saveFilter(filter: Filter) {
         val sharedPrefs = getPreferences(Context.MODE_PRIVATE)
         sharedPrefs.edit()
-                .putInt(SAVED_RADIUS, selectedFilter.radius.toInt())
+                .putInt(SAVED_RADIUS, filter.radius.toInt())
                 .putString(SAVED_GAME_ID, filter.gameId)
                 .putString(SAVED_GAME_NAME, filter.gameName)
+                .putString(SAVED_LOCATION_NAME, filter.locationName)
+                .putString(SAVED_LOCATION_LATITUDE, filter.userLocation?.latitude.toString())
+                .putString(SAVED_LOCATION_LONGITUDE, filter.userLocation?.longitude.toString())
                 .apply()
     }
 }
