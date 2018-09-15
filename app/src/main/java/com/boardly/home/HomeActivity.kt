@@ -149,6 +149,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         when (resultCode) {
             Activity.RESULT_OK -> {
                 selectedFilter = data.getParcelableExtra(PICKED_FILTER)
+                init = true
                 saveFilter(selectedFilter)
             }
         }
