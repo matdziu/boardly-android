@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -15,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.iid.FirebaseInstanceId
 
 @SuppressLint("Registered")
-open class BaseActivity : AppCompatActivity() {
+open class BaseActivity : BaseLocationActivity() {
 
     protected val toolbar: Toolbar by lazy {
         findViewById<Toolbar>(R.id.toolbar)
