@@ -5,7 +5,7 @@ import com.boardly.common.events.models.Event
 import com.boardly.constants.EVENTS_NODE
 import com.boardly.constants.NOTIFICATION_TOKEN_CHILD
 import com.boardly.home.models.JoinEventData
-import com.boardly.home.models.UserLocation
+import com.boardly.common.location.UserLocation
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQueryDataEventListener
 import com.google.android.gms.tasks.Tasks

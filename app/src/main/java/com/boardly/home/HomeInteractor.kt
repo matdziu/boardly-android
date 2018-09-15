@@ -3,7 +3,7 @@ package com.boardly.home
 import com.boardly.common.events.models.Event
 import com.boardly.extensions.isOlderThanOneHour
 import com.boardly.home.models.JoinEventData
-import com.boardly.home.models.UserLocation
+import com.boardly.common.location.UserLocation
 import com.boardly.home.network.HomeService
 import io.reactivex.Observable
 import io.reactivex.functions.BiFunction

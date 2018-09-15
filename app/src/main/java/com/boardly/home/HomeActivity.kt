@@ -13,6 +13,7 @@ import android.view.View
 import com.boardly.R
 import com.boardly.base.BaseDrawerActivity
 import com.boardly.common.events.list.EventsAdapter
+import com.boardly.common.location.UserLocation
 import com.boardly.constants.PICKED_FILTER
 import com.boardly.constants.PICK_FILTER_REQUEST_CODE
 import com.boardly.constants.SAVED_GAME_ID
@@ -24,7 +25,6 @@ import com.boardly.filter.FilterActivity
 import com.boardly.filter.models.Filter
 import com.boardly.home.models.FilteredFetchData
 import com.boardly.home.models.JoinEventData
-import com.boardly.home.models.UserLocation
 import com.google.android.gms.common.GoogleApiAvailability
 import dagger.android.AndroidInjection
 import io.reactivex.Observable

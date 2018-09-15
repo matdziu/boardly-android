@@ -2,7 +2,7 @@ package com.boardly.home
 
 import com.boardly.common.events.models.Event
 import com.boardly.home.models.JoinEventData
-import com.boardly.home.models.UserLocation
+import com.boardly.common.location.UserLocation
 import com.boardly.home.network.HomeService
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
