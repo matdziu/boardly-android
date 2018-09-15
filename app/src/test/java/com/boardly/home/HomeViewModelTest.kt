@@ -1,10 +1,10 @@
 package com.boardly.home
 
 import com.boardly.common.events.models.Event
+import com.boardly.common.location.UserLocation
 import com.boardly.filter.models.Filter
 import com.boardly.home.models.FilteredFetchData
 import com.boardly.home.models.JoinEventData
-import com.boardly.common.location.UserLocation
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
@@ -27,7 +27,7 @@ class HomeViewModelTest {
 
     @Test
     fun testSuccessfulEventFetchingWithProgressBar() {
-        homeViewRobot.emitFilteredFetchTrigger(FilteredFetchData(Filter(), UserLocation(1.0, 2.0), true))
+        homeViewRobot.emitFilteredFetchTrigger(FilteredFetchData(Filter(userLocation = UserLocation(1.0, 2.0)), true))
 
         homeViewRobot.assertViewStates(
                 HomeViewState(),
@@ -37,7 +37,7 @@ class HomeViewModelTest {
 
     @Test
     fun testSuccessfulEventFetchingWithoutProgressBar() {
-        homeViewRobot.emitFilteredFetchTrigger(FilteredFetchData(Filter(), UserLocation(1.0, 2.0), false))
+        homeViewRobot.emitFilteredFetchTrigger(FilteredFetchData(Filter(userLocation = UserLocation(1.0, 2.0)), false))
 
         homeViewRobot.assertViewStates(
                 HomeViewState(),
@@ -46,7 +46,7 @@ class HomeViewModelTest {
 
     @Test
     fun testSuccessfulEventJoining() {
-        homeViewRobot.emitFilteredFetchTrigger(FilteredFetchData(Filter(), UserLocation(1.0, 2.0), true))
+        homeViewRobot.emitFilteredFetchTrigger(FilteredFetchData(Filter(userLocation = UserLocation(1.0, 2.0)), true))
         homeViewRobot.joinEvent(JoinEventData("1", "This is test hello message"))
 
         homeViewRobot.assertViewStates(
@@ -59,7 +59,8 @@ class HomeViewModelTest {
 
     @Test
     fun whenLocationIsProcessedViewStateIndicatesIt() {
-        homeViewRobot.processLocation()
+        homeViewRobot.processLocation(true)
+        homeViewRobot.processLocation(false)
         homeViewRobot.assertViewStates(
                 HomeViewState(),
                 HomeViewState(locationProcessing = true))

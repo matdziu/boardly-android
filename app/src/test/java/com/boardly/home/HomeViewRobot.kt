@@ -37,7 +37,7 @@ class HomeViewRobot(homeViewModel: HomeViewModel) : BaseViewRobot<HomeViewState>
         joinEventSubject.onNext(joinEventData)
     }
 
-    fun processLocation() {
-        locationProcessingSubject.onNext(true)
+    fun processLocation(processing: Boolean) {
+        locationProcessingSubject.onNext(processing)
     }
 }

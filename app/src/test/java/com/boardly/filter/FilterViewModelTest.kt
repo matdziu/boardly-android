@@ -26,4 +26,15 @@ class FilterViewModelTest {
                 FilterViewState(),
                 FilterViewState(gameImageUrl = testGame.image))
     }
+
+    @Test
+    fun whenLocationIsProcessedViewStateIndicatesIt() {
+        filterViewRobot.emitLocationProcessing(true)
+        filterViewRobot.emitLocationProcessing(false)
+
+        filterViewRobot.assertViewStates(
+                FilterViewState(),
+                FilterViewState(locationProcessing = true),
+                FilterViewState(locationProcessing = false))
+    }
 }
