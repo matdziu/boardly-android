@@ -6,7 +6,6 @@ import android.support.design.widget.TabLayout
 import android.view.View
 import com.boardly.R
 import com.boardly.base.BaseDrawerActivity
-import com.boardly.common.events.list.EventsAdapter
 import com.boardly.factories.MyEventsViewModelFactory
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
@@ -22,16 +21,11 @@ class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
 
     private lateinit var myEventsViewModel: MyEventsViewModel
 
-    private val acceptedEventsAdapter = EventsAdapter()
-    private val pendingEventsAdapter = EventsAdapter()
-    private val createdEventsAdapter = EventsAdapter()
-
-    private val viewPagerAdapter = ViewPagerAdapter(acceptedEventsAdapter, pendingEventsAdapter, createdEventsAdapter)
-
     @Inject
     lateinit var myEventsViewModelFactory: MyEventsViewModelFactory
 
     private var init = true
+    private var viewPagerPosition = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -58,6 +52,7 @@ class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
     override fun onStop() {
         myEventsViewModel.unbind()
         init = false
+        viewPagerPosition = viewPager.currentItem
         super.onStop()
     }
 
@@ -66,7 +61,7 @@ class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
     }
 
     private fun initViewPager() {
-        viewPager.adapter = viewPagerAdapter
+        viewPager.offscreenPageLimit = 2
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(viewPager))
     }
@@ -76,6 +71,8 @@ class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
     override fun render(myEventsViewState: MyEventsViewState) {
         with(myEventsViewState) {
             showProgressBar(progress)
+            viewPager.adapter = ViewPagerAdapter(acceptedEvents, pendingEvents, createdEvents)
+            viewPager.setCurrentItem(viewPagerPosition, false)
         }
     }
 

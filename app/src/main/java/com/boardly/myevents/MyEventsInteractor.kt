@@ -20,18 +20,9 @@ class MyEventsInteractor @Inject constructor(private val myEventsService: MyEven
                 createdEventsObservable,
                 Function3<List<Event>, List<Event>, List<Event>, PartialMyEventsViewState> { pending, accepted, created ->
                     PartialMyEventsViewState.EventsFetchedState(
-                            accepted.map {
-                                it.type = EventType.ACCEPTED
-                                it
-                            }.filter { !isOlderThanOneHour(it.timestamp) }
-                                    + created.map {
-                                it.type = EventType.CREATED
-                                it
-                            }.filter { !isOlderThanOneHour(it.timestamp) }
-                                    + pending.map {
-                                it.type = EventType.PENDING
-                                it
-                            }.filter { !isOlderThanOneHour(it.timestamp) })
+                            accepted.map { it.type = EventType.ACCEPTED;it }.filter { !isOlderThanOneHour(it.timestamp) },
+                            pending.map { it.type = EventType.PENDING; it }.filter { !isOlderThanOneHour(it.timestamp) },
+                            created.map { it.type = EventType.CREATED; it }.filter { !isOlderThanOneHour(it.timestamp) })
                 })
     }
 }

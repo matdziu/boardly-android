@@ -12,9 +12,13 @@ sealed class PartialMyEventsViewState {
         }
     }
 
-    data class EventsFetchedState(private val eventsList: List<Event>) : PartialMyEventsViewState() {
+    data class EventsFetchedState(private val acceptedEvents: List<Event>,
+                                  private val pendingEvents: List<Event>,
+                                  private val createdEvents: List<Event>) : PartialMyEventsViewState() {
         override fun reduce(previousState: MyEventsViewState): MyEventsViewState {
-            return MyEventsViewState(eventsList = eventsList)
+            return MyEventsViewState(acceptedEvents = acceptedEvents,
+                    pendingEvents = pendingEvents,
+                    createdEvents = createdEvents)
         }
     }
 }
