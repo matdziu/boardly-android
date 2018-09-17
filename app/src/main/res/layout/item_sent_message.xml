@@ -10,10 +10,12 @@
         android:id="@+id/messageTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:autoLink="web"
         android:background="@drawable/not_sent_message_background"
         android:maxWidth="300dp"
         android:padding="8dp"
         android:textColor="@android:color/white"
+        android:textColorLink="@android:color/white"
         android:textSize="16dp"
         tools:text="Hello, how are you? I'm glad to meet you!" />
 
