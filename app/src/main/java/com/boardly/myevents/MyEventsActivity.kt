@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout
 import android.view.View
 import com.boardly.R
 import com.boardly.base.BaseDrawerActivity
+import com.boardly.common.events.models.Event
 import com.boardly.factories.MyEventsViewModelFactory
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
@@ -13,6 +14,8 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_my_events.progressBar
 import kotlinx.android.synthetic.main.activity_my_events.tabLayout
 import kotlinx.android.synthetic.main.activity_my_events.viewPager
+import kotlinx.android.synthetic.main.view_my_events.view.myEventsRecyclerView
+import kotlinx.android.synthetic.main.view_my_events.view.noEventsTextView
 import javax.inject.Inject
 
 class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
@@ -21,11 +24,12 @@ class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
 
     private lateinit var myEventsViewModel: MyEventsViewModel
 
+    private val viewPagerAdapter = ViewPagerAdapter()
+
     @Inject
     lateinit var myEventsViewModelFactory: MyEventsViewModelFactory
 
     private var init = true
-    private var viewPagerPosition = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -52,7 +56,6 @@ class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
     override fun onStop() {
         myEventsViewModel.unbind()
         init = false
-        viewPagerPosition = viewPager.currentItem
         super.onStop()
     }
 
@@ -62,6 +65,7 @@ class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
 
     private fun initViewPager() {
         viewPager.offscreenPageLimit = 2
+        viewPager.adapter = viewPagerAdapter
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(viewPager))
     }
@@ -71,8 +75,36 @@ class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
     override fun render(myEventsViewState: MyEventsViewState) {
         with(myEventsViewState) {
             showProgressBar(progress)
-            viewPager.adapter = ViewPagerAdapter(acceptedEvents, pendingEvents, createdEvents)
-            viewPager.setCurrentItem(viewPagerPosition, false)
+            viewPagerAdapter.pendingAdapter.submitList(pendingEvents)
+            viewPagerAdapter.acceptedAdapter.submitList(acceptedEvents)
+            viewPagerAdapter.createdAdapter.submitList(createdEvents)
+
+            if (init) {
+                // this is done because of surprisingly very late call to instantiateItem()
+                viewPagerAdapter.renderingFinishedEmitter().subscribe {
+                    when (it.tag) {
+                        PageView.ACCEPTED -> showNoEventsTextView(acceptedEvents, it)
+                        PageView.CREATED -> showNoEventsTextView(createdEvents, it)
+                        PageView.PENDING -> showNoEventsTextView(pendingEvents, it)
+                    }
+                }
+            } else {
+                showNoEventsTextView(acceptedEvents, viewPager.findViewWithTag(PageView.ACCEPTED))
+                showNoEventsTextView(pendingEvents, viewPager.findViewWithTag(PageView.PENDING))
+                showNoEventsTextView(createdEvents, viewPager.findViewWithTag(PageView.CREATED))
+            }
+        }
+    }
+
+    private fun showNoEventsTextView(eventsList: List<Event>, pageView: View) {
+        with(pageView) {
+            if (eventsList.isEmpty()) {
+                noEventsTextView.visibility = View.VISIBLE
+                myEventsRecyclerView.visibility = View.GONE
+            } else {
+                noEventsTextView.visibility = View.GONE
+                myEventsRecyclerView.visibility = View.VISIBLE
+            }
         }
     }
 

@@ -8,57 +8,43 @@ import android.view.View
 import android.view.ViewGroup
 import com.boardly.R
 import com.boardly.common.events.list.EventsAdapter
-import com.boardly.common.events.models.Event
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.view_my_events.view.myEventsRecyclerView
 import kotlinx.android.synthetic.main.view_my_events.view.noEventsTextView
 
-class ViewPagerAdapter(private val acceptedEvents: List<Event>,
-                       private val pendingEvents: List<Event>,
-                       private val createdEvents: List<Event>) : PagerAdapter() {
+class ViewPagerAdapter : PagerAdapter() {
 
-    private val acceptedAdapter = EventsAdapter()
-    private val pendingAdapter = EventsAdapter()
-    private val createdAdapter = EventsAdapter()
+    val acceptedAdapter = EventsAdapter()
+    val pendingAdapter = EventsAdapter()
+    val createdAdapter = EventsAdapter()
+
+    private val viewsSubject = PublishSubject.create<View>()
 
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val pageView = LayoutInflater.from(container.context).inflate(R.layout.view_my_events, container, false)
-        when (PageView.values()[position]) {
-            PageView.ACCEPTED -> {
-                init(acceptedAdapter, R.string.no_accepted_events_found_text, pageView)
-                display(acceptedAdapter, acceptedEvents, pageView)
-            }
-            PageView.CREATED -> {
-                init(createdAdapter, R.string.no_created_events_found_text, pageView)
-                display(createdAdapter, createdEvents, pageView)
-            }
-            PageView.PENDING -> {
-                init(pendingAdapter, R.string.no_pending_events_found_text, pageView)
-                display(pendingAdapter, pendingEvents, pageView)
-            }
+        val pageEnum = PageView.values()[position]
+        when (pageEnum) {
+            PageView.ACCEPTED -> init(acceptedAdapter, R.string.no_accepted_events_found_text, pageView, pageEnum)
+            PageView.CREATED -> init(createdAdapter, R.string.no_created_events_found_text, pageView, pageEnum)
+            PageView.PENDING -> init(pendingAdapter, R.string.no_pending_events_found_text, pageView, pageEnum)
         }
+
         container.addView(pageView)
+        viewsSubject.onNext(pageView)
 
         return pageView
     }
 
-    private fun init(adapter: EventsAdapter, @StringRes noEventsHintId: Int, pageView: View): View {
+    private fun init(adapter: EventsAdapter,
+                     @StringRes noEventsHintId: Int,
+                     pageView: View,
+                     tagObj: Any): View {
         return pageView.apply {
             myEventsRecyclerView.layoutManager = LinearLayoutManager(pageView.context)
             myEventsRecyclerView.adapter = adapter
             noEventsTextView.setText(noEventsHintId)
-        }
-    }
-
-    private fun display(adapter: EventsAdapter, eventList: List<Event>, pageView: View) {
-        with(pageView) {
-            if (eventList.isNotEmpty()) {
-                noEventsTextView.visibility = View.GONE
-                myEventsRecyclerView.visibility = View.VISIBLE
-                adapter.submitList(eventList)
-            } else {
-                noEventsTextView.visibility = View.VISIBLE
-                myEventsRecyclerView.visibility = View.GONE
-            }
+            tag = tagObj
         }
     }
 
@@ -73,6 +59,8 @@ class ViewPagerAdapter(private val acceptedEvents: List<Event>,
     override fun getCount(): Int {
         return PageView.values().size
     }
+
+    fun renderingFinishedEmitter(): Observable<View> = viewsSubject
 }
 
 enum class PageView {
