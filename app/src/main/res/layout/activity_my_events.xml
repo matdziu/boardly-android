@@ -11,21 +11,39 @@
 
         <include layout="@layout/toolbar" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/eventsRecyclerView"
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/toolbar" />
-
-        <TextView
-            android:id="@+id/noEventsTextView"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:padding="16dp"
-            android:text="@string/no_my_events_found_text"
-            android:textAlignment="center"
-            android:visibility="gone" />
+            android:layout_below="@id/toolbar"
+            android:background="@color/colorPrimary"
+            app:tabIndicatorHeight="5dp">
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/acceptedTab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_accepted" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/createdTab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_created" />
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/pendingTab"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/ic_pending" />
+
+        </android.support.design.widget.TabLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tabLayout" />
 
         <ProgressBar
             android:id="@+id/progressBar"

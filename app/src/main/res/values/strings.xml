@@ -62,7 +62,6 @@
     <string name="enable_location_permission">Włącz lokalizację i zezwól Boardly na dostęp do niej lub użyj filtrowania żeby wyświetlić wydarzenia w okolicy.</string>
     <string name="date_to_be_added">Do ustalenia</string>
     <string name="my_events_text">Moje wydarzenia</string>
-    <string name="no_my_events_found_text">Nie znaleziono żadnych wydarzeń</string>
     <string name="created_text">STWORZONE</string>
     <string name="pending_text">OCZEKUJĄCE</string>
     <string name="accepted_text">ZAAKCEPTOWANE</string>
@@ -108,4 +107,7 @@
     <string name="use_current_location">Użyj obecnej lokalizacji</string>
     <string name="current_location_info">Obecna lokalizacja</string>
     <string name="chat_incentive_text">Bądź pierwszą osobą, która napisze wiadomość. Przywitaj się i zacznij poznawać innych fanów planszówek!</string>
+    <string name="no_created_events_found_text">Nie masz jeszcze utworzonych wydarzeń</string>
+    <string name="no_accepted_events_found_text">Nie masz jeszcze nadchodzących wydarzeń</string>
+    <string name="no_pending_events_found_text">Nie masz jeszcze wydarzeń, które oczekują na akceptację organizatora</string>
 </resources>

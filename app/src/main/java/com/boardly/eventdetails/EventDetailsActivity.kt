@@ -51,19 +51,7 @@ class EventDetailsActivity : BaseActivity(), HasSupportFragmentInjector {
     private fun initViewPager(eventId: String, eventType: EventType) {
         viewPager.adapter = ViewPagerAdapter(supportFragmentManager, tabLayout.tabCount, eventId, eventType)
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                viewPager.currentItem = tab.position
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab) {
-                // unused
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-                // unused
-            }
-        })
+        tabLayout.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(viewPager))
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> = fragmentDispatchingAndroidInjector
