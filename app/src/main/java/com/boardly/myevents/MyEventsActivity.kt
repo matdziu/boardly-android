@@ -30,6 +30,7 @@ class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
     lateinit var myEventsViewModelFactory: MyEventsViewModelFactory
 
     private var init = true
+    private var viewPagerInit = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -79,9 +80,10 @@ class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
             viewPagerAdapter.acceptedAdapter.submitList(acceptedEvents)
             viewPagerAdapter.createdAdapter.submitList(createdEvents)
 
-            if (init) {
+            if (!viewPagerInit) {
                 // this is done because of surprisingly very late call to instantiateItem()
                 viewPagerAdapter.renderingFinishedEmitter().subscribe {
+                    viewPagerInit = true
                     when (it.tag) {
                         PageView.ACCEPTED -> showNoEventsTextView(acceptedEvents, it)
                         PageView.CREATED -> showNoEventsTextView(createdEvents, it)
