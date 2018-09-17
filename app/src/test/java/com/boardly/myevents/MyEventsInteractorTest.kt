@@ -29,6 +29,6 @@ class MyEventsInteractorTest {
         val myEventsInteractor = MyEventsInteractor(myEventsService)
 
         myEventsInteractor.fetchEvents().test()
-                .assertValue(PartialMyEventsViewState.EventsFetchedState(acceptedEventsList + pendingEventsList))
+                .assertValue(PartialMyEventsViewState.EventsFetchedState(acceptedEventsList, pendingEventsList, listOf()))
     }
 }
