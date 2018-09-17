@@ -18,6 +18,7 @@ import com.jakewharton.rxbinding2.view.RxView
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.fragment_chat.incentiveTextView
 import kotlinx.android.synthetic.main.fragment_chat.messageInputEditText
 import kotlinx.android.synthetic.main.fragment_chat.messagesRecyclerView
 import kotlinx.android.synthetic.main.fragment_chat.progressBar
@@ -126,8 +127,13 @@ class ChatFragment : Fragment(), ChatView {
     override fun render(chatViewState: ChatViewState) {
         with(chatViewState) {
             showProgressBar(progress)
+            showIncentiveTextView(messagesList.isEmpty() && !progress)
             messagesAdapter.submitList(messagesList)
         }
+    }
+
+    private fun showIncentiveTextView(show: Boolean) {
+        incentiveTextView.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     private fun showProgressBar(show: Boolean) {

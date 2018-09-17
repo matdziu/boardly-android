@@ -107,4 +107,5 @@
     <string name="location_text_placeholder">Nie wybrano miejsca</string>
     <string name="use_current_location">Użyj obecnej lokalizacji</string>
     <string name="current_location_info">Obecna lokalizacja</string>
+    <string name="chat_incentive_text">Bądź pierwszą osobą, która napisze wiadomość. Przywitaj się i zacznij poznawać innych fanów planszówek!</string>
 </resources>
