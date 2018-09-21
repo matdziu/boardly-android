@@ -9,4 +9,6 @@ interface EventDetailsService {
     fun sendRating(rateInput: RateInput): Observable<Boolean>
 
     fun fetchEventDetails(eventId: String): Observable<Event>
+
+    fun removePlayer(eventId: String, playerId: String): Observable<Boolean>
 }
