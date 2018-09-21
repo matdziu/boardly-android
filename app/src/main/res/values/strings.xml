@@ -113,4 +113,5 @@
     <string name="leave_cancel">Anuluj</string>
     <string name="are_you_sure_to_leave">Na pewno chcesz opuścić to wydarzenie?</string>
     <string name="leave_event_title">Opuść wydarzenie</string>
+    <string name="toggle_chat_notifications_text">Powiadomienia o nowej wiadomości na czacie</string>
 </resources>
