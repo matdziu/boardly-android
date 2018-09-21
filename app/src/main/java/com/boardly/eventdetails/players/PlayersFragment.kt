@@ -47,8 +47,6 @@ class PlayersFragment : BaseEventDetailsFragment(), PlayersView {
     private lateinit var leaveEventSubject: PublishSubject<Boolean>
     private var init = true
 
-    private var eventId = ""
-
     private val acceptedPlayersAdapter = AcceptedPlayersAdapter(this)
 
     companion object {

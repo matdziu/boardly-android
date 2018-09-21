@@ -53,7 +53,6 @@ class AdminFragment : BaseEventDetailsFragment(), AdminView {
     private lateinit var fetchEventDetailsTriggerSubject: PublishSubject<Boolean>
     private var init = true
 
-    private var eventId = ""
     private var event = Event()
 
     lateinit var acceptPlayerSubject: PublishSubject<String>

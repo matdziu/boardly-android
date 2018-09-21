@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.preference.PreferenceManager
 import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
 import com.boardly.BoardlyApplication
@@ -29,9 +30,11 @@ import com.boardly.constants.NOTIFICATION_BODY_ARGS
 import com.boardly.constants.NOTIFICATION_EXTRAS_KEY
 import com.boardly.constants.NOTIFICATION_TITLE_ARGS
 import com.boardly.constants.NOTIFICATION_TYPE_KEY
+import com.boardly.constants.TOGGLE_CHAT_NOTIFICATIONS_KEY_PREFIX
 import com.boardly.eventdetails.EventDetailsActivity
 import com.boardly.extensions.jsonToArrayOfStrings
 import com.boardly.extensions.jsonToMapOfStrings
+import com.boardly.extensions.readAppSetting
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -73,12 +76,15 @@ class MessagingService : FirebaseMessagingService() {
                                               bodyArgs: Array<String>,
                                               eventId: String,
                                               eventType: String) {
-        val title = getString(R.string.chat_message_notification_title, *titleArgs)
-        val body = getString(R.string.chat_message_notification_body, *bodyArgs)
-        val notificationId = eventId.hashCode() + NEW_CHAT_MESSAGE_REQUEST_CODE
-        val eventTypeEnum = getEventType(eventType)
-        val pendingIntent = createEventDetailsPendingIntent(eventId, eventTypeEnum, NEW_CHAT_MESSAGE_REQUEST_CODE)
-        showDefaultNotification(pendingIntent, title, body, NEW_CHAT_MESSAGE_CHANNEL_ID, notificationId)
+        if (PreferenceManager.getDefaultSharedPreferences(this)
+                        .readAppSetting("$TOGGLE_CHAT_NOTIFICATIONS_KEY_PREFIX$eventId")) {
+            val title = getString(R.string.chat_message_notification_title, *titleArgs)
+            val body = getString(R.string.chat_message_notification_body, *bodyArgs)
+            val notificationId = eventId.hashCode() + NEW_CHAT_MESSAGE_REQUEST_CODE
+            val eventTypeEnum = getEventType(eventType)
+            val pendingIntent = createEventDetailsPendingIntent(eventId, eventTypeEnum, NEW_CHAT_MESSAGE_REQUEST_CODE)
+            showDefaultNotification(pendingIntent, title, body, NEW_CHAT_MESSAGE_CHANNEL_ID, notificationId)
+        }
     }
 
     private fun handleJoinRequestNotification(titleArgs: Array<String>,
