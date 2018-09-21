@@ -30,7 +30,6 @@
     <string name="place_text_placeholder">Nie wybrano miejsca</string>
     <string name="pick_place_text">Wybierz miejsce</string>
     <string name="level_text_placeholder">Nie wybrano poziomu</string>
-    <string name="pick_level_text">Wybierz poziom (opcjonalnie)</string>
     <string name="date_text_placeholder">Nie wybrano daty</string>
     <string name="pick_date_text">Wybierz datę (opcjonalnie)</string>
     <string name="add_new_event">Dodaj wydarzenie</string>
@@ -44,7 +43,6 @@
     <string name="be_more_specific_error_text">Dla \'%1$s\' jest zbyt dużo wyników. Spróbuj sprecyzować.</string>
     <string name="dialog_ok">Akceptuj</string>
     <string name="dialog_cancel">Anuluj</string>
-    <string name="pick_level_title">Wybierz poziom</string>
     <string name="beginner_level">Początkujący</string>
     <string name="intermediate_level">Średnio-zaawansowany</string>
     <string name="advanced_level">Zaawansowany</string>

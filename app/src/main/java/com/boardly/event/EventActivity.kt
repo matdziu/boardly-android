@@ -18,8 +18,6 @@ import com.boardly.constants.EDIT_EVENT_REQUEST_CODE
 import com.boardly.constants.EVENT
 import com.boardly.constants.EVENT_EDITED_RESULT_CODE
 import com.boardly.constants.EVENT_REMOVED_RESULT_CODE
-import com.boardly.constants.LEVEL_IDS_MAP
-import com.boardly.constants.LEVEL_STRINGS_MAP
 import com.boardly.constants.MODE
 import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_GAME_REQUEST_CODE
@@ -47,10 +45,8 @@ import kotlinx.android.synthetic.main.activity_event.dateTextView
 import kotlinx.android.synthetic.main.activity_event.deleteEventButton
 import kotlinx.android.synthetic.main.activity_event.descriptionEditText
 import kotlinx.android.synthetic.main.activity_event.eventNameEditText
-import kotlinx.android.synthetic.main.activity_event.levelTextView
 import kotlinx.android.synthetic.main.activity_event.pickDateButton
 import kotlinx.android.synthetic.main.activity_event.pickGameButton
-import kotlinx.android.synthetic.main.activity_event.pickLevelButton
 import kotlinx.android.synthetic.main.activity_event.pickPlaceButton
 import kotlinx.android.synthetic.main.activity_event.placeTextView
 import kotlinx.android.synthetic.main.activity_event.progressBar
@@ -73,11 +69,6 @@ class EventActivity : BaseActivity(), EventView {
     private var event = Event()
 
     private var gamePickEvent = false
-
-    private val levelNames = listOf(
-            R.string.beginner_level,
-            R.string.intermediate_level,
-            R.string.advanced_level)
 
     private lateinit var mode: Mode
 
@@ -109,7 +100,6 @@ class EventActivity : BaseActivity(), EventView {
 
         pickGameButton.setOnClickListener { launchGamePickScreen() }
         pickPlaceButton.setOnClickListener { launchPlacePickScreen() }
-        pickLevelButton.setOnClickListener { launchLevelDialog() }
         pickDateButton.setOnClickListener { launchDatePickerDialog() }
 
         deleteEventButton.setOnClickListener { launchDeleteEventDialog() }
@@ -148,7 +138,6 @@ class EventActivity : BaseActivity(), EventView {
             loadImageFromUrl(boardGameImageView, gameImageUrl, R.drawable.board_game_placeholder)
             boardGameTextView.text = gameName
             placeTextView.text = placeName
-            LEVEL_STRINGS_MAP[levelId]?.let { levelTextView.text = getString(it) }
             if (timestamp > 0) dateTextView.text = Date(timestamp).formatForDisplay()
         }
     }
@@ -162,7 +151,6 @@ class EventActivity : BaseActivity(), EventView {
             placeName = event.placeName
             placeLatitude = event.placeLatitude
             placeLongitude = event.placeLongitude
-            levelId = event.levelId
             timestamp = event.timestamp
             adminId = event.adminId
         }
@@ -270,19 +258,6 @@ class EventActivity : BaseActivity(), EventView {
     private fun launchGamePickScreen() {
         val pickGameIntent = Intent(this, PickGameActivity::class.java)
         startActivityForResult(pickGameIntent, PICK_GAME_REQUEST_CODE)
-    }
-
-    private fun launchLevelDialog() {
-        AlertDialog.Builder(this)
-                .setTitle(R.string.pick_level_title)
-                .setItems(levelNames.map { getString(it) }.toTypedArray(), { _, which ->
-                    val itemNameResId = levelNames[which]
-                    val clickedItemName = getString(itemNameResId)
-                    inputData.levelId = LEVEL_IDS_MAP[itemNameResId].orEmpty()
-                    levelTextView.text = clickedItemName
-                })
-                .create()
-                .show()
     }
 
     private fun launchDatePickerDialog() {

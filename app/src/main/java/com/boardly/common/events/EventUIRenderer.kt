@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.boardly.R
 import com.boardly.common.events.models.Event
-import com.boardly.constants.LEVEL_STRINGS_MAP
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.loadImageFromUrl
 import java.util.*
@@ -25,7 +24,6 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
                          locationImageView: ImageView,
                          boardGameImageView: ImageView,
                          seeDescriptionButton: Button,
-                         levelTextView: TextView,
                          timeTextView: TextView) {
         with(event) {
             eventNameTextView.text = eventName
@@ -34,7 +32,6 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
             activity.loadImageFromUrl(boardGameImageView, gameImageUrl, R.drawable.board_game_placeholder)
 
             setSeeDescriptionButton(description, seeDescriptionButton)
-            setLevelTextView(levelId, levelTextView)
             setDateTextView(timestamp, timeTextView)
 
             setOnClickListener({ openMap(placeLatitude, placeLongitude) }, locationTextView, locationImageView)
@@ -76,11 +73,6 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
                 .setPositiveButton(R.string.close_dialog) { dialog, _ -> dialog.cancel() }
                 .create()
                 .show()
-    }
-
-    private fun setLevelTextView(levelId: String, levelTextView: TextView) {
-        levelTextView.text = activity.getString(LEVEL_STRINGS_MAP[levelId]
-                ?: com.boardly.R.string.empty)
     }
 
     private fun setDateTextView(timestamp: Long, timeTextView: TextView) {

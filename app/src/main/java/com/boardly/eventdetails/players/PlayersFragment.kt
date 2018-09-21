@@ -27,7 +27,6 @@ import kotlinx.android.synthetic.main.fragment_players.playersProgressBar
 import kotlinx.android.synthetic.main.layout_event.boardGameImageView
 import kotlinx.android.synthetic.main.layout_event.eventNameTextView
 import kotlinx.android.synthetic.main.layout_event.gameTextView
-import kotlinx.android.synthetic.main.layout_event.levelTextView
 import kotlinx.android.synthetic.main.layout_event.locationImageView
 import kotlinx.android.synthetic.main.layout_event.locationTextView
 import kotlinx.android.synthetic.main.layout_event.seeDescriptionButton
@@ -134,7 +133,6 @@ class PlayersFragment : BaseEventDetailsFragment(), PlayersView {
                 locationImageView,
                 boardGameImageView,
                 seeDescriptionButton,
-                levelTextView,
                 timeTextView)
     }
 

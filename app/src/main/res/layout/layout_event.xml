@@ -37,21 +37,8 @@
         app:layout_constraintEnd_toStartOf="@+id/boardGameImageView"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/levelTextView"
-        tools:text="Eurobusiness" />
-
-    <TextView
-        android:id="@+id/levelTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:textSize="14dp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toStartOf="@+id/boardGameImageView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eventNameTextView"
-        tools:text="Beginner" />
+        tools:text="Eurobusiness" />
 
     <ImageView
         android:id="@+id/locationImageView"
@@ -71,6 +58,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:paddingBottom="6dp"
