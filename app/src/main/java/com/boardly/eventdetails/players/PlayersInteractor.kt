@@ -7,10 +7,12 @@ import javax.inject.Inject
 
 class PlayersInteractor @Inject constructor(private val playersService: PlayersService) {
 
+    private var leavingEvent = false
+
     fun fetchAcceptedPlayers(eventId: String): Observable<PartialPlayersViewState> {
         return playersService.getAcceptedPlayers(eventId)
                 .map {
-                    if (it.find { it.id == playersService.userId } == null) PartialPlayersViewState.KickedState()
+                    if (it.find { it.id == playersService.userId } == null && !leavingEvent) PartialPlayersViewState.KickedState()
                     else PartialPlayersViewState.AcceptedListState(it)
                 }
     }
@@ -26,6 +28,7 @@ class PlayersInteractor @Inject constructor(private val playersService: PlayersS
     }
 
     fun leaveEvent(eventId: String): Observable<PartialPlayersViewState> {
+        leavingEvent = true
         return playersService.leaveEvent(eventId)
                 .map { PartialPlayersViewState.LeftEventState() }
     }

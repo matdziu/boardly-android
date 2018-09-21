@@ -77,7 +77,7 @@ open class EventDetailsServiceImpl : EventDetailsService, BaseServiceImpl() {
                 .equalTo(eventId)
                 .addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        dataSnapshot.ref.removeValue().addOnSuccessListener { dbSource.setResult(Any()) }
+                        dataSnapshot.children.forEach { it.ref.removeValue().addOnSuccessListener { dbSource.setResult(Any()) } }
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {
