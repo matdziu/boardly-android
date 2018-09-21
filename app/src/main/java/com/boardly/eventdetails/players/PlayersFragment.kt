@@ -1,5 +1,6 @@
 package com.boardly.eventdetails.players
 
+import android.app.AlertDialog
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -20,6 +21,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.fragment_players.acceptedPlayersRecyclerView
 import kotlinx.android.synthetic.main.fragment_players.eventLayout
 import kotlinx.android.synthetic.main.fragment_players.eventProgressBar
+import kotlinx.android.synthetic.main.fragment_players.leaveEventButton
 import kotlinx.android.synthetic.main.fragment_players.noPlayersTextView
 import kotlinx.android.synthetic.main.fragment_players.playersProgressBar
 import kotlinx.android.synthetic.main.layout_event.boardGameImageView
@@ -75,6 +77,7 @@ class PlayersFragment : BaseEventDetailsFragment(), PlayersView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
+        leaveEventButton.setOnClickListener { launchLeaveEventDialog() }
     }
 
     override fun onStart() {
@@ -167,5 +170,15 @@ class PlayersFragment : BaseEventDetailsFragment(), PlayersView {
             acceptedPlayersRecyclerView.visibility = View.VISIBLE
             noPlayersTextView.visibility = View.GONE
         }
+    }
+
+    private fun launchLeaveEventDialog() {
+        AlertDialog.Builder(context)
+                .setTitle(getString(R.string.leave_event_title))
+                .setMessage(getString(R.string.are_you_sure_to_leave))
+                .setPositiveButton(R.string.leave_event, { _, _ -> leaveEventSubject.onNext(true) })
+                .setNegativeButton(R.string.leave_cancel, null)
+                .create()
+                .show()
     }
 }

@@ -111,4 +111,8 @@
     <string name="no_accepted_events_found_text">Nie masz jeszcze nadchodzących wydarzeń</string>
     <string name="no_pending_events_found_text">Nie masz jeszcze wydarzeń, które oczekują na akceptację organizatora</string>
     <string name="you_left_event">Opuściłeś wydarzenie</string>
+    <string name="leave_event">Opuść wydarzenie</string>
+    <string name="leave_cancel">Anuluj</string>
+    <string name="are_you_sure_to_leave">Na pewno chcesz opuścić to wydarzenie?</string>
+    <string name="leave_event_title">Opuść wydarzenie</string>
 </resources>
