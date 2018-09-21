@@ -12,4 +12,8 @@ class PlayersServiceImpl : EventDetailsServiceImpl(), PlayersService {
         return getPartialPlayerProfiles(getAcceptedPlayersNode(eventId))
                 .flatMap { completePlayerProfilesWithRating(it, eventId) }
     }
+
+    override fun leaveEvent(eventId: String): Observable<Boolean> {
+        return removePlayer(eventId, currentUserId)
+    }
 }

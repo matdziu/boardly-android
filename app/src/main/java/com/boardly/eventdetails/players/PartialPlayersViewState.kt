@@ -32,9 +32,15 @@ sealed class PartialPlayersViewState {
         }
     }
 
-    class KickState : PartialPlayersViewState() {
+    class KickedState : PartialPlayersViewState() {
         override fun reduce(previousState: PlayersViewState): PlayersViewState {
-            return PlayersViewState(kick = true)
+            return PlayersViewState(kicked = true)
+        }
+    }
+
+    class LeftEventState : PartialPlayersViewState() {
+        override fun reduce(previousState: PlayersViewState): PlayersViewState {
+            return PlayersViewState(left = true)
         }
     }
 

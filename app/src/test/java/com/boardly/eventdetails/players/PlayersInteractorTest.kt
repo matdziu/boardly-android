@@ -27,6 +27,7 @@ class PlayersInteractorTest {
         on { it.sendRating(any()) } doReturn Observable.just(true)
         on { it.userId } doReturn "acceptedTestId"
         on { it.fetchEventDetails(any()) } doReturn Observable.just(testEvent)
+        on { it.leaveEvent(any()) } doReturn Observable.just(true)
     }
     private val playersInteractor = PlayersInteractor(playersService)
 
@@ -39,7 +40,7 @@ class PlayersInteractorTest {
     @Test
     fun testSuccessfulPlayerKick() {
         playersInteractor.fetchAcceptedPlayers("testEventId2").test()
-                .assertValue { it is PartialPlayersViewState.KickState }
+                .assertValue { it is PartialPlayersViewState.KickedState }
     }
 
     @Test
@@ -52,5 +53,11 @@ class PlayersInteractorTest {
     fun testSuccessfulEventFetching() {
         playersInteractor.fetchEvent("testEventId").test()
                 .assertValue(PartialPlayersViewState.EventFetched(testEvent))
+    }
+
+    @Test
+    fun testSuccessfulPlayerLeaving() {
+        playersInteractor.leaveEvent("testEventId").test()
+                .assertValue { it is PartialPlayersViewState.LeftEventState }
     }
 }

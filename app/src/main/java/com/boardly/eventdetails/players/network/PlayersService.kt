@@ -9,4 +9,6 @@ interface PlayersService : EventDetailsService {
     val userId: String
 
     fun getAcceptedPlayers(eventId: String): Observable<List<Player>>
+
+    fun leaveEvent(eventId: String): Observable<Boolean>
 }

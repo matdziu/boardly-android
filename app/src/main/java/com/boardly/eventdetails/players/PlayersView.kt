@@ -8,4 +8,6 @@ interface PlayersView : EventDetailsView {
     fun render(playersViewState: PlayersViewState)
 
     fun fetchEventDetailsTriggerEmitter(): Observable<Boolean>
+
+    fun leaveEventEmitter(): Observable<Boolean>
 }

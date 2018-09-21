@@ -43,6 +43,7 @@ class PlayersFragment : BaseEventDetailsFragment(), PlayersView {
     private lateinit var playersViewModel: PlayersViewModel
 
     private lateinit var fetchEventDetailsTriggerSubject: PublishSubject<Boolean>
+    private lateinit var leaveEventSubject: PublishSubject<Boolean>
     private var init = true
 
     private var eventId = ""
@@ -92,6 +93,7 @@ class PlayersFragment : BaseEventDetailsFragment(), PlayersView {
     override fun initEmitters() {
         super.initEmitters()
         fetchEventDetailsTriggerSubject = PublishSubject.create()
+        leaveEventSubject = PublishSubject.create()
     }
 
     private fun initRecyclerView() {
@@ -109,8 +111,12 @@ class PlayersFragment : BaseEventDetailsFragment(), PlayersView {
             } else if (!playersProgress) {
                 showNoPlayersText(true)
             }
-            if (kick) {
+            if (kicked) {
                 Toast.makeText(context, getString(R.string.you_were_kicked_text), Toast.LENGTH_SHORT).show()
+                activity?.finish()
+            }
+            if (left) {
+                Toast.makeText(context, getString(R.string.you_left_event), Toast.LENGTH_SHORT).show()
                 activity?.finish()
             }
             initEventView(event)
@@ -130,6 +136,8 @@ class PlayersFragment : BaseEventDetailsFragment(), PlayersView {
     }
 
     override fun fetchEventDetailsTriggerEmitter(): Observable<Boolean> = fetchEventDetailsTriggerSubject
+
+    override fun leaveEventEmitter(): Observable<Boolean> = leaveEventSubject
 
     private fun showPlayersProgressBar(show: Boolean) {
         if (show) {

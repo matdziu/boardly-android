@@ -33,11 +33,15 @@ class PlayersViewModel(private val playersInteractor: PlayersInteractor,
                     PartialPlayersViewState.AcceptedListState(acceptedList)
                 }
 
+        val leaveEventObservable = playersView.leaveEventEmitter()
+                .flatMap { playersInteractor.leaveEvent(eventId) }
+
         val mergedObservable = Observable.merge(listOf(
                 fetchEventTriggerObservable,
                 fetchEventPlayersObservable,
                 sendRatingObservable,
-                updateRatedOrSelfObservable))
+                updateRatedOrSelfObservable,
+                leaveEventObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 

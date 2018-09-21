@@ -18,13 +18,15 @@ class PlayersViewModelTest {
     private val playersInteractor: PlayersInteractor = mock {
         on { it.fetchAcceptedPlayers("testEventId") } doReturn Observable.just(PartialPlayersViewState.AcceptedListState(testAcceptedPlayersList))
                 .cast(PartialPlayersViewState::class.java)
-        on { it.fetchAcceptedPlayers("testEventIdWithKicking") } doReturn Observable.just(PartialPlayersViewState.KickState())
+        on { it.fetchAcceptedPlayers("testEventIdWithKicking") } doReturn Observable.just(PartialPlayersViewState.KickedState())
                 .cast(PartialPlayersViewState::class.java)
         on { it.sendRating(any()) } doReturn Observable.just(PartialPlayersViewState.RatingSent())
                 .cast(PartialPlayersViewState::class.java)
         on { it.fetchEvent("testEventId") } doReturn Observable.just(PartialPlayersViewState.EventFetched(testEvent))
                 .cast(PartialPlayersViewState::class.java)
         on { it.fetchEvent("testEventIdWithKicking") } doReturn Observable.just(PartialPlayersViewState.EventFetched(testEvent))
+                .cast(PartialPlayersViewState::class.java)
+        on { it.leaveEvent(any()) } doReturn Observable.just(PartialPlayersViewState.LeftEventState())
                 .cast(PartialPlayersViewState::class.java)
     }
 
@@ -81,6 +83,17 @@ class PlayersViewModelTest {
                         playersProgress = true,
                         event = testEvent),
                 PlayersViewState(
-                        kick = true))
+                        kicked = true))
+    }
+
+    @Test
+    fun testSuccessfulEventLeaving() {
+        val playersViewRobot = PlayersViewRobot(PlayersViewModel(playersInteractor))
+        playersViewRobot.init("testEventId")
+        playersViewRobot.leaveEvent()
+        playersViewRobot.assertViewStates(
+                PlayersViewState(),
+                PlayersViewState(
+                        left = true))
     }
 }

@@ -10,7 +10,7 @@ class PlayersInteractor @Inject constructor(private val playersService: PlayersS
     fun fetchAcceptedPlayers(eventId: String): Observable<PartialPlayersViewState> {
         return playersService.getAcceptedPlayers(eventId)
                 .map {
-                    if (it.find { it.id == playersService.userId } == null) PartialPlayersViewState.KickState()
+                    if (it.find { it.id == playersService.userId } == null) PartialPlayersViewState.KickedState()
                     else PartialPlayersViewState.AcceptedListState(it)
                 }
     }
@@ -23,5 +23,10 @@ class PlayersInteractor @Inject constructor(private val playersService: PlayersS
     fun fetchEvent(eventId: String): Observable<PartialPlayersViewState> {
         return playersService.fetchEventDetails(eventId)
                 .map { PartialPlayersViewState.EventFetched(it) }
+    }
+
+    fun leaveEvent(eventId: String): Observable<PartialPlayersViewState> {
+        return playersService.leaveEvent(eventId)
+                .map { PartialPlayersViewState.LeftEventState() }
     }
 }

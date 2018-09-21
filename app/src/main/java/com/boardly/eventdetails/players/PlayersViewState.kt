@@ -6,5 +6,6 @@ import com.boardly.common.players.models.Player
 data class PlayersViewState(val playersProgress: Boolean = false,
                             val eventProgress: Boolean = false,
                             val acceptedPlayersList: List<Player> = listOf(),
-                            val kick: Boolean = false,
+                            val kicked: Boolean = false,
+                            val left: Boolean = false,
                             val event: Event = Event())
