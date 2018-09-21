@@ -30,6 +30,7 @@ import kotlinx.android.synthetic.main.layout_event.gameTextView
 import kotlinx.android.synthetic.main.layout_event.locationImageView
 import kotlinx.android.synthetic.main.layout_event.locationTextView
 import kotlinx.android.synthetic.main.layout_event.seeDescriptionButton
+import kotlinx.android.synthetic.main.layout_event.timeImageView
 import kotlinx.android.synthetic.main.layout_event.timeTextView
 import javax.inject.Inject
 
@@ -131,7 +132,8 @@ class PlayersFragment : BaseEventDetailsFragment(), PlayersView {
                 locationImageView,
                 boardGameImageView,
                 seeDescriptionButton,
-                timeTextView)
+                timeTextView,
+                timeImageView)
     }
 
     override fun fetchEventDetailsTriggerEmitter(): Observable<Boolean> = fetchEventDetailsTriggerSubject

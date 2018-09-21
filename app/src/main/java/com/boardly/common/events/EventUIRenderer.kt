@@ -2,6 +2,8 @@ package com.boardly.common.events
 
 import android.content.Intent
 import android.net.Uri
+import android.provider.CalendarContract
+import android.provider.CalendarContract.Events
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
@@ -9,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.boardly.R
 import com.boardly.common.events.models.Event
+import com.boardly.extensions.HOUR_IN_MILLIS
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.loadImageFromUrl
 import java.util.*
@@ -24,7 +27,8 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
                          locationImageView: ImageView,
                          boardGameImageView: ImageView,
                          seeDescriptionButton: Button,
-                         timeTextView: TextView) {
+                         timeTextView: TextView,
+                         timeImageView: ImageView) {
         with(event) {
             eventNameTextView.text = eventName
             gameTextView.text = gameName
@@ -35,7 +39,8 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
             setDateTextView(timestamp, timeTextView)
 
             setOnClickListener({ openMap(placeLatitude, placeLongitude) }, locationTextView, locationImageView)
-            setOnClickListener({ openBoardgameInfoPage(gameId) }, gameTextView, boardGameImageView)
+            setOnClickListener({ openBoardGameInfoPage(gameId) }, gameTextView, boardGameImageView)
+            setOnClickListener({ openCalendar(eventName, gameName, timestamp, placeName) }, timeTextView, timeImageView)
         }
     }
 
@@ -50,10 +55,28 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
         }
     }
 
-    private fun openBoardgameInfoPage(gameId: String) {
+    private fun openBoardGameInfoPage(gameId: String) {
         with(activity) {
             val infoPageIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://boardgamegeek.com/boardgame/$gameId"))
             startActivity(infoPageIntent)
+        }
+    }
+
+    private fun openCalendar(eventName: String,
+                             gameName: String,
+                             startTime: Long,
+                             placeName: String) {
+        if (startTime > 0) {
+            val eventTitle = activity.getString(R.string.calendar_event_title, eventName)
+            val eventDescription = activity.getString(R.string.calendar_event_description, gameName)
+            val intent = Intent(Intent.ACTION_INSERT)
+                    .setData(Events.CONTENT_URI)
+                    .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startTime)
+                    .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, startTime + HOUR_IN_MILLIS)
+                    .putExtra(Events.TITLE, eventTitle)
+                    .putExtra(Events.DESCRIPTION, eventDescription)
+                    .putExtra(Events.EVENT_LOCATION, placeName)
+            activity.startActivity(intent)
         }
     }
 

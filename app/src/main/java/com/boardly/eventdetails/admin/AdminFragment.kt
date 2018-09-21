@@ -37,6 +37,7 @@ import kotlinx.android.synthetic.main.layout_event.boardGameImageView
 import kotlinx.android.synthetic.main.layout_event.eventNameTextView
 import kotlinx.android.synthetic.main.layout_event.gameTextView
 import kotlinx.android.synthetic.main.layout_event.locationTextView
+import kotlinx.android.synthetic.main.layout_event.timeImageView
 import kotlinx.android.synthetic.main.layout_event.timeTextView
 import javax.inject.Inject
 
@@ -98,7 +99,8 @@ class AdminFragment : BaseEventDetailsFragment(), AdminView {
                 locationImageView,
                 boardGameImageView,
                 seeDescriptionButton,
-                timeTextView)
+                timeTextView,
+                timeImageView)
     }
 
     private fun initRecyclerViews() {

@@ -114,4 +114,6 @@
     <string name="are_you_sure_to_leave">Na pewno chcesz opuścić to wydarzenie?</string>
     <string name="leave_event_title">Opuść wydarzenie</string>
     <string name="toggle_chat_notifications_text">Powiadomienia o nowej wiadomości na czacie</string>
+    <string name="calendar_event_title">Boardly: wydarzenie %1$s</string>
+    <string name="calendar_event_description">Będziecie grać razem w %1$s</string>
 </resources>
