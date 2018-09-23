@@ -2,6 +2,7 @@ package com.boardly.login
 
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -38,6 +39,7 @@ import kotlinx.android.synthetic.main.activity_login.loginButton
 import kotlinx.android.synthetic.main.activity_login.loginWithFacebookButton
 import kotlinx.android.synthetic.main.activity_login.loginWithGoogleButton
 import kotlinx.android.synthetic.main.activity_login.passwordEditText
+import kotlinx.android.synthetic.main.activity_login.privacyPolicyTextView
 import kotlinx.android.synthetic.main.activity_login.progressBar
 import javax.inject.Inject
 
@@ -80,6 +82,11 @@ class LoginActivity : BaseActivity(), LoginView {
         }
         loginWithFacebookButton.setOnClickListener {
             loginManager.logInWithReadPermissions(this, arrayListOf("email"))
+        }
+        privacyPolicyTextView.setOnClickListener {
+            val viewIntent = Intent(Intent.ACTION_VIEW)
+            viewIntent.data = Uri.parse("https://boardly.github.io/")
+            startActivity(viewIntent)
         }
     }
 
