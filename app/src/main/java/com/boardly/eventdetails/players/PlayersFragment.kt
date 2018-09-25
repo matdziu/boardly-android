@@ -25,8 +25,12 @@ import kotlinx.android.synthetic.main.fragment_players.leaveEventButton
 import kotlinx.android.synthetic.main.fragment_players.noPlayersTextView
 import kotlinx.android.synthetic.main.fragment_players.playersProgressBar
 import kotlinx.android.synthetic.main.layout_event.boardGameImageView
+import kotlinx.android.synthetic.main.layout_event.boardGameImageView2
+import kotlinx.android.synthetic.main.layout_event.boardGameImageView3
 import kotlinx.android.synthetic.main.layout_event.eventNameTextView
 import kotlinx.android.synthetic.main.layout_event.gameTextView
+import kotlinx.android.synthetic.main.layout_event.gameTextView2
+import kotlinx.android.synthetic.main.layout_event.gameTextView3
 import kotlinx.android.synthetic.main.layout_event.locationImageView
 import kotlinx.android.synthetic.main.layout_event.locationTextView
 import kotlinx.android.synthetic.main.layout_event.seeDescriptionButton
@@ -133,7 +137,11 @@ class PlayersFragment : BaseEventDetailsFragment(), PlayersView {
                 boardGameImageView,
                 seeDescriptionButton,
                 timeTextView,
-                timeImageView)
+                timeImageView,
+                gameTextView2,
+                boardGameImageView2,
+                gameTextView3,
+                boardGameImageView3)
     }
 
     override fun fetchEventDetailsTriggerEmitter(): Observable<Boolean> = fetchEventDetailsTriggerSubject

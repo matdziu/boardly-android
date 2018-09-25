@@ -16,9 +16,13 @@ import com.boardly.home.JoinDialogValidator
 import com.boardly.home.models.JoinEventData
 import kotlinx.android.synthetic.main.item_event.view.acceptedTextView
 import kotlinx.android.synthetic.main.item_event.view.boardGameImageView
+import kotlinx.android.synthetic.main.item_event.view.boardGameImageView2
+import kotlinx.android.synthetic.main.item_event.view.boardGameImageView3
 import kotlinx.android.synthetic.main.item_event.view.createdTextView
 import kotlinx.android.synthetic.main.item_event.view.eventNameTextView
 import kotlinx.android.synthetic.main.item_event.view.gameTextView
+import kotlinx.android.synthetic.main.item_event.view.gameTextView2
+import kotlinx.android.synthetic.main.item_event.view.gameTextView3
 import kotlinx.android.synthetic.main.item_event.view.joinEventButton
 import kotlinx.android.synthetic.main.item_event.view.locationImageView
 import kotlinx.android.synthetic.main.item_event.view.locationTextView
@@ -44,7 +48,11 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     boardGameImageView,
                     seeDescriptionButton,
                     timeTextView,
-                    timeImageView)
+                    timeImageView,
+                    gameTextView2,
+                    boardGameImageView2,
+                    gameTextView3,
+                    boardGameImageView3)
             setTypeLabel(event.type)
             setClickAction(event)
         }

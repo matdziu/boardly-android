@@ -28,6 +28,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginTop="16dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:paddingBottom="6dp"
@@ -39,6 +40,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eventNameTextView"
         tools:text="Eurobusiness" />
+
+    <TextView
+        android:id="@+id/gameTextView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp"
+        android:textSize="16dp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toStartOf="@+id/boardGameImageView3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gameTextView"
+        tools:text="Monopoly" />
+
+    <TextView
+        android:id="@+id/gameTextView3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:paddingBottom="6dp"
+        android:paddingTop="6dp"
+        android:textSize="16dp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toStartOf="@+id/boardGameImageView2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gameTextView2"
+        tools:text="Chińczyk" />
 
     <ImageView
         android:id="@+id/locationImageView"
@@ -66,7 +101,7 @@
         android:textSize="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/locationImageView"
-        app:layout_constraintTop_toBottomOf="@+id/gameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/gameTextView3"
         tools:text="Domówka" />
 
     <ImageView
@@ -162,13 +197,36 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/boardGameImageView"
-        android:layout_width="66dp"
-        android:layout_height="66dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:src="@drawable/board_game_placeholder"
         app:civ_border_color="@color/lightGrey"
         app:civ_border_width="1dp"
+        app:layout_constraintBottom_toBottomOf="@+id/gameTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/gameTextView" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/boardGameImageView2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/board_game_placeholder"
+        app:civ_border_color="@color/lightGrey"
+        app:civ_border_width="1dp"
+        app:layout_constraintBottom_toBottomOf="@+id/gameTextView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gameTextView2" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/boardGameImageView3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/board_game_placeholder"
+        app:civ_border_color="@color/lightGrey"
+        app:civ_border_width="1dp"
+        app:layout_constraintBottom_toBottomOf="@+id/gameTextView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gameTextView3" />
 
     <Button
         android:id="@+id/openEventScreenButton"

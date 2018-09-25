@@ -34,8 +34,12 @@ import kotlinx.android.synthetic.main.fragment_admin.pendingProgressBar
 import kotlinx.android.synthetic.main.item_event.locationImageView
 import kotlinx.android.synthetic.main.item_event.seeDescriptionButton
 import kotlinx.android.synthetic.main.layout_event.boardGameImageView
+import kotlinx.android.synthetic.main.layout_event.boardGameImageView2
+import kotlinx.android.synthetic.main.layout_event.boardGameImageView3
 import kotlinx.android.synthetic.main.layout_event.eventNameTextView
 import kotlinx.android.synthetic.main.layout_event.gameTextView
+import kotlinx.android.synthetic.main.layout_event.gameTextView2
+import kotlinx.android.synthetic.main.layout_event.gameTextView3
 import kotlinx.android.synthetic.main.layout_event.locationTextView
 import kotlinx.android.synthetic.main.layout_event.timeImageView
 import kotlinx.android.synthetic.main.layout_event.timeTextView
@@ -100,7 +104,11 @@ class AdminFragment : BaseEventDetailsFragment(), AdminView {
                 boardGameImageView,
                 seeDescriptionButton,
                 timeTextView,
-                timeImageView)
+                timeImageView,
+                gameTextView2,
+                boardGameImageView2,
+                gameTextView3,
+                boardGameImageView3)
     }
 
     private fun initRecyclerViews() {

@@ -17,7 +17,6 @@ import com.boardly.extensions.loadImageFromUrl
 import java.util.*
 import javax.inject.Inject
 
-
 class EventUIRenderer @Inject constructor(private val activity: AppCompatActivity) {
 
     fun displayEventInfo(event: Event,
@@ -28,19 +27,40 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
                          boardGameImageView: ImageView,
                          seeDescriptionButton: Button,
                          timeTextView: TextView,
-                         timeImageView: ImageView) {
+                         timeImageView: ImageView,
+                         gameTextView2: TextView,
+                         boardGameImageView2: ImageView,
+                         gameTextView3: TextView,
+                         boardGameImageView3: ImageView) {
         with(event) {
             eventNameTextView.text = eventName
-            gameTextView.text = gameName
             locationTextView.text = placeName
-            activity.loadImageFromUrl(boardGameImageView, gameImageUrl, R.drawable.board_game_placeholder)
+
+            displayGameNameAndImage(gameName, gameTextView, gameImageUrl, boardGameImageView)
+            displayGameNameAndImage(gameName2, gameTextView2, gameImageUrl2, boardGameImageView2)
+            displayGameNameAndImage(gameName3, gameTextView3, gameImageUrl3, boardGameImageView3)
 
             setSeeDescriptionButton(description, seeDescriptionButton)
             setDateTextView(timestamp, timeTextView)
 
             setOnClickListener({ openMap(placeLatitude, placeLongitude) }, locationTextView, locationImageView)
             setOnClickListener({ openBoardGameInfoPage(gameId) }, gameTextView, boardGameImageView)
+            setOnClickListener({ openBoardGameInfoPage(gameId2) }, gameTextView2, boardGameImageView2)
+            setOnClickListener({ openBoardGameInfoPage(gameId3) }, gameTextView3, boardGameImageView3)
             setOnClickListener({ openCalendar(eventName, gameName, timestamp, placeName) }, timeTextView, timeImageView)
+        }
+    }
+
+    private fun displayGameNameAndImage(gameName: String, gameTextView: TextView,
+                                        gameImageUrl: String, gameImageView: ImageView) {
+        if (gameName.isNotEmpty()) {
+            gameTextView.visibility = View.VISIBLE
+            gameImageView.visibility = View.VISIBLE
+            gameTextView.text = gameName
+            activity.loadImageFromUrl(gameImageView, gameImageUrl, R.drawable.board_game_placeholder)
+        } else {
+            gameTextView.visibility = View.GONE
+            gameImageView.visibility = View.GONE
         }
     }
 
@@ -108,7 +128,7 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
 
     private fun setOnClickListener(clickAction: () -> Unit, vararg views: View) {
         for (view in views) {
-            view.setOnClickListener { clickAction() }
+            if (view.visibility == View.VISIBLE) view.setOnClickListener { clickAction() }
         }
     }
 }
