@@ -47,7 +47,14 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
             setOnClickListener({ openBoardGameInfoPage(gameId) }, gameTextView, boardGameImageView)
             setOnClickListener({ openBoardGameInfoPage(gameId2) }, gameTextView2, boardGameImageView2)
             setOnClickListener({ openBoardGameInfoPage(gameId3) }, gameTextView3, boardGameImageView3)
-            setOnClickListener({ openCalendar(eventName, gameName, timestamp, placeName) }, timeTextView, timeImageView)
+            setOnClickListener({
+                openCalendar(eventName,
+                        gameName,
+                        gameName2,
+                        gameName3,
+                        timestamp,
+                        placeName)
+            }, timeTextView, timeImageView)
         }
     }
 
@@ -84,11 +91,14 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
 
     private fun openCalendar(eventName: String,
                              gameName: String,
+                             gameName2: String,
+                             gameName3: String,
                              startTime: Long,
                              placeName: String) {
         if (startTime > 0) {
             val eventTitle = activity.getString(R.string.calendar_event_title, eventName)
-            val eventDescription = activity.getString(R.string.calendar_event_description, gameName)
+            val eventDescription = activity.getString(R.string.calendar_event_description,
+                    "$gameName${appendWithComma(gameName2)}${appendWithComma(gameName3)}.")
             val intent = Intent(Intent.ACTION_INSERT)
                     .setData(Events.CONTENT_URI)
                     .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startTime)
@@ -98,6 +108,10 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
                     .putExtra(Events.EVENT_LOCATION, placeName)
             activity.startActivity(intent)
         }
+    }
+
+    private fun appendWithComma(gameName: String): String {
+        return if (gameName.isNotEmpty()) ", $gameName" else ""
     }
 
     private fun setSeeDescriptionButton(description: String, seeDescriptionButton: Button) {
