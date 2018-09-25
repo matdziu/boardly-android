@@ -56,16 +56,45 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/boardGameImageView"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_marginEnd="8dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_marginTop="24dp"
                 android:src="@drawable/board_game_placeholder"
                 app:civ_border_color="@color/lightGrey"
                 app:civ_border_width="1dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/boardGameImageView2"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/descriptionEditText" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/boardGameImageView2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/board_game_placeholder"
+                app:civ_border_color="@color/lightGrey"
+                app:civ_border_width="1dp"
+                app:layout_constraintBottom_toBottomOf="@+id/boardGameImageView"
+                app:layout_constraintEnd_toStartOf="@+id/boardGameImageView3"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/boardGameImageView"
+                app:layout_constraintTop_toTopOf="@+id/boardGameImageView" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/boardGameImageView3"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/board_game_placeholder"
+                app:civ_border_color="@color/lightGrey"
+                app:civ_border_width="1dp"
+                app:layout_constraintBottom_toBottomOf="@+id/boardGameImageView2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/boardGameImageView2"
+                app:layout_constraintTop_toTopOf="@+id/boardGameImageView2"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/boardGameTextView"
@@ -94,6 +123,58 @@
                 app:layout_constraintTop_toBottomOf="@+id/boardGameImageView" />
 
             <TextView
+                android:id="@+id/boardGameTextView2"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/game_text_placeholder"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@+id/pickGameButton2"
+                app:layout_constraintEnd_toStartOf="@+id/pickGameButton2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/pickGameButton2" />
+
+            <Button
+                android:id="@+id/pickGameButton2"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/pick_game_text_optional"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/boardGameTextView2"
+                app:layout_constraintTop_toBottomOf="@+id/pickGameButton" />
+
+            <TextView
+                android:id="@+id/boardGameTextView3"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="@string/game_text_placeholder"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@+id/pickGameButton3"
+                app:layout_constraintEnd_toStartOf="@+id/pickGameButton3"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/pickGameButton3" />
+
+            <Button
+                android:id="@+id/pickGameButton3"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/pick_game_text_optional"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/boardGameTextView3"
+                app:layout_constraintTop_toBottomOf="@+id/pickGameButton2" />
+
+            <TextView
                 android:id="@+id/placeTextView"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
@@ -116,7 +197,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/placeTextView"
-                app:layout_constraintTop_toBottomOf="@+id/pickGameButton" />
+                app:layout_constraintTop_toBottomOf="@+id/pickGameButton3" />
 
             <TextView
                 android:id="@+id/dateTextView"

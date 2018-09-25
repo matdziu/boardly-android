@@ -10,6 +10,8 @@ import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseActivity
@@ -20,15 +22,20 @@ import com.boardly.constants.EVENT_EDITED_RESULT_CODE
 import com.boardly.constants.EVENT_REMOVED_RESULT_CODE
 import com.boardly.constants.MODE
 import com.boardly.constants.PICKED_GAME
-import com.boardly.constants.PICK_GAME_REQUEST_CODE
+import com.boardly.constants.PICK_FIRST_GAME_REQUEST_CODE
+import com.boardly.constants.PICK_SECOND_GAME_REQUEST_CODE
+import com.boardly.constants.PICK_THIRD_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
 import com.boardly.event.dialogs.DatePickerFragment
 import com.boardly.event.dialogs.TimePickerFragment
+import com.boardly.event.models.GamePickEvent
+import com.boardly.event.models.GamePickType
 import com.boardly.event.models.Mode
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.loadImageFromUrl
 import com.boardly.factories.EventViewModelFactory
 import com.boardly.pickgame.PickGameActivity
+import com.boardly.retrofit.gamesearch.models.Game
 import com.boardly.retrofit.gamesearch.models.SearchResult
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
@@ -39,7 +46,11 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_event.addEventButton
 import kotlinx.android.synthetic.main.activity_event.boardGameImageView
+import kotlinx.android.synthetic.main.activity_event.boardGameImageView2
+import kotlinx.android.synthetic.main.activity_event.boardGameImageView3
 import kotlinx.android.synthetic.main.activity_event.boardGameTextView
+import kotlinx.android.synthetic.main.activity_event.boardGameTextView2
+import kotlinx.android.synthetic.main.activity_event.boardGameTextView3
 import kotlinx.android.synthetic.main.activity_event.contentViewGroup
 import kotlinx.android.synthetic.main.activity_event.dateTextView
 import kotlinx.android.synthetic.main.activity_event.deleteEventButton
@@ -47,6 +58,8 @@ import kotlinx.android.synthetic.main.activity_event.descriptionEditText
 import kotlinx.android.synthetic.main.activity_event.eventNameEditText
 import kotlinx.android.synthetic.main.activity_event.pickDateButton
 import kotlinx.android.synthetic.main.activity_event.pickGameButton
+import kotlinx.android.synthetic.main.activity_event.pickGameButton2
+import kotlinx.android.synthetic.main.activity_event.pickGameButton3
 import kotlinx.android.synthetic.main.activity_event.pickPlaceButton
 import kotlinx.android.synthetic.main.activity_event.placeTextView
 import kotlinx.android.synthetic.main.activity_event.progressBar
@@ -61,14 +74,16 @@ class EventActivity : BaseActivity(), EventView {
 
     private lateinit var eventViewModel: EventViewModel
 
-    private lateinit var gamePickEventSubject: PublishSubject<String>
+    private lateinit var gamePickEventSubject: PublishSubject<GamePickEvent>
     private lateinit var placePickEventSubject: PublishSubject<Boolean>
     private lateinit var deleteEventSubject: PublishSubject<String>
 
     private val inputData = InputData()
     private var event = Event()
 
-    private var gamePickEvent = false
+    private var emitGamePickEvent = false
+
+    private var recentGamePickEvent = GamePickEvent()
 
     private lateinit var mode: Mode
 
@@ -98,7 +113,9 @@ class EventActivity : BaseActivity(), EventView {
 
         eventViewModel = ViewModelProviders.of(this, eventViewModelFactory)[EventViewModel::class.java]
 
-        pickGameButton.setOnClickListener { launchGamePickScreen() }
+        pickGameButton.setOnClickListener { launchGamePickScreen(PICK_FIRST_GAME_REQUEST_CODE) }
+        pickGameButton2.setOnClickListener { launchGamePickScreen(PICK_SECOND_GAME_REQUEST_CODE) }
+        pickGameButton3.setOnClickListener { launchGamePickScreen(PICK_THIRD_GAME_REQUEST_CODE) }
         pickPlaceButton.setOnClickListener { launchPlacePickScreen() }
         pickDateButton.setOnClickListener { launchDatePickerDialog() }
 
@@ -135,11 +152,18 @@ class EventActivity : BaseActivity(), EventView {
         with(event) {
             eventNameEditText.setText(eventName)
             descriptionEditText.setText(description)
-            loadImageFromUrl(boardGameImageView, gameImageUrl, R.drawable.board_game_placeholder)
-            boardGameTextView.text = gameName
+            loadGameSection(boardGameImageView, gameImageUrl, boardGameTextView, gameName)
+            loadGameSection(boardGameImageView2, gameImageUrl2, boardGameTextView2, gameName2)
+            loadGameSection(boardGameImageView3, gameImageUrl3, boardGameTextView3, gameName3)
             placeTextView.text = placeName
             if (timestamp > 0) dateTextView.text = Date(timestamp).formatForDisplay()
         }
+    }
+
+    private fun loadGameSection(gameImageView: ImageView, gameImageUrl: String,
+                                gameNameTextView: TextView, gameName: String) {
+        loadImageFromUrl(gameImageView, gameImageUrl, R.drawable.board_game_placeholder)
+        gameNameTextView.text = if (gameName.isNotEmpty()) gameName else getString(R.string.game_text_placeholder)
     }
 
     private fun updateInputData(event: Event) {
@@ -147,7 +171,13 @@ class EventActivity : BaseActivity(), EventView {
             eventId = event.eventId
             gameName = event.gameName
             gameId = event.gameId
+            gameName2 = event.gameName2
+            gameId2 = event.gameId2
+            gameName3 = event.gameName3
+            gameId3 = event.gameId3
             gameImageUrl = event.gameImageUrl
+            gameImageUrl2 = event.gameImageUrl2
+            gameImageUrl3 = event.gameImageUrl3
             placeName = event.placeName
             placeLatitude = event.placeLatitude
             placeLongitude = event.placeLongitude
@@ -161,8 +191,8 @@ class EventActivity : BaseActivity(), EventView {
         initEmitters()
         eventViewModel.bind(this)
 
-        if (gamePickEvent) gamePickEventSubject.onNext(inputData.gameId)
-        gamePickEvent = false
+        if (emitGamePickEvent) gamePickEventSubject.onNext(recentGamePickEvent)
+        emitGamePickEvent = false
     }
 
     private fun initEmitters() {
@@ -180,7 +210,9 @@ class EventActivity : BaseActivity(), EventView {
         if (data != null) {
             when (requestCode) {
                 PLACE_AUTOCOMPLETE_REQUEST_CODE -> handleAutoCompleteResult(resultCode, data)
-                PICK_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data)
+                PICK_FIRST_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data, GamePickType.FIRST)
+                PICK_SECOND_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data, GamePickType.SECOND)
+                PICK_THIRD_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data, GamePickType.THIRD)
             }
         }
     }
@@ -201,10 +233,17 @@ class EventActivity : BaseActivity(), EventView {
                 setResult(EVENT_REMOVED_RESULT_CODE)
                 finish()
             }
-            if (selectedGame.id > 0) {
-                inputData.gameImageUrl = selectedGame.image
-                loadImageFromUrl(boardGameImageView, selectedGame.image, R.drawable.board_game_placeholder)
-            }
+
+            loadAndSaveGameImage(selectedGame, { inputData.gameImageUrl = it }, boardGameImageView)
+            loadAndSaveGameImage(selectedGame2, { inputData.gameImageUrl2 = it }, boardGameImageView2)
+            loadAndSaveGameImage(selectedGame3, { inputData.gameImageUrl3 = it }, boardGameImageView3)
+        }
+    }
+
+    private fun loadAndSaveGameImage(game: Game, inputDataSetter: (String) -> Unit, boardGameImageView: ImageView) {
+        if (game.id > 0) {
+            inputDataSetter(game.image)
+            loadImageFromUrl(boardGameImageView, game.image, R.drawable.board_game_placeholder)
         }
     }
 
@@ -228,15 +267,30 @@ class EventActivity : BaseActivity(), EventView {
         }
     }
 
-    private fun handlePickGameResult(resultCode: Int, data: Intent) {
+    private fun handlePickGameResult(resultCode: Int, data: Intent, gamePickType: GamePickType) {
         when (resultCode) {
             Activity.RESULT_OK -> {
                 val pickedGame = data.getParcelableExtra<SearchResult>(PICKED_GAME)
                 with(pickedGame) {
-                    boardGameTextView.text = name
-                    inputData.gameId = id.toString()
-                    inputData.gameName = name
-                    gamePickEvent = true
+                    when (gamePickType) {
+                        GamePickType.FIRST -> {
+                            boardGameTextView.text = name
+                            inputData.gameId = id.toString()
+                            inputData.gameName = name
+                        }
+                        GamePickType.SECOND -> {
+                            boardGameTextView2.text = name
+                            inputData.gameId2 = id.toString()
+                            inputData.gameName2 = name
+                        }
+                        GamePickType.THIRD -> {
+                            boardGameTextView3.text = name
+                            inputData.gameId3 = id.toString()
+                            inputData.gameName3 = name
+                        }
+                    }
+                    recentGamePickEvent = GamePickEvent(id.toString(), gamePickType)
+                    emitGamePickEvent = true
                 }
             }
         }
@@ -255,9 +309,9 @@ class EventActivity : BaseActivity(), EventView {
         }
     }
 
-    private fun launchGamePickScreen() {
+    private fun launchGamePickScreen(requestCode: Int) {
         val pickGameIntent = Intent(this, PickGameActivity::class.java)
-        startActivityForResult(pickGameIntent, PICK_GAME_REQUEST_CODE)
+        startActivityForResult(pickGameIntent, requestCode)
     }
 
     private fun launchDatePickerDialog() {
@@ -307,7 +361,7 @@ class EventActivity : BaseActivity(), EventView {
 
     override fun placePickEventEmitter(): Observable<Boolean> = placePickEventSubject
 
-    override fun gamePickEventEmitter(): Observable<String> = gamePickEventSubject
+    override fun gamePickEventEmitter(): Observable<GamePickEvent> = gamePickEventSubject
 
     override fun editEventEmitter(): Observable<InputData> = RxView.clicks(saveChangesButton)
             .map {

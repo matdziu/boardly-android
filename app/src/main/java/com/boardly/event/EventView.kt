@@ -1,5 +1,6 @@
 package com.boardly.event
 
+import com.boardly.event.models.GamePickEvent
 import io.reactivex.Observable
 
 interface EventView {
@@ -12,7 +13,7 @@ interface EventView {
 
     fun deleteEventEmitter(): Observable<String>
 
-    fun gamePickEventEmitter(): Observable<String>
+    fun gamePickEventEmitter(): Observable<GamePickEvent>
 
     fun placePickEventEmitter(): Observable<Boolean>
 }

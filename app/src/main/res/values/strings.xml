@@ -26,6 +26,7 @@
     <string name="event_name_hint">Nazwa wydarzenia</string>
     <string name="number_of_players_hint">Maksymalna ilość graczy</string>
     <string name="pick_game_text">Wybierz grę</string>
+    <string name="pick_game_text_optional">Wybierz grę (opcjonalnie)</string>
     <string name="game_text_placeholder">Nie wybrano gry</string>
     <string name="place_text_placeholder">Nie wybrano miejsca</string>
     <string name="pick_place_text">Wybierz miejsce</string>

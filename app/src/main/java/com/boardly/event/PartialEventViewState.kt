@@ -1,5 +1,6 @@
 package com.boardly.event
 
+import com.boardly.event.models.GamePickType
 import com.boardly.retrofit.gamesearch.models.Game
 
 sealed class PartialEventViewState {
@@ -10,9 +11,13 @@ sealed class PartialEventViewState {
         override fun reduce(previousState: EventViewState) = previousState.copy(progress = true)
     }
 
-    data class GameDetailsFetched(private val game: Game) : PartialEventViewState() {
+    data class GameDetailsFetched(private val game: Game, private val gamePickType: GamePickType) : PartialEventViewState() {
         override fun reduce(previousState: EventViewState): EventViewState {
-            return previousState.copy(selectedGame = game)
+            return when (gamePickType) {
+                GamePickType.FIRST -> previousState.copy(selectedGame = game)
+                GamePickType.SECOND -> previousState.copy(selectedGame2 = game)
+                GamePickType.THIRD -> previousState.copy(selectedGame3 = game)
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package com.boardly.event
 
+import com.boardly.event.models.GamePickEvent
 import com.boardly.event.network.EventService
 import com.boardly.retrofit.gamesearch.GameSearchService
 import com.boardly.retrofit.gamesearch.models.DetailsResponse
@@ -10,10 +11,10 @@ import javax.inject.Inject
 class EventInteractor @Inject constructor(private val gameSearchService: GameSearchService,
                                           private val eventService: EventService) {
 
-    fun fetchGameDetails(gameId: String): Observable<PartialEventViewState> {
-        return gameSearchService.details(gameId)
+    fun fetchGameDetails(gamePickEvent: GamePickEvent): Observable<PartialEventViewState> {
+        return gameSearchService.details(gamePickEvent.gameId)
                 .onErrorReturn { DetailsResponse() }
-                .map { PartialEventViewState.GameDetailsFetched(it.game) }
+                .map { PartialEventViewState.GameDetailsFetched(it.game, gamePickEvent.type) }
     }
 
     fun addEvent(inputData: InputData): Observable<PartialEventViewState> {

@@ -1,5 +1,7 @@
 package com.boardly.event
 
+import com.boardly.event.models.GamePickEvent
+import com.boardly.event.models.GamePickType
 import com.boardly.retrofit.gamesearch.models.Game
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
@@ -14,17 +16,45 @@ class EventViewModelTest {
     private val eventViewRobot = EventViewRobot(eventViewModel)
 
     @Test
-    fun testGamePickEvent() {
+    fun testFirstGamePickEvent() {
         val fetchedGame = Game(1, "Galaxy", "2008")
         whenever(eventInteractor.fetchGameDetails(any()))
-                .thenReturn(Observable.just(PartialEventViewState.GameDetailsFetched(fetchedGame)))
+                .thenReturn(Observable.just(PartialEventViewState.GameDetailsFetched(fetchedGame, GamePickType.FIRST)))
 
-        eventViewRobot.pickGame("1")
+        eventViewRobot.pickGame(GamePickEvent("1"))
 
         eventViewRobot.assertViewStates(
                 EventViewState(),
                 EventViewState(selectedGameValid = true),
                 EventViewState(selectedGame = fetchedGame))
+    }
+
+    @Test
+    fun testSecondGamePickEvent() {
+        val fetchedGame = Game(1, "Galaxy", "2008")
+        whenever(eventInteractor.fetchGameDetails(any()))
+                .thenReturn(Observable.just(PartialEventViewState.GameDetailsFetched(fetchedGame, GamePickType.SECOND)))
+
+        eventViewRobot.pickGame(GamePickEvent("1", GamePickType.SECOND))
+
+        eventViewRobot.assertViewStates(
+                EventViewState(),
+                EventViewState(selectedGameValid = true),
+                EventViewState(selectedGame2 = fetchedGame))
+    }
+
+    @Test
+    fun testThirdGamePickEvent() {
+        val fetchedGame = Game(1, "Galaxy", "2008")
+        whenever(eventInteractor.fetchGameDetails(any()))
+                .thenReturn(Observable.just(PartialEventViewState.GameDetailsFetched(fetchedGame, GamePickType.THIRD)))
+
+        eventViewRobot.pickGame(GamePickEvent("1", GamePickType.THIRD))
+
+        eventViewRobot.assertViewStates(
+                EventViewState(),
+                EventViewState(selectedGameValid = true),
+                EventViewState(selectedGame3 = fetchedGame))
     }
 
     @Test

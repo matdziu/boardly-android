@@ -14,7 +14,7 @@ import com.boardly.common.location.UserLocation
 import com.boardly.constants.PICKED_FILTER
 import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_FILTER_REQUEST_CODE
-import com.boardly.constants.PICK_GAME_REQUEST_CODE
+import com.boardly.constants.PICK_FIRST_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
 import com.boardly.constants.SAVED_FILTER
 import com.boardly.extensions.loadImageFromUrl
@@ -130,13 +130,13 @@ class FilterActivity : BaseActivity(), FilterView {
 
     private fun launchGamePickScreen() {
         val pickGameIntent = Intent(this, PickGameActivity::class.java)
-        startActivityForResult(pickGameIntent, PICK_GAME_REQUEST_CODE)
+        startActivityForResult(pickGameIntent, PICK_FIRST_GAME_REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data != null) {
             when (requestCode) {
-                PICK_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data)
+                PICK_FIRST_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data)
                 PLACE_AUTOCOMPLETE_REQUEST_CODE -> handleAutoCompleteResult(resultCode, data)
             }
         }

@@ -1,5 +1,7 @@
 package com.boardly.event
 
+import com.boardly.event.models.GamePickEvent
+import com.boardly.event.models.GamePickType
 import com.boardly.event.network.EventService
 import com.boardly.retrofit.gamesearch.GameSearchService
 import com.boardly.retrofit.gamesearch.models.DetailsResponse
@@ -13,7 +15,7 @@ import org.junit.Test
 class EventInteractorTest {
 
     @Test
-    fun testSuccessfulGameDetailsFetching() {
+    fun testSuccessfulFirstGameDetailsFetching() {
         val testGame = Game(1, "Monopoly")
         val detailsResponse = DetailsResponse(testGame)
         val gameSearchService: GameSearchService = mock {
@@ -22,8 +24,36 @@ class EventInteractorTest {
         val eventService: EventService = mock()
         val eventInteractor = EventInteractor(gameSearchService, eventService)
 
-        eventInteractor.fetchGameDetails("testGameId").test()
-                .assertValue(PartialEventViewState.GameDetailsFetched(testGame))
+        eventInteractor.fetchGameDetails(GamePickEvent("testGameId")).test()
+                .assertValue(PartialEventViewState.GameDetailsFetched(testGame, GamePickType.FIRST))
+    }
+
+    @Test
+    fun testSuccessfulSecondGameDetailsFetching() {
+        val testGame = Game(1, "Monopoly")
+        val detailsResponse = DetailsResponse(testGame)
+        val gameSearchService: GameSearchService = mock {
+            on { it.details(any()) } doReturn Observable.just(detailsResponse)
+        }
+        val eventService: EventService = mock()
+        val eventInteractor = EventInteractor(gameSearchService, eventService)
+
+        eventInteractor.fetchGameDetails(GamePickEvent("testGameId", GamePickType.SECOND)).test()
+                .assertValue(PartialEventViewState.GameDetailsFetched(testGame, GamePickType.SECOND))
+    }
+
+    @Test
+    fun testSuccessfulThirdGameDetailsFetching() {
+        val testGame = Game(1, "Monopoly")
+        val detailsResponse = DetailsResponse(testGame)
+        val gameSearchService: GameSearchService = mock {
+            on { it.details(any()) } doReturn Observable.just(detailsResponse)
+        }
+        val eventService: EventService = mock()
+        val eventInteractor = EventInteractor(gameSearchService, eventService)
+
+        eventInteractor.fetchGameDetails(GamePickEvent("testGameId", GamePickType.THIRD)).test()
+                .assertValue(PartialEventViewState.GameDetailsFetched(testGame, GamePickType.THIRD))
     }
 
     @Test
@@ -35,8 +65,8 @@ class EventInteractorTest {
         val eventService: EventService = mock()
         val eventInteractor = EventInteractor(gameSearchService, eventService)
 
-        eventInteractor.fetchGameDetails("testGameId").test()
-                .assertValue(PartialEventViewState.GameDetailsFetched(Game()))
+        eventInteractor.fetchGameDetails(GamePickEvent("testGameId")).test()
+                .assertValue(PartialEventViewState.GameDetailsFetched(Game(), GamePickType.FIRST))
     }
 
     @Test
