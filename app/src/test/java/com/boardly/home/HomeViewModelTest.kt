@@ -53,8 +53,8 @@ class HomeViewModelTest {
                 HomeViewState(),
                 HomeViewState(progress = true),
                 HomeViewState(eventList = testEventList),
-                HomeViewState(eventList = testEventList),
-                HomeViewState())
+                HomeViewState(eventList = testEventList, joinRequestSent = true),
+                HomeViewState(joinRequestSent = false))
     }
 
     @Test

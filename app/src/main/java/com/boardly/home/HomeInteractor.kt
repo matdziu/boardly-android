@@ -35,6 +35,8 @@ class HomeInteractor @Inject constructor(private val homeService: HomeService) {
 
     fun joinEvent(joinEventData: JoinEventData): Observable<PartialHomeViewState> {
         return homeService.sendJoinRequest(joinEventData)
-                .map { PartialHomeViewState.JoinRequestSent() }
+                .map { PartialHomeViewState.JoinRequestSent(false) }
+                .cast(PartialHomeViewState::class.java)
+                .startWith(PartialHomeViewState.JoinRequestSent())
     }
 }

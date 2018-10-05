@@ -14,9 +14,9 @@ sealed class PartialHomeViewState {
         override fun reduce(previousState: HomeViewState): HomeViewState = HomeViewState(eventList = eventsList)
     }
 
-    class JoinRequestSent : PartialHomeViewState() {
+    data class JoinRequestSent(private val render: Boolean = true) : PartialHomeViewState() {
         override fun reduce(previousState: HomeViewState): HomeViewState {
-            return previousState
+            return previousState.copy(joinRequestSent = render)
         }
     }
 

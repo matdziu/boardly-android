@@ -44,7 +44,8 @@ class HomeInteractorTest {
     @Test
     fun testSuccessfulJoinEventRequest() {
         homeInteractor.joinEvent(JoinEventData("testEventId", "testHelloText")).test()
-                .assertValue { it is PartialHomeViewState.JoinRequestSent }
+                .assertValues(PartialHomeViewState.JoinRequestSent(),
+                        PartialHomeViewState.JoinRequestSent(false))
     }
 
     @Test

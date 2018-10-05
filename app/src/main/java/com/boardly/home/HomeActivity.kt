@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseDrawerActivity
 import com.boardly.common.events.list.EventsAdapter
@@ -168,11 +169,14 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
             showLookingForEventsText(progress)
             showLocationProcessingText(locationProcessing)
             eventsAdapter.submitList(eventList)
+
             if (!progress && !locationProcessing && eventList.isNotEmpty()) {
                 showNoLocationPermissionText(false)
             } else if (eventList.isEmpty() && !progress && !locationProcessing && isLocationPermissionGranted()) {
                 showNoEventsFoundText(true)
             }
+
+            if (joinRequestSent) Toast.makeText(this@HomeActivity, R.string.join_request_sent, Toast.LENGTH_SHORT).show()
         }
     }
 
