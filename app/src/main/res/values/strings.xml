@@ -4,7 +4,7 @@
     <string name="create_account_text">Create account</string>
     <string name="sign_in_with_google_text">Log in using Gmail</string>
     <string name="sign_in_with_facebook_text">Log in using Facebook</string>
-    <string name="sign_in_text">Login</string>
+    <string name="sign_in_text">Log in</string>
     <string name="password_hint_login">Password</string>
     <string name="email_hint">Email</string>
     <string name="password_hint_sign_up">Password (at least 6 characters)</string>

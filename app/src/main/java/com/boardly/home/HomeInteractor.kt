@@ -27,7 +27,13 @@ class HomeInteractor @Inject constructor(private val homeService: HomeService) {
                     val filteredEventList = allEvents
                             .filter { !userEventsIds.contains(it.eventId) && !isOlderThanOneHour(it.timestamp) }
                     val createdEventsWithType = createdEvents
-                            .filter { !isOlderThanOneHour(it.timestamp) }
+                            .filter {
+                                !isOlderThanOneHour(it.timestamp)
+                                        && (gameId.isEmpty() ||
+                                        it.gameId == gameId ||
+                                        it.gameId2 == gameId ||
+                                        it.gameId3 == gameId)
+                            }
                             .map { it.type = EventType.CREATED; it }
                     PartialHomeViewState.EventListState(filteredEventList + createdEventsWithType)
                 })

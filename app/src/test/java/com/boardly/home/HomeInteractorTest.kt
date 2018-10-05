@@ -15,15 +15,19 @@ class HomeInteractorTest {
 
     private val testEventList = listOf(
             Event(eventId = "1",
-                    eventName = "testEvent1"),
+                    eventName = "testEvent1",
+                    gameId = "testGameId"),
             Event(eventId = "2",
-                    eventName = "testEvent2"),
+                    eventName = "testEvent2",
+                    gameId = "testGameId"),
             Event(eventId = "3",
                     eventName = "testEvent3",
-                    timestamp = 1000))
+                    timestamp = 1000,
+                    gameId = "testGameId"))
     private val testCreatedEventsList = listOf(
             Event(eventId = "4",
-                    eventName = "testEvent4"))
+                    eventName = "testEvent4",
+                    gameId = "testGameId"))
     private val testEventIdsList = listOf("1")
     private val homeService: HomeService = mock {
         on { it.fetchAllEvents(any(), any(), any()) } doReturn Observable.just(testEventList)
@@ -37,8 +41,8 @@ class HomeInteractorTest {
     fun testSuccessfulEventsFetching() {
         homeInteractor.fetchEvents(UserLocation(0.0, 0.0), 1.0, "testGameId").test()
                 .assertValue(PartialHomeViewState.EventListState(listOf(
-                        Event("2", "testEvent2"),
-                        Event("4", "testEvent4", type = EventType.CREATED))))
+                        Event("2", "testEvent2", gameId = "testGameId"),
+                        Event("4", "testEvent4", type = EventType.CREATED, gameId = "testGameId"))))
     }
 
     @Test
