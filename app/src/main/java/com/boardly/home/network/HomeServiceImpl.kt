@@ -24,10 +24,14 @@ class HomeServiceImpl : HomeService, BaseServiceImpl() {
         }
     }
 
-    override fun fetchUserEventIds(): Observable<List<String>> {
+    override fun fetchUserEvents(): Observable<List<String>> {
         return Observable.zip(pendingEventIdsList(), acceptedEventIdsList(), createdEventIdsList(),
                 Function3<List<String>, List<String>, List<String>, List<String>>
                 { pending, accepted, created -> pending + accepted + created })
+    }
+
+    override fun fetchCreatedEvents(): Observable<List<Event>> {
+        return createdEventIdsList().flatMap { events(it) }
     }
 
     override fun fetchAllEvents(userLocation: UserLocation, radius: Double, gameId: String): Observable<List<Event>> {

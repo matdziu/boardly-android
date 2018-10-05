@@ -1,5 +1,6 @@
 package com.boardly.base
 
+import com.boardly.common.events.models.Event
 import com.boardly.common.players.models.Player
 import com.boardly.constants.ACCEPTED_EVENTS_NODE
 import com.boardly.constants.CHATS_NODE
@@ -227,6 +228,31 @@ open class BaseServiceImpl {
                         playersList.add(it)
                         if (partialPlayersList.size == playersList.size) resultSubject.onNext(playersList)
                     }
+        }
+
+        return resultSubject
+    }
+
+    protected fun events(idsList: List<String>): Observable<List<Event>> {
+        val resultSubject = PublishSubject.create<List<Event>>()
+        val eventList = arrayListOf<Event>()
+
+        if (idsList.isEmpty()) return Observable.just(eventList)
+
+        for (id in idsList) {
+            getSingleEventNode(id).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    dataSnapshot.getValue(Event::class.java)?.let {
+                        it.eventId = id
+                        eventList.add(0, it)
+                    }
+                    if (eventList.size == idsList.size) resultSubject.onNext(eventList)
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    resultSubject.onError(databaseError.toException())
+                }
+            })
         }
 
         return resultSubject

@@ -1,6 +1,7 @@
 package com.boardly.home
 
 import com.boardly.common.events.models.Event
+import com.boardly.common.events.models.EventType
 import com.boardly.common.location.UserLocation
 import com.boardly.home.models.JoinEventData
 import com.boardly.home.network.HomeService
@@ -20,18 +21,24 @@ class HomeInteractorTest {
             Event(eventId = "3",
                     eventName = "testEvent3",
                     timestamp = 1000))
+    private val testCreatedEventsList = listOf(
+            Event(eventId = "4",
+                    eventName = "testEvent4"))
     private val testEventIdsList = listOf("1")
     private val homeService: HomeService = mock {
         on { it.fetchAllEvents(any(), any(), any()) } doReturn Observable.just(testEventList)
-        on { it.fetchUserEventIds() } doReturn Observable.just(testEventIdsList)
+        on { it.fetchUserEvents() } doReturn Observable.just(testEventIdsList)
         on { it.sendJoinRequest(any()) } doReturn Observable.just(true)
+        on { it.fetchCreatedEvents() } doReturn Observable.just(testCreatedEventsList)
     }
     private val homeInteractor = HomeInteractor(homeService)
 
     @Test
     fun testSuccessfulEventsFetching() {
         homeInteractor.fetchEvents(UserLocation(0.0, 0.0), 1.0, "testGameId").test()
-                .assertValue(PartialHomeViewState.EventListState(listOf(Event("2", "testEvent2"))))
+                .assertValue(PartialHomeViewState.EventListState(listOf(
+                        Event("2", "testEvent2"),
+                        Event("4", "testEvent4", type = EventType.CREATED))))
     }
 
     @Test
