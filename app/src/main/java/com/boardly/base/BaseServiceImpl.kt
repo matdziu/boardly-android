@@ -99,7 +99,7 @@ open class BaseServiceImpl {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                resultSubject.onError(databaseError.toException())
+                resultSubject.onNext(listOf())
             }
         })
 
@@ -120,7 +120,7 @@ open class BaseServiceImpl {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                dbSource.setException(databaseError.toException())
+                dbSource.setResult(listOf())
             }
         })
 
@@ -141,7 +141,7 @@ open class BaseServiceImpl {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                resultSubject.onError(databaseError.toException())
+                resultSubject.onNext(listOf())
             }
         })
 
@@ -183,7 +183,7 @@ open class BaseServiceImpl {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                dbSource.setException(databaseError.toException())
+                dbSource.setResult(Player())
             }
         })
 
@@ -207,7 +207,7 @@ open class BaseServiceImpl {
                     }
 
                     override fun onCancelled(databaseError: DatabaseError) {
-                        dbSource.setException(databaseError.toException())
+                        dbSource.setResult(Player())
                     }
                 })
 
