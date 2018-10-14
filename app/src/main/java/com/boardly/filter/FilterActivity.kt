@@ -103,7 +103,7 @@ class FilterActivity : BaseActivity(), FilterView {
                     locationTextView.text = getString(R.string.current_location_info)
                     locationProcessingSubject.onNext(false)
                 }
-                getLastKnownLocation { onLocationFound(it) }
+                getLastKnownLocation(true) { onLocationFound(it) }
             })
         }
     }

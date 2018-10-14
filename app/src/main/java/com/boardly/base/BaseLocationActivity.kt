@@ -75,10 +75,14 @@ open class BaseLocationActivity : AppCompatActivity() {
     }
 
     @SuppressLint("MissingPermission")
-    fun getLastKnownLocation(onLocationFound: (location: Location) -> Unit) {
-        fusedLocationClient.lastLocation.addOnSuccessListener {
-            if (it != null) onLocationFound(it)
-            else waitForLocation(onLocationFound)
+    fun getLastKnownLocation(forceRefresh: Boolean = false, onLocationFound: (location: Location) -> Unit) {
+        if (forceRefresh) {
+            waitForLocation(onLocationFound)
+        } else {
+            fusedLocationClient.lastLocation.addOnSuccessListener {
+                if (it != null) onLocationFound(it)
+                else waitForLocation(onLocationFound)
+            }
         }
     }
 
