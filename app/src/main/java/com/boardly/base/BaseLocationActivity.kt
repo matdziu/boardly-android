@@ -77,20 +77,23 @@ open class BaseLocationActivity : AppCompatActivity() {
     @SuppressLint("MissingPermission")
     fun getLastKnownLocation(forceRefresh: Boolean = false, onLocationFound: (location: Location) -> Unit) {
         if (forceRefresh) {
-            waitForLocation(onLocationFound)
+            waitForLocation(onLocationFound, null)
         } else {
             fusedLocationClient.lastLocation.addOnSuccessListener {
                 if (it != null) onLocationFound(it)
-                else waitForLocation(onLocationFound)
+                waitForLocation(onLocationFound, it)
             }
         }
     }
 
     @SuppressLint("MissingPermission")
-    private fun waitForLocation(onLocationFound: (location: Location) -> Unit) {
+    private fun waitForLocation(onLocationFound: (location: Location) -> Unit, cachedLocation: Location?) {
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
-                onLocationFound(locationResult.lastLocation)
+                val foundLocation = locationResult.lastLocation
+                if (cachedLocation == null || foundLocation.distanceTo(cachedLocation) > 5000) {
+                    onLocationFound(foundLocation)
+                }
             }
         }
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)

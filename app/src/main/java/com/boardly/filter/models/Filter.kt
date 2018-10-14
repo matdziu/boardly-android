@@ -9,4 +9,5 @@ data class Filter(var radius: Double = 50.0,
                   var gameId: String = "",
                   var gameName: String = "",
                   var userLocation: UserLocation? = null,
-                  var locationName: String = "") : Parcelable
+                  var locationName: String = "",
+                  var isCurrentLocation: Boolean = true) : Parcelable

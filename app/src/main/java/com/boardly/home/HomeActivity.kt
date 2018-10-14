@@ -19,6 +19,7 @@ import com.boardly.constants.PICKED_FILTER
 import com.boardly.constants.PICK_FILTER_REQUEST_CODE
 import com.boardly.constants.SAVED_GAME_ID
 import com.boardly.constants.SAVED_GAME_NAME
+import com.boardly.constants.SAVED_IS_CURRENT_LOCATION
 import com.boardly.constants.SAVED_LOCATION_LATITUDE
 import com.boardly.constants.SAVED_LOCATION_LONGITUDE
 import com.boardly.constants.SAVED_LOCATION_NAME
@@ -85,7 +86,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         super.onStart()
         initEmitters()
         homeViewModel.bind(this)
-        if (selectedFilter.userLocation == null) {
+        if (selectedFilter.isCurrentLocation) {
             checkLocationSettings({
                 showNoLocationPermissionText(false)
                 getLocationAndEmitFilter()
@@ -108,6 +109,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         val onLocationFound = { location: Location ->
             selectedFilter.userLocation = UserLocation(location.latitude, location.longitude)
             selectedFilter.locationName = getString(R.string.current_location_info)
+            selectedFilter.isCurrentLocation = true
             saveFilter(selectedFilter)
             filteredFetchSubject.onNext(FilteredFetchData(selectedFilter, init))
         }
@@ -224,8 +226,9 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
         val savedLocationName = sharedPrefs.getString(SAVED_LOCATION_NAME, "")
         val savedLocationLongitude = sharedPrefs.getString(SAVED_LOCATION_LONGITUDE, "")
         val savedLocationLatitude = sharedPrefs.getString(SAVED_LOCATION_LATITUDE, "")
+        val savedIsCurrentLocation = sharedPrefs.getBoolean(SAVED_IS_CURRENT_LOCATION, true)
         val userLocation = getUserLocationFromString(savedLocationLongitude, savedLocationLatitude)
-        return Filter(savedRadius.toDouble(), savedGameId, savedGameName, userLocation, savedLocationName)
+        return Filter(savedRadius.toDouble(), savedGameId, savedGameName, userLocation, savedLocationName, savedIsCurrentLocation)
     }
 
     private fun getUserLocationFromString(longitude: String, latitude: String): UserLocation? {
@@ -242,6 +245,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
                 .putString(SAVED_LOCATION_NAME, filter.locationName)
                 .putString(SAVED_LOCATION_LATITUDE, filter.userLocation?.latitude.toString())
                 .putString(SAVED_LOCATION_LONGITUDE, filter.userLocation?.longitude.toString())
+                .putBoolean(SAVED_IS_CURRENT_LOCATION, filter.isCurrentLocation)
                 .apply()
     }
 }

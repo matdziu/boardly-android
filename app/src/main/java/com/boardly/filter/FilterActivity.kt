@@ -100,6 +100,7 @@ class FilterActivity : BaseActivity(), FilterView {
                 val onLocationFound = { location: Location ->
                     currentFilter.userLocation = UserLocation(location.latitude, location.longitude)
                     currentFilter.locationName = getString(R.string.current_location_info)
+                    currentFilter.isCurrentLocation = true
                     locationTextView.text = getString(R.string.current_location_info)
                     locationProcessingSubject.onNext(false)
                 }
@@ -177,6 +178,7 @@ class FilterActivity : BaseActivity(), FilterView {
                     val userLocation = UserLocation(latLng.latitude, latLng.longitude)
                     currentFilter.userLocation = userLocation
                     currentFilter.locationName = place.address.toString()
+                    currentFilter.isCurrentLocation = false
                     locationTextView.text = place.address
                 }
             }
