@@ -2,6 +2,7 @@ package com.boardly.home
 
 import com.boardly.common.events.models.Event
 import com.boardly.common.events.models.EventType
+import com.boardly.common.location.DistanceCalculator
 import com.boardly.common.location.UserLocation
 import com.boardly.extensions.isOlderThanOneDay
 import com.boardly.home.models.JoinEventData
@@ -10,7 +11,8 @@ import io.reactivex.Observable
 import io.reactivex.functions.Function3
 import javax.inject.Inject
 
-class HomeInteractor @Inject constructor(private val homeService: HomeService) {
+class HomeInteractor @Inject constructor(private val homeService: HomeService,
+                                         private val distanceCalculator: DistanceCalculator) {
 
     init {
         homeService.sendClientNotificationToken()
@@ -33,10 +35,22 @@ class HomeInteractor @Inject constructor(private val homeService: HomeService) {
                                         it.gameId == gameId ||
                                         it.gameId2 == gameId ||
                                         it.gameId3 == gameId)
+                                        && isInsideRadius(userLocation, it.placeLatitude, it.placeLongitude, radius)
                             }
                             .map { it.type = EventType.CREATED; it }
                     PartialHomeViewState.EventListState(filteredEventList + createdEventsWithType)
                 })
+    }
+
+    private fun isInsideRadius(userLocation: UserLocation,
+                               eventPlaceLatitude: Double,
+                               eventPlaceLongitude: Double,
+                               radius: Double): Boolean {
+        return distanceCalculator.distanceBetween(
+                userLocation.latitude,
+                userLocation.longitude,
+                eventPlaceLatitude,
+                eventPlaceLongitude) < radius * 1000
     }
 
     fun joinEvent(joinEventData: JoinEventData): Observable<PartialHomeViewState> {
