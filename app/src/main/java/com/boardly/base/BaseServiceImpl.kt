@@ -6,6 +6,7 @@ import com.boardly.constants.ACCEPTED_EVENTS_NODE
 import com.boardly.constants.CHATS_NODE
 import com.boardly.constants.CREATED_EVENTS_NODE
 import com.boardly.constants.EVENTS_NODE
+import com.boardly.constants.NOTIFY_SETTINGS_NODE
 import com.boardly.constants.PENDING_EVENTS_NODE
 import com.boardly.constants.PLAYERS_NODE
 import com.boardly.constants.RATING_HASHES
@@ -73,6 +74,10 @@ open class BaseServiceImpl {
 
     protected fun getUserCreatedEventsNodeRef(userId: String): DatabaseReference {
         return firebaseDatabase.getReference("$USERS_NODE/$userId/$EVENTS_NODE/$CREATED_EVENTS_NODE")
+    }
+
+    protected fun getUserNotifySettingsRef(userId: String): DatabaseReference {
+        return firebaseDatabase.getReference("$NOTIFY_SETTINGS_NODE/$userId")
     }
 
     protected fun pendingEventIdsList(): Observable<List<String>> {

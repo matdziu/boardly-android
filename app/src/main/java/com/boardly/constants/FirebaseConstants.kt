@@ -2,6 +2,7 @@ package com.boardly.constants
 
 const val USERS_NODE = "users"
 const val EVENTS_NODE = "events"
+const val NOTIFY_SETTINGS_NODE = "notifySettings"
 const val PLAYERS_NODE = "players"
 const val PENDING_EVENTS_NODE = "pending"
 const val ACCEPTED_EVENTS_NODE = "accepted"
