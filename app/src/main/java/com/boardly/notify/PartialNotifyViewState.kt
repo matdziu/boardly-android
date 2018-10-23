@@ -1,5 +1,6 @@
 package com.boardly.notify
 
+import com.boardly.notify.models.NotifySettings
 import com.boardly.retrofit.gamesearch.models.Game
 
 sealed class PartialNotifyViewState {
@@ -9,6 +10,12 @@ sealed class PartialNotifyViewState {
     data class GameDetailsFetched(private val game: Game) : PartialNotifyViewState() {
         override fun reduce(previousState: NotifyViewState): NotifyViewState {
             return previousState.copy(gameImageUrl = game.image)
+        }
+    }
+
+    data class NotifySettingsFetched(private val notifySettings: NotifySettings) : PartialNotifyViewState() {
+        override fun reduce(previousState: NotifyViewState): NotifyViewState {
+            return previousState.copy(progress = false, notifySettings = notifySettings)
         }
     }
 

@@ -16,9 +16,16 @@ class NotifyViewModel(private val notifyInteractor: NotifyInteractor) : ViewMode
                 .flatMap { notifyInteractor.fetchGameDetails(it) }
 
         val notifySettingsObservable = notifyView.notifySettingsEmitter()
-                .flatMap { notifyInteractor.saveNotifySettings(it).startWith(PartialNotifyViewState.ProgressState()) }
+                .flatMap { notifyInteractor.updateNotifySettings(it).startWith(PartialNotifyViewState.ProgressState()) }
 
-        val mergedObservable = Observable.merge(notifySettingsObservable, gameDetailsObservable)
+        val notifySettingsFetchObservable = notifyView.notifySettingsFetchEmitter()
+                .filter { it }
+                .flatMap { notifyInteractor.fetchNotifySettings().startWith(PartialNotifyViewState.ProgressState()) }
+
+        val mergedObservable = Observable.merge(
+                notifySettingsObservable,
+                gameDetailsObservable,
+                notifySettingsFetchObservable)
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 

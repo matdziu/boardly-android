@@ -16,6 +16,7 @@ import com.boardly.constants.PICK_NOTIFY_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
 import com.boardly.extensions.loadImageFromUrl
 import com.boardly.factories.NotifyViewModelFactory
+import com.boardly.injection.modules.GlideApp
 import com.boardly.notify.models.NotifySettings
 import com.boardly.pickgame.PickGameActivity
 import com.boardly.retrofit.gamesearch.models.SearchResult
@@ -30,6 +31,8 @@ import kotlinx.android.synthetic.main.activity_notify.applyNotifySettingsButton
 import kotlinx.android.synthetic.main.activity_notify.boardGameImageView
 import kotlinx.android.synthetic.main.activity_notify.boardGameTextView
 import kotlinx.android.synthetic.main.activity_notify.contentGroup
+import kotlinx.android.synthetic.main.activity_notify.deleteGameButton
+import kotlinx.android.synthetic.main.activity_notify.deleteLocationButton
 import kotlinx.android.synthetic.main.activity_notify.distanceSeekBar
 import kotlinx.android.synthetic.main.activity_notify.distanceTextView
 import kotlinx.android.synthetic.main.activity_notify.locationTextView
@@ -41,11 +44,14 @@ import javax.inject.Inject
 
 class NotifyActivity : BaseActivity(), NotifyView {
 
+    private var newSettings = NotifySettings()
     private var currentSettings = NotifySettings()
 
     private lateinit var gameIdSubject: PublishSubject<String>
+    private lateinit var notifySettingsFetchSubject: PublishSubject<Boolean>
 
     private var fetchDetails = true
+    private var init = true
 
     @Inject
     lateinit var notifyViewModelFactory: NotifyViewModelFactory
@@ -58,12 +64,21 @@ class NotifyActivity : BaseActivity(), NotifyView {
         super.onCreate(savedInstanceState)
         showBackToolbarArrow(true, this::finish)
 
-        initDistanceSetting(50)
-        initGameSetting("")
-        initLocationSetting("")
-
         pickGameButton.setOnClickListener { launchGamePickScreen() }
         pickPlaceButton.setOnClickListener { launchPlacePickScreen() }
+
+        deleteGameButton.setOnClickListener {
+            GlideApp.with(this).pauseAllRequests()
+            boardGameTextView.text = getString(R.string.game_text_placeholder)
+            boardGameImageView.setImageResource(R.drawable.board_game_placeholder)
+            newSettings.gameId = ""
+            newSettings.gameName = ""
+        }
+        deleteLocationButton.setOnClickListener {
+            locationTextView.text = getString(R.string.place_text_placeholder)
+            newSettings.locationName = ""
+            newSettings.userLocation = null
+        }
 
         notifyViewModel = ViewModelProviders.of(this, notifyViewModelFactory)[NotifyViewModel::class.java]
     }
@@ -72,17 +87,20 @@ class NotifyActivity : BaseActivity(), NotifyView {
         super.onStart()
         initEmitters()
         notifyViewModel.bind(this)
+        notifySettingsFetchSubject.onNext(init)
         if (fetchDetails) {
             fetchDetails = false
-            gameIdSubject.onNext(currentSettings.gameId)
+            gameIdSubject.onNext(newSettings.gameId)
         }
     }
 
     private fun initEmitters() {
         gameIdSubject = PublishSubject.create()
+        notifySettingsFetchSubject = PublishSubject.create()
     }
 
     override fun onStop() {
+        init = false
         notifyViewModel.unbind()
         super.onStop()
     }
@@ -99,13 +117,21 @@ class NotifyActivity : BaseActivity(), NotifyView {
     override fun gameIdEmitter(): Observable<String> = gameIdSubject
 
     override fun notifySettingsEmitter(): Observable<NotifySettings> = RxView.clicks(applyNotifySettingsButton)
-            .map { currentSettings }
+            .map { newSettings }
+
+    override fun notifySettingsFetchEmitter(): Observable<Boolean> = notifySettingsFetchSubject
 
     override fun render(notifyViewState: NotifyViewState) {
         with(notifyViewState) {
             loadImageFromUrl(boardGameImageView, gameImageUrl, com.boardly.R.drawable.board_game_placeholder)
             showProgressBar(progress)
             if (success) finish()
+            if (currentSettings != notifySettings) {
+                currentSettings = notifySettings
+                initDistanceSetting(notifySettings.radius.toInt())
+                initGameSetting(notifySettings.gameName)
+                initLocationSetting(notifySettings.locationName)
+            }
         }
     }
 
@@ -125,7 +151,8 @@ class NotifyActivity : BaseActivity(), NotifyView {
                 val pickedGame = data.getParcelableExtra<SearchResult>(PICKED_GAME)
                 with(pickedGame) {
                     boardGameTextView.text = name
-                    currentSettings.gameId = id.toString()
+                    newSettings.gameId = id.toString()
+                    newSettings.gameName = name
                     fetchDetails = true
                 }
             }
@@ -154,7 +181,8 @@ class NotifyActivity : BaseActivity(), NotifyView {
             Activity.RESULT_OK -> {
                 val place = PlaceAutocomplete.getPlace(this, data)
                 with(place) {
-                    currentSettings.userLocation = UserLocation(latLng.latitude, latLng.longitude)
+                    newSettings.userLocation = UserLocation(latLng.latitude, latLng.longitude)
+                    newSettings.locationName = place.address.toString()
                     locationTextView.text = place.address
                 }
             }
@@ -176,6 +204,7 @@ class NotifyActivity : BaseActivity(), NotifyView {
         distanceSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 val actualProgress = progress + seekBarMin
+                newSettings.radius = actualProgress.toDouble()
                 distanceTextView.text = getString(R.string.max_distance_text, actualProgress)
             }
 

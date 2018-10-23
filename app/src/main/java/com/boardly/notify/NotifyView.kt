@@ -10,4 +10,6 @@ interface NotifyView {
     fun gameIdEmitter(): Observable<String>
 
     fun notifySettingsEmitter(): Observable<NotifySettings>
+
+    fun notifySettingsFetchEmitter(): Observable<Boolean>
 }

@@ -5,5 +5,7 @@ import io.reactivex.Observable
 
 interface NotifyService {
 
-    fun saveNotifySettings(notifySettings: NotifySettings): Observable<Boolean>
+    fun updateNotifySettings(notifySettings: NotifySettings): Observable<Boolean>
+
+    fun fetchNotifySettings(): Observable<NotifySettings>
 }

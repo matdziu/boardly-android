@@ -5,7 +5,7 @@ import io.reactivex.Observable
 
 class NotifyServiceImpl : NotifyService {
 
-    override fun saveNotifySettings(notifySettings: NotifySettings): Observable<Boolean> {
+    override fun updateNotifySettings(notifySettings: NotifySettings): Observable<Boolean> {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

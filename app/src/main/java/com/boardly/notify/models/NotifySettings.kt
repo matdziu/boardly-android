@@ -4,4 +4,6 @@ import com.boardly.common.location.UserLocation
 
 data class NotifySettings(var radius: Double = 50.0,
                           var gameId: String = "",
-                          var userLocation: UserLocation? = null)
+                          var gameName: String = "",
+                          var userLocation: UserLocation? = null,
+                          var locationName: String = "")
