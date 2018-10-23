@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/notify_item"
+        android:icon="@drawable/ic_notify"
+        android:title="@string/notify_text"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/filter_events_item"
         android:icon="@drawable/ic_filter_white"
         android:title="@string/filter_text"

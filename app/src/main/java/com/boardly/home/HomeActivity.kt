@@ -30,6 +30,7 @@ import com.boardly.filter.FilterActivity
 import com.boardly.filter.models.Filter
 import com.boardly.home.models.FilteredFetchData
 import com.boardly.home.models.JoinEventData
+import com.boardly.notify.NotifyActivity
 import com.google.android.gms.common.GoogleApiAvailability
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
@@ -135,6 +136,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.filter_events_item -> FilterActivity.start(this, selectedFilter)
+            R.id.notify_item -> startActivity(Intent(this, NotifyActivity::class.java))
         }
         return false
     }

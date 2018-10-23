@@ -52,7 +52,7 @@
     <string name="empty"> </string>
     <string name="no_event_found_text">Nie znaleziono żadnych wydarzeń. Spróbuj zmienić kryteria wyszukiwania.</string>
     <string name="looking_for_events_text">Szukam dla Ciebie wydarzeń…</string>
-    <string name="filter_text">Filtruj</string>
+    <string name="filter_text">Filtruj wydarzenia</string>
     <string name="max_distance_text">Maksymalna odległość wydarzenia: %1$d km</string>
     <string name="apply_filter_text">Zastosuj</string>
     <string name="delete_game_text">Usuń grę</string>
@@ -119,4 +119,5 @@
     <string name="calendar_event_description">Będziecie grać razem w %1$s</string>
     <string name="privacy_policy_text">Polityka Prywatności</string>
     <string name="join_request_sent">Prośba o dołączenie została wysłana</string>
+    <string name="notify_text">Powiadomienia o wydarzeniach</string>
 </resources>

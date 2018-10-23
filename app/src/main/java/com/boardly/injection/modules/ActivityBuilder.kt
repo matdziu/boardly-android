@@ -1,13 +1,14 @@
 package com.boardly.injection.modules
 
-import com.boardly.event.EventActivity
 import com.boardly.editprofile.EditProfileActivity
+import com.boardly.event.EventActivity
 import com.boardly.eventdetails.EventDetailsActivity
 import com.boardly.filter.FilterActivity
 import com.boardly.home.HomeActivity
 import com.boardly.injection.ActivityScope
 import com.boardly.login.LoginActivity
 import com.boardly.myevents.MyEventsActivity
+import com.boardly.notify.NotifyActivity
 import com.boardly.pickgame.PickGameActivity
 import com.boardly.signup.SignUpActivity
 import dagger.Module
@@ -52,4 +53,8 @@ abstract class ActivityBuilder {
     @ActivityScope
     @ContributesAndroidInjector(modules = [FragmentBuilder::class])
     abstract fun bindEventDetailsActivity(): EventDetailsActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [NotifyActivityModule::class])
+    abstract fun bindNotifyActivity(): NotifyActivity
 }
