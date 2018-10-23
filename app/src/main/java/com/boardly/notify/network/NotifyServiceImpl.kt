@@ -16,11 +16,15 @@ class NotifyServiceImpl : NotifyService, BaseServiceImpl() {
 
     override fun updateNotifySettings(notifySettings: NotifySettings): Observable<Boolean> {
         val resultSubject = PublishSubject.create<Boolean>()
-        val userLocation = notifySettings.userLocation
-        if (userLocation != null) {
-            val geoLocation = GeoLocation(userLocation.latitude, userLocation.longitude)
+        val userLatitude = notifySettings.userLatitude
+        val userLongitude = notifySettings.userLongitude
+        if (userLatitude != null && userLongitude != null) {
+            val geoLocation = GeoLocation(userLatitude, userLongitude)
             setGeoLocationTask(geoLocation)
                     .continueWithTask { getUserNotifySettingsRef(currentUserId).updateChildren(notifySettings.toMap()) }
+                    .addOnCompleteListener { resultSubject.onNext(true) }
+        } else {
+            getUserNotifySettingsRef(currentUserId).setValue(null)
                     .addOnCompleteListener { resultSubject.onNext(true) }
         }
         return resultSubject

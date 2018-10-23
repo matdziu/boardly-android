@@ -10,7 +10,6 @@ import android.widget.SeekBar
 import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseActivity
-import com.boardly.common.location.UserLocation
 import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_NOTIFY_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
@@ -64,6 +63,8 @@ class NotifyActivity : BaseActivity(), NotifyView {
         super.onCreate(savedInstanceState)
         showBackToolbarArrow(true, this::finish)
 
+        initWithNotifySettings(currentSettings)
+
         pickGameButton.setOnClickListener { launchGamePickScreen() }
         pickPlaceButton.setOnClickListener { launchPlacePickScreen() }
 
@@ -73,11 +74,13 @@ class NotifyActivity : BaseActivity(), NotifyView {
             boardGameImageView.setImageResource(R.drawable.board_game_placeholder)
             newSettings.gameId = ""
             newSettings.gameName = ""
+            gameIdSubject.onNext("")
         }
         deleteLocationButton.setOnClickListener {
             locationTextView.text = getString(R.string.place_text_placeholder)
             newSettings.locationName = ""
-            newSettings.userLocation = null
+            newSettings.userLatitude = null
+            newSettings.userLongitude = null
         }
 
         notifyViewModel = ViewModelProviders.of(this, notifyViewModelFactory)[NotifyViewModel::class.java]
@@ -128,11 +131,17 @@ class NotifyActivity : BaseActivity(), NotifyView {
             if (success) finish()
             if (currentSettings != notifySettings) {
                 currentSettings = notifySettings
-                initDistanceSetting(notifySettings.radius.toInt())
-                initGameSetting(notifySettings.gameName)
-                initLocationSetting(notifySettings.locationName)
+                newSettings = notifySettings
+                initWithNotifySettings(notifySettings)
+                gameIdSubject.onNext(notifySettings.gameId)
             }
         }
+    }
+
+    private fun initWithNotifySettings(notifySettings: NotifySettings) {
+        initDistanceSetting(notifySettings.radius.toInt())
+        initGameSetting(notifySettings.gameName)
+        initLocationSetting(notifySettings.locationName)
     }
 
     private fun showProgressBar(progress: Boolean) {
@@ -181,7 +190,8 @@ class NotifyActivity : BaseActivity(), NotifyView {
             Activity.RESULT_OK -> {
                 val place = PlaceAutocomplete.getPlace(this, data)
                 with(place) {
-                    newSettings.userLocation = UserLocation(latLng.latitude, latLng.longitude)
+                    newSettings.userLatitude = latLng.latitude
+                    newSettings.userLongitude = latLng.longitude
                     newSettings.locationName = place.address.toString()
                     locationTextView.text = place.address
                 }
