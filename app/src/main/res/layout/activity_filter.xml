@@ -115,7 +115,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/deleteGameButton"
-        tools:text="Maksymalna odległość wydarzenia: 5 km" />
+        tools:text="Maximum event distance: 5 km" />
 
     <SeekBar
         android:id="@+id/distanceSeekBar"

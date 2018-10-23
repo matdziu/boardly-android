@@ -120,4 +120,6 @@
     <string name="privacy_policy_text">Polityka Prywatności</string>
     <string name="join_request_sent">Prośba o dołączenie została wysłana</string>
     <string name="notify_text">Powiadomienia o wydarzeniach</string>
+    <string name="delete_place_text">Usuń miejsce</string>
+    <string name="apply_notify_settings_text">Zastosuj</string>
 </resources>

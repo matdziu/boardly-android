@@ -120,4 +120,6 @@
     <string name="privacy_policy_text">Privacy Policy</string>
     <string name="join_request_sent">Join request sent</string>
     <string name="notify_text">Event notifications</string>
+    <string name="delete_place_text">Delete place</string>
+    <string name="apply_notify_settings_text">Apply</string>
 </resources>
