@@ -5,9 +5,8 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
-import javax.inject.Inject
 
-class FilterViewModel @Inject constructor(private val filterInteractor: FilterInteractor) : ViewModel() {
+class FilterViewModel(private val filterInteractor: FilterInteractor) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     private val stateSubject = BehaviorSubject.createDefault(FilterViewState())
