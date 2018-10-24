@@ -121,13 +121,16 @@
         android:id="@+id/distanceSeekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:max="99"
+        app:layout_constraintBottom_toTopOf="@+id/deleteNotificationsButton"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/distanceTextView" />
+        app:layout_constraintTop_toBottomOf="@id/distanceTextView"
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.boardly.customviews.BoardlyButton
         android:id="@+id/applyNotifySettingsButton"
@@ -152,12 +155,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/deleteNotificationsButton"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/delete_notifications_text"
+        android:textColor="@color/errorRed"
+        app:layout_constraintBottom_toTopOf="@+id/applyNotifySettingsButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <android.support.constraint.Group
         android:id="@+id/contentGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="applyNotifySettingsButton, distanceSeekBar,
         distanceTextView, deleteGameButton, deleteLocationButton, pickGameButton,
-        pickPlaceButton, boardGameTextView, locationTextView, boardGameImageView" />
+        pickPlaceButton, boardGameTextView, locationTextView, boardGameImageView,
+        deleteNotificationsButton" />
 
 </android.support.constraint.ConstraintLayout>

@@ -23,10 +23,14 @@ class NotifyServiceImpl : NotifyService, BaseServiceImpl() {
             setGeoLocationTask(geoLocation)
                     .continueWithTask { getUserNotifySettingsRef(currentUserId).updateChildren(notifySettings.toMap()) }
                     .addOnCompleteListener { resultSubject.onNext(true) }
-        } else {
-            getUserNotifySettingsRef(currentUserId).setValue(null)
-                    .addOnCompleteListener { resultSubject.onNext(true) }
         }
+        return resultSubject
+    }
+
+    override fun deleteNotifications(): Observable<Boolean> {
+        val resultSubject = PublishSubject.create<Boolean>()
+        getUserNotifySettingsRef(currentUserId).setValue(null)
+                .addOnCompleteListener { resultSubject.onNext(true) }
         return resultSubject
     }
 

@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.SeekBar
 import android.widget.Toast
@@ -32,6 +33,7 @@ import kotlinx.android.synthetic.main.activity_notify.boardGameTextView
 import kotlinx.android.synthetic.main.activity_notify.contentGroup
 import kotlinx.android.synthetic.main.activity_notify.deleteGameButton
 import kotlinx.android.synthetic.main.activity_notify.deleteLocationButton
+import kotlinx.android.synthetic.main.activity_notify.deleteNotificationsButton
 import kotlinx.android.synthetic.main.activity_notify.distanceSeekBar
 import kotlinx.android.synthetic.main.activity_notify.distanceTextView
 import kotlinx.android.synthetic.main.activity_notify.locationTextView
@@ -48,6 +50,7 @@ class NotifyActivity : BaseActivity(), NotifyView {
 
     private lateinit var gameIdSubject: PublishSubject<String>
     private lateinit var notifySettingsFetchSubject: PublishSubject<Boolean>
+    private lateinit var placePickEventSubject: PublishSubject<Boolean>
 
     private var fetchDetails = true
     private var init = true
@@ -100,6 +103,7 @@ class NotifyActivity : BaseActivity(), NotifyView {
     private fun initEmitters() {
         gameIdSubject = PublishSubject.create()
         notifySettingsFetchSubject = PublishSubject.create()
+        placePickEventSubject = PublishSubject.create()
     }
 
     override fun onStop() {
@@ -124,10 +128,16 @@ class NotifyActivity : BaseActivity(), NotifyView {
 
     override fun notifySettingsFetchEmitter(): Observable<Boolean> = notifySettingsFetchSubject
 
+    override fun placePickEventEmitter(): Observable<Boolean> = placePickEventSubject
+
+    override fun stopNotificationsButtonClickEmitter(): Observable<Boolean> = RxView.clicks(deleteNotificationsButton)
+            .map { true }
+
     override fun render(notifyViewState: NotifyViewState) {
         with(notifyViewState) {
             loadImageFromUrl(boardGameImageView, gameImageUrl, com.boardly.R.drawable.board_game_placeholder)
             showProgressBar(progress)
+            showPlacePickedError(!selectedPlaceValid)
             if (success) finish()
             if (currentSettings != notifySettings) {
                 currentSettings = notifySettings
@@ -135,6 +145,14 @@ class NotifyActivity : BaseActivity(), NotifyView {
                 initWithNotifySettings(notifySettings)
                 gameIdSubject.onNext(notifySettings.gameId)
             }
+        }
+    }
+
+    private fun showPlacePickedError(show: Boolean) {
+        if (show) {
+            locationTextView.setTextColor(ContextCompat.getColor(this, R.color.errorRed))
+        } else {
+            locationTextView.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryText))
         }
     }
 
@@ -194,6 +212,10 @@ class NotifyActivity : BaseActivity(), NotifyView {
                     newSettings.userLongitude = latLng.longitude
                     newSettings.locationName = place.address.toString()
                     locationTextView.text = place.address
+
+                    // Somehow default Places API Activity does not trigger onStop() of NotifyActivity
+                    // so it's ok to emit event here
+                    placePickEventSubject.onNext(true)
                 }
             }
             PlaceAutocomplete.RESULT_ERROR -> showErrorToast(R.string.generic_error)

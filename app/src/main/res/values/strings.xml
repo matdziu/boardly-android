@@ -122,4 +122,5 @@
     <string name="notify_text">Event notifications</string>
     <string name="delete_place_text">Delete place</string>
     <string name="apply_notify_settings_text">Apply</string>
+    <string name="delete_notifications_text">Delete notifications</string>
 </resources>

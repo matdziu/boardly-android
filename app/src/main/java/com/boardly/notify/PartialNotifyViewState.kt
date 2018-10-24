@@ -19,6 +19,18 @@ sealed class PartialNotifyViewState {
         }
     }
 
+    class PlacePickedState : PartialNotifyViewState() {
+        override fun reduce(previousState: NotifyViewState): NotifyViewState {
+            return previousState.copy(selectedPlaceValid = true)
+        }
+    }
+
+    data class LocalValidation(private val selectedPlaceValid: Boolean) : PartialNotifyViewState() {
+        override fun reduce(previousState: NotifyViewState): NotifyViewState {
+            return previousState.copy(selectedPlaceValid = selectedPlaceValid)
+        }
+    }
+
     class ProgressState : PartialNotifyViewState() {
         override fun reduce(previousState: NotifyViewState): NotifyViewState {
             return previousState.copy(progress = true)

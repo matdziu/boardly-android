@@ -12,4 +12,8 @@ interface NotifyView {
     fun notifySettingsEmitter(): Observable<NotifySettings>
 
     fun notifySettingsFetchEmitter(): Observable<Boolean>
+
+    fun stopNotificationsButtonClickEmitter(): Observable<Boolean>
+
+    fun placePickEventEmitter(): Observable<Boolean>
 }

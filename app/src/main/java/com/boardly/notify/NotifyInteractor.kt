@@ -27,4 +27,9 @@ class NotifyInteractor @Inject constructor(private val gameSearchService: GameSe
         return notifyService.fetchNotifySettings()
                 .map { PartialNotifyViewState.NotifySettingsFetched(it) }
     }
+
+    fun deleteNotifications(): Observable<PartialNotifyViewState> {
+        return notifyService.deleteNotifications()
+                .map { PartialNotifyViewState.SuccessState() }
+    }
 }

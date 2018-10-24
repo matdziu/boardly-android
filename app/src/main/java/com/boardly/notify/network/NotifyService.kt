@@ -8,4 +8,6 @@ interface NotifyService {
     fun updateNotifySettings(notifySettings: NotifySettings): Observable<Boolean>
 
     fun fetchNotifySettings(): Observable<NotifySettings>
+
+    fun deleteNotifications(): Observable<Boolean>
 }
