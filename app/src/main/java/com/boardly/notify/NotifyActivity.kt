@@ -30,7 +30,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_notify.applyNotifySettingsButton
 import kotlinx.android.synthetic.main.activity_notify.boardGameImageView
 import kotlinx.android.synthetic.main.activity_notify.boardGameTextView
-import kotlinx.android.synthetic.main.activity_notify.contentGroup
+import kotlinx.android.synthetic.main.activity_notify.contentViewGroup
 import kotlinx.android.synthetic.main.activity_notify.deleteGameButton
 import kotlinx.android.synthetic.main.activity_notify.deleteLocationButton
 import kotlinx.android.synthetic.main.activity_notify.deleteNotificationsButton
@@ -164,10 +164,10 @@ class NotifyActivity : BaseActivity(), NotifyView {
 
     private fun showProgressBar(progress: Boolean) {
         if (progress) {
-            contentGroup.visibility = View.GONE
+            contentViewGroup.visibility = View.GONE
             progressBar.visibility = View.VISIBLE
         } else {
-            contentGroup.visibility = View.VISIBLE
+            contentViewGroup.visibility = View.VISIBLE
             progressBar.visibility = View.GONE
         }
     }

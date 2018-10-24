@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,139 +7,152 @@
 
     <include layout="@layout/toolbar" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/boardGameImageView"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/board_game_placeholder"
-        app:civ_border_color="@color/lightGrey"
-        app:civ_border_width="1dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-    <TextView
-        android:id="@+id/locationTextView"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:text="@string/location_text_placeholder"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@+id/boardGameTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/boardGameTextView"
-        app:layout_constraintTop_toTopOf="@+id/boardGameTextView" />
-
-    <TextView
-        android:id="@+id/boardGameTextView"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="@string/game_text_placeholder"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/locationTextView"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/boardGameImageView" />
-
-    <Button
-        android:id="@+id/pickPlaceButton"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/pick_place_text"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="@+id/pickGameButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/pickGameButton"
-        app:layout_constraintTop_toTopOf="@+id/pickGameButton" />
-
-    <Button
-        android:id="@+id/pickGameButton"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/pick_game_text"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintEnd_toStartOf="@+id/pickPlaceButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/boardGameTextView" />
-
-    <Button
-        android:id="@+id/currentLocationButton"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="@string/use_current_location"
-        android:textColor="@color/green"
-        app:layout_constraintBottom_toBottomOf="@+id/deleteGameButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/deleteGameButton"
-        app:layout_constraintTop_toTopOf="@+id/deleteGameButton" />
-
-    <Button
-        android:id="@+id/deleteGameButton"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="@string/delete_game_text"
-        android:textColor="@color/errorRed"
-        app:layout_constraintEnd_toStartOf="@+id/currentLocationButton"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pickGameButton" />
-
-    <TextView
-        android:id="@+id/distanceTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/max_distance_text"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deleteGameButton"
-        tools:text="Maximum event distance: 5 km" />
-
-    <SeekBar
-        android:id="@+id/distanceSeekBar"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:max="99"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/distanceTextView" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:fillViewport="true">
 
-    <com.boardly.customviews.BoardlyButton
-        android:id="@+id/applyFilterButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="@drawable/blue_background_selector"
-        android:text="@string/apply_filter_text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
-</android.support.constraint.ConstraintLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/boardGameImageView"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/board_game_placeholder"
+                app:civ_border_color="@color/lightGrey"
+                app:civ_border_width="1dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+            <TextView
+                android:id="@+id/locationTextView"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="@string/location_text_placeholder"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="@+id/boardGameTextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/boardGameTextView"
+                app:layout_constraintTop_toTopOf="@+id/boardGameTextView" />
+
+            <TextView
+                android:id="@+id/boardGameTextView"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/game_text_placeholder"
+                android:textAlignment="center"
+                app:layout_constraintEnd_toStartOf="@+id/locationTextView"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/boardGameImageView" />
+
+            <Button
+                android:id="@+id/pickPlaceButton"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/pick_place_text"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="@+id/pickGameButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/pickGameButton"
+                app:layout_constraintTop_toTopOf="@+id/pickGameButton" />
+
+            <Button
+                android:id="@+id/pickGameButton"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/pick_game_text"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintEnd_toStartOf="@+id/pickPlaceButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/boardGameTextView" />
+
+            <Button
+                android:id="@+id/currentLocationButton"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/use_current_location"
+                android:textColor="@color/green"
+                app:layout_constraintBottom_toBottomOf="@+id/deleteGameButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/deleteGameButton"
+                app:layout_constraintTop_toTopOf="@+id/deleteGameButton" />
+
+            <Button
+                android:id="@+id/deleteGameButton"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/delete_game_text"
+                android:textColor="@color/errorRed"
+                app:layout_constraintEnd_toStartOf="@+id/currentLocationButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pickGameButton" />
+
+            <TextView
+                android:id="@+id/distanceTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/max_distance_text"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/deleteGameButton"
+                tools:text="Maximum event distance: 5 km" />
+
+            <SeekBar
+                android:id="@+id/distanceSeekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:max="99"
+                app:layout_constraintBottom_toTopOf="@+id/applyFilterButton"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/distanceTextView"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <com.boardly.customviews.BoardlyButton
+                android:id="@+id/applyFilterButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/blue_background_selector"
+                android:text="@string/apply_filter_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
