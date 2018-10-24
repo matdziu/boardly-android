@@ -5,90 +5,97 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/toolbar" />
-
         <RelativeLayout
-            android:id="@+id/contentViewGroup"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/toolbar">
+            android:layout_height="match_parent">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/eventsRecyclerView"
+            <include layout="@layout/toolbar" />
+
+            <RelativeLayout
+                android:id="@+id/contentViewGroup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingBottom="64dp" />
+                android:layout_below="@id/toolbar">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/eventsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:paddingBottom="64dp" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/noEventsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="16dp"
+                android:text="@string/no_event_found_text"
+                android:textAlignment="center"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/noLocationPermissionTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="16dp"
+                android:text="@string/enable_location_permission"
+                android:textAlignment="center"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/locationProcessingTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="16dp"
+                android:text="@string/location_processing_text"
+                android:textAlignment="center"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/lookingForEventsTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="16dp"
+                android:text="@string/looking_for_events_text"
+                android:textAlignment="center"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/inviteFriendsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/errorRed"
+                android:text="@string/invite_friends"
+                android:textColor="@android:color/white" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/addEventButton"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_add_white_24dp"
+                app:elevation="4dp" />
 
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/noEventsTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:padding="16dp"
-            android:text="@string/no_event_found_text"
-            android:textAlignment="center"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/noLocationPermissionTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:padding="16dp"
-            android:text="@string/enable_location_permission"
-            android:textAlignment="center"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/locationProcessingTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:padding="16dp"
-            android:text="@string/location_processing_text"
-            android:textAlignment="center"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/lookingForEventsTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:padding="16dp"
-            android:text="@string/looking_for_events_text"
-            android:textAlignment="center"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/inviteFriendsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/errorRed"
-            android:text="@string/invite_friends"
-            android:textColor="@android:color/white" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/addEventButton"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_add_white_24dp"
-            app:elevation="4dp" />
-
-    </RelativeLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigationView"

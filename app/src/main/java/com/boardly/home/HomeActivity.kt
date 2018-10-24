@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
@@ -26,6 +27,9 @@ import com.boardly.constants.SAVED_LOCATION_LONGITUDE
 import com.boardly.constants.SAVED_LOCATION_NAME
 import com.boardly.constants.SAVED_RADIUS
 import com.boardly.event.EventActivity
+import com.boardly.extensions.setBackgroundColor
+import com.boardly.extensions.setTextColor
+import com.boardly.extensions.simplySetActionTextColor
 import com.boardly.factories.HomeViewModelFactory
 import com.boardly.filter.FilterActivity
 import com.boardly.filter.models.Filter
@@ -38,6 +42,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_home.addEventButton
 import kotlinx.android.synthetic.main.activity_home.contentViewGroup
+import kotlinx.android.synthetic.main.activity_home.coordinatorLayout
 import kotlinx.android.synthetic.main.activity_home.eventsRecyclerView
 import kotlinx.android.synthetic.main.activity_home.inviteFriendsButton
 import kotlinx.android.synthetic.main.activity_home.locationProcessingTextView
@@ -80,7 +85,12 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
         val launchInfo = intent.getStringExtra(LAUNCH_INFO)
         if (launchInfo != null) {
-            Toast.makeText(this, launchInfo, Toast.LENGTH_LONG).show()
+            Snackbar.make(coordinatorLayout, launchInfo, Snackbar.LENGTH_INDEFINITE)
+                    .simplySetActionTextColor(android.R.color.white)
+                    .setBackgroundColor(R.color.colorPrimary)
+                    .setTextColor(android.R.color.white)
+                    .setAction(R.string.snackbar_ok, {})
+                    .show()
         }
     }
 
