@@ -32,7 +32,6 @@ import kotlinx.android.synthetic.main.activity_notify.boardGameImageView
 import kotlinx.android.synthetic.main.activity_notify.boardGameTextView
 import kotlinx.android.synthetic.main.activity_notify.contentViewGroup
 import kotlinx.android.synthetic.main.activity_notify.deleteGameButton
-import kotlinx.android.synthetic.main.activity_notify.deleteLocationButton
 import kotlinx.android.synthetic.main.activity_notify.deleteNotificationsButton
 import kotlinx.android.synthetic.main.activity_notify.distanceSeekBar
 import kotlinx.android.synthetic.main.activity_notify.distanceTextView
@@ -78,12 +77,6 @@ class NotifyActivity : BaseActivity(), NotifyView {
             newSettings.gameId = ""
             newSettings.gameName = ""
             gameIdSubject.onNext("")
-        }
-        deleteLocationButton.setOnClickListener {
-            locationTextView.text = getString(R.string.place_text_placeholder)
-            newSettings.locationName = ""
-            newSettings.userLatitude = null
-            newSettings.userLongitude = null
         }
 
         notifyViewModel = ViewModelProviders.of(this, notifyViewModelFactory)[NotifyViewModel::class.java]
