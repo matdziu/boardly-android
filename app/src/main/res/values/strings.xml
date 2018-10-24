@@ -123,4 +123,6 @@
     <string name="delete_place_text">Delete place</string>
     <string name="apply_notify_settings_text">Apply</string>
     <string name="delete_notifications_text">Delete notifications</string>
+    <string name="notify_info">We\'ll notify you whenever new event with criteria below will be added nearby</string>
+    <string name="filter_info">Filter events nearby using criteria below</string>
 </resources>
