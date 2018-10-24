@@ -135,6 +135,7 @@ class MessagingService : FirebaseMessagingService() {
                 .setContentTitle(title)
                 .setContentText(body)
                 .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                .setStyle(NotificationCompat.BigTextStyle().bigText(body))
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent)
