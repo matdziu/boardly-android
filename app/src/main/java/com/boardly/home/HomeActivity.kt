@@ -15,6 +15,7 @@ import com.boardly.R
 import com.boardly.base.BaseDrawerActivity
 import com.boardly.common.events.list.EventsAdapter
 import com.boardly.common.location.UserLocation
+import com.boardly.constants.LAUNCH_INFO
 import com.boardly.constants.PICKED_FILTER
 import com.boardly.constants.PICK_FILTER_REQUEST_CODE
 import com.boardly.constants.SAVED_GAME_ID
@@ -75,6 +76,11 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
             shareIntent.type = "text/plain"
             shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.boardly_invite_text))
             startActivity(Intent.createChooser(shareIntent, getString(R.string.chooser_title_text)))
+        }
+
+        val launchInfo = intent.getStringExtra(LAUNCH_INFO)
+        if (launchInfo != null) {
+            Toast.makeText(this, launchInfo, Toast.LENGTH_LONG).show()
         }
     }
 

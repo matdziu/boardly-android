@@ -20,9 +20,13 @@ import com.boardly.constants.EVENT_TYPE_ADMIN
 import com.boardly.constants.EVENT_TYPE_PLAYER
 import com.boardly.constants.EXTRAS_EVENT_ID
 import com.boardly.constants.EXTRAS_EVENT_TYPE
+import com.boardly.constants.LAUNCH_INFO
 import com.boardly.constants.NEW_CHAT_MESSAGE_CHANNEL_ID
 import com.boardly.constants.NEW_CHAT_MESSAGE_NOTIFICATION_TYPE
 import com.boardly.constants.NEW_CHAT_MESSAGE_REQUEST_CODE
+import com.boardly.constants.NEW_EVENT_CHANNEL_ID
+import com.boardly.constants.NEW_EVENT_NOTIFICATION_TYPE
+import com.boardly.constants.NEW_EVENT_REQUEST_CODE
 import com.boardly.constants.NEW_JOIN_REQUEST_CHANNEL_ID
 import com.boardly.constants.NEW_JOIN_REQUEST_NOTIFICATION_TYPE
 import com.boardly.constants.NEW_JOIN_REQUEST_REQUEST_CODE
@@ -35,6 +39,7 @@ import com.boardly.eventdetails.EventDetailsActivity
 import com.boardly.extensions.jsonToArrayOfStrings
 import com.boardly.extensions.jsonToMapOfStrings
 import com.boardly.extensions.readAppSetting
+import com.boardly.home.HomeActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -68,6 +73,9 @@ class MessagingService : FirebaseMessagingService() {
                 ACCEPTED_REQUEST_NOTIFICATION_TYPE -> handleAcceptedRequestNotification(
                         titleArgs,
                         eventId)
+                NEW_EVENT_NOTIFICATION_TYPE -> handleNewEventNotification(
+                        bodyArgs,
+                        eventId)
             }
         }
     }
@@ -78,8 +86,8 @@ class MessagingService : FirebaseMessagingService() {
                                               eventType: String) {
         if (PreferenceManager.getDefaultSharedPreferences(this)
                         .readAppSetting("$TOGGLE_CHAT_NOTIFICATIONS_KEY_PREFIX$eventId")) {
-            val title = getString(R.string.chat_message_notification_title, *titleArgs)
-            val body = getString(R.string.chat_message_notification_body, *bodyArgs)
+            val title = getString(R.string.chat_message_notification_title, titleArgs[0])
+            val body = getString(R.string.chat_message_notification_body, bodyArgs[0])
             val notificationId = eventId.hashCode() + NEW_CHAT_MESSAGE_REQUEST_CODE
             val eventTypeEnum = getEventType(eventType)
             val pendingIntent = createEventDetailsPendingIntent(eventId, eventTypeEnum, NEW_CHAT_MESSAGE_REQUEST_CODE)
@@ -89,7 +97,7 @@ class MessagingService : FirebaseMessagingService() {
 
     private fun handleJoinRequestNotification(titleArgs: Array<String>,
                                               eventId: String) {
-        val title = getString(R.string.join_request_notification_title, *titleArgs)
+        val title = getString(R.string.join_request_notification_title, titleArgs[0])
         val body = getString(R.string.join_request_notification_body)
         val notificationId = eventId.hashCode() + NEW_JOIN_REQUEST_REQUEST_CODE
         val eventType = EventType.CREATED
@@ -99,12 +107,30 @@ class MessagingService : FirebaseMessagingService() {
 
     private fun handleAcceptedRequestNotification(titleArgs: Array<String>,
                                                   eventId: String) {
-        val title = getString(R.string.accepted_request_notification_title, *titleArgs)
+        val title = getString(R.string.accepted_request_notification_title, titleArgs[0])
         val body = getString(R.string.accepted_request_notification_body)
         val notificationId = eventId.hashCode() + ACCEPTED_REQUEST_REQUEST_CODE
         val eventType = EventType.ACCEPTED
         val pendingIntent = createEventDetailsPendingIntent(eventId, eventType, ACCEPTED_REQUEST_REQUEST_CODE)
         showDefaultNotification(pendingIntent, title, body, ACCEPTED_REQUEST_CHANNEL_ID, notificationId)
+    }
+
+    private fun handleNewEventNotification(bodyArgs: Array<String>,
+                                           eventId: String) {
+        val title = getString(R.string.new_event_notification_title)
+        val body = getString(R.string.new_event_notification_body, bodyArgs[0], bodyArgs[1])
+        val notificationId = eventId.hashCode() + NEW_EVENT_REQUEST_CODE
+        val pendingIntent = createHomePendingIntent(NEW_EVENT_REQUEST_CODE, title, body)
+        showDefaultNotification(pendingIntent, title, body, NEW_EVENT_CHANNEL_ID, notificationId)
+    }
+
+    private fun createHomePendingIntent(requestCode: Int,
+                                        title: String,
+                                        body: String): PendingIntent {
+        val intent = Intent(this, HomeActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        intent.putExtra(LAUNCH_INFO, "$title: $body")
+        return PendingIntent.getActivity(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     private fun createEventDetailsPendingIntent(eventId: String,

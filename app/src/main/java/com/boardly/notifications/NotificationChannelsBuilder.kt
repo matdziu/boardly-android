@@ -10,6 +10,7 @@ import android.support.annotation.StringRes
 import com.boardly.R
 import com.boardly.constants.ACCEPTED_REQUEST_CHANNEL_ID
 import com.boardly.constants.NEW_CHAT_MESSAGE_CHANNEL_ID
+import com.boardly.constants.NEW_EVENT_CHANNEL_ID
 import com.boardly.constants.NEW_JOIN_REQUEST_CHANNEL_ID
 
 class NotificationChannelsBuilder(private val context: Context) {
@@ -19,6 +20,7 @@ class NotificationChannelsBuilder(private val context: Context) {
         buildDefaultChannel(NEW_CHAT_MESSAGE_CHANNEL_ID, R.string.new_chat_message_channel)
         buildDefaultChannel(NEW_JOIN_REQUEST_CHANNEL_ID, R.string.new_join_request_channel)
         buildDefaultChannel(ACCEPTED_REQUEST_CHANNEL_ID, R.string.accepted_request_channel)
+        buildDefaultChannel(NEW_EVENT_CHANNEL_ID, R.string.new_event_channel)
     }
 
     @RequiresApi(26)

@@ -125,4 +125,7 @@
     <string name="delete_notifications_text">Delete notifications</string>
     <string name="notify_info">We\'ll notify you whenever new event with criteria below will be added nearby</string>
     <string name="filter_info">Filter events nearby using criteria below</string>
+    <string name="new_event_channel">New events nearby</string>
+    <string name="new_event_notification_title">New event nearby</string>
+    <string name="new_event_notification_body">Place: %1$s. Game: %2$s.</string>
 </resources>
