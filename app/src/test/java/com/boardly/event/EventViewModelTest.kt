@@ -59,10 +59,16 @@ class EventViewModelTest {
 
     @Test
     fun testPlacePickEvent() {
+        val inputData = InputData(
+                eventName = "Let's go",
+                gameId = "1")
+
+        eventViewRobot.addEvent(inputData)
         eventViewRobot.pickPlace()
 
         eventViewRobot.assertViewStates(
                 EventViewState(),
+                EventViewState(selectedPlaceValid = false),
                 EventViewState(selectedPlaceValid = true))
     }
 
