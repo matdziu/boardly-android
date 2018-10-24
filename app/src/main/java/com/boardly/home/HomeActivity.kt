@@ -28,6 +28,7 @@ import com.boardly.constants.SAVED_LOCATION_NAME
 import com.boardly.constants.SAVED_RADIUS
 import com.boardly.event.EventActivity
 import com.boardly.extensions.setBackgroundColor
+import com.boardly.extensions.setMaxLines
 import com.boardly.extensions.setTextColor
 import com.boardly.extensions.simplySetActionTextColor
 import com.boardly.factories.HomeViewModelFactory
@@ -89,6 +90,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
                     .simplySetActionTextColor(android.R.color.white)
                     .setBackgroundColor(R.color.colorPrimary)
                     .setTextColor(android.R.color.white)
+                    .setMaxLines(6)
                     .setAction(R.string.snackbar_ok, {})
                     .show()
         }
