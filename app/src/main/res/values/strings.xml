@@ -127,6 +127,6 @@
     <string name="filter_info">Filter events nearby using criteria below</string>
     <string name="new_event_channel">New events nearby</string>
     <string name="new_event_notification_title">New event nearby</string>
-    <string name="new_event_notification_body">Place: %1$s. Game: %2$s.</string>
+    <string name="new_event_notification_body">Place: %1$s. Games: %2$s.</string>
     <string name="snackbar_ok">OK</string>
 </resources>

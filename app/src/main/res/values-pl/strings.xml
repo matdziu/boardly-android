@@ -127,6 +127,6 @@
     <string name="filter_info">Filtruj wydarzenia w pobliżu używając poniższych kryteriów</string>
     <string name="new_event_channel">Nowe wydarzenia w okolicy</string>
     <string name="new_event_notification_title">Nowe wydarzenie w pobliżu</string>
-    <string name="new_event_notification_body">Miejsce: %1$s. Gra: %2$s.</string>
+    <string name="new_event_notification_body">Miejsce: %1$s. Gry: %2$s.</string>
     <string name="snackbar_ok">OK</string>
 </resources>
