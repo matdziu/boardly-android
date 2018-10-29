@@ -25,6 +25,7 @@
 -keep class com.boardly.common.players.models.** { *; }
 -keep class com.boardly.eventdetails.chat.models.** { *; }
 -keep class com.boardly.editprofile.models.** { *; }
+-keep class com.boardly.notify.models.** { *; }
 -keep class com.boardly.retrofit.gamesearch.models.** { *; }
 -keepattributes Signature
 -keepattributes *Annotation*
