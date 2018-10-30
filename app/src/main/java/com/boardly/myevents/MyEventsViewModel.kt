@@ -29,9 +29,33 @@ class MyEventsViewModel(private val myEventsInteractor: MyEventsInteractor,
                     myEventsInteractor.joinEvent(it)
                 }
 
+        val updateEventListObservable = myEventsView.joinEventEmitter()
+                .map { joinEventData ->
+                    val currentState = stateSubject.value ?: MyEventsViewState()
+                    val eventToBeJoined = currentState.interestingEvents.find { joinEventData.eventId != it.eventId }
+                    val acceptedEvents = currentState.acceptedEvents
+                    val createdEvents = currentState.createdEvents
+                    if (eventToBeJoined != null) {
+                        val pendingEvents = listOf(eventToBeJoined) + currentState.pendingEvents
+                        val interestingEvents = currentState.interestingEvents.filter { it == eventToBeJoined }
+                        PartialMyEventsViewState.EventsFetchedState(
+                                acceptedEvents,
+                                pendingEvents,
+                                createdEvents,
+                                interestingEvents)
+                    } else {
+                        PartialMyEventsViewState.EventsFetchedState(
+                                acceptedEvents,
+                                currentState.pendingEvents,
+                                createdEvents,
+                                currentState.interestingEvents)
+                    }
+                }
+
         val mergedObservable = Observable.merge(listOf(
                 eventsFetchObservable,
-                joinEventObservable))
+                joinEventObservable,
+                updateEventListObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 
