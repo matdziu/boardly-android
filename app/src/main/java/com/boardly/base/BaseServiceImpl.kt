@@ -6,6 +6,7 @@ import com.boardly.constants.ACCEPTED_EVENTS_NODE
 import com.boardly.constants.CHATS_NODE
 import com.boardly.constants.CREATED_EVENTS_NODE
 import com.boardly.constants.EVENTS_NODE
+import com.boardly.constants.EVENTS_WITH_INTEREST
 import com.boardly.constants.INTERESTING_EVENTS_NODE
 import com.boardly.constants.NOTIFY_SETTINGS_NODE
 import com.boardly.constants.PENDING_EVENTS_NODE
@@ -41,6 +42,10 @@ open class BaseServiceImpl {
 
     protected fun getUserNodeRef(userId: String): DatabaseReference {
         return firebaseDatabase.getReference("$USERS_NODE/$userId")
+    }
+
+    protected fun getEventsWithInterestRef(eventId: String): DatabaseReference {
+        return firebaseDatabase.getReference("$EVENTS_WITH_INTEREST/$eventId")
     }
 
     protected fun getUserRatingHashesRef(userId: String): DatabaseReference {
@@ -134,6 +139,27 @@ open class BaseServiceImpl {
                     childSnapshot.key?.let { keysList.add(it) }
                 }
                 dbSource.setResult(keysList)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                dbSource.setResult(listOf())
+            }
+        })
+
+        return dbTask
+    }
+
+    protected fun getValuesTask(databaseReference: DatabaseReference): Task<List<String>> {
+        val dbSource = TaskCompletionSource<List<String>>()
+        val dbTask = dbSource.task
+
+        databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val valuesList = arrayListOf<String>()
+                for (childSnapshot in dataSnapshot.children) {
+                    childSnapshot.getValue(String::class.java)?.let { valuesList.add(it) }
+                }
+                dbSource.setResult(valuesList)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {

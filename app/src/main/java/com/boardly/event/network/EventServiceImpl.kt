@@ -36,7 +36,8 @@ class EventServiceImpl : EventService, BaseServiceImpl() {
                 removeEventInfo(eventId),
                 removeEventFromPending(eventId),
                 removeEventFromAccepted(eventId),
-                removeEventFromCreated(eventId))
+                removeEventFromCreated(eventId),
+                removeEventFromInteresting(eventId))
                 .addOnSuccessListener { resultSubject.onNext(true) }
 
         return resultSubject
@@ -60,6 +61,12 @@ class EventServiceImpl : EventService, BaseServiceImpl() {
         return getKeysTask(getAcceptedPlayersNode(eventId))
                 .continueWithTask { removeForAllWithValue(it.result, { getUserAcceptedEventsNodeRef(it) }, eventId) }
                 .continueWithTask { getAcceptedPlayersNode(eventId).removeValue() }
+    }
+
+    private fun removeEventFromInteresting(eventId: String): Task<Void> {
+        return getValuesTask(getEventsWithInterestRef(eventId))
+                .continueWithTask { removeForAllWithValue(it.result, { getUserInterestingEventsNodeRef(it) }, eventId) }
+                .continueWithTask { getEventsWithInterestRef(eventId).removeValue() }
     }
 
     private fun removeEventFromCreated(eventId: String): Task<Any> {
