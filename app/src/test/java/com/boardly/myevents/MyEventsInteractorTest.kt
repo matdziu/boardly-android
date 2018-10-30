@@ -10,7 +10,7 @@ import org.junit.Test
 class MyEventsInteractorTest {
 
     @Test
-    fun testSuccessfulPendingAcceptedAndCreatedEventsMerging() {
+    fun testSuccessfulPendingAcceptedCreatedAndInterestingEventsMerging() {
         val acceptedEventsList = listOf(
                 Event(eventId = "1",
                         eventName = "sampleAcceptedEvent"))
@@ -21,14 +21,18 @@ class MyEventsInteractorTest {
                 Event(eventId = "3",
                         eventName = "sampleCreatedEvent",
                         timestamp = 1000))
+        val interestingEventsList = listOf(
+                Event(eventId = "2",
+                        eventName = "sampleInterestingEvent"))
         val myEventsService: MyEventsService = mock {
             on { it.getAcceptedEvents() } doReturn Observable.just(acceptedEventsList)
             on { it.getPendingEvents() } doReturn Observable.just(pendingEventsList)
             on { it.getCreatedEvents() } doReturn Observable.just(createdEventsList)
+            on { it.getInterestingEvents() } doReturn Observable.just(interestingEventsList)
         }
         val myEventsInteractor = MyEventsInteractor(myEventsService)
 
         myEventsInteractor.fetchEvents().test()
-                .assertValue(PartialMyEventsViewState.EventsFetchedState(acceptedEventsList, pendingEventsList, listOf()))
+                .assertValue(PartialMyEventsViewState.EventsFetchedState(acceptedEventsList, pendingEventsList, listOf(), listOf()))
     }
 }
