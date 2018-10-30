@@ -2,6 +2,7 @@ package com.boardly.myevents
 
 import android.arch.lifecycle.ViewModel
 import com.boardly.analytics.Analytics
+import com.boardly.common.events.models.EventType
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
@@ -32,12 +33,13 @@ class MyEventsViewModel(private val myEventsInteractor: MyEventsInteractor,
         val updateEventListObservable = myEventsView.joinEventEmitter()
                 .map { joinEventData ->
                     val currentState = stateSubject.value ?: MyEventsViewState()
-                    val eventToBeJoined = currentState.interestingEvents.find { joinEventData.eventId != it.eventId }
+                    val eventToBeJoined = currentState.interestingEvents.find { joinEventData.eventId == it.eventId }
                     val acceptedEvents = currentState.acceptedEvents
                     val createdEvents = currentState.createdEvents
                     if (eventToBeJoined != null) {
-                        val pendingEvents = listOf(eventToBeJoined) + currentState.pendingEvents
-                        val interestingEvents = currentState.interestingEvents.filter { it == eventToBeJoined }
+                        eventToBeJoined.type = EventType.PENDING
+                        val pendingEvents = currentState.pendingEvents + listOf(eventToBeJoined)
+                        val interestingEvents = currentState.interestingEvents.filter { it.eventId != eventToBeJoined.eventId }
                         PartialMyEventsViewState.EventsFetchedState(
                                 acceptedEvents,
                                 pendingEvents,
