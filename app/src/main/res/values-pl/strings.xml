@@ -109,6 +109,7 @@
     <string name="no_created_events_found_text">Nie masz jeszcze utworzonych wydarzeń</string>
     <string name="no_accepted_events_found_text">Nie masz jeszcze nadchodzących wydarzeń</string>
     <string name="no_pending_events_found_text">Nie masz jeszcze wydarzeń, które oczekują na akceptację organizatora</string>
+    <string name="no_interesting_events_found_text">Nie masz jeszcze wydarzeń, które Cię interesują</string>
     <string name="you_left_event">Opuściłeś wydarzenie</string>
     <string name="leave_event">Opuść wydarzenie</string>
     <string name="leave_cancel">Anuluj</string>

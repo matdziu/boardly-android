@@ -65,7 +65,7 @@ class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
     }
 
     private fun initViewPager() {
-        viewPager.offscreenPageLimit = 2
+        viewPager.offscreenPageLimit = 3
         viewPager.adapter = viewPagerAdapter
         viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(viewPager))
@@ -79,6 +79,7 @@ class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
             viewPagerAdapter.pendingAdapter.submitList(pendingEvents)
             viewPagerAdapter.acceptedAdapter.submitList(acceptedEvents)
             viewPagerAdapter.createdAdapter.submitList(createdEvents)
+            viewPagerAdapter.interestingAdapter.submitList(interestingEvents)
 
             if (!viewPagerInit) {
                 // this is done because of surprisingly very late call to instantiateItem()
@@ -88,12 +89,14 @@ class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
                         PageView.ACCEPTED -> showNoEventsTextView(acceptedEvents, it)
                         PageView.CREATED -> showNoEventsTextView(createdEvents, it)
                         PageView.PENDING -> showNoEventsTextView(pendingEvents, it)
+                        PageView.INTERESTING -> showNoEventsTextView(interestingEvents, it)
                     }
                 }
             } else {
                 showNoEventsTextView(acceptedEvents, viewPager.findViewWithTag(PageView.ACCEPTED))
                 showNoEventsTextView(pendingEvents, viewPager.findViewWithTag(PageView.PENDING))
                 showNoEventsTextView(createdEvents, viewPager.findViewWithTag(PageView.CREATED))
+                showNoEventsTextView(interestingEvents, viewPager.findViewWithTag(PageView.INTERESTING))
             }
         }
     }

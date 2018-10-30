@@ -109,6 +109,7 @@
     <string name="no_created_events_found_text">No created events yet</string>
     <string name="no_accepted_events_found_text">No accepted events yet</string>
     <string name="no_pending_events_found_text">No pending events yet</string>
+    <string name="no_interesting_events_found_text">No events that interest you yet</string>
     <string name="you_left_event">You left the event</string>
     <string name="leave_event">Leave the event</string>
     <string name="leave_cancel">Cancel</string>

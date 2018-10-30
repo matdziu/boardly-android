@@ -18,6 +18,7 @@ class ViewPagerAdapter : PagerAdapter() {
     val acceptedAdapter = EventsAdapter()
     val pendingAdapter = EventsAdapter()
     val createdAdapter = EventsAdapter()
+    val interestingAdapter = EventsAdapter()
 
     private val viewsSubject = PublishSubject.create<View>()
 
@@ -28,6 +29,7 @@ class ViewPagerAdapter : PagerAdapter() {
             PageView.ACCEPTED -> init(acceptedAdapter, R.string.no_accepted_events_found_text, pageView, pageEnum)
             PageView.CREATED -> init(createdAdapter, R.string.no_created_events_found_text, pageView, pageEnum)
             PageView.PENDING -> init(pendingAdapter, R.string.no_pending_events_found_text, pageView, pageEnum)
+            PageView.INTERESTING -> init(interestingAdapter, R.string.no_interesting_events_found_text, pageView, pageEnum)
         }
 
         container.addView(pageView)
@@ -64,5 +66,5 @@ class ViewPagerAdapter : PagerAdapter() {
 }
 
 enum class PageView {
-    ACCEPTED, CREATED, PENDING
+    ACCEPTED, CREATED, PENDING, INTERESTING
 }
