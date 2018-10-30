@@ -2,15 +2,22 @@ package com.boardly.myevents
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.view.View
 import com.boardly.R
 import com.boardly.base.joinevent.BaseJoinEventActivity
 import com.boardly.common.events.models.Event
+import com.boardly.constants.LAUNCH_INFO
+import com.boardly.extensions.setBackgroundColor
+import com.boardly.extensions.setMaxLines
+import com.boardly.extensions.setTextColor
+import com.boardly.extensions.simplySetActionTextColor
 import com.boardly.factories.MyEventsViewModelFactory
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.activity_my_events.coordinatorLayout
 import kotlinx.android.synthetic.main.activity_my_events.progressBar
 import kotlinx.android.synthetic.main.activity_my_events.tabLayout
 import kotlinx.android.synthetic.main.activity_my_events.viewPager
@@ -39,6 +46,18 @@ class MyEventsActivity : BaseJoinEventActivity(), MyEventsView {
         initViewPager()
 
         myEventsViewModel = ViewModelProviders.of(this, myEventsViewModelFactory)[MyEventsViewModel::class.java]
+
+        val launchInfo = intent.getStringExtra(LAUNCH_INFO)
+        if (launchInfo != null) {
+            Snackbar.make(coordinatorLayout, launchInfo, Snackbar.LENGTH_INDEFINITE)
+                    .simplySetActionTextColor(android.R.color.white)
+                    .setBackgroundColor(R.color.colorPrimary)
+                    .setTextColor(android.R.color.white)
+                    .setMaxLines(6)
+                    .setAction(R.string.snackbar_ok, {})
+                    .show()
+            viewPager.currentItem = 3
+        }
     }
 
     override fun onResume() {

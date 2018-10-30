@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
@@ -15,7 +14,6 @@ import com.boardly.R
 import com.boardly.base.joinevent.BaseJoinEventActivity
 import com.boardly.common.events.list.EventsAdapter
 import com.boardly.common.location.UserLocation
-import com.boardly.constants.LAUNCH_INFO
 import com.boardly.constants.PICKED_FILTER
 import com.boardly.constants.PICK_FILTER_REQUEST_CODE
 import com.boardly.constants.SAVED_GAME_ID
@@ -26,10 +24,6 @@ import com.boardly.constants.SAVED_LOCATION_LONGITUDE
 import com.boardly.constants.SAVED_LOCATION_NAME
 import com.boardly.constants.SAVED_RADIUS
 import com.boardly.event.EventActivity
-import com.boardly.extensions.setBackgroundColor
-import com.boardly.extensions.setMaxLines
-import com.boardly.extensions.setTextColor
-import com.boardly.extensions.simplySetActionTextColor
 import com.boardly.factories.HomeViewModelFactory
 import com.boardly.filter.FilterActivity
 import com.boardly.filter.models.Filter
@@ -41,7 +35,6 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_home.addEventButton
 import kotlinx.android.synthetic.main.activity_home.contentViewGroup
-import kotlinx.android.synthetic.main.activity_home.coordinatorLayout
 import kotlinx.android.synthetic.main.activity_home.eventsRecyclerView
 import kotlinx.android.synthetic.main.activity_home.inviteFriendsButton
 import kotlinx.android.synthetic.main.activity_home.locationProcessingTextView
@@ -79,17 +72,6 @@ class HomeActivity : BaseJoinEventActivity(), HomeView {
             shareIntent.type = "text/plain"
             shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.boardly_invite_text))
             startActivity(Intent.createChooser(shareIntent, getString(R.string.chooser_title_text)))
-        }
-
-        val launchInfo = intent.getStringExtra(LAUNCH_INFO)
-        if (launchInfo != null) {
-            Snackbar.make(coordinatorLayout, launchInfo, Snackbar.LENGTH_INDEFINITE)
-                    .simplySetActionTextColor(android.R.color.white)
-                    .setBackgroundColor(R.color.colorPrimary)
-                    .setTextColor(android.R.color.white)
-                    .setMaxLines(6)
-                    .setAction(R.string.snackbar_ok, {})
-                    .show()
         }
     }
 

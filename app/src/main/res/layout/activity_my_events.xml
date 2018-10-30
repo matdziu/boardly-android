@@ -5,62 +5,69 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include layout="@layout/toolbar" />
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabLayout"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/toolbar"
-            android:background="@color/colorPrimary"
-            app:tabIndicatorHeight="5dp">
+            android:layout_height="match_parent">
 
-            <android.support.design.widget.TabItem
-                android:id="@+id/acceptedTab"
+            <include layout="@layout/toolbar" />
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/ic_accepted" />
+                android:layout_below="@id/toolbar"
+                android:background="@color/colorPrimary"
+                app:tabIndicatorHeight="5dp">
 
-            <android.support.design.widget.TabItem
-                android:id="@+id/createdTab"
+                <android.support.design.widget.TabItem
+                    android:id="@+id/acceptedTab"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_accepted" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/createdTab"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_created" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/pendingTab"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_pending" />
+
+                <android.support.design.widget.TabItem
+                    android:id="@+id/interestingTab"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:icon="@drawable/ic_notify" />
+
+            </android.support.design.widget.TabLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:icon="@drawable/ic_created" />
+                android:layout_below="@id/tabLayout" />
 
-            <android.support.design.widget.TabItem
-                android:id="@+id/pendingTab"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_pending" />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:visibility="gone" />
 
-            <android.support.design.widget.TabItem
-                android:id="@+id/interestingTab"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:icon="@drawable/ic_notify" />
+        </RelativeLayout>
 
-        </android.support.design.widget.TabLayout>
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tabLayout" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:visibility="gone" />
-
-    </RelativeLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigationView"

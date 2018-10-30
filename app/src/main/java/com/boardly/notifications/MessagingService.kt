@@ -39,7 +39,7 @@ import com.boardly.eventdetails.EventDetailsActivity
 import com.boardly.extensions.jsonToArrayOfStrings
 import com.boardly.extensions.jsonToMapOfStrings
 import com.boardly.extensions.readAppSetting
-import com.boardly.home.HomeActivity
+import com.boardly.myevents.MyEventsActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -127,7 +127,7 @@ class MessagingService : FirebaseMessagingService() {
     private fun createHomePendingIntent(requestCode: Int,
                                         title: String,
                                         body: String): PendingIntent {
-        val intent = Intent(this, HomeActivity::class.java)
+        val intent = Intent(this, MyEventsActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         intent.putExtra(LAUNCH_INFO, "$title: $body")
         return PendingIntent.getActivity(this, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT)
