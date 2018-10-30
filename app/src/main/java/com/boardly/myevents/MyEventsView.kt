@@ -1,8 +1,9 @@
 package com.boardly.myevents
 
+import com.boardly.base.joinevent.BaseJoinEventView
 import io.reactivex.Observable
 
-interface MyEventsView {
+interface MyEventsView : BaseJoinEventView {
 
     fun render(myEventsViewState: MyEventsViewState)
 

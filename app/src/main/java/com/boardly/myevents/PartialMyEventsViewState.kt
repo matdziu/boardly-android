@@ -14,11 +14,19 @@ sealed class PartialMyEventsViewState {
 
     data class EventsFetchedState(private val acceptedEvents: List<Event>,
                                   private val pendingEvents: List<Event>,
-                                  private val createdEvents: List<Event>) : PartialMyEventsViewState() {
+                                  private val createdEvents: List<Event>,
+                                  private val interestingEvents: List<Event>) : PartialMyEventsViewState() {
         override fun reduce(previousState: MyEventsViewState): MyEventsViewState {
             return MyEventsViewState(acceptedEvents = acceptedEvents,
                     pendingEvents = pendingEvents,
-                    createdEvents = createdEvents)
+                    createdEvents = createdEvents,
+                    interestingEvents = interestingEvents)
+        }
+    }
+
+    data class JoinRequestSent(private val render: Boolean = true) : PartialMyEventsViewState() {
+        override fun reduce(previousState: MyEventsViewState): MyEventsViewState {
+            return previousState.copy(joinRequestSent = render)
         }
     }
 }

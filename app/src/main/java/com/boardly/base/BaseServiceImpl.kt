@@ -6,14 +6,17 @@ import com.boardly.constants.ACCEPTED_EVENTS_NODE
 import com.boardly.constants.CHATS_NODE
 import com.boardly.constants.CREATED_EVENTS_NODE
 import com.boardly.constants.EVENTS_NODE
+import com.boardly.constants.INTERESTING_EVENTS_NODE
 import com.boardly.constants.NOTIFY_SETTINGS_NODE
 import com.boardly.constants.PENDING_EVENTS_NODE
 import com.boardly.constants.PLAYERS_NODE
 import com.boardly.constants.RATING_HASHES
 import com.boardly.constants.USERS_NODE
+import com.boardly.home.models.JoinEventData
 import com.firebase.geofire.GeoFire
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -76,6 +79,10 @@ open class BaseServiceImpl {
         return firebaseDatabase.getReference("$USERS_NODE/$userId/$EVENTS_NODE/$CREATED_EVENTS_NODE")
     }
 
+    protected fun getUserInterestingEventsNodeRef(userId: String): DatabaseReference {
+        return firebaseDatabase.getReference("$USERS_NODE/$userId/$EVENTS_NODE/$INTERESTING_EVENTS_NODE")
+    }
+
     protected fun getUserNotifySettingsRef(userId: String): DatabaseReference {
         return firebaseDatabase.getReference("$NOTIFY_SETTINGS_NODE/$userId")
     }
@@ -90,6 +97,10 @@ open class BaseServiceImpl {
 
     protected fun createdEventIdsList(): Observable<List<String>> {
         return idsList(getUserCreatedEventsNodeRef(currentUserId))
+    }
+
+    protected fun interestingEventIdsList(): Observable<List<String>> {
+        return idsList(getUserInterestingEventsNodeRef(currentUserId))
     }
 
     private fun idsList(idsDatabaseReference: DatabaseReference): Observable<List<String>> {
@@ -260,6 +271,19 @@ open class BaseServiceImpl {
             })
         }
 
+        return resultSubject
+    }
+
+    fun sendJoinRequest(joinEventData: JoinEventData): Observable<Boolean> {
+        val resultSubject = PublishSubject.create<Boolean>()
+        Tasks.whenAllComplete(
+                getUserPendingEventsNodeRef(currentUserId)
+                        .push()
+                        .setValue(joinEventData.eventId),
+                getPendingPlayersNode(joinEventData.eventId)
+                        .child(currentUserId)
+                        .setValue(joinEventData.helloText))
+                .addOnSuccessListener { resultSubject.onNext(true) }
         return resultSubject
     }
 }

@@ -1,12 +1,14 @@
 package com.boardly.myevents
 
 import android.arch.lifecycle.ViewModel
+import com.boardly.analytics.Analytics
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 
-class MyEventsViewModel(private val myEventsInteractor: MyEventsInteractor) : ViewModel() {
+class MyEventsViewModel(private val myEventsInteractor: MyEventsInteractor,
+                        private val analytics: Analytics) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     private val stateSubject = BehaviorSubject.createDefault(MyEventsViewState())
@@ -21,7 +23,15 @@ class MyEventsViewModel(private val myEventsInteractor: MyEventsInteractor) : Vi
                     }
                 }
 
-        val mergedObservable = Observable.merge(listOf(eventsFetchObservable))
+        val joinEventObservable = myEventsView.joinEventEmitter()
+                .flatMap {
+                    analytics.logJoinRequestSentEvent()
+                    myEventsInteractor.joinEvent(it)
+                }
+
+        val mergedObservable = Observable.merge(listOf(
+                eventsFetchObservable,
+                joinEventObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 

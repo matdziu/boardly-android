@@ -1,16 +1,14 @@
 package com.boardly.home
 
+import com.boardly.base.joinevent.BaseJoinEventView
 import com.boardly.home.models.FilteredFetchData
-import com.boardly.home.models.JoinEventData
 import io.reactivex.Observable
 
-interface HomeView {
+interface HomeView : BaseJoinEventView {
 
     fun render(homeViewState: HomeViewState)
 
     fun filteredFetchTriggerEmitter(): Observable<FilteredFetchData>
-
-    fun joinEventEmitter(): Observable<JoinEventData>
 
     fun locationProcessingEmitter(): Observable<Boolean>
 }

@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.view.View
 import com.boardly.R
-import com.boardly.base.BaseDrawerActivity
+import com.boardly.base.joinevent.BaseJoinEventActivity
 import com.boardly.common.events.models.Event
 import com.boardly.factories.MyEventsViewModelFactory
 import dagger.android.AndroidInjection
@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.view_my_events.view.myEventsRecyclerView
 import kotlinx.android.synthetic.main.view_my_events.view.noEventsTextView
 import javax.inject.Inject
 
-class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
+class MyEventsActivity : BaseJoinEventActivity(), MyEventsView {
 
     private lateinit var fetchEventsSubject: PublishSubject<Boolean>
 
@@ -98,6 +98,8 @@ class MyEventsActivity : BaseDrawerActivity(), MyEventsView {
                 showNoEventsTextView(createdEvents, viewPager.findViewWithTag(PageView.CREATED))
                 showNoEventsTextView(interestingEvents, viewPager.findViewWithTag(PageView.INTERESTING))
             }
+
+            showJoinRequestSentToast(joinRequestSent)
         }
     }
 

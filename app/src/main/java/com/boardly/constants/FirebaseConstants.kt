@@ -7,6 +7,7 @@ const val PLAYERS_NODE = "players"
 const val PENDING_EVENTS_NODE = "pending"
 const val ACCEPTED_EVENTS_NODE = "accepted"
 const val CREATED_EVENTS_NODE = "created"
+const val INTERESTING_EVENTS_NODE = "interesting"
 const val CHATS_NODE = "chats"
 
 const val NAME_CHILD = "name"

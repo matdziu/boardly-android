@@ -11,4 +11,6 @@ class MyEventsServiceImpl : MyEventsService, BaseServiceImpl() {
     override fun getAcceptedEvents(): Observable<List<Event>> = acceptedEventIdsList().flatMap { events(it) }
 
     override fun getCreatedEvents(): Observable<List<Event>> = createdEventIdsList().flatMap { events(it) }
+
+    override fun getInterestingEvents(): Observable<List<Event>> = interestingEventIdsList().flatMap { events(it) }
 }

@@ -11,9 +11,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import com.boardly.R
-import com.boardly.base.BaseDrawerActivity
+import com.boardly.base.joinevent.BaseJoinEventActivity
 import com.boardly.common.events.list.EventsAdapter
 import com.boardly.common.location.UserLocation
 import com.boardly.constants.LAUNCH_INFO
@@ -35,7 +34,6 @@ import com.boardly.factories.HomeViewModelFactory
 import com.boardly.filter.FilterActivity
 import com.boardly.filter.models.Filter
 import com.boardly.home.models.FilteredFetchData
-import com.boardly.home.models.JoinEventData
 import com.boardly.notify.NotifyActivity
 import com.google.android.gms.common.GoogleApiAvailability
 import dagger.android.AndroidInjection
@@ -52,7 +50,7 @@ import kotlinx.android.synthetic.main.activity_home.noEventsTextView
 import kotlinx.android.synthetic.main.activity_home.noLocationPermissionTextView
 import javax.inject.Inject
 
-class HomeActivity : BaseDrawerActivity(), HomeView {
+class HomeActivity : BaseJoinEventActivity(), HomeView {
 
     @Inject
     lateinit var homeViewModelFactory: HomeViewModelFactory
@@ -61,7 +59,6 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
     private lateinit var filteredFetchSubject: PublishSubject<FilteredFetchData>
     private lateinit var locationProcessingSubject: PublishSubject<Boolean>
-    lateinit var joinEventSubject: PublishSubject<JoinEventData>
 
     private val eventsAdapter = EventsAdapter()
     private var selectedFilter = Filter()
@@ -119,7 +116,6 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
     private fun initEmitters() {
         filteredFetchSubject = PublishSubject.create()
-        joinEventSubject = PublishSubject.create()
         locationProcessingSubject = PublishSubject.create()
     }
 
@@ -180,8 +176,6 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
 
     override fun filteredFetchTriggerEmitter(): Observable<FilteredFetchData> = filteredFetchSubject
 
-    override fun joinEventEmitter(): Observable<JoinEventData> = joinEventSubject
-
     override fun locationProcessingEmitter(): Observable<Boolean> = locationProcessingSubject
 
     override fun render(homeViewState: HomeViewState) {
@@ -198,7 +192,7 @@ class HomeActivity : BaseDrawerActivity(), HomeView {
                 showNoEventsFoundText(true)
             }
 
-            if (joinRequestSent) Toast.makeText(this@HomeActivity, R.string.join_request_sent, Toast.LENGTH_SHORT).show()
+            showJoinRequestSentToast(joinRequestSent)
         }
     }
 

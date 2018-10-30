@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.boardly.R
 import com.boardly.base.BaseActivity
+import com.boardly.base.joinevent.BaseJoinEventActivity
 import com.boardly.common.events.EventUIRenderer
 import com.boardly.common.events.models.Event
 import com.boardly.common.events.models.EventType
 import com.boardly.eventdetails.EventDetailsActivity
-import com.boardly.home.HomeActivity
 import com.boardly.home.JoinDialogValidator
 import com.boardly.home.models.JoinEventData
 import kotlinx.android.synthetic.main.item_event.view.acceptedTextView
@@ -104,7 +104,7 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     private fun emitJoinEventData(joinEventData: JoinEventData) {
-        val homeActivity = parentActivity as HomeActivity
+        val homeActivity = parentActivity as BaseJoinEventActivity
         homeActivity.joinEventSubject.onNext(joinEventData)
     }
 

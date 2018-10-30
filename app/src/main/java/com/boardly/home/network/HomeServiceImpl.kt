@@ -5,10 +5,8 @@ import com.boardly.common.events.models.Event
 import com.boardly.common.location.UserLocation
 import com.boardly.constants.EVENTS_NODE
 import com.boardly.constants.NOTIFICATION_TOKEN_CHILD
-import com.boardly.home.models.JoinEventData
 import com.firebase.geofire.GeoLocation
 import com.firebase.geofire.GeoQueryDataEventListener
-import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.iid.FirebaseInstanceId
@@ -73,19 +71,6 @@ class HomeServiceImpl : HomeService, BaseServiceImpl() {
                     }
                 })
 
-        return resultSubject
-    }
-
-    override fun sendJoinRequest(joinEventData: JoinEventData): Observable<Boolean> {
-        val resultSubject = PublishSubject.create<Boolean>()
-        Tasks.whenAllComplete(
-                getUserPendingEventsNodeRef(currentUserId)
-                        .push()
-                        .setValue(joinEventData.eventId),
-                getPendingPlayersNode(joinEventData.eventId)
-                        .child(currentUserId)
-                        .setValue(joinEventData.helloText))
-                .addOnSuccessListener { resultSubject.onNext(true) }
         return resultSubject
     }
 }
