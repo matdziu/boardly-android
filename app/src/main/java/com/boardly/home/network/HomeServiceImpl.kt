@@ -51,7 +51,7 @@ class HomeServiceImpl : HomeService, BaseServiceImpl() {
                     }
 
                     override fun onGeoQueryReady() {
-                        resultSubject.onNext(fetchedEventsList)
+                        resultSubject.onNext(fetchedEventsList.reversed())
                     }
 
                     override fun onDataExited(dataSnapshot: DataSnapshot) {
