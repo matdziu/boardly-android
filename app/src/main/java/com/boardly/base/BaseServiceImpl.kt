@@ -31,7 +31,7 @@ import io.reactivex.subjects.PublishSubject
 
 open class BaseServiceImpl {
 
-    private val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
+    protected val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
     private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     protected val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     protected val currentUserId = firebaseAuth.currentUser?.uid.orEmpty()

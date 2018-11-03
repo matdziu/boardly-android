@@ -104,7 +104,7 @@ class EventServiceImpl : EventService, BaseServiceImpl() {
         inputData.adminId = currentUserId
         val resultSubject = PublishSubject.create<Boolean>()
 
-        val eventKey = UUID.randomUUID().toString()
+        val eventKey = firebaseDatabase.getReference("").push().key ?: UUID.randomUUID().toString()
         val geoLocation = GeoLocation(inputData.placeLatitude, inputData.placeLongitude)
 
         setGeoLocationTask(eventKey, geoLocation)
