@@ -31,7 +31,7 @@ class MyEventsInteractor @Inject constructor(private val myEventsService: MyEven
                             interesting.filter { interestingEvent ->
                                 !isOlderThanOneDay(interestingEvent.timestamp)
                                         && other.find { it.eventId == interestingEvent.eventId } == null
-                            }.distinct())
+                            })
                 })
     }
 
