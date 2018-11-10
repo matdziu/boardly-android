@@ -14,7 +14,8 @@ import com.boardly.common.events.models.Event
 import com.boardly.extensions.HOUR_IN_MILLIS
 import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.loadImageFromUrl
-import java.util.*
+import com.boardly.extensions.setOnClickListener
+import java.util.Date
 import javax.inject.Inject
 
 class EventUIRenderer @Inject constructor(private val activity: AppCompatActivity) {
@@ -43,18 +44,18 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
             setSeeDescriptionButton(description, seeDescriptionButton)
             setDateTextView(timestamp, timeTextView)
 
-            setOnClickListener({ openMap(placeLatitude, placeLongitude) }, locationTextView, locationImageView)
-            setOnClickListener({ openBoardGameInfoPage(gameId) }, gameTextView, boardGameImageView)
-            setOnClickListener({ openBoardGameInfoPage(gameId2) }, gameTextView2, boardGameImageView2)
-            setOnClickListener({ openBoardGameInfoPage(gameId3) }, gameTextView3, boardGameImageView3)
-            setOnClickListener({
+            listOf(locationTextView, locationImageView).setOnClickListener { openMap(placeLatitude, placeLongitude) }
+            listOf(timeTextView, timeImageView).setOnClickListener {
                 openCalendar(eventName,
                         gameName,
                         gameName2,
                         gameName3,
                         timestamp,
                         placeName)
-            }, timeTextView, timeImageView)
+            }
+            boardGameImageView.setOnClickListener { openBoardGameInfoPage(gameId) }
+            boardGameImageView2.setOnClickListener { openBoardGameInfoPage(gameId2) }
+            boardGameImageView3.setOnClickListener { openBoardGameInfoPage(gameId3) }
         }
     }
 
@@ -137,12 +138,6 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
             timeTextView.text = Date(timestamp).formatForDisplay()
         } else {
             timeTextView.text = activity.getString(R.string.date_to_be_added)
-        }
-    }
-
-    private fun setOnClickListener(clickAction: () -> Unit, vararg views: View) {
-        for (view in views) {
-            if (view.visibility == View.VISIBLE) view.setOnClickListener { clickAction() }
         }
     }
 }

@@ -12,6 +12,7 @@ import com.boardly.common.events.EventUIRenderer
 import com.boardly.common.events.models.Event
 import com.boardly.common.events.models.EventType
 import com.boardly.eventdetails.EventDetailsActivity
+import com.boardly.extensions.setOnClickListener
 import com.boardly.home.JoinDialogValidator
 import com.boardly.home.models.JoinEventData
 import kotlinx.android.synthetic.main.item_event.view.acceptedTextView
@@ -70,7 +71,8 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private fun setDefaultClickAction(eventId: String) {
         with(itemView) {
             openEventScreenButton.visibility = View.GONE
-            joinEventButton.setOnClickListener { launchHelloDialog(eventId) }
+            listOf(joinEventButton, gameTextView, gameTextView2, gameTextView3, eventNameTextView)
+                    .setOnClickListener { launchHelloDialog(eventId) }
         }
     }
 
@@ -111,7 +113,8 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private fun setCreatedClickAction(event: Event) {
         with(itemView) {
             openEventScreenButton.visibility = View.VISIBLE
-            openEventScreenButton.setOnClickListener { EventDetailsActivity.start(parentActivity, event.eventId, event.type) }
+            listOf(openEventScreenButton, gameTextView, gameTextView2, gameTextView3, eventNameTextView)
+                    .setOnClickListener { EventDetailsActivity.start(parentActivity, event.eventId, event.type) }
         }
     }
 
@@ -124,7 +127,8 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private fun setAcceptedClickAction(event: Event) {
         with(itemView) {
             openEventScreenButton.visibility = View.VISIBLE
-            openEventScreenButton.setOnClickListener { EventDetailsActivity.start(parentActivity, event.eventId, event.type) }
+            listOf(openEventScreenButton, gameTextView, gameTextView2, gameTextView3, eventNameTextView)
+                    .setOnClickListener { EventDetailsActivity.start(parentActivity, event.eventId, event.type) }
         }
     }
 
