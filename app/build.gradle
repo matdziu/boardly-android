@@ -16,8 +16,8 @@ android {
         applicationId "com.boardly"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 25
-        versionName "1.25"
+        versionCode 26
+        versionName "1.26"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
