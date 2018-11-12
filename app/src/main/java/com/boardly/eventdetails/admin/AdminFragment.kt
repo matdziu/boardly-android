@@ -112,6 +112,9 @@ class AdminFragment : BaseEventDetailsFragment(), AdminView {
     }
 
     private fun initRecyclerViews() {
+        acceptedPlayersRecyclerView.isNestedScrollingEnabled = false
+        pendingPlayersRecyclerView.isNestedScrollingEnabled = false
+
         acceptedPlayersRecyclerView.layoutManager = LinearLayoutManager(context)
         pendingPlayersRecyclerView.layoutManager = LinearLayoutManager(context)
 

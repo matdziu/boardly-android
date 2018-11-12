@@ -66,16 +66,16 @@
             android:textAlignment="center"
             android:visibility="gone" />
 
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/inviteFriendsButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/errorRed"
             android:text="@string/invite_friends"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            app:backgroundTint="@color/errorRed" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/addEventButton"

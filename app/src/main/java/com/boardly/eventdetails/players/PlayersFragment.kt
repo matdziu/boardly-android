@@ -102,6 +102,7 @@ class PlayersFragment : BaseEventDetailsFragment(), PlayersView {
     }
 
     private fun initRecyclerView() {
+        acceptedPlayersRecyclerView.isNestedScrollingEnabled = false
         acceptedPlayersRecyclerView.layoutManager = LinearLayoutManager(context)
         acceptedPlayersRecyclerView.adapter = acceptedPlayersAdapter
     }
