@@ -34,6 +34,8 @@
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_marginTop="24dp"
+                android:background="@drawable/image_view_border"
+                android:padding="1dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/board_game_placeholder"
                 app:layout_constraintLeft_toLeftOf="parent"
