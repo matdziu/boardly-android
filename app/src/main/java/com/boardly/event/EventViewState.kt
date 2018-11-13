@@ -1,6 +1,6 @@
 package com.boardly.event
 
-import com.boardly.retrofit.gamesearch.models.Game
+import com.boardly.retrofit.gameservice.models.Game
 
 data class EventViewState(val progress: Boolean = false,
                           val success: Boolean = false,

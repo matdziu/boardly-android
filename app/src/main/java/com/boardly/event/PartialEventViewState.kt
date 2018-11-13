@@ -1,7 +1,7 @@
 package com.boardly.event
 
 import com.boardly.event.models.GamePickType
-import com.boardly.retrofit.gamesearch.models.Game
+import com.boardly.retrofit.gameservice.models.Game
 
 sealed class PartialEventViewState {
 

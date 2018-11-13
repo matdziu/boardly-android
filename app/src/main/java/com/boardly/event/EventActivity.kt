@@ -36,8 +36,8 @@ import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.loadImageFromUrl
 import com.boardly.factories.EventViewModelFactory
 import com.boardly.pickgame.PickGameActivity
-import com.boardly.retrofit.gamesearch.models.Game
-import com.boardly.retrofit.gamesearch.models.SearchResult
+import com.boardly.retrofit.gameservice.models.Game
+import com.boardly.retrofit.gameservice.models.SearchResult
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.places.ui.PlaceAutocomplete

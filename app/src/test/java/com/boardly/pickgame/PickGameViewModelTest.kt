@@ -1,6 +1,6 @@
 package com.boardly.pickgame
 
-import com.boardly.retrofit.gamesearch.models.SearchResult
+import com.boardly.retrofit.gameservice.models.SearchResult
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock

@@ -1,16 +1,16 @@
 package com.boardly.pickgame
 
-import com.boardly.retrofit.gamesearch.GameSearchService
+import com.boardly.retrofit.gameservice.BoardGameGeekService
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class PickGameInteractor @Inject constructor(private val gameSearchService: GameSearchService) {
+class PickGameInteractor @Inject constructor(private val boardGameGeekService: BoardGameGeekService) {
 
     private var latestQuery = ""
 
     fun fetchSearchResults(query: String): Observable<PartialPickGameViewState> {
         latestQuery = query
-        return gameSearchService
+        return boardGameGeekService
                 .search(query)
                 .map { PartialPickGameViewState.ResultsFetchedState(it.games) }
                 .cast(PartialPickGameViewState::class.java)

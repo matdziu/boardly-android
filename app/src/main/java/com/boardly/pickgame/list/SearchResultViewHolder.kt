@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.boardly.constants.PICKED_GAME
 import com.boardly.pickgame.PickGameActivity
-import com.boardly.retrofit.gamesearch.models.SearchResult
+import com.boardly.retrofit.gameservice.models.SearchResult
 import kotlinx.android.synthetic.main.item_search_result.view.gameNameTextView
 import kotlinx.android.synthetic.main.item_search_result.view.yearPublishedTextView
 

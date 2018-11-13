@@ -2,9 +2,9 @@ package com.boardly.notify
 
 import com.boardly.notify.models.NotifySettings
 import com.boardly.notify.network.NotifyService
-import com.boardly.retrofit.gamesearch.GameSearchService
-import com.boardly.retrofit.gamesearch.models.DetailsResponse
-import com.boardly.retrofit.gamesearch.models.Game
+import com.boardly.retrofit.gameservice.GameService
+import com.boardly.retrofit.gameservice.models.DetailsResponse
+import com.boardly.retrofit.gameservice.models.Game
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
@@ -22,15 +22,15 @@ class NotifyInteractorTest {
     private val testGame = Game(1, "Monopoly")
     private val detailsResponse = DetailsResponse(testGame)
     private val testNotifySettings = NotifySettings(radius = 100.0, gameId = "1", gameName = "Monopoly")
-    private val gameSearchService: GameSearchService = mock {
-        on { it.boardGameDetails("testGameId") } doReturn Observable.just(detailsResponse)
+    private val gameService: GameService = mock {
+        on { it.gameDetails("testGameId") } doReturn Observable.just(detailsResponse)
     }
     private val notifyService: NotifyService = mock {
         on { it.deleteNotifications() } doReturn Observable.just(true)
         on { it.fetchNotifySettings() } doReturn Observable.just(testNotifySettings)
         on { it.updateNotifySettings(any()) } doReturn Observable.just(true)
     }
-    private val notifyInteractor = NotifyInteractor(gameSearchService, notifyService)
+    private val notifyInteractor = NotifyInteractor(gameService, notifyService)
 
     @Test
     fun testSuccessfulGameDetailsFetching() {

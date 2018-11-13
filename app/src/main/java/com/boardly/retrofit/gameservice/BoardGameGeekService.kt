@@ -1,12 +1,12 @@
-package com.boardly.retrofit.gamesearch
+package com.boardly.retrofit.gameservice
 
-import com.boardly.retrofit.gamesearch.models.DetailsResponse
-import com.boardly.retrofit.gamesearch.models.SearchResponse
+import com.boardly.retrofit.gameservice.models.DetailsResponse
+import com.boardly.retrofit.gameservice.models.SearchResponse
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface GameSearchService {
+interface BoardGameGeekService {
 
     @GET("search?type=boardgame,rpg")
     fun search(@Query("query") query: String): Observable<SearchResponse>

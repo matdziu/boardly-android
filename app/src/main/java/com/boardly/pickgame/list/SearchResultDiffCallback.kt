@@ -1,7 +1,7 @@
 package com.boardly.pickgame.list
 
 import android.support.v7.util.DiffUtil
-import com.boardly.retrofit.gamesearch.models.SearchResult
+import com.boardly.retrofit.gameservice.models.SearchResult
 
 class SearchResultDiffCallback : DiffUtil.ItemCallback<SearchResult>() {
 

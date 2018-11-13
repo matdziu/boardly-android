@@ -2,17 +2,17 @@ package com.boardly.notify
 
 import com.boardly.notify.models.NotifySettings
 import com.boardly.notify.network.NotifyService
-import com.boardly.retrofit.gamesearch.GameSearchService
-import com.boardly.retrofit.gamesearch.models.DetailsResponse
+import com.boardly.retrofit.gameservice.GameService
+import com.boardly.retrofit.gameservice.models.DetailsResponse
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
-class NotifyInteractor @Inject constructor(private val gameSearchService: GameSearchService,
+class NotifyInteractor @Inject constructor(private val gameService: GameService,
                                            private val notifyService: NotifyService) {
 
     fun fetchGameDetails(gameId: String): Observable<PartialNotifyViewState> {
-        return gameSearchService.boardGameDetails(gameId)
+        return gameService.gameDetails(gameId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorReturn { DetailsResponse() }
                 .map { PartialNotifyViewState.GameDetailsFetched(it.game) }

@@ -1,6 +1,6 @@
 package com.boardly.pickgame
 
-import com.boardly.retrofit.gamesearch.models.SearchResult
+import com.boardly.retrofit.gameservice.models.SearchResult
 
 sealed class PartialPickGameViewState {
 

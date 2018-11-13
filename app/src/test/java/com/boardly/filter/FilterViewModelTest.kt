@@ -1,6 +1,6 @@
 package com.boardly.filter
 
-import com.boardly.retrofit.gamesearch.models.Game
+import com.boardly.retrofit.gameservice.models.Game
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock

@@ -1,6 +1,6 @@
 package com.boardly.filter
 
-import com.boardly.retrofit.gamesearch.models.Game
+import com.boardly.retrofit.gameservice.models.Game
 
 sealed class PartialFilterViewState {
 

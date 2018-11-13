@@ -23,7 +23,7 @@ import com.boardly.factories.FilterViewModelFactory
 import com.boardly.filter.models.Filter
 import com.boardly.injection.modules.GlideApp
 import com.boardly.pickgame.PickGameActivity
-import com.boardly.retrofit.gamesearch.models.SearchResult
+import com.boardly.retrofit.gameservice.models.SearchResult
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.places.ui.PlaceAutocomplete

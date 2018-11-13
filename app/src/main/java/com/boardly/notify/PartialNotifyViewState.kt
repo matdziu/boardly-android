@@ -1,7 +1,7 @@
 package com.boardly.notify
 
 import com.boardly.notify.models.NotifySettings
-import com.boardly.retrofit.gamesearch.models.Game
+import com.boardly.retrofit.gameservice.models.Game
 
 sealed class PartialNotifyViewState {
 

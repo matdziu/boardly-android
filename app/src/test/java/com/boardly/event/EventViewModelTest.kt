@@ -2,7 +2,7 @@ package com.boardly.event
 
 import com.boardly.event.models.GamePickEvent
 import com.boardly.event.models.GamePickType
-import com.boardly.retrofit.gamesearch.models.Game
+import com.boardly.retrofit.gameservice.models.Game
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever

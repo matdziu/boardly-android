@@ -1,8 +1,8 @@
 package com.boardly.filter
 
-import com.boardly.retrofit.gamesearch.GameSearchService
-import com.boardly.retrofit.gamesearch.models.DetailsResponse
-import com.boardly.retrofit.gamesearch.models.Game
+import com.boardly.retrofit.gameservice.GameService
+import com.boardly.retrofit.gameservice.models.DetailsResponse
+import com.boardly.retrofit.gameservice.models.Game
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
@@ -20,11 +20,11 @@ class FilterInteractorTest {
     @Test
     fun testSuccessfulGameDetailsFetching() {
         val testGameDetail = Game(1, "Monopoly", "1999")
-        val gameSearchService: GameSearchService = mock {
-            on { it.boardGameDetails(any()) } doReturn
+        val gameService: GameService = mock {
+            on { it.gameDetails(any()) } doReturn
                     Observable.just(DetailsResponse(testGameDetail))
         }
-        val filterInteractor = FilterInteractor(gameSearchService)
+        val filterInteractor = FilterInteractor(gameService)
 
         filterInteractor.fetchGameDetails("testGameId").test()
                 .assertValue(PartialFilterViewState.GameDetailsFetched(testGameDetail))
@@ -32,10 +32,10 @@ class FilterInteractorTest {
 
     @Test
     fun testGameDetailsFetchingWithError() {
-        val gameSearchService: GameSearchService = mock {
-            on { it.boardGameDetails(any()) } doReturn Observable.error(Exception(""))
+        val gameService: GameService = mock {
+            on { it.gameDetails(any()) } doReturn Observable.error(Exception(""))
         }
-        val filterInteractor = FilterInteractor(gameSearchService)
+        val filterInteractor = FilterInteractor(gameService)
 
         filterInteractor.fetchGameDetails("testGameId").test()
                 .assertValue(PartialFilterViewState.GameDetailsFetched(Game()))

@@ -2,17 +2,17 @@ package com.boardly.event
 
 import com.boardly.event.models.GamePickEvent
 import com.boardly.event.network.EventService
-import com.boardly.retrofit.gamesearch.GameSearchService
-import com.boardly.retrofit.gamesearch.models.DetailsResponse
+import com.boardly.retrofit.gameservice.GameService
+import com.boardly.retrofit.gameservice.models.DetailsResponse
 import io.reactivex.Observable
 import javax.inject.Inject
 
 
-class EventInteractor @Inject constructor(private val gameSearchService: GameSearchService,
+class EventInteractor @Inject constructor(private val gameService: GameService,
                                           private val eventService: EventService) {
 
     fun fetchGameDetails(gamePickEvent: GamePickEvent): Observable<PartialEventViewState> {
-        return gameSearchService.boardGameDetails(gamePickEvent.gameId)
+        return gameService.gameDetails(gamePickEvent.gameId)
                 .onErrorReturn { DetailsResponse() }
                 .map { PartialEventViewState.GameDetailsFetched(it.game, gamePickEvent.type) }
     }

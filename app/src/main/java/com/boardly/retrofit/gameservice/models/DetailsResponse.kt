@@ -1,4 +1,4 @@
-package com.boardly.retrofit.gamesearch.models
+package com.boardly.retrofit.gameservice.models
 
 import com.tickaroo.tikxml.annotation.Element
 import com.tickaroo.tikxml.annotation.Xml

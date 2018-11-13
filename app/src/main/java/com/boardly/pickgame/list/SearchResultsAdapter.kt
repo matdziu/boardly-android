@@ -4,7 +4,7 @@ import android.support.v7.recyclerview.extensions.ListAdapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.boardly.R
-import com.boardly.retrofit.gamesearch.models.SearchResult
+import com.boardly.retrofit.gameservice.models.SearchResult
 
 class SearchResultsAdapter : ListAdapter<SearchResult, SearchResultViewHolder>(SearchResultDiffCallback()) {
 

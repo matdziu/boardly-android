@@ -14,3 +14,7 @@ fun String?.jsonToMapOfStrings(): Map<String, String> {
     val mapType = object : TypeToken<Map<String, String>>() {}.type
     return gson.fromJson(this, mapType)
 }
+
+fun String.isOfType(type: String): Boolean = contains(type)
+
+fun String.clearFromType(type: String): String = replace(type, "")
