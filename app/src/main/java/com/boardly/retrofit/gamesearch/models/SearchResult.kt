@@ -10,6 +10,8 @@ import kotlinx.android.parcel.Parcelize
 @Xml(name = "item")
 data class SearchResult @JvmOverloads constructor(@field:Attribute var id: Int = 0,
 
+                                                  @field:Attribute var type: String = "",
+
                                                   @field:Path("name")
                                                   @field:Attribute(name = "value")
                                                   var name: String = "",

@@ -14,6 +14,7 @@ import com.boardly.base.BaseActivity
 import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_NOTIFY_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
+import com.boardly.constants.RPG_TYPE
 import com.boardly.extensions.loadImageFromUrl
 import com.boardly.factories.NotifyViewModelFactory
 import com.boardly.injection.modules.GlideApp
@@ -171,7 +172,7 @@ class NotifyActivity : BaseActivity(), NotifyView {
                 val pickedGame = data.getParcelableExtra<SearchResult>(PICKED_GAME)
                 with(pickedGame) {
                     boardGameTextView.text = name
-                    newSettings.gameId = id.toString()
+                    newSettings.gameId = if (type == RPG_TYPE) "$id$RPG_TYPE" else id.toString()
                     newSettings.gameName = name
                     fetchDetails = true
                 }

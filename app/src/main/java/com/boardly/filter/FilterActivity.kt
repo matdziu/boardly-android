@@ -16,6 +16,7 @@ import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_FILTER_REQUEST_CODE
 import com.boardly.constants.PICK_FIRST_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
+import com.boardly.constants.RPG_TYPE
 import com.boardly.constants.SAVED_FILTER
 import com.boardly.extensions.loadImageFromUrl
 import com.boardly.factories.FilterViewModelFactory
@@ -149,7 +150,7 @@ class FilterActivity : BaseActivity(), FilterView {
                 val pickedGame = data.getParcelableExtra<SearchResult>(PICKED_GAME)
                 with(pickedGame) {
                     boardGameTextView.text = name
-                    currentFilter.gameId = id.toString()
+                    currentFilter.gameId = if (type == RPG_TYPE) "$id$RPG_TYPE" else id.toString()
                     currentFilter.gameName = name
                     fetchDetails = true
                 }

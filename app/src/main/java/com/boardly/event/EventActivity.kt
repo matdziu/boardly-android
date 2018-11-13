@@ -26,6 +26,7 @@ import com.boardly.constants.PICK_FIRST_GAME_REQUEST_CODE
 import com.boardly.constants.PICK_SECOND_GAME_REQUEST_CODE
 import com.boardly.constants.PICK_THIRD_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
+import com.boardly.constants.RPG_TYPE
 import com.boardly.event.dialogs.DatePickerFragment
 import com.boardly.event.dialogs.TimePickerFragment
 import com.boardly.event.models.GamePickEvent
@@ -64,7 +65,8 @@ import kotlinx.android.synthetic.main.activity_event.pickPlaceButton
 import kotlinx.android.synthetic.main.activity_event.placeTextView
 import kotlinx.android.synthetic.main.activity_event.progressBar
 import kotlinx.android.synthetic.main.activity_event.saveChangesButton
-import java.util.*
+import java.util.Calendar
+import java.util.Date
 import javax.inject.Inject
 
 class EventActivity : BaseActivity(), EventView {
@@ -275,17 +277,17 @@ class EventActivity : BaseActivity(), EventView {
                     when (gamePickType) {
                         GamePickType.FIRST -> {
                             boardGameTextView.text = name
-                            inputData.gameId = id.toString()
+                            inputData.gameId = if (type == RPG_TYPE) "$id$RPG_TYPE" else id.toString()
                             inputData.gameName = name
                         }
                         GamePickType.SECOND -> {
                             boardGameTextView2.text = name
-                            inputData.gameId2 = id.toString()
+                            inputData.gameId2 = if (type == RPG_TYPE) "$id$RPG_TYPE" else id.toString()
                             inputData.gameName2 = name
                         }
                         GamePickType.THIRD -> {
                             boardGameTextView3.text = name
-                            inputData.gameId3 = id.toString()
+                            inputData.gameId3 = if (type == RPG_TYPE) "$id$RPG_TYPE" else id.toString()
                             inputData.gameName3 = name
                         }
                     }
