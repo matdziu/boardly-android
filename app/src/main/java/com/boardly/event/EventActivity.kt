@@ -277,26 +277,28 @@ class EventActivity : BaseActivity(), EventView {
                     when (gamePickType) {
                         GamePickType.FIRST -> {
                             boardGameTextView.text = name
-                            inputData.gameId = if (type == RPG_TYPE) "$id$RPG_TYPE" else id.toString()
+                            inputData.gameId = formatId(id, type)
                             inputData.gameName = name
                         }
                         GamePickType.SECOND -> {
                             boardGameTextView2.text = name
-                            inputData.gameId2 = if (type == RPG_TYPE) "$id$RPG_TYPE" else id.toString()
+                            inputData.gameId2 = formatId(id, type)
                             inputData.gameName2 = name
                         }
                         GamePickType.THIRD -> {
                             boardGameTextView3.text = name
-                            inputData.gameId3 = if (type == RPG_TYPE) "$id$RPG_TYPE" else id.toString()
+                            inputData.gameId3 = formatId(id, type)
                             inputData.gameName3 = name
                         }
                     }
-                    recentGamePickEvent = GamePickEvent(id.toString(), gamePickType)
+                    recentGamePickEvent = GamePickEvent(formatId(id, type), gamePickType)
                     emitGamePickEvent = true
                 }
             }
         }
     }
+
+    private fun formatId(id: Int, type: String): String = if (type == RPG_TYPE) "$id$RPG_TYPE" else id.toString()
 
     private fun launchPlacePickScreen() {
         try {
