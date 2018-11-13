@@ -11,8 +11,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.boardly.R
 import com.boardly.common.events.models.Event
+import com.boardly.constants.RPG_TYPE
 import com.boardly.extensions.HOUR_IN_MILLIS
+import com.boardly.extensions.clearFromType
 import com.boardly.extensions.formatForDisplay
+import com.boardly.extensions.isOfType
 import com.boardly.extensions.loadImageFromUrl
 import com.boardly.extensions.setOnClickListener
 import java.util.Date
@@ -85,7 +88,8 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
 
     private fun openBoardGameInfoPage(gameId: String) {
         with(activity) {
-            val infoPageIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://boardgamegeek.com/boardgame/$gameId"))
+            val endpoint = if (gameId.isOfType(RPG_TYPE)) "rpg/${gameId.clearFromType(RPG_TYPE)}" else "boardgame/$gameId"
+            val infoPageIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://boardgamegeek.com/$endpoint"))
             startActivity(infoPageIntent)
         }
     }
