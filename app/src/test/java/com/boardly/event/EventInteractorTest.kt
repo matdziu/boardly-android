@@ -19,7 +19,7 @@ class EventInteractorTest {
         val testGame = Game(1, "Monopoly")
         val detailsResponse = DetailsResponse(testGame)
         val gameSearchService: GameSearchService = mock {
-            on { it.details(any()) } doReturn Observable.just(detailsResponse)
+            on { it.boardGameDetails(any()) } doReturn Observable.just(detailsResponse)
         }
         val eventService: EventService = mock()
         val eventInteractor = EventInteractor(gameSearchService, eventService)
@@ -33,7 +33,7 @@ class EventInteractorTest {
         val testGame = Game(1, "Monopoly")
         val detailsResponse = DetailsResponse(testGame)
         val gameSearchService: GameSearchService = mock {
-            on { it.details(any()) } doReturn Observable.just(detailsResponse)
+            on { it.boardGameDetails(any()) } doReturn Observable.just(detailsResponse)
         }
         val eventService: EventService = mock()
         val eventInteractor = EventInteractor(gameSearchService, eventService)
@@ -47,7 +47,7 @@ class EventInteractorTest {
         val testGame = Game(1, "Monopoly")
         val detailsResponse = DetailsResponse(testGame)
         val gameSearchService: GameSearchService = mock {
-            on { it.details(any()) } doReturn Observable.just(detailsResponse)
+            on { it.boardGameDetails(any()) } doReturn Observable.just(detailsResponse)
         }
         val eventService: EventService = mock()
         val eventInteractor = EventInteractor(gameSearchService, eventService)
@@ -60,7 +60,7 @@ class EventInteractorTest {
     fun testGameDetailsFetchingWithError() {
         val exception = Exception("")
         val gameSearchService: GameSearchService = mock {
-            on { it.details(any()) } doReturn Observable.error(exception)
+            on { it.boardGameDetails(any()) } doReturn Observable.error(exception)
         }
         val eventService: EventService = mock()
         val eventInteractor = EventInteractor(gameSearchService, eventService)

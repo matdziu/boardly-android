@@ -12,7 +12,7 @@ class EventInteractor @Inject constructor(private val gameSearchService: GameSea
                                           private val eventService: EventService) {
 
     fun fetchGameDetails(gamePickEvent: GamePickEvent): Observable<PartialEventViewState> {
-        return gameSearchService.details(gamePickEvent.gameId)
+        return gameSearchService.boardGameDetails(gamePickEvent.gameId)
                 .onErrorReturn { DetailsResponse() }
                 .map { PartialEventViewState.GameDetailsFetched(it.game, gamePickEvent.type) }
     }

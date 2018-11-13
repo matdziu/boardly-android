@@ -9,7 +9,7 @@ import javax.inject.Inject
 class FilterInteractor @Inject constructor(private val gameSearchService: GameSearchService) {
 
     fun fetchGameDetails(gameId: String): Observable<PartialFilterViewState> {
-        return gameSearchService.details(gameId)
+        return gameSearchService.boardGameDetails(gameId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorReturn { DetailsResponse() }
                 .map { PartialFilterViewState.GameDetailsFetched(it.game) }

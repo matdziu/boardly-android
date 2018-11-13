@@ -21,7 +21,7 @@ class FilterInteractorTest {
     fun testSuccessfulGameDetailsFetching() {
         val testGameDetail = Game(1, "Monopoly", "1999")
         val gameSearchService: GameSearchService = mock {
-            on { it.details(any()) } doReturn
+            on { it.boardGameDetails(any()) } doReturn
                     Observable.just(DetailsResponse(testGameDetail))
         }
         val filterInteractor = FilterInteractor(gameSearchService)
@@ -33,7 +33,7 @@ class FilterInteractorTest {
     @Test
     fun testGameDetailsFetchingWithError() {
         val gameSearchService: GameSearchService = mock {
-            on { it.details(any()) } doReturn Observable.error(Exception(""))
+            on { it.boardGameDetails(any()) } doReturn Observable.error(Exception(""))
         }
         val filterInteractor = FilterInteractor(gameSearchService)
 

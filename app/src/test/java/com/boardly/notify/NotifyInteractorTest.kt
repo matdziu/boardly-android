@@ -23,7 +23,7 @@ class NotifyInteractorTest {
     private val detailsResponse = DetailsResponse(testGame)
     private val testNotifySettings = NotifySettings(radius = 100.0, gameId = "1", gameName = "Monopoly")
     private val gameSearchService: GameSearchService = mock {
-        on { it.details("testGameId") } doReturn Observable.just(detailsResponse)
+        on { it.boardGameDetails("testGameId") } doReturn Observable.just(detailsResponse)
     }
     private val notifyService: NotifyService = mock {
         on { it.deleteNotifications() } doReturn Observable.just(true)

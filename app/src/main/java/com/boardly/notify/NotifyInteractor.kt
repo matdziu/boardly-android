@@ -12,7 +12,7 @@ class NotifyInteractor @Inject constructor(private val gameSearchService: GameSe
                                            private val notifyService: NotifyService) {
 
     fun fetchGameDetails(gameId: String): Observable<PartialNotifyViewState> {
-        return gameSearchService.details(gameId)
+        return gameSearchService.boardGameDetails(gameId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .onErrorReturn { DetailsResponse() }
                 .map { PartialNotifyViewState.GameDetailsFetched(it.game) }
