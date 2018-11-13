@@ -190,35 +190,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/seeDescriptionButton" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/boardGameImageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:scaleType="fitCenter"
         android:src="@drawable/board_game_placeholder"
-        app:civ_border_color="@color/lightGrey"
-        app:civ_border_width="1dp"
         app:layout_constraintBottom_toBottomOf="@+id/gameTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/gameTextView" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/boardGameImageView2"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:scaleType="fitCenter"
         android:src="@drawable/board_game_placeholder"
-        app:civ_border_color="@color/lightGrey"
-        app:civ_border_width="1dp"
         app:layout_constraintBottom_toBottomOf="@+id/gameTextView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/gameTextView2" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <ImageView
         android:id="@+id/boardGameImageView3"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:scaleType="fitCenter"
         android:src="@drawable/board_game_placeholder"
-        app:civ_border_color="@color/lightGrey"
-        app:civ_border_width="1dp"
         app:layout_constraintBottom_toBottomOf="@+id/gameTextView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/gameTextView3" />
