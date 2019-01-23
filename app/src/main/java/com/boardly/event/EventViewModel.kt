@@ -24,7 +24,12 @@ class EventViewModel(private val eventInteractor: EventInteractor,
         val addEventObservable = eventView.addEventEmitter()
                 .flatMap {
                     validateInputData(it, {
-                        analytics.logEventAddedEvent(it.gameId, it.placeLatitude, it.placeLongitude)
+                        analytics.logEventAddedEvent(
+                                it.gameId,
+                                it.gameId2,
+                                it.gameId3,
+                                it.placeLatitude,
+                                it.placeLongitude)
                         eventInteractor.addEvent(it)
                     })
                 }
