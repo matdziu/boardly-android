@@ -4,15 +4,23 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 fun String?.jsonToArrayOfStrings(): Array<String> {
-    val gson = Gson()
-    val arrayType = object : TypeToken<Array<String>>() {}.type
-    return gson.fromJson(this, arrayType)
+    return if (this != null) {
+        val gson = Gson()
+        val arrayType = object : TypeToken<Array<String>>() {}.type
+        gson.fromJson(this, arrayType)
+    } else {
+        emptyArray()
+    }
 }
 
 fun String?.jsonToMapOfStrings(): Map<String, String> {
-    val gson = Gson()
-    val mapType = object : TypeToken<Map<String, String>>() {}.type
-    return gson.fromJson(this, mapType)
+    return if (this != null) {
+        val gson = Gson()
+        val mapType = object : TypeToken<Map<String, String>>() {}.type
+        gson.fromJson(this, mapType)
+    } else {
+        emptyMap()
+    }
 }
 
 fun String.isOfType(type: String): Boolean = contains(type)
