@@ -1,11 +1,11 @@
 package com.boardly.discover
 
-import com.boardly.filter.models.Filter
+import com.boardly.discover.models.FilteredFetchData
 import io.reactivex.Observable
 
 interface DiscoverView {
 
-    fun fetchPlacesListTrigger(): Observable<Filter>
+    fun fetchPlacesListTrigger(): Observable<FilteredFetchData>
 
     fun render(discoverViewState: DiscoverViewState)
 }

@@ -6,8 +6,8 @@ import android.content.Intent
 import android.os.Bundle
 import com.boardly.R
 import com.boardly.base.BaseActivity
+import com.boardly.discover.models.FilteredFetchData
 import com.boardly.factories.DiscoverViewModelFactory
-import com.boardly.filter.models.Filter
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -20,7 +20,7 @@ class DiscoverActivity : BaseActivity(), DiscoverView {
 
     private lateinit var discoverViewModel: DiscoverViewModel
 
-    private lateinit var fetchPlacesListTriggerSubject: PublishSubject<Filter>
+    private lateinit var fetchPlacesListTriggerSubject: PublishSubject<FilteredFetchData>
 
     companion object {
 
@@ -53,7 +53,7 @@ class DiscoverActivity : BaseActivity(), DiscoverView {
         super.onStop()
     }
 
-    override fun fetchPlacesListTrigger(): Observable<Filter> {
+    override fun fetchPlacesListTrigger(): Observable<FilteredFetchData> {
         return fetchPlacesListTriggerSubject
     }
 

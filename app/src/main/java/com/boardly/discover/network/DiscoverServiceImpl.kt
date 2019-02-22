@@ -7,7 +7,7 @@ import io.reactivex.Observable
 
 class DiscoverServiceImpl : DiscoverService, BaseServiceImpl() {
 
-    override fun fetchPlacesList(userLocation: UserLocation?, radius: Double): Observable<List<Place>> {
+    override fun fetchPlacesList(userLocation: UserLocation, radius: Double): Observable<List<Place>> {
         return Observable.empty()
     }
 }

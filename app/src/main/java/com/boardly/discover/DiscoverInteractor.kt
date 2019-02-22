@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class DiscoverInteractor @Inject constructor(private val discoverService: DiscoverService) {
 
-    fun fetchPlacesList(userLocation: UserLocation?, radius: Double): Observable<PartialDiscoverViewState> {
+    fun fetchPlacesList(userLocation: UserLocation, radius: Double): Observable<PartialDiscoverViewState> {
         return discoverService.fetchPlacesList(userLocation, radius)
                 .map { PartialDiscoverViewState.PlacesListFetched(it) }
     }

@@ -6,5 +6,5 @@ import io.reactivex.Observable
 
 interface DiscoverService {
 
-    fun fetchPlacesList(userLocation: UserLocation?, radius: Double): Observable<List<Place>>
+    fun fetchPlacesList(userLocation: UserLocation, radius: Double): Observable<List<Place>>
 }
