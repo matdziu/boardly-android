@@ -13,7 +13,7 @@ sealed class PartialGamesCollectionViewState {
         }
     }
 
-    data class CollectionFetched(private val games: List<CollectionGame>) : PartialGamesCollectionViewState() {
+    data class CollectionFetched(val games: List<CollectionGame>) : PartialGamesCollectionViewState() {
         override fun reduce(previousState: GamesCollectionViewState): GamesCollectionViewState {
             return previousState.copy(
                     progress = false,

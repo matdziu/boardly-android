@@ -11,19 +11,26 @@ class GamesCollectionViewModel(private val gamesCollectionInteractor: GamesColle
 
     private val compositeDisposable = CompositeDisposable()
     private val stateSubject = BehaviorSubject.createDefault(GamesCollectionViewState())
+    private var currentCollectionGames = listOf<CollectionGame>()
 
     fun bind(gamesCollectionView: GamesCollectionView, collectionId: String) {
         val initialFetchObservable = gamesCollectionView.initialFetchTriggerEmitter()
-                .map {
-                    PartialGamesCollectionViewState.CollectionFetched(listOf(
-                            CollectionGame("155821", "Inis", "2008", "https://cf.geekdo-images.com/imagepagezoom/img/dDc0W93LJaVuyAEXV0alFh9MyhQ=/fit-in/1200x900/filters:no_upscale()/pic3112623.jpg"),
-                            CollectionGame("155821", "Inis", "2008", "https://cf.geekdo-images.com/imagepagezoom/img/dDc0W93LJaVuyAEXV0alFh9MyhQ=/fit-in/1200x900/filters:no_upscale()/pic3112623.jpg"),
-                            CollectionGame("155821", "Inis", "2008", "https://cf.geekdo-images.com/imagepagezoom/img/dDc0W93LJaVuyAEXV0alFh9MyhQ=/fit-in/1200x900/filters:no_upscale()/pic3112623.jpg")
-                    ))
+                .flatMap {
+                    gamesCollectionInteractor.fetchGames(collectionId)
+                            .startWith(PartialGamesCollectionViewState.ProgressState)
+                }
+                .doOnNext { if (it is PartialGamesCollectionViewState.CollectionFetched) currentCollectionGames = it.games }
+
+        val queryObservable = gamesCollectionView.queryEmitter()
+                .map { query ->
+                    val formattedQuery = query.trim().toLowerCase()
+                    PartialGamesCollectionViewState.CollectionFetched(
+                            currentCollectionGames.filter { it.name.toLowerCase().contains(formattedQuery) })
                 }
 
         val mergedObservable = Observable.merge(
-                listOf(initialFetchObservable))
+                listOf(initialFetchObservable,
+                        queryObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 
