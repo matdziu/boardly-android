@@ -1,5 +1,6 @@
 package com.boardly.injection.modules
 
+import com.boardly.discover.DiscoverActivity
 import com.boardly.editprofile.EditProfileActivity
 import com.boardly.event.EventActivity
 import com.boardly.eventdetails.EventDetailsActivity
@@ -57,4 +58,8 @@ abstract class ActivityBuilder {
     @ActivityScope
     @ContributesAndroidInjector(modules = [NotifyActivityModule::class])
     abstract fun bindNotifyActivity(): NotifyActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [DiscoverActivityModule::class])
+    abstract fun bindDiscoverActivity(): DiscoverActivity
 }
