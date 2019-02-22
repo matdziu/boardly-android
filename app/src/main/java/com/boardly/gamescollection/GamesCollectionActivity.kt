@@ -1,5 +1,6 @@
 package com.boardly.gamescollection
 
+import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
@@ -11,11 +12,17 @@ import com.boardly.R
 import com.boardly.base.BaseSearchActivity
 import com.boardly.constants.COLLECTION_ID
 import com.boardly.constants.MODE
+import com.boardly.constants.PICKED_GAME
+import com.boardly.constants.PICK_FIRST_GAME_REQUEST_CODE
 import com.boardly.factories.GamesCollectionViewModelFactory
 import com.boardly.gamescollection.list.CollectionGamesAdapter
+import com.boardly.gamescollection.models.CollectionGame
+import com.boardly.pickgame.PickGameActivity
+import com.boardly.retrofit.gameservice.models.SearchResult
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.activity_games_collection.addGameButton
 import kotlinx.android.synthetic.main.activity_games_collection.gamesCollectionRecyclerView
 import kotlinx.android.synthetic.main.activity_games_collection.hintTextView
 import kotlinx.android.synthetic.main.activity_games_collection.noGamesTextView
@@ -40,12 +47,16 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
     private var progress = false
 
     private lateinit var initialFetchTriggerSubject: PublishSubject<Boolean>
+    private lateinit var newGameSubject: PublishSubject<CollectionGame>
+    private lateinit var deleteGameSubject: PublishSubject<String>
 
     private lateinit var collectionGamesAdapter: CollectionGamesAdapter
 
     override val searchHintResId: Int = R.string.search_game_hint
 
     private lateinit var mode: Mode
+
+    private var recentlyPickedGame: CollectionGame? = null
 
     companion object {
         fun startViewMode(context: Context, collectionId: String) {
@@ -73,13 +84,20 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
         mode = intent.getSerializableExtra(MODE) as Mode
         initRecyclerView()
         prepareMode(mode)
+        addGameButton.setOnClickListener { launchGamePickScreen(PICK_FIRST_GAME_REQUEST_CODE) }
+        initWithKeyboard = false
+    }
+
+    private fun launchGamePickScreen(requestCode: Int) {
+        val pickGameIntent = Intent(this, PickGameActivity::class.java)
+        startActivityForResult(pickGameIntent, requestCode)
     }
 
     private fun prepareMode(mode: Mode) {
         if (mode == Mode.VIEW) {
-
+            addGameButton.visibility = View.GONE
         } else if (mode == Mode.MANAGE) {
-
+            addGameButton.visibility = View.VISIBLE
         }
     }
 
@@ -89,16 +107,43 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
         gamesCollectionRecyclerView.adapter = collectionGamesAdapter
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (data != null) {
+            when (requestCode) {
+                PICK_FIRST_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data)
+            }
+        }
+    }
+
+    private fun handlePickGameResult(resultCode: Int, data: Intent) {
+        when (resultCode) {
+            Activity.RESULT_OK -> {
+                val pickedGame = data.getParcelableExtra<SearchResult>(PICKED_GAME)
+                val collectionGame = CollectionGame(
+                        pickedGame.id.toString(),
+                        pickedGame.name,
+                        pickedGame.yearPublished)
+                recentlyPickedGame = collectionGame
+            }
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         initEmitters()
         gamesCollectionViewModel.bind(this, collectionId)
         if (init) initialFetchTriggerSubject.onNext(true)
+        if (recentlyPickedGame != null) {
+            newGameSubject.onNext(recentlyPickedGame!!)
+            recentlyPickedGame = null
+        }
     }
 
     override fun initEmitters() {
         super.initEmitters()
         initialFetchTriggerSubject = PublishSubject.create()
+        newGameSubject = PublishSubject.create()
+        deleteGameSubject = PublishSubject.create()
     }
 
     override fun onStop() {
@@ -130,6 +175,7 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
     private fun showSuccessToast(show: Boolean) {
         if (show) {
             Toast.makeText(this, R.string.generic_success, Toast.LENGTH_SHORT).show()
+            initialFetchTriggerSubject.onNext(false)
         }
     }
 
@@ -143,7 +189,19 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
 
     override fun queryEmitter(): Observable<String> = searchInput.filter { !progress }
 
+    override fun emitGameDeletion(gameId: String) {
+        deleteGameSubject.onNext(gameId)
+    }
+
     override fun initialFetchTriggerEmitter(): Observable<Boolean> {
         return initialFetchTriggerSubject
+    }
+
+    override fun newGameEmitter(): Observable<CollectionGame> {
+        return newGameSubject
+    }
+
+    override fun deleteGameEmitter(): Observable<String> {
+        return deleteGameSubject
     }
 }

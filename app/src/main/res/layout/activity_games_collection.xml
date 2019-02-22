@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -45,6 +46,19 @@
         android:id="@+id/gamesCollectionRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/hintTextView" />
+        android:layout_below="@id/hintTextView"
+        android:clipToPadding="false"
+        android:paddingBottom="64dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addGameButton"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_add_white_24dp"
+        app:elevation="4dp" />
 
 </RelativeLayout>

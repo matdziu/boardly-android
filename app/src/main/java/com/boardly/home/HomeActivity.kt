@@ -73,7 +73,7 @@ class HomeActivity : BaseJoinEventActivity(), HomeView {
 
         homeViewModel = ViewModelProviders.of(this, homeViewModelFactory)[HomeViewModel::class.java]
         addEventButton.setOnClickListener { EventActivity.startAddMode(this@HomeActivity) }
-        discoverButton.setOnClickListener { GamesCollectionActivity.startViewMode(this@HomeActivity, "") }
+        discoverButton.setOnClickListener { GamesCollectionActivity.startManageMode(this@HomeActivity, "") }
         inviteFriendsButton.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "text/plain"

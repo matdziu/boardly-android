@@ -34,10 +34,20 @@ class GamesCollectionServiceImpl : GamesCollectionService, BaseServiceImpl() {
     }
 
     override fun addGame(collectionId: String, game: CollectionGame): Observable<Boolean> {
-        return Observable.empty()
+        val resultSubject = PublishSubject.create<Boolean>()
+
+        getSingleCollectionRef(collectionId).child(game.id)
+                .setValue(game).addOnSuccessListener { resultSubject.onNext(true) }
+
+        return resultSubject
     }
 
     override fun deleteGame(collectionId: String, gameId: String): Observable<Boolean> {
-        return Observable.empty()
+        val resultSubject = PublishSubject.create<Boolean>()
+
+        getSingleCollectionRef(collectionId).child(gameId).setValue(null)
+                .addOnSuccessListener { resultSubject.onNext(true) }
+
+        return resultSubject
     }
 }

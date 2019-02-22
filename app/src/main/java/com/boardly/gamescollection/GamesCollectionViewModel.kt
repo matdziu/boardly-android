@@ -16,10 +16,16 @@ class GamesCollectionViewModel(private val gamesCollectionInteractor: GamesColle
     fun bind(gamesCollectionView: GamesCollectionView, collectionId: String) {
         val initialFetchObservable = gamesCollectionView.initialFetchTriggerEmitter()
                 .flatMap {
-                    gamesCollectionInteractor.fetchGames(collectionId)
-                            .startWith(PartialGamesCollectionViewState.ProgressState)
+                    if (it) gamesCollectionInteractor.fetchGames(collectionId).startWith(PartialGamesCollectionViewState.ProgressState)
+                    else gamesCollectionInteractor.fetchGames(collectionId)
                 }
                 .doOnNext { if (it is PartialGamesCollectionViewState.CollectionFetched) currentCollectionGames = it.games }
+
+        val newGameObservable = gamesCollectionView.newGameEmitter()
+                .flatMap { gamesCollectionInteractor.addGame(collectionId, it) }
+
+        val deleteGameObservable = gamesCollectionView.deleteGameEmitter()
+                .flatMap { gamesCollectionInteractor.deleteGame(collectionId, it) }
 
         val queryObservable = gamesCollectionView.queryEmitter()
                 .map { query ->
@@ -30,7 +36,9 @@ class GamesCollectionViewModel(private val gamesCollectionInteractor: GamesColle
 
         val mergedObservable = Observable.merge(
                 listOf(initialFetchObservable,
-                        queryObservable))
+                        queryObservable,
+                        newGameObservable,
+                        deleteGameObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 

@@ -138,4 +138,6 @@
     <string name="no_games_in_collection">Sorry, we found no games here</string>
     <string name="games_collection_hint">You\'ll find more games on site</string>
     <string name="generic_success">Success!</string>
+    <string name="game_action_delete">Delete</string>
+    <string name="select_game_action">Select action</string>
 </resources>

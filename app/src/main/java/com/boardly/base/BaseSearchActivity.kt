@@ -15,6 +15,8 @@ abstract class BaseSearchActivity : BaseActivity() {
 
     protected var searchInput = PublishSubject.create<String>()
 
+    protected var initWithKeyboard = true
+
     protected open fun initEmitters() {
         searchInput = PublishSubject.create()
     }
@@ -29,7 +31,8 @@ abstract class BaseSearchActivity : BaseActivity() {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.setIconifiedByDefault(false)
         searchView.maxWidth = Integer.MAX_VALUE
-        searchView.requestFocus()
+        if (initWithKeyboard) searchView.requestFocus()
+        else searchView.isFocusable = false
         searchView.queryHint = getString(searchHintResId)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
