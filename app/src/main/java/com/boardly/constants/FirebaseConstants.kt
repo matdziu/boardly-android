@@ -10,6 +10,7 @@ const val CREATED_EVENTS_NODE = "created"
 const val INTERESTING_EVENTS_NODE = "interesting"
 const val CHATS_NODE = "chats"
 const val EVENTS_WITH_INTEREST = "eventsWithInterest"
+const val PLACES_NODE = "places"
 
 const val NAME_CHILD = "name"
 const val PROFILE_PICTURE_CHILD = "profilePicture"
