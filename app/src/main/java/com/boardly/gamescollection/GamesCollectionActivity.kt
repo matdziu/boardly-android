@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseSearchActivity
 import com.boardly.constants.COLLECTION_ID
+import com.boardly.constants.MODE
 import com.boardly.factories.GamesCollectionViewModelFactory
 import com.boardly.gamescollection.list.CollectionGamesAdapter
 import dagger.android.AndroidInjection
@@ -20,6 +21,10 @@ import kotlinx.android.synthetic.main.activity_games_collection.hintTextView
 import kotlinx.android.synthetic.main.activity_games_collection.noGamesTextView
 import kotlinx.android.synthetic.main.activity_games_collection.progressBar
 import javax.inject.Inject
+
+enum class Mode {
+    VIEW, MANAGE
+}
 
 class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
 
@@ -36,14 +41,24 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
 
     private lateinit var initialFetchTriggerSubject: PublishSubject<Boolean>
 
-    private val collectionGamesAdapter = CollectionGamesAdapter()
+    private lateinit var collectionGamesAdapter: CollectionGamesAdapter
 
     override val searchHintResId: Int = R.string.search_game_hint
 
+    private lateinit var mode: Mode
+
     companion object {
-        fun start(context: Context, collectionId: String) {
+        fun startViewMode(context: Context, collectionId: String) {
             val intent = Intent(context, GamesCollectionActivity::class.java)
             intent.putExtra(COLLECTION_ID, collectionId)
+            intent.putExtra(MODE, Mode.VIEW)
+            context.startActivity(intent)
+        }
+
+        fun startManageMode(context: Context, collectionId: String) {
+            val intent = Intent(context, GamesCollectionActivity::class.java)
+            intent.putExtra(COLLECTION_ID, collectionId)
+            intent.putExtra(MODE, Mode.MANAGE)
             context.startActivity(intent)
         }
     }
@@ -55,10 +70,21 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
         showBackToolbarArrow(true, this::finish)
         gamesCollectionViewModel = ViewModelProviders.of(this, gamesCollectionViewModelFactory)[GamesCollectionViewModel::class.java]
         collectionId = intent.getStringExtra(COLLECTION_ID)
+        mode = intent.getSerializableExtra(MODE) as Mode
         initRecyclerView()
+        prepareMode(mode)
+    }
+
+    private fun prepareMode(mode: Mode) {
+        if (mode == Mode.VIEW) {
+
+        } else if (mode == Mode.MANAGE) {
+
+        }
     }
 
     private fun initRecyclerView() {
+        collectionGamesAdapter = CollectionGamesAdapter(mode)
         gamesCollectionRecyclerView.layoutManager = LinearLayoutManager(this)
         gamesCollectionRecyclerView.adapter = collectionGamesAdapter
     }

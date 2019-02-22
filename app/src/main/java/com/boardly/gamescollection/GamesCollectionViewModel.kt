@@ -14,7 +14,13 @@ class GamesCollectionViewModel(private val gamesCollectionInteractor: GamesColle
 
     fun bind(gamesCollectionView: GamesCollectionView, collectionId: String) {
         val initialFetchObservable = gamesCollectionView.initialFetchTriggerEmitter()
-                .map { PartialGamesCollectionViewState.ProgressState }
+                .map {
+                    PartialGamesCollectionViewState.CollectionFetched(listOf(
+                            CollectionGame("155821", "Inis", "2008", "https://cf.geekdo-images.com/imagepagezoom/img/dDc0W93LJaVuyAEXV0alFh9MyhQ=/fit-in/1200x900/filters:no_upscale()/pic3112623.jpg"),
+                            CollectionGame("155821", "Inis", "2008", "https://cf.geekdo-images.com/imagepagezoom/img/dDc0W93LJaVuyAEXV0alFh9MyhQ=/fit-in/1200x900/filters:no_upscale()/pic3112623.jpg"),
+                            CollectionGame("155821", "Inis", "2008", "https://cf.geekdo-images.com/imagepagezoom/img/dDc0W93LJaVuyAEXV0alFh9MyhQ=/fit-in/1200x900/filters:no_upscale()/pic3112623.jpg")
+                    ))
+                }
 
         val mergedObservable = Observable.merge(
                 listOf(initialFetchObservable))

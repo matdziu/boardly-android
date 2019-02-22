@@ -47,7 +47,7 @@ class PlaceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             ))
         }
         listOf(viewBoardGamesImageView, viewBoardGamesButton).setOnClickListener {
-            GamesCollectionActivity.start(context, place.collectionId)
+            GamesCollectionActivity.startViewMode(context, place.collectionId)
         }
         placeImageView.setOnClickListener { openBoardGameInfoPage(place.pageLink, context) }
     }

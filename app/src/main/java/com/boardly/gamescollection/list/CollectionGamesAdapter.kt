@@ -4,13 +4,14 @@ import android.support.v7.recyclerview.extensions.ListAdapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.boardly.R
+import com.boardly.gamescollection.Mode
 import com.boardly.gamescollection.models.CollectionGame
 
-class CollectionGamesAdapter : ListAdapter<CollectionGame, CollectionGameViewHolder>(CollectionGameDiffCallback()) {
+class CollectionGamesAdapter(private val mode: Mode) : ListAdapter<CollectionGame, CollectionGameViewHolder>(CollectionGameDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionGameViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_collection_game, parent, false)
-        return CollectionGameViewHolder(itemView)
+        return CollectionGameViewHolder(itemView, mode)
     }
 
     override fun onBindViewHolder(holder: CollectionGameViewHolder, position: Int) {
