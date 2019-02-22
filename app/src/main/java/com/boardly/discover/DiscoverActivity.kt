@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.boardly.R
 import com.boardly.base.BaseActivity
@@ -12,6 +13,7 @@ import com.boardly.common.location.UserLocation
 import com.boardly.constants.SAVED_LOCATION_LATITUDE
 import com.boardly.constants.SAVED_LOCATION_LONGITUDE
 import com.boardly.constants.SAVED_RADIUS
+import com.boardly.discover.list.PlacesAdapter
 import com.boardly.discover.models.FilteredFetchData
 import com.boardly.factories.DiscoverViewModelFactory
 import dagger.android.AndroidInjection
@@ -20,6 +22,7 @@ import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_discover.contentView
 import kotlinx.android.synthetic.main.activity_discover.noPlacesTextView
 import kotlinx.android.synthetic.main.activity_discover.noUserLocationTextView
+import kotlinx.android.synthetic.main.activity_discover.placesRecyclerView
 import kotlinx.android.synthetic.main.activity_discover.progressBar
 import javax.inject.Inject
 
@@ -31,6 +34,8 @@ class DiscoverActivity : BaseActivity(), DiscoverView {
     private lateinit var discoverViewModel: DiscoverViewModel
 
     private lateinit var fetchPlacesListTriggerSubject: PublishSubject<FilteredFetchData>
+
+    private val placesAdapter = PlacesAdapter()
 
     private var init = true
     private var currentFilteredFetchData: FilteredFetchData? = null
@@ -49,6 +54,12 @@ class DiscoverActivity : BaseActivity(), DiscoverView {
         showBackToolbarArrow(true, this::finish)
         discoverViewModel = ViewModelProviders.of(this, discoverViewModelFactory)[DiscoverViewModel::class.java]
         currentFilteredFetchData = getFilteredFetchData()
+        initRecyclerView()
+    }
+
+    private fun initRecyclerView() {
+        placesRecyclerView.layoutManager = LinearLayoutManager(this)
+        placesRecyclerView.adapter = placesAdapter
     }
 
     private fun getFilteredFetchData(): FilteredFetchData? {
@@ -96,6 +107,7 @@ class DiscoverActivity : BaseActivity(), DiscoverView {
             if (placesList.isNotEmpty()) {
                 showNoPlacesText(false)
                 showNoLocationText(false)
+                placesAdapter.submitList(placesList)
             }
         } else {
             showNoLocationText(true)

@@ -1,4 +1,11 @@
 package com.boardly.discover.models
 
-class Place {
-}
+data class Place(val id: String = "",
+                 val name: String = "",
+                 val description: String = "",
+                 val imageUrl: String = "",
+                 val placeName: String = "",
+                 val placeLatitude: Double = 0.0,
+                 val placeLongitude: Double = 0.0,
+                 val phoneNumber: String = "",
+                 val pageLink: String = "")
