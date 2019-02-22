@@ -125,9 +125,11 @@
     <string name="apply_notify_settings_text">Zastosuj</string>
     <string name="delete_notifications_text">Usuń powiadomienia</string>
     <string name="notify_info">Powiadomimy Cię kiedy nowe wydarzenie spełniające poniższe kryteria pojawi się w pobliżu</string>
-    <string name="filter_info">Filtruj wydarzenia w pobliżu używając poniższych kryteriów</string>
+    <string name="filter_info">Filtruj wydarzenia i miejsca w pobliżu używając poniższych kryteriów</string>
     <string name="new_event_channel">Nowe wydarzenia w okolicy</string>
     <string name="new_event_notification_title">Nowe wydarzenie w pobliżu</string>
     <string name="new_event_notification_body">Miejsce: %1$s. Gry: %2$s.</string>
     <string name="snackbar_ok">OK</string>
+    <string name="no_user_location">Aby odkrywać miejsca z Boardly przejdź do ekranu filtrowania i wybierz lokalizację</string>
+    <string name="no_places">Nie znaleziono planszówkowych miejsc w pobliżu. Skontaktuj się z nami na Facebooku żeby je dodać i zostać partnerem Boardly!</string>
 </resources>

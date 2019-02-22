@@ -125,9 +125,11 @@
     <string name="apply_notify_settings_text">Apply</string>
     <string name="delete_notifications_text">Delete notifications</string>
     <string name="notify_info">We\'ll notify you whenever new event with criteria below will be added nearby</string>
-    <string name="filter_info">Filter events nearby using criteria below</string>
+    <string name="filter_info">Filter events and places nearby using criteria below</string>
     <string name="new_event_channel">New events nearby</string>
     <string name="new_event_notification_title">New event nearby</string>
     <string name="new_event_notification_body">Place: %1$s. Games: %2$s.</string>
     <string name="snackbar_ok">OK</string>
+    <string name="no_user_location">To discover places with Boardly go to Filter screen and select a location</string>
+    <string name="no_places">No places with board games nearby. Contact us on Facebook to add them and become Boardly partner!</string>
 </resources>
