@@ -8,7 +8,7 @@ sealed class PartialDiscoverViewState {
 
     data class PlacesListFetched(private val placesList: List<Place>) : PartialDiscoverViewState() {
         override fun reduce(previousState: DiscoverViewState): DiscoverViewState {
-            return DiscoverViewState(placesList = placesList)
+            return DiscoverViewState(progress = false, placesList = placesList)
         }
     }
 }

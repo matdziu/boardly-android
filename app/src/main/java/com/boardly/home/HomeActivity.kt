@@ -4,8 +4,10 @@ import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.location.Location
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
@@ -65,7 +67,9 @@ class HomeActivity : BaseJoinEventActivity(), HomeView {
         super.onCreate(savedInstanceState)
         GoogleApiAvailability.getInstance().makeGooglePlayServicesAvailable(this)
         initRecyclerView()
+
         selectedFilter = getSavedFilter()
+        saveFilter(selectedFilter, PreferenceManager.getDefaultSharedPreferences(this))
 
         homeViewModel = ViewModelProviders.of(this, homeViewModelFactory)[HomeViewModel::class.java]
         addEventButton.setOnClickListener { EventActivity.startAddMode(this@HomeActivity) }
@@ -237,6 +241,12 @@ class HomeActivity : BaseJoinEventActivity(), HomeView {
 
     private fun saveFilter(filter: Filter) {
         val sharedPrefs = getPreferences(Context.MODE_PRIVATE)
+        val commonSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
+        saveFilter(filter, sharedPrefs)
+        saveFilter(filter, commonSharedPrefs)
+    }
+
+    private fun saveFilter(filter: Filter, sharedPrefs: SharedPreferences) {
         sharedPrefs.edit()
                 .putInt(SAVED_RADIUS, filter.radius.toInt())
                 .putString(SAVED_GAME_ID, filter.gameId)
