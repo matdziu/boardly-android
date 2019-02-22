@@ -9,4 +9,5 @@ data class Place(var id: String = "",
                  val placeLatitude: Double = 0.0,
                  val placeLongitude: Double = 0.0,
                  val phoneNumber: String = "",
-                 val pageLink: String = "")
+                 val pageLink: String = ",",
+                 val collectionId: String = "")

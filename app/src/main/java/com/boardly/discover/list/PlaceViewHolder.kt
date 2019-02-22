@@ -11,6 +11,7 @@ import com.boardly.discover.models.Place
 import com.boardly.event.EventActivity
 import com.boardly.extensions.loadImageFromUrl
 import com.boardly.extensions.setOnClickListener
+import com.boardly.gamescollection.GamesCollectionActivity
 import kotlinx.android.synthetic.main.item_place.view.callButton
 import kotlinx.android.synthetic.main.item_place.view.callImageView
 import kotlinx.android.synthetic.main.item_place.view.createEventButton
@@ -20,6 +21,8 @@ import kotlinx.android.synthetic.main.item_place.view.locationImageView
 import kotlinx.android.synthetic.main.item_place.view.locationTextView
 import kotlinx.android.synthetic.main.item_place.view.placeImageView
 import kotlinx.android.synthetic.main.item_place.view.placeNameTextView
+import kotlinx.android.synthetic.main.item_place.view.viewBoardGamesButton
+import kotlinx.android.synthetic.main.item_place.view.viewBoardGamesImageView
 
 
 class PlaceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -42,6 +45,9 @@ class PlaceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     placeLatitude = place.placeLatitude,
                     placeLongitude = place.placeLongitude
             ))
+        }
+        listOf(viewBoardGamesImageView, viewBoardGamesButton).setOnClickListener {
+            GamesCollectionActivity.start(context, place.collectionId)
         }
         placeImageView.setOnClickListener { openBoardGameInfoPage(place.pageLink, context) }
     }
