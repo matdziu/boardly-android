@@ -23,6 +23,7 @@ import com.boardly.constants.SAVED_LOCATION_LATITUDE
 import com.boardly.constants.SAVED_LOCATION_LONGITUDE
 import com.boardly.constants.SAVED_LOCATION_NAME
 import com.boardly.constants.SAVED_RADIUS
+import com.boardly.discover.DiscoverActivity
 import com.boardly.event.EventActivity
 import com.boardly.factories.HomeViewModelFactory
 import com.boardly.filter.FilterActivity
@@ -35,6 +36,7 @@ import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import kotlinx.android.synthetic.main.activity_home.addEventButton
 import kotlinx.android.synthetic.main.activity_home.contentViewGroup
+import kotlinx.android.synthetic.main.activity_home.discoverButton
 import kotlinx.android.synthetic.main.activity_home.eventsRecyclerView
 import kotlinx.android.synthetic.main.activity_home.inviteFriendsButton
 import kotlinx.android.synthetic.main.activity_home.locationProcessingTextView
@@ -67,6 +69,7 @@ class HomeActivity : BaseJoinEventActivity(), HomeView {
 
         homeViewModel = ViewModelProviders.of(this, homeViewModelFactory)[HomeViewModel::class.java]
         addEventButton.setOnClickListener { EventActivity.startAddMode(this@HomeActivity) }
+        discoverButton.setOnClickListener { DiscoverActivity.start(this@HomeActivity) }
         inviteFriendsButton.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "text/plain"

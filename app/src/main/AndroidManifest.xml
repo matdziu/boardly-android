@@ -101,6 +101,10 @@
             android:name=".notify.NotifyActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".discover.DiscoverActivity"
+            android:screenOrientation="portrait" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/places_api_key" />
