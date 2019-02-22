@@ -5,6 +5,7 @@ import com.boardly.editprofile.EditProfileActivity
 import com.boardly.event.EventActivity
 import com.boardly.eventdetails.EventDetailsActivity
 import com.boardly.filter.FilterActivity
+import com.boardly.gamescollection.GamesCollectionActivity
 import com.boardly.home.HomeActivity
 import com.boardly.injection.ActivityScope
 import com.boardly.login.LoginActivity
@@ -62,4 +63,8 @@ abstract class ActivityBuilder {
     @ActivityScope
     @ContributesAndroidInjector(modules = [DiscoverActivityModule::class])
     abstract fun bindDiscoverActivity(): DiscoverActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [GamesCollectionActivityModule::class])
+    abstract fun bindGamesCollectionActivity(): GamesCollectionActivity
 }
