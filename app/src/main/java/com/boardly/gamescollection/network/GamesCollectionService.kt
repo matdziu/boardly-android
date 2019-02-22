@@ -9,7 +9,5 @@ interface GamesCollectionService {
 
     fun addGame(collectionId: String, game: CollectionGame): Observable<Boolean>
 
-    fun editGame(collectionId: String, game: CollectionGame): Observable<Boolean>
-
     fun deleteGame(collectionId: String, gameId: String): Observable<Boolean>
 }

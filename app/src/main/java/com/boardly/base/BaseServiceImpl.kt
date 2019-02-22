@@ -4,6 +4,7 @@ import com.boardly.common.events.models.Event
 import com.boardly.common.players.models.Player
 import com.boardly.constants.ACCEPTED_EVENTS_NODE
 import com.boardly.constants.CHATS_NODE
+import com.boardly.constants.COLLECTIONS_NODE
 import com.boardly.constants.CREATED_EVENTS_NODE
 import com.boardly.constants.EVENTS_NODE
 import com.boardly.constants.EVENTS_WITH_INTEREST
@@ -66,6 +67,10 @@ open class BaseServiceImpl {
 
     protected fun getStorageProfilePictureRef(userId: String): StorageReference {
         return firebaseStorage.reference.child(userId)
+    }
+
+    protected fun getSingleCollectionRef(collectionId: String): DatabaseReference {
+        return firebaseDatabase.getReference("$COLLECTIONS_NODE/$collectionId")
     }
 
     protected fun getGeoFire(childPath: String): GeoFire {
