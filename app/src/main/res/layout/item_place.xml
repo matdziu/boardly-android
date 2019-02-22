@@ -67,7 +67,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
-        android:maxLines="1"
+        android:maxLines="2"
         android:paddingTop="6dp"
         android:paddingBottom="6dp"
         android:textSize="16dp"
@@ -93,7 +93,7 @@
     <Button
         android:id="@+id/callButton"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
@@ -122,7 +122,7 @@
     <Button
         android:id="@+id/viewBoardGamesButton"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:gravity="start|center"
@@ -149,7 +149,7 @@
     <Button
         android:id="@+id/createEventButton"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"

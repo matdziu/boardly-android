@@ -90,9 +90,10 @@ class EventActivity : BaseActivity(), EventView {
     private lateinit var mode: Mode
 
     companion object {
-        fun startAddMode(context: Context) {
+        fun startAddMode(context: Context, event: Event? = null) {
             val intent = Intent(context, EventActivity::class.java)
             intent.putExtra(MODE, Mode.ADD)
+            intent.putExtra(EVENT, event)
             context.startActivity(intent)
         }
 
@@ -139,6 +140,12 @@ class EventActivity : BaseActivity(), EventView {
             addEventButton.visibility = View.VISIBLE
             saveChangesButton.visibility = View.GONE
             deleteEventButton.visibility = View.GONE
+            val partialEvent = intent.getParcelableExtra<Event>(EVENT)
+            if (partialEvent != null) {
+                event = partialEvent
+                renderEventData(event)
+                updateInputData(event)
+            }
         } else if (mode == Mode.EDIT) {
             addEventButton.visibility = View.GONE
             saveChangesButton.visibility = View.VISIBLE
