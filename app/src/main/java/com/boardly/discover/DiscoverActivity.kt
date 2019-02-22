@@ -4,13 +4,19 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import com.boardly.R
 import com.boardly.base.BaseActivity
+import com.boardly.common.location.UserLocation
+import com.boardly.constants.SAVED_LOCATION_LATITUDE
+import com.boardly.constants.SAVED_LOCATION_LONGITUDE
+import com.boardly.constants.SAVED_RADIUS
 import com.boardly.discover.models.FilteredFetchData
 import com.boardly.factories.DiscoverViewModelFactory
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
+import kotlinx.android.synthetic.main.activity_discover.noUserLocationTextView
 import javax.inject.Inject
 
 class DiscoverActivity : BaseActivity(), DiscoverView {
@@ -21,6 +27,8 @@ class DiscoverActivity : BaseActivity(), DiscoverView {
     private lateinit var discoverViewModel: DiscoverViewModel
 
     private lateinit var fetchPlacesListTriggerSubject: PublishSubject<FilteredFetchData>
+
+    private var init = true
 
     companion object {
 
@@ -41,7 +49,23 @@ class DiscoverActivity : BaseActivity(), DiscoverView {
         super.onStart()
         initEmitters()
         discoverViewModel.bind(this)
+        if (init) initFetching()
+    }
 
+    private fun initFetching() {
+        val sharedPrefs = getPreferences(Context.MODE_PRIVATE)
+        val savedRadius = sharedPrefs.getInt(SAVED_RADIUS, 50)
+        val savedLocationLongitude = sharedPrefs.getString(SAVED_LOCATION_LONGITUDE, "")
+        val savedLocationLatitude = sharedPrefs.getString(SAVED_LOCATION_LATITUDE, "")
+        val userLocation = getUserLocationFromString(savedLocationLongitude, savedLocationLatitude)
+
+        if (userLocation != null) fetchPlacesListTriggerSubject.onNext(FilteredFetchData(userLocation, savedRadius.toDouble()))
+        else noUserLocationTextView.visibility = View.VISIBLE
+    }
+
+    private fun getUserLocationFromString(longitude: String, latitude: String): UserLocation? {
+        return if (longitude.isNotEmpty() && latitude.isNotEmpty()) UserLocation(latitude.toDouble(), longitude.toDouble())
+        else null
     }
 
     private fun initEmitters() {
@@ -49,6 +73,7 @@ class DiscoverActivity : BaseActivity(), DiscoverView {
     }
 
     override fun onStop() {
+        init = false
         discoverViewModel.unbind()
         super.onStop()
     }
