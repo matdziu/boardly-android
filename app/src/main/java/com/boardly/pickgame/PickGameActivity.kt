@@ -45,6 +45,7 @@ class PickGameActivity : BaseSearchActivity(), PickGameView {
 
     override fun onStart() {
         super.onStart()
+        initEmitters()
         pickGameViewModel.bind(this)
     }
 

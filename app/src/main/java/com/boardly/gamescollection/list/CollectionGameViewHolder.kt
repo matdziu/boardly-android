@@ -6,7 +6,7 @@ import com.boardly.gamescollection.models.CollectionGame
 
 class CollectionGameViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(collectionGame: CollectionGame) {
+    fun bind(collectionGame: CollectionGame) = with(itemView) {
 
     }
 }

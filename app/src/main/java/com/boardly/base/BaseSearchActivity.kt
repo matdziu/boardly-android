@@ -15,6 +15,10 @@ abstract class BaseSearchActivity : BaseActivity() {
 
     protected var searchInput = PublishSubject.create<String>()
 
+    protected open fun initEmitters() {
+        searchInput = PublishSubject.create()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.options_menu, menu)
 
@@ -26,6 +30,7 @@ abstract class BaseSearchActivity : BaseActivity() {
         searchView.setIconifiedByDefault(false)
         searchView.maxWidth = Integer.MAX_VALUE
         searchView.requestFocus()
+        searchView.queryHint = getString(searchHintResId)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 formatAndEmitQuery(query, searchInput)

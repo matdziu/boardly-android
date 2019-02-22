@@ -1,6 +1,7 @@
 package com.boardly.gamescollection
 
 import android.arch.lifecycle.ViewModel
+import com.boardly.gamescollection.models.CollectionGame
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
@@ -12,10 +13,11 @@ class GamesCollectionViewModel(private val gamesCollectionInteractor: GamesColle
     private val stateSubject = BehaviorSubject.createDefault(GamesCollectionViewState())
 
     fun bind(gamesCollectionView: GamesCollectionView, collectionId: String) {
-
+        val initialFetchObservable = gamesCollectionView.initialFetchTriggerEmitter()
+                .map { PartialGamesCollectionViewState.ProgressState }
 
         val mergedObservable = Observable.merge(
-                listOf(Observable.just(PartialGamesCollectionViewState.ProgressState)))
+                listOf(initialFetchObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 

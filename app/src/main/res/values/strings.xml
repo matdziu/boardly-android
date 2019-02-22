@@ -135,4 +135,7 @@
     <string name="call">Call</string>
     <string name="create_event">Create event</string>
     <string name="browse_board_games">Browse board games</string>
+    <string name="no_games_in_collection">Sorry, we found no games here</string>
+    <string name="games_collection_hint">You\'ll find more games on site</string>
+    <string name="generic_success">Success!</string>
 </resources>
