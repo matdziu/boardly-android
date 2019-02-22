@@ -133,4 +133,6 @@
     <string name="no_user_location">To discover places with Boardly go to Filter screen and select a location</string>
     <string name="no_places">No places with board games nearby. Contact us on Facebook to add them and become Boardly partner!</string>
     <string name="call">Call</string>
+    <string name="create_event">Create event</string>
+    <string name="browse_board_games">Browse board games</string>
 </resources>

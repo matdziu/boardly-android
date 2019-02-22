@@ -133,4 +133,6 @@
     <string name="no_user_location">Aby odkrywać miejsca z Boardly przejdź do ekranu filtrowania i wybierz lokalizację</string>
     <string name="no_places">Nie znaleziono planszówkowych miejsc w pobliżu. Skontaktuj się z nami na Facebooku żeby je dodać i zostać partnerem Boardly!</string>
     <string name="call">Zadzwoń</string>
+    <string name="create_event">Stwórz wydarzenie</string>
+    <string name="browse_board_games">Przeglądaj planszówki</string>
 </resources>
