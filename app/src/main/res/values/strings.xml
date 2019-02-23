@@ -140,4 +140,5 @@
     <string name="generic_success">Success!</string>
     <string name="game_action_delete">Delete</string>
     <string name="select_game_action">Select action</string>
+    <string name="manage_place">Manage place</string>
 </resources>

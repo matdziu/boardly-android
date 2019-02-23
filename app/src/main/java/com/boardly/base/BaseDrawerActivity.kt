@@ -10,6 +10,7 @@ import android.view.MenuItem
 import com.boardly.R
 import com.boardly.editprofile.EditProfileActivity
 import com.boardly.home.HomeActivity
+import com.boardly.manageplace.ManagePlaceActivity
 import com.boardly.myevents.MyEventsActivity
 
 @SuppressLint("Registered")
@@ -42,6 +43,7 @@ open class BaseDrawerActivity : BaseActivity(), NavigationView.OnNavigationItemS
                 R.id.profile_item -> EditProfileActivity.start(this, true)
                 R.id.events_item -> startActivity(Intent(this, HomeActivity::class.java))
                 R.id.my_events_item -> startActivity(Intent(this, MyEventsActivity::class.java))
+                R.id.manage_place_item -> ManagePlaceActivity.start(this)
             }
             drawerLayout.closeDrawers()
             true

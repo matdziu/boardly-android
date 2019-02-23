@@ -20,6 +20,12 @@
         android:title="@string/your_profile_text" />
 
     <item
+        android:id="@+id/manage_place_item"
+        android:checkable="true"
+        android:icon="@drawable/ic_place_white"
+        android:title="@string/manage_place" />
+
+    <item
         android:id="@+id/sign_out_item"
         android:icon="@drawable/ic_first_page_white_18dp"
         android:title="@string/sign_out_text" />
