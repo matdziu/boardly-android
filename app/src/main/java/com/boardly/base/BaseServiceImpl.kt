@@ -78,6 +78,10 @@ open class BaseServiceImpl {
         return firebaseDatabase.getReference("$PLACES_NODE/$placeId")
     }
 
+    protected fun getPlacesRef(): DatabaseReference {
+        return firebaseDatabase.getReference(PLACES_NODE)
+    }
+
     protected fun getGeoFire(childPath: String): GeoFire {
         return GeoFire(firebaseDatabase.getReference(childPath))
     }
