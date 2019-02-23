@@ -13,7 +13,7 @@ class ManagePlaceViewModel(private val managePlaceInteractor: ManagePlaceInterac
 
     fun bind(managePlaceView: ManagePlaceView) {
         val fetchPlaceDataObservable = managePlaceView.fetchPlaceDataTriggerEmitter()
-                .flatMap { managePlaceInteractor.fetchPlaceData() }
+                .flatMap { managePlaceInteractor.fetchPlaceData().startWith(PartialManagePlaceViewState.ProgressState) }
 
         val placeDataObservable = managePlaceView.placeDataEmitter()
                 .flatMap {

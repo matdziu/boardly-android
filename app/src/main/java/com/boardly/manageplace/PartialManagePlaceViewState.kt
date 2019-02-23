@@ -33,7 +33,9 @@ sealed class PartialManagePlaceViewState {
 
     data class PartnershipCheckState(private val isPartner: Boolean = false) : PartialManagePlaceViewState() {
         override fun reduce(previousState: ManagePlaceViewState): ManagePlaceViewState {
-            return previousState.copy(isPartner = isPartner)
+            return previousState.copy(
+                    progress = false,
+                    isPartner = isPartner)
         }
     }
 
