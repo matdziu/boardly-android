@@ -19,6 +19,7 @@ class ManagePlaceInteractorTest {
         whenever(managePlaceService.fetchPlaceData(any())).thenReturn(Observable.just(Place(id = "1")))
         managePlaceInteractor.fetchPlaceData().test()
                 .assertValues(
+                        PartialManagePlaceViewState.PartnershipCheckState(true),
                         PartialManagePlaceViewState.PlaceDataFetched(Place(id = "1"), render = true),
                         PartialManagePlaceViewState.PlaceDataFetched(Place(id = "1")))
     }

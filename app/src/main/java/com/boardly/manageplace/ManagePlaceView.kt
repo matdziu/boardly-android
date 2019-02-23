@@ -10,4 +10,6 @@ interface ManagePlaceView {
     fun placeDataEmitter(): Observable<Place>
 
     fun fetchPlaceDataTriggerEmitter(): Observable<Boolean>
+
+    fun placePickEventEmitter(): Observable<Boolean>
 }

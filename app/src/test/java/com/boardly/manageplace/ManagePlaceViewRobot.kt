@@ -9,8 +9,12 @@ class ManagePlaceViewRobot(managePlaceViewModel: ManagePlaceViewModel) : BaseVie
 
     private val placeDataEmitterSubject = PublishSubject.create<Place>()
     private val fetchPlaceDataTriggerSubject = PublishSubject.create<Boolean>()
+    private val placePickEventSubject = PublishSubject.create<Boolean>()
 
     private val managePlaceView = object : ManagePlaceView {
+        override fun placePickEventEmitter(): Observable<Boolean> {
+            return placePickEventSubject
+        }
 
         override fun render(managePlaceViewState: ManagePlaceViewState) {
             renderedStates.add(managePlaceViewState)
@@ -35,5 +39,9 @@ class ManagePlaceViewRobot(managePlaceViewModel: ManagePlaceViewModel) : BaseVie
 
     fun emitFetchTrigger() {
         fetchPlaceDataTriggerSubject.onNext(true)
+    }
+
+    fun emitPlacePickEvent() {
+        placePickEventSubject.onNext(true)
     }
 }

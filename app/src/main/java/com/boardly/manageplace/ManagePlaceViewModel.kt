@@ -24,7 +24,7 @@ class ManagePlaceViewModel(private val managePlaceInteractor: ManagePlaceInterac
 
                     if (placeNameValid && placeDescriptionValid
                             && placeLocationValid && placeNumberValid) {
-                        managePlaceInteractor.savePlaceData(it)
+                        managePlaceInteractor.savePlaceData(it).startWith(PartialManagePlaceViewState.ProgressState)
                     } else {
                         Observable.just(PartialManagePlaceViewState.LocalValidation(
                                 placeNameValid,
@@ -34,9 +34,13 @@ class ManagePlaceViewModel(private val managePlaceInteractor: ManagePlaceInterac
                     }
                 }
 
+        val placePickEventObservable = managePlaceView.placePickEventEmitter()
+                .map { PartialManagePlaceViewState.PlacePickedState }
+
         val mergedObservable = Observable.merge(
                 listOf(fetchPlaceDataObservable,
-                        placeDataObservable))
+                        placeDataObservable,
+                        placePickEventObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 

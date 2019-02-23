@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.Toast
 import com.boardly.R
 import com.boardly.common.events.models.Event
 import com.boardly.discover.models.Place
@@ -64,9 +65,15 @@ class PlaceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     private fun openBoardGameInfoPage(link: String, context: Context) {
-        with(context) {
-            val infoPageIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-            startActivity(infoPageIntent)
+        if (link.trim().isNotEmpty()) {
+            with(context) {
+                val infoPageIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+                try {
+                    startActivity(infoPageIntent)
+                } catch (e: Exception) {
+                    Toast.makeText(this, R.string.no_link_found, Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 

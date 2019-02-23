@@ -10,8 +10,15 @@ class ManagePlaceInteractor @Inject constructor(private val managePlaceService: 
     fun fetchPlaceData(): Observable<PartialManagePlaceViewState> {
         return managePlaceService.fetchManagedPlaceId()
                 .flatMap { managedPlaceId ->
-                    if (managedPlaceId.isEmpty()) Observable.just(PartialManagePlaceViewState.PartnershipCheckState(false))
-                    else managePlaceService.fetchPlaceData(managedPlaceId).flatMap { emitPlaceDataFetchedState(it) }
+                    if (managedPlaceId.isEmpty()) {
+                        Observable.just(PartialManagePlaceViewState.PartnershipCheckState(false))
+                    } else {
+                        managePlaceService
+                                .fetchPlaceData(managedPlaceId)
+                                .flatMap { emitPlaceDataFetchedState(it) }
+                                .cast(PartialManagePlaceViewState::class.java)
+                                .startWith(PartialManagePlaceViewState.PartnershipCheckState(true))
+                    }
                 }
     }
 

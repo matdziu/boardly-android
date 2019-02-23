@@ -14,7 +14,9 @@ sealed class PartialManagePlaceViewState {
 
     object SuccessfulUpdateState : PartialManagePlaceViewState() {
         override fun reduce(previousState: ManagePlaceViewState): ManagePlaceViewState {
-            return ManagePlaceViewState(successfulUpdate = true)
+            return ManagePlaceViewState(
+                    progress = true,
+                    successfulUpdate = true)
         }
     }
 
@@ -36,6 +38,12 @@ sealed class PartialManagePlaceViewState {
             return previousState.copy(
                     progress = false,
                     isPartner = isPartner)
+        }
+    }
+
+    object PlacePickedState : PartialManagePlaceViewState() {
+        override fun reduce(previousState: ManagePlaceViewState): ManagePlaceViewState {
+            return previousState.copy(placeLocationValid = true)
         }
     }
 

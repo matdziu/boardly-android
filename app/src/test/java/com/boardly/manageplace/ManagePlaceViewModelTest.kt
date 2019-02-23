@@ -46,7 +46,11 @@ class ManagePlaceViewModelTest {
                 phoneNumber = "1"))
         managePlaceViewRobot.assertViewStates(
                 ManagePlaceViewState(),
-                ManagePlaceViewState(successfulUpdate = true))
+                ManagePlaceViewState(
+                        progress = true),
+                ManagePlaceViewState(
+                        progress = true,
+                        successfulUpdate = true))
     }
 
     @Test
@@ -77,6 +81,21 @@ class ManagePlaceViewModelTest {
                 ManagePlaceViewState(),
                 ManagePlaceViewState(placeNameValid = false),
                 ManagePlaceViewState(placeDescriptionValid = false),
+                ManagePlaceViewState(placeNumberValid = false))
+    }
+
+    @Test
+    fun testPlacePickEvent() {
+        managePlaceViewRobot.emitPlace(Place(
+                id = "1",
+                adminId = "1",
+                name = "1",
+                description = "1",
+                imageUrl = "1"))
+        managePlaceViewRobot.emitPlacePickEvent()
+        managePlaceViewRobot.assertViewStates(
+                ManagePlaceViewState(),
+                ManagePlaceViewState(placeNumberValid = false, placeLocationValid = false),
                 ManagePlaceViewState(placeNumberValid = false))
     }
 }

@@ -141,4 +141,11 @@
     <string name="game_action_delete">Usuń</string>
     <string name="select_game_action">Wybierz akcję</string>
     <string name="manage_place">Zarządzaj miejscem</string>
+    <string name="place_name_text">Nazwa miejsca</string>
+    <string name="place_description_text">Opis miejsca</string>
+    <string name="phone_number_text">Number telefonu</string>
+    <string name="page_link_text">Link do strony (opcjonalnie)</string>
+    <string name="no_partnership_text">Nie jesteś jeszcze partnerem Boardly. Żeby nim zostać napisz do nas na Facebooku ;)</string>
+    <string name="edit_games_collection">Edytuj kolekcję gier</string>
+    <string name="no_link_found">Nie można otworzyć strony</string>
 </resources>
