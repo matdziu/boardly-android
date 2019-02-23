@@ -2,12 +2,13 @@ package com.boardly.manageplace
 
 import com.boardly.base.BaseViewRobot
 import com.boardly.discover.models.Place
+import com.boardly.manageplace.models.PlaceInputData
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
 class ManagePlaceViewRobot(managePlaceViewModel: ManagePlaceViewModel) : BaseViewRobot<ManagePlaceViewState>() {
 
-    private val placeDataEmitterSubject = PublishSubject.create<Place>()
+    private val placeDataEmitterSubject = PublishSubject.create<PlaceInputData>()
     private val fetchPlaceDataTriggerSubject = PublishSubject.create<Boolean>()
     private val placePickEventSubject = PublishSubject.create<Boolean>()
 
@@ -20,7 +21,7 @@ class ManagePlaceViewRobot(managePlaceViewModel: ManagePlaceViewModel) : BaseVie
             renderedStates.add(managePlaceViewState)
         }
 
-        override fun placeDataEmitter(): Observable<Place> {
+        override fun placeDataEmitter(): Observable<PlaceInputData> {
             return placeDataEmitterSubject
         }
 
@@ -34,7 +35,7 @@ class ManagePlaceViewRobot(managePlaceViewModel: ManagePlaceViewModel) : BaseVie
     }
 
     fun emitPlace(place: Place) {
-        placeDataEmitterSubject.onNext(place)
+        placeDataEmitterSubject.onNext(PlaceInputData(place))
     }
 
     fun emitFetchTrigger() {

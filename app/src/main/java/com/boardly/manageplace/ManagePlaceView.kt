@@ -1,13 +1,13 @@
 package com.boardly.manageplace
 
-import com.boardly.discover.models.Place
+import com.boardly.manageplace.models.PlaceInputData
 import io.reactivex.Observable
 
 interface ManagePlaceView {
 
     fun render(managePlaceViewState: ManagePlaceViewState)
 
-    fun placeDataEmitter(): Observable<Place>
+    fun placeDataEmitter(): Observable<PlaceInputData>
 
     fun fetchPlaceDataTriggerEmitter(): Observable<Boolean>
 

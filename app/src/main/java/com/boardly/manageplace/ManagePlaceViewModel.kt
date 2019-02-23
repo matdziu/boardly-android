@@ -17,10 +17,10 @@ class ManagePlaceViewModel(private val managePlaceInteractor: ManagePlaceInterac
 
         val placeDataObservable = managePlaceView.placeDataEmitter()
                 .flatMap {
-                    val placeNameValid = it.name.isNotBlank()
-                    val placeDescriptionValid = it.description.isNotBlank()
-                    val placeLocationValid = it.locationName.isNotBlank()
-                    val placeNumberValid = it.phoneNumber.isNotBlank()
+                    val placeNameValid = it.place.name.isNotBlank()
+                    val placeDescriptionValid = it.place.description.isNotBlank()
+                    val placeLocationValid = it.place.locationName.isNotBlank()
+                    val placeNumberValid = it.place.phoneNumber.isNotBlank()
 
                     if (placeNameValid && placeDescriptionValid
                             && placeLocationValid && placeNumberValid) {

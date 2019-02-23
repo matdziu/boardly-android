@@ -14,8 +14,10 @@ import com.boardly.base.BaseDrawerActivity
 import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
 import com.boardly.discover.models.Place
 import com.boardly.extensions.loadImageFromFile
+import com.boardly.extensions.loadImageFromUrl
 import com.boardly.factories.ManagePlaceViewModelFactory
 import com.boardly.gamescollection.GamesCollectionActivity
+import com.boardly.manageplace.models.PlaceInputData
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
@@ -108,6 +110,7 @@ class ManagePlaceActivity : BaseDrawerActivity(), ManagePlaceView {
             phoneNumberEditText.setText(managedPlace.phoneNumber)
             pageLinkEditText.setText(managedPlace.pageLink)
             renderLocationTextView(managedPlace.locationName)
+            loadImageFromUrl(placeImageView, managedPlace.imageUrl, R.drawable.place_placeholder)
         }
         if (successfulUpdate) {
             Toast.makeText(this@ManagePlaceActivity, R.string.generic_success, Toast.LENGTH_SHORT).show()
@@ -158,15 +161,17 @@ class ManagePlaceActivity : BaseDrawerActivity(), ManagePlaceView {
         }
     }
 
-    override fun placeDataEmitter(): Observable<Place> = RxView.clicks(saveChangesButton).map {
-        currentManagedPlace.copy(
-                name = placeNameEditText.text.toString(),
-                description = placeDescriptionEditText.text.toString(),
-                phoneNumber = phoneNumberEditText.text.toString(),
-                pageLink = pageLinkEditText.text.toString(),
-                locationName = currentManagedPlace.locationName,
-                placeLongitude = currentManagedPlace.placeLongitude,
-                placeLatitude = currentManagedPlace.placeLatitude)
+    override fun placeDataEmitter(): Observable<PlaceInputData> = RxView.clicks(saveChangesButton).map {
+        PlaceInputData(
+                currentManagedPlace.copy(
+                        name = placeNameEditText.text.toString(),
+                        description = placeDescriptionEditText.text.toString(),
+                        phoneNumber = phoneNumberEditText.text.toString(),
+                        pageLink = pageLinkEditText.text.toString(),
+                        locationName = currentManagedPlace.locationName,
+                        placeLongitude = currentManagedPlace.placeLongitude,
+                        placeLatitude = currentManagedPlace.placeLatitude),
+                selectedPlacePictureFile)
     }
 
     override fun fetchPlaceDataTriggerEmitter(): Observable<Boolean> = placeDataFetchTriggerSubject

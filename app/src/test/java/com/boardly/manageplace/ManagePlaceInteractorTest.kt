@@ -1,6 +1,7 @@
 package com.boardly.manageplace
 
 import com.boardly.discover.models.Place
+import com.boardly.manageplace.models.PlaceInputData
 import com.boardly.manageplace.network.ManagePlaceService
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
@@ -37,7 +38,7 @@ class ManagePlaceInteractorTest {
     fun testSuccessfulPlaceSaving() {
         whenever(managePlaceService.savePlaceData(any(), any())).thenReturn(Observable.just(true))
         whenever(managePlaceService.fetchManagedPlaceId()).thenReturn(Observable.just(""))
-        managePlaceInteractor.savePlaceData(Place(id = "1")).test()
+        managePlaceInteractor.savePlaceData(PlaceInputData(Place(id = "1"))).test()
                 .assertValue(PartialManagePlaceViewState.SuccessfulUpdateState)
     }
 }

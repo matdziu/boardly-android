@@ -1,6 +1,7 @@
 package com.boardly.manageplace
 
 import com.boardly.discover.models.Place
+import com.boardly.manageplace.models.PlaceInputData
 import com.boardly.manageplace.network.ManagePlaceService
 import io.reactivex.Observable
 import javax.inject.Inject
@@ -28,10 +29,10 @@ class ManagePlaceInteractor @Inject constructor(private val managePlaceService: 
         return Observable.just(placeDataFetchedState).startWith(placeDataFetchedState.copy(render = true))
     }
 
-    fun savePlaceData(place: Place): Observable<PartialManagePlaceViewState> {
+    fun savePlaceData(placeInputData: PlaceInputData): Observable<PartialManagePlaceViewState> {
         return managePlaceService.fetchManagedPlaceId()
                 .flatMap {
-                    managePlaceService.savePlaceData(it, place)
+                    managePlaceService.savePlaceData(it, placeInputData)
                             .map { PartialManagePlaceViewState.SuccessfulUpdateState }
                 }
     }

@@ -70,6 +70,10 @@ open class BaseServiceImpl {
         return firebaseStorage.reference.child(userId)
     }
 
+    protected fun getStoragePlacePictureRef(placeId: String): StorageReference {
+        return firebaseStorage.reference.child(placeId)
+    }
+
     protected fun getSingleCollectionRef(collectionId: String): DatabaseReference {
         return firebaseDatabase.getReference("$COLLECTIONS_NODE/$collectionId")
     }
