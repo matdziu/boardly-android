@@ -9,6 +9,7 @@ import com.boardly.gamescollection.GamesCollectionActivity
 import com.boardly.home.HomeActivity
 import com.boardly.injection.ActivityScope
 import com.boardly.login.LoginActivity
+import com.boardly.manageplace.ManagePlaceActivity
 import com.boardly.myevents.MyEventsActivity
 import com.boardly.notify.NotifyActivity
 import com.boardly.pickgame.PickGameActivity
@@ -67,4 +68,8 @@ abstract class ActivityBuilder {
     @ActivityScope
     @ContributesAndroidInjector(modules = [GamesCollectionActivityModule::class])
     abstract fun bindGamesCollectionActivity(): GamesCollectionActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [ManagePlaceActivityModule::class])
+    abstract fun bindManagePlaceActivity(): ManagePlaceActivity
 }

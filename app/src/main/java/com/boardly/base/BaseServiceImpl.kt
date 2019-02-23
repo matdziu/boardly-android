@@ -11,6 +11,7 @@ import com.boardly.constants.EVENTS_WITH_INTEREST
 import com.boardly.constants.INTERESTING_EVENTS_NODE
 import com.boardly.constants.NOTIFY_SETTINGS_NODE
 import com.boardly.constants.PENDING_EVENTS_NODE
+import com.boardly.constants.PLACES_NODE
 import com.boardly.constants.PLAYERS_NODE
 import com.boardly.constants.RATING_HASHES
 import com.boardly.constants.USERS_NODE
@@ -71,6 +72,10 @@ open class BaseServiceImpl {
 
     protected fun getSingleCollectionRef(collectionId: String): DatabaseReference {
         return firebaseDatabase.getReference("$COLLECTIONS_NODE/$collectionId")
+    }
+
+    protected fun getSinglePlaceRef(placeId: String): DatabaseReference {
+        return firebaseDatabase.getReference("$PLACES_NODE/$placeId")
     }
 
     protected fun getGeoFire(childPath: String): GeoFire {
