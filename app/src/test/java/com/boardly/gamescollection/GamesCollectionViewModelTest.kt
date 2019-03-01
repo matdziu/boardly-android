@@ -16,7 +16,7 @@ class GamesCollectionViewModelTest {
     private val gamesCollectionInteractor: GamesCollectionInteractor = mock {
         on { it.fetchGames(any()) } doReturn Observable.just(PartialGamesCollectionViewState.CollectionFetched(testGames))
                 .cast(PartialGamesCollectionViewState::class.java)
-        on { it.addGame(any(), any()) } doReturn Observable.just(PartialGamesCollectionViewState.SuccessState())
+        on { it.addGame(any(), any(), any()) } doReturn Observable.just(PartialGamesCollectionViewState.SuccessState())
                 .cast(PartialGamesCollectionViewState::class.java)
         on { it.deleteGame(any(), any()) } doReturn Observable.just(PartialGamesCollectionViewState.SuccessState())
                 .cast(PartialGamesCollectionViewState::class.java)

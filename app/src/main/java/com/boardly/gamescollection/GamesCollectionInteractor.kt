@@ -14,13 +14,17 @@ class GamesCollectionInteractor @Inject constructor(private val gameService: Gam
                 .map { PartialGamesCollectionViewState.CollectionFetched(it) }
     }
 
-    fun addGame(collectionId: String, collectionGame: CollectionGame): Observable<PartialGamesCollectionViewState> {
+    fun addGame(collectionId: String, collectionGame: CollectionGame,
+                currentCollectionCount: Int): Observable<PartialGamesCollectionViewState> {
         return gameService.gameDetails(collectionGame.id)
                 .flatMap {
                     collectionGame.imageUrl = it.game.image
-                    gamesCollectionService.addGame(collectionId, collectionGame)
+                    gamesCollectionService.addGame(collectionId, collectionGame, currentCollectionCount)
                 }
-                .flatMap { emitSuccessState() }
+                .flatMap {
+                    if (it) emitSuccessState()
+                    else emitNoMoreLimitState()
+                }
     }
 
     fun deleteGame(collectionId: String, gameId: String): Observable<PartialGamesCollectionViewState> {
@@ -31,6 +35,12 @@ class GamesCollectionInteractor @Inject constructor(private val gameService: Gam
     private fun emitSuccessState(): Observable<PartialGamesCollectionViewState> {
         return Observable.just(PartialGamesCollectionViewState.SuccessState(false))
                 .startWith(PartialGamesCollectionViewState.SuccessState())
+                .cast(PartialGamesCollectionViewState::class.java)
+    }
+
+    private fun emitNoMoreLimitState(): Observable<PartialGamesCollectionViewState> {
+        return Observable.just(PartialGamesCollectionViewState.NoMoreLimitState(false))
+                .startWith(PartialGamesCollectionViewState.NoMoreLimitState())
                 .cast(PartialGamesCollectionViewState::class.java)
     }
 }

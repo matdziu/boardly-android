@@ -156,6 +156,7 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
         showProgressBar(progress)
         showSuccessToast(success)
         showNoGamesText(games.isEmpty() && !progress)
+        showNoMoreLimitToast(noMoreLimit)
         collectionGamesAdapter.submitList(games)
     }
 
@@ -176,6 +177,12 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
         if (show) {
             Toast.makeText(this, R.string.generic_success, Toast.LENGTH_SHORT).show()
             initialFetchTriggerSubject.onNext(false)
+        }
+    }
+
+    private fun showNoMoreLimitToast(show: Boolean) {
+        if (show) {
+            Toast.makeText(this, R.string.no_more_limit, Toast.LENGTH_SHORT).show()
         }
     }
 

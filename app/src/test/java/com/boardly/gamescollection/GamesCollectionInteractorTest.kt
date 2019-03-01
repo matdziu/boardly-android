@@ -28,9 +28,9 @@ class GamesCollectionInteractorTest {
     @Test
     fun testSuccessfulGameAdding() {
         val testDetailsResponse = DetailsResponse(Game(image = "path/to/image"))
-        whenever(gamesCollectionService.addGame("collectionId", CollectionGame(id = "1", imageUrl = "path/to/image"))).thenReturn(Observable.just(true))
+        whenever(gamesCollectionService.addGame("collectionId", CollectionGame(id = "1", imageUrl = "path/to/image"), 1)).thenReturn(Observable.just(true))
         whenever(gameService.gameDetails(any())).thenReturn(Observable.just(testDetailsResponse))
-        gamesCollectionInteractor.addGame("collectionId", CollectionGame(id = "1"))
+        gamesCollectionInteractor.addGame("collectionId", CollectionGame(id = "1"), 1)
                 .test()
                 .assertValues(
                         PartialGamesCollectionViewState.SuccessState(),

@@ -22,7 +22,7 @@ class GamesCollectionViewModel(private val gamesCollectionInteractor: GamesColle
                 .doOnNext { if (it is PartialGamesCollectionViewState.CollectionFetched) currentCollectionGames = it.games }
 
         val newGameObservable = gamesCollectionView.newGameEmitter()
-                .flatMap { gamesCollectionInteractor.addGame(collectionId, it) }
+                .flatMap { gamesCollectionInteractor.addGame(collectionId, it, currentCollectionGames.size) }
 
         val deleteGameObservable = gamesCollectionView.deleteGameEmitter()
                 .flatMap { gamesCollectionInteractor.deleteGame(collectionId, it) }

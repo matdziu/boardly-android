@@ -148,4 +148,5 @@
     <string name="no_partnership_text">You are not a Boardly partner yet. To become one drop us a message on Facebook ;)</string>
     <string name="edit_games_collection">Edit games collection</string>
     <string name="no_link_found">Could not show web page</string>
+    <string name="no_more_limit">You exceeded your collection limit</string>
 </resources>

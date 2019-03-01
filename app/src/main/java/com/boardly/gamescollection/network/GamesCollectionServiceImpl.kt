@@ -1,6 +1,7 @@
 package com.boardly.gamescollection.network
 
 import com.boardly.base.BaseServiceImpl
+import com.boardly.constants.GAMES_LIMIT_CHILD
 import com.boardly.gamescollection.models.CollectionGame
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -17,9 +18,13 @@ class GamesCollectionServiceImpl : GamesCollectionService, BaseServiceImpl() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val gamesCollectionList = arrayListOf<CollectionGame>()
                 for (childSnapshot in dataSnapshot.children) {
-                    childSnapshot.getValue(CollectionGame::class.java)?.let {
-                        it.id = childSnapshot.key.orEmpty()
-                        gamesCollectionList.add(it)
+                    try {
+                        childSnapshot.getValue(CollectionGame::class.java)?.let {
+                            it.id = childSnapshot.key.orEmpty()
+                            gamesCollectionList.add(it)
+                        }
+                    } catch (e: Exception) {
+                        // unused
                     }
                 }
                 resultSubject.onNext(gamesCollectionList)
@@ -33,11 +38,26 @@ class GamesCollectionServiceImpl : GamesCollectionService, BaseServiceImpl() {
         return resultSubject
     }
 
-    override fun addGame(collectionId: String, game: CollectionGame): Observable<Boolean> {
+    override fun addGame(collectionId: String,
+                         game: CollectionGame,
+                         currentCollectionCount: Int): Observable<Boolean> {
         val resultSubject = PublishSubject.create<Boolean>()
 
-        getSingleCollectionRef(collectionId).child(game.id)
-                .setValue(game).addOnSuccessListener { resultSubject.onNext(true) }
+        getSingleCollectionRef(collectionId).child(GAMES_LIMIT_CHILD).addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val gamesLimit = dataSnapshot.getValue(Int::class.java) ?: 0
+                if (currentCollectionCount + 1 <= gamesLimit) {
+                    getSingleCollectionRef(collectionId).child(game.id)
+                            .setValue(game).addOnSuccessListener { resultSubject.onNext(true) }
+                } else {
+                    resultSubject.onNext(false)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // unused
+            }
+        })
 
         return resultSubject
     }

@@ -7,7 +7,9 @@ interface GamesCollectionService {
 
     fun fetchGames(collectionId: String): Observable<List<CollectionGame>>
 
-    fun addGame(collectionId: String, game: CollectionGame): Observable<Boolean>
+    fun addGame(collectionId: String,
+                game: CollectionGame,
+                currentCollectionCount: Int): Observable<Boolean>
 
     fun deleteGame(collectionId: String, gameId: String): Observable<Boolean>
 }

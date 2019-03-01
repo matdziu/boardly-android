@@ -28,4 +28,12 @@ sealed class PartialGamesCollectionViewState {
                     success = render)
         }
     }
+
+    data class NoMoreLimitState(private val render: Boolean = true) : PartialGamesCollectionViewState() {
+        override fun reduce(previousState: GamesCollectionViewState): GamesCollectionViewState {
+            return previousState.copy(
+                    progress = false,
+                    noMoreLimit = render)
+        }
+    }
 }
