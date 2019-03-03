@@ -18,6 +18,7 @@ import com.boardly.factories.GamesCollectionViewModelFactory
 import com.boardly.gamescollection.list.CollectionGamesAdapter
 import com.boardly.gamescollection.models.CollectionGame
 import com.boardly.pickgame.PickGameActivity
+import com.boardly.pickgame.dialog.addGameDialog
 import com.boardly.retrofit.gameservice.models.SearchResult
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
@@ -27,6 +28,7 @@ import kotlinx.android.synthetic.main.activity_games_collection.gamesCollectionR
 import kotlinx.android.synthetic.main.activity_games_collection.hintTextView
 import kotlinx.android.synthetic.main.activity_games_collection.noGamesTextView
 import kotlinx.android.synthetic.main.activity_games_collection.progressBar
+import kotlinx.android.synthetic.main.activity_games_collection.rootView
 import javax.inject.Inject
 
 enum class Mode {
@@ -84,7 +86,7 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
         mode = intent.getSerializableExtra(MODE) as Mode
         initRecyclerView()
         prepareMode(mode)
-        addGameButton.setOnClickListener { launchGamePickScreen(PICK_FIRST_GAME_REQUEST_CODE) }
+        addGameButton.setOnClickListener { addGameDialog(rootView) { handlePickGameResult(it) } }
         initWithKeyboard = false
     }
 
@@ -126,6 +128,11 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
                 recentlyPickedGame = collectionGame
             }
         }
+    }
+
+    private fun handlePickGameResult(gameName: String) {
+        val collectionGame = CollectionGame(name = gameName)
+        newGameSubject.onNext(collectionGame)
     }
 
     override fun onStart() {

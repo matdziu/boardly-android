@@ -16,11 +16,7 @@ class GamesCollectionInteractor @Inject constructor(private val gameService: Gam
 
     fun addGame(collectionId: String, collectionGame: CollectionGame,
                 currentCollectionCount: Int): Observable<PartialGamesCollectionViewState> {
-        return gameService.gameDetails(collectionGame.id)
-                .flatMap {
-                    collectionGame.imageUrl = it.game.image
-                    gamesCollectionService.addGame(collectionId, collectionGame, currentCollectionCount)
-                }
+        return gamesCollectionService.addGame(collectionId, collectionGame, currentCollectionCount)
                 .flatMap {
                     if (it) emitSuccessState()
                     else emitNoMoreLimitState()

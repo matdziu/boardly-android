@@ -16,7 +16,6 @@ import com.boardly.gamescollection.Mode
 import com.boardly.gamescollection.models.CollectionGame
 import kotlinx.android.synthetic.main.item_collection_game.view.boardGameImageView
 import kotlinx.android.synthetic.main.item_collection_game.view.gameNameTextView
-import kotlinx.android.synthetic.main.item_collection_game.view.yearPublishedTextView
 
 class CollectionGameViewHolder(itemView: View, private val mode: Mode) : RecyclerView.ViewHolder(itemView),
         View.OnCreateContextMenuListener {
@@ -26,7 +25,6 @@ class CollectionGameViewHolder(itemView: View, private val mode: Mode) : Recycle
     fun bind(collectionGame: CollectionGame) = with(itemView) {
         gameId = collectionGame.id
         gameNameTextView.text = collectionGame.name
-        yearPublishedTextView.text = collectionGame.yearPublished
         context.loadImageFromUrl(boardGameImageView, collectionGame.imageUrl, R.drawable.board_game_placeholder)
         if (mode == Mode.VIEW) {
 //            setOnClickListener { openBoardGameInfoPage(collectionGame.id, context) }

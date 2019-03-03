@@ -47,6 +47,8 @@ class GamesCollectionServiceImpl : GamesCollectionService, BaseServiceImpl() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val gamesLimit = dataSnapshot.getValue(Int::class.java) ?: 0
                 if (currentCollectionCount + 1 <= gamesLimit) {
+                    game.id = if (game.id.isEmpty()) getSingleCollectionRef(collectionId).push().key
+                            ?: "" else game.id
                     getSingleCollectionRef(collectionId).child(game.id)
                             .setValue(game).addOnSuccessListener { resultSubject.onNext(true) }
                 } else {
