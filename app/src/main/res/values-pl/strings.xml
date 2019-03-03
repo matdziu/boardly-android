@@ -149,4 +149,8 @@
     <string name="edit_games_collection">Edytuj kolekcję gier</string>
     <string name="no_link_found">Nie można otworzyć strony</string>
     <string name="no_more_limit">Przekroczyłeś swój limit kolekcji</string>
+    <string name="add_game_hint">Wpisz nazwę gry. Pamiętaj, żeby być dokładnym!</string>
+    <string name="add_game_dialog_positive_text">Dodaj</string>
+    <string name="add_game_dialog_negative_text">Anuluj</string>
+    <string name="add_game_dialog_title">Dodaj grę</string>
 </resources>

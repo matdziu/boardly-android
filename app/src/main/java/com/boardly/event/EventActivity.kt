@@ -36,6 +36,7 @@ import com.boardly.extensions.formatForDisplay
 import com.boardly.extensions.loadImageFromUrl
 import com.boardly.factories.EventViewModelFactory
 import com.boardly.pickgame.PickGameActivity
+import com.boardly.pickgame.dialog.addGameDialog
 import com.boardly.retrofit.gameservice.models.Game
 import com.boardly.retrofit.gameservice.models.SearchResult
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
@@ -116,9 +117,9 @@ class EventActivity : BaseActivity(), EventView {
 
         eventViewModel = ViewModelProviders.of(this, eventViewModelFactory)[EventViewModel::class.java]
 
-        pickGameButton.setOnClickListener { launchGamePickScreen(PICK_FIRST_GAME_REQUEST_CODE) }
-        pickGameButton2.setOnClickListener { launchGamePickScreen(PICK_SECOND_GAME_REQUEST_CODE) }
-        pickGameButton3.setOnClickListener { launchGamePickScreen(PICK_THIRD_GAME_REQUEST_CODE) }
+        pickGameButton.setOnClickListener { addGameDialog(contentViewGroup) { handlePickGameResult(GamePickType.FIRST, it) } }
+        pickGameButton2.setOnClickListener { addGameDialog(contentViewGroup) { handlePickGameResult(GamePickType.SECOND, it) } }
+        pickGameButton3.setOnClickListener { addGameDialog(contentViewGroup) { handlePickGameResult(GamePickType.THIRD, it) } }
         pickPlaceButton.setOnClickListener { launchPlacePickScreen() }
         pickDateButton.setOnClickListener { launchDatePickerDialog() }
 
@@ -303,6 +304,24 @@ class EventActivity : BaseActivity(), EventView {
                 }
             }
         }
+    }
+
+    private fun handlePickGameResult(gamePickType: GamePickType, gameName: String) {
+        when (gamePickType) {
+            GamePickType.FIRST -> {
+                boardGameTextView.text = gameName
+                inputData.gameName = gameName
+            }
+            GamePickType.SECOND -> {
+                boardGameTextView2.text = gameName
+                inputData.gameName2 = gameName
+            }
+            GamePickType.THIRD -> {
+                boardGameTextView3.text = gameName
+                inputData.gameName3 = gameName
+            }
+        }
+        gamePickEventSubject.onNext(recentGamePickEvent)
     }
 
     private fun formatId(id: Int, type: String): String = if (type == RPG_TYPE) "$id$RPG_TYPE" else id.toString()

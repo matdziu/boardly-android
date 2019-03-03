@@ -12,13 +12,10 @@ class FilterViewModel(private val filterInteractor: FilterInteractor) : ViewMode
     private val stateSubject = BehaviorSubject.createDefault(FilterViewState())
 
     fun bind(filterView: FilterView) {
-        val gameDetailsObservable = filterView.gameIdEmitter()
-                .flatMap { filterInteractor.fetchGameDetails(it) }
-
         val locationProcessingObservable = filterView.locationProcessingEmitter()
                 .map { PartialFilterViewState.LocationProcessingState(it) }
 
-        val mergedObservable = Observable.merge(locationProcessingObservable, gameDetailsObservable)
+        val mergedObservable = Observable.merge(listOf(locationProcessingObservable))
                 .scan(stateSubject.value, BiFunction(this::reduce))
                 .subscribeWith(stateSubject)
 

@@ -56,9 +56,9 @@ class EventUIRenderer @Inject constructor(private val activity: AppCompatActivit
                         timestamp,
                         placeName)
             }
-            boardGameImageView.setOnClickListener { openBoardGameInfoPage(gameId) }
-            boardGameImageView2.setOnClickListener { openBoardGameInfoPage(gameId2) }
-            boardGameImageView3.setOnClickListener { openBoardGameInfoPage(gameId3) }
+//            boardGameImageView.setOnClickListener { openBoardGameInfoPage(gameId) }
+//            boardGameImageView2.setOnClickListener { openBoardGameInfoPage(gameId2) }
+//            boardGameImageView3.setOnClickListener { openBoardGameInfoPage(gameId3) }
         }
     }
 

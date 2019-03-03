@@ -16,7 +16,7 @@ class EventViewModel(private val eventInteractor: EventInteractor,
 
     fun bind(eventView: EventView) {
         val gamePickEventObservable = eventView.gamePickEventEmitter()
-                .flatMap { eventInteractor.fetchGameDetails(it).startWith(PartialEventViewState.GamePickedState()) }
+                .map { PartialEventViewState.GamePickedState() }
 
         val placePickEventObservable = eventView.placePickEventEmitter()
                 .map { PartialEventViewState.PlacePickedState() }
@@ -57,7 +57,7 @@ class EventViewModel(private val eventInteractor: EventInteractor,
             : Observable<PartialEventViewState> {
         return with(inputData) {
             val eventNameValid = eventName.isNotBlank()
-            val selectedGameValid = gameId.isNotBlank()
+            val selectedGameValid = gameName.isNotBlank()
             val selectedPlaceValid = placeName.isNotBlank()
 
             if (eventNameValid

@@ -29,7 +29,7 @@ class CollectionGameViewHolder(itemView: View, private val mode: Mode) : Recycle
         yearPublishedTextView.text = collectionGame.yearPublished
         context.loadImageFromUrl(boardGameImageView, collectionGame.imageUrl, R.drawable.board_game_placeholder)
         if (mode == Mode.VIEW) {
-            setOnClickListener { openBoardGameInfoPage(collectionGame.id, context) }
+//            setOnClickListener { openBoardGameInfoPage(collectionGame.id, context) }
         } else if (mode == Mode.MANAGE) {
             itemView.setOnCreateContextMenuListener(this@CollectionGameViewHolder)
         }

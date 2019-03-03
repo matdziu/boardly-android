@@ -13,9 +13,6 @@ class NotifyViewModel(private val notifyInteractor: NotifyInteractor) : ViewMode
     private val stateSubject = BehaviorSubject.createDefault(NotifyViewState())
 
     fun bind(notifyView: NotifyView) {
-        val gameDetailsObservable = notifyView.gameIdEmitter()
-                .flatMap { notifyInteractor.fetchGameDetails(it) }
-
         val notifySettingsObservable = notifyView.notifySettingsEmitter()
                 .flatMap { validateNotifySettings(it, { notifyInteractor.updateNotifySettings(it) }) }
 
@@ -31,7 +28,6 @@ class NotifyViewModel(private val notifyInteractor: NotifyInteractor) : ViewMode
 
         val mergedObservable = Observable.merge(listOf(
                 notifySettingsObservable,
-                gameDetailsObservable,
                 notifySettingsFetchObservable,
                 stopNotificationsObservable,
                 placePickEventObservable))

@@ -149,4 +149,8 @@
     <string name="edit_games_collection">Edit games collection</string>
     <string name="no_link_found">Could not show web page</string>
     <string name="no_more_limit">You exceeded your collection limit</string>
+    <string name="add_game_hint">Type name of the game. Remember to be specific!</string>
+    <string name="add_game_dialog_positive_text">Add</string>
+    <string name="add_game_dialog_negative_text">Cancel</string>
+    <string name="add_game_dialog_title">Add game</string>
 </resources>
