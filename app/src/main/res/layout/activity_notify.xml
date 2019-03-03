@@ -38,6 +38,7 @@
                 android:padding="1dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/board_game_placeholder"
+                android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/infoTextView" />
@@ -46,16 +47,14 @@
                 android:id="@+id/locationTextView"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
+                android:layout_marginTop="32dp"
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:text="@string/location_text_placeholder"
                 android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="@+id/boardGameTextView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/boardGameTextView"
-                app:layout_constraintTop_toTopOf="@+id/boardGameTextView" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/infoTextView" />
 
             <TextView
                 android:id="@+id/boardGameTextView"
@@ -67,6 +66,7 @@
                 android:maxLines="1"
                 android:text="@string/game_text_placeholder"
                 android:textAlignment="center"
+                android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@+id/locationTextView"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread"
@@ -78,14 +78,11 @@
                 style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:text="@string/pick_place_text"
                 android:textColor="@color/colorPrimary"
-                app:layout_constraintBottom_toBottomOf="@+id/pickGameButton"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/pickGameButton"
-                app:layout_constraintTop_toTopOf="@+id/pickGameButton" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/locationTextView" />
 
             <Button
                 android:id="@+id/pickGameButton"
@@ -95,6 +92,7 @@
                 android:layout_marginStart="8dp"
                 android:text="@string/pick_game_text"
                 android:textColor="@color/colorPrimary"
+                android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@+id/pickPlaceButton"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread"
@@ -108,6 +106,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/delete_game_text"
                 android:textColor="@color/errorRed"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@+id/pickGameButton"
                 app:layout_constraintStart_toStartOf="@+id/pickGameButton"
                 app:layout_constraintTop_toBottomOf="@+id/pickGameButton" />
@@ -120,20 +119,20 @@
                 android:text="@string/max_distance_text"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/deleteGameButton"
+                app:layout_constraintTop_toBottomOf="@+id/pickPlaceButton"
                 tools:text="Maximum event distance: 5 km" />
 
             <SeekBar
                 android:id="@+id/distanceSeekBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 android:max="99"
                 app:layout_constraintBottom_toTopOf="@+id/deleteNotificationsButton"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/distanceTextView"
+                app:layout_constraintTop_toBottomOf="@+id/distanceTextView"
                 app:layout_constraintVertical_bias="0.0" />
 
             <com.boardly.customviews.BoardlyButton
