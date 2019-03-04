@@ -185,9 +185,9 @@ class EventActivity : BaseActivity(), EventView {
             gameId2 = event.gameId2
             gameName3 = event.gameName3
             gameId3 = event.gameId3
-            gameImageUrl = event.gameImageUrl
-            gameImageUrl2 = event.gameImageUrl2
-            gameImageUrl3 = event.gameImageUrl3
+            gameImageUrl = ""
+            gameImageUrl2 = ""
+            gameImageUrl3 = ""
             placeName = event.placeName
             placeLatitude = event.placeLatitude
             placeLongitude = event.placeLongitude
