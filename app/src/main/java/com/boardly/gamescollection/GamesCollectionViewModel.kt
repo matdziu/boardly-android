@@ -1,6 +1,7 @@
 package com.boardly.gamescollection
 
 import android.arch.lifecycle.ViewModel
+import com.boardly.extensions.noSpecialChars
 import com.boardly.gamescollection.models.CollectionGame
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -31,7 +32,10 @@ class GamesCollectionViewModel(private val gamesCollectionInteractor: GamesColle
                 .map { query ->
                     val formattedQuery = query.trim().toLowerCase()
                     PartialGamesCollectionViewState.CollectionFetched(
-                            currentCollectionGames.filter { it.name.toLowerCase().contains(formattedQuery) })
+                            currentCollectionGames.filter {
+                                it.name.toLowerCase().noSpecialChars()
+                                        .contains(formattedQuery.noSpecialChars())
+                            })
                 }
 
         val mergedObservable = Observable.merge(

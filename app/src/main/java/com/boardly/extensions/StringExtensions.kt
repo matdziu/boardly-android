@@ -26,3 +26,15 @@ fun String?.jsonToMapOfStrings(): Map<String, String> {
 fun String.isOfType(type: String): Boolean = contains(type)
 
 fun String.clearFromType(type: String): String = replace(type, "")
+
+fun String.noSpecialChars(): String {
+    return replace("ą", "a")
+            .replace("ę", "e")
+            .replace("ć", "c")
+            .replace("ł", "l")
+            .replace("ń", "n")
+            .replace("ó", "o")
+            .replace("ś", "s")
+            .replace("ź", "z")
+            .replace("ż", "z")
+}
