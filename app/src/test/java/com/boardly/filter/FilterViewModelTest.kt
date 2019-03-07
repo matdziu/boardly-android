@@ -19,15 +19,6 @@ class FilterViewModelTest {
     private val filterViewRobot = FilterViewRobot(filterViewModel)
 
     @Test
-    fun testSuccessfulGameDetailsFetching() {
-        filterViewRobot.emitGameId("testGameId")
-
-        filterViewRobot.assertViewStates(
-                FilterViewState(),
-                FilterViewState(gameImageUrl = testGame.image))
-    }
-
-    @Test
     fun whenLocationIsProcessedViewStateIndicatesIt() {
         filterViewRobot.emitLocationProcessing(true)
         filterViewRobot.emitLocationProcessing(false)

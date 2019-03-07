@@ -25,8 +25,7 @@ class EventViewModelTest {
 
         eventViewRobot.assertViewStates(
                 EventViewState(),
-                EventViewState(selectedGameValid = true),
-                EventViewState(selectedGame = fetchedGame))
+                EventViewState(selectedGameValid = true))
     }
 
     @Test
@@ -39,8 +38,7 @@ class EventViewModelTest {
 
         eventViewRobot.assertViewStates(
                 EventViewState(),
-                EventViewState(selectedGameValid = true),
-                EventViewState(selectedGame2 = fetchedGame))
+                EventViewState(selectedGameValid = true))
     }
 
     @Test
@@ -53,15 +51,14 @@ class EventViewModelTest {
 
         eventViewRobot.assertViewStates(
                 EventViewState(),
-                EventViewState(selectedGameValid = true),
-                EventViewState(selectedGame3 = fetchedGame))
+                EventViewState(selectedGameValid = true))
     }
 
     @Test
     fun testPlacePickEvent() {
         val inputData = InputData(
                 eventName = "Let's go",
-                gameId = "1")
+                gameName = "1")
 
         eventViewRobot.addEvent(inputData)
         eventViewRobot.pickPlace()
@@ -76,7 +73,7 @@ class EventViewModelTest {
     fun givenUserAddsEventWhenEventNameIsBlankThenShowEventNameError() {
         val inputData = InputData(
                 eventName = "  ",
-                gameId = "1",
+                gameName = "1",
                 placeName = "Domowka")
 
         eventViewRobot.addEvent(inputData)
@@ -104,7 +101,7 @@ class EventViewModelTest {
     fun givenUserAddsEventWhenNoPlaceIsSelectedThenShowSelectedPlaceError() {
         val inputData = InputData(
                 eventName = "Let's go",
-                gameId = "1")
+                gameName = "1")
 
         eventViewRobot.addEvent(inputData)
 
@@ -117,7 +114,7 @@ class EventViewModelTest {
     fun givenUserAddsEventWhenAllFieldsAreValidThenShowSuccess() {
         val inputData = InputData(
                 eventName = "Let's go",
-                gameId = "1",
+                gameName = "1",
                 placeName = "Domowka")
         whenever(eventInteractor.addEvent(any())).thenReturn(Observable.just(PartialEventViewState.SuccessState()))
 
@@ -134,7 +131,7 @@ class EventViewModelTest {
     fun givenUserEditsEventWhenEventNameIsBlankThenShowEventNameError() {
         val inputData = InputData(
                 eventName = "  ",
-                gameId = "1",
+                gameName = "1",
                 placeName = "Domowka")
 
         eventViewRobot.editEvent(inputData)
@@ -162,7 +159,7 @@ class EventViewModelTest {
     fun givenUserEditsEventWhenNoPlaceIsSelectedThenShowSelectedPlaceError() {
         val inputData = InputData(
                 eventName = "Let's go",
-                gameId = "1")
+                gameName = "1")
 
         eventViewRobot.editEvent(inputData)
 
@@ -175,7 +172,7 @@ class EventViewModelTest {
     fun givenUserEditsEventWhenAllFieldsAreValidThenShowSuccess() {
         val inputData = InputData(
                 eventName = "Let's go",
-                gameId = "1",
+                gameName = "1",
                 placeName = "Domowka")
         whenever(eventInteractor.editEvent(any())).thenReturn(Observable.just(PartialEventViewState.SuccessState()))
 

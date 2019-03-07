@@ -26,14 +26,6 @@ class NotifyViewModelTest {
     private val notifyViewRobot = NotifyViewRobot(notifyViewModel)
 
     @Test
-    fun testSuccessfulGameFetching() {
-        notifyViewRobot.emitGameId("testGameId")
-        notifyViewRobot.assertViewStates(
-                NotifyViewState(),
-                NotifyViewState(gameImageUrl = "url/picture"))
-    }
-
-    @Test
     fun testSuccessfulNotifySettingsFetching() {
         notifyViewRobot.triggerNotifySettingsFetch(false)
         notifyViewRobot.triggerNotifySettingsFetch(true)
