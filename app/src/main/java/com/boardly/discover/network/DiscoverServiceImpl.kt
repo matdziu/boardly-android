@@ -27,6 +27,7 @@ class DiscoverServiceImpl : DiscoverService, BaseServiceImpl() {
                     }
 
                     override fun onGeoQueryReady() {
+                        fetchedPlacesList.shuffle()
                         resultSubject.onNext(fetchedPlacesList)
                     }
 
