@@ -2,6 +2,8 @@ package com.boardly.manageplace.network
 
 import android.net.Uri
 import com.boardly.base.BaseServiceImpl
+import com.boardly.constants.COLLECTION_ID_CHILD
+import com.boardly.constants.GAMES_LIMIT_CHILD
 import com.boardly.constants.MANAGED_PLACE_CHILD
 import com.boardly.constants.PLACES_NODE
 import com.boardly.constants.PLACE_IMAGE_CHILD
@@ -10,6 +12,7 @@ import com.boardly.manageplace.models.PlaceInputData
 import com.firebase.geofire.GeoLocation
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.TaskCompletionSource
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -17,6 +20,7 @@ import com.google.firebase.storage.UploadTask
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import java.io.File
+import java.util.UUID
 
 class ManagePlaceServiceImpl : ManagePlaceService, BaseServiceImpl() {
 
@@ -96,6 +100,23 @@ class ManagePlaceServiceImpl : ManagePlaceService, BaseServiceImpl() {
                         resultSubject.onNext("")
                     }
                 })
+        return resultSubject
+    }
+
+    override fun createManagedPlace(): Observable<String> {
+        val resultSubject = PublishSubject.create<String>()
+        val placeId = UUID.randomUUID().toString()
+        Tasks.whenAllComplete(
+                getSingleCollectionRef(placeId)
+                        .child(GAMES_LIMIT_CHILD)
+                        .setValue(5),
+                getUserNodeRef(currentUserId)
+                        .child(MANAGED_PLACE_CHILD)
+                        .setValue(placeId),
+                getSinglePlaceRef(placeId)
+                        .child(COLLECTION_ID_CHILD)
+                        .setValue(placeId))
+                .addOnSuccessListener { resultSubject.onNext(placeId) }
         return resultSubject
     }
 }

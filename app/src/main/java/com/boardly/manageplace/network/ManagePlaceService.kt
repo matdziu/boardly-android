@@ -11,4 +11,6 @@ interface ManagePlaceService {
     fun savePlaceData(placeId: String, placeInputData: PlaceInputData): Observable<Boolean>
 
     fun fetchManagedPlaceId(): Observable<String>
+
+    fun createManagedPlace(): Observable<String>
 }
