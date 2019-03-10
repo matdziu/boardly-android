@@ -47,8 +47,8 @@ class HomeInteractorTest {
     fun testSuccessfulEventsFetchingInsideRadius() {
         homeInteractor.fetchEvents(UserLocation(0.0, 0.0), 1.0, "testGameId").test()
                 .assertValue(PartialHomeViewState.EventListState(listOf(
-                        Event("2", "testEvent2", gameId = "testGameId"),
-                        Event("4", "testEvent4", type = EventType.CREATED, gameId = "testGameId"))))
+                        Event("1", "testEvent1", type = EventType.CREATED, gameId = "testGameId"),
+                        Event("2", "testEvent2", gameId = "testGameId"))))
     }
 
     @Test

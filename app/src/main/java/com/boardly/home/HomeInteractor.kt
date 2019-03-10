@@ -8,7 +8,7 @@ import com.boardly.extensions.isOlderThanOneDay
 import com.boardly.home.models.JoinEventData
 import com.boardly.home.network.HomeService
 import io.reactivex.Observable
-import io.reactivex.functions.Function3
+import io.reactivex.functions.BiFunction
 import javax.inject.Inject
 
 class HomeInteractor @Inject constructor(private val homeService: HomeService,
@@ -22,23 +22,19 @@ class HomeInteractor @Inject constructor(private val homeService: HomeService,
         return if (userLocation == null) Observable.just(PartialHomeViewState.EventListState(arrayListOf()))
         else Observable.zip(
                 homeService.fetchUserEvents(),
-                homeService.fetchCreatedEvents(),
                 homeService.fetchAllEvents(userLocation, radius, gameId),
-                Function3<List<String>, List<Event>, List<Event>, PartialHomeViewState>
-                { userEventsIds, createdEvents, allEvents ->
+                BiFunction<List<String>, List<Event>, PartialHomeViewState>
+                { userEventsIds, allEvents ->
                     val filteredEventList = allEvents
-                            .filter { !userEventsIds.contains(it.eventId) && !isOlderThanOneDay(it.timestamp) }
-                    val createdEventsWithType = createdEvents
                             .filter {
-                                !isOlderThanOneDay(it.timestamp)
-                                        && (gameId.isEmpty() ||
-                                        it.gameId == gameId ||
-                                        it.gameId2 == gameId ||
-                                        it.gameId3 == gameId)
-                                        && isInsideRadius(userLocation, it.placeLatitude, it.placeLongitude, radius)
+                                val userEventPredicate = isInsideRadius(userLocation, it.placeLatitude, it.placeLongitude, radius)
+                                !isOlderThanOneDay(it.timestamp) && if (userEventsIds.contains(it.eventId)) userEventPredicate else true
                             }
-                            .map { it.type = EventType.CREATED; it }
-                    PartialHomeViewState.EventListState(filteredEventList + createdEventsWithType)
+                            .map {
+                                if (userEventsIds.contains(it.eventId)) it.type = EventType.CREATED
+                                it
+                            }
+                    PartialHomeViewState.EventListState(filteredEventList)
                 })
     }
 
