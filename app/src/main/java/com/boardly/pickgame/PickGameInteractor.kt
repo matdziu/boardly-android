@@ -4,6 +4,7 @@ import com.boardly.retrofit.gameservice.BoardGameGeekService
 import io.reactivex.Observable
 import javax.inject.Inject
 
+@Deprecated("Can't use BGG API")
 class PickGameInteractor @Inject constructor(private val boardGameGeekService: BoardGameGeekService) {
 
     private var latestQuery = ""

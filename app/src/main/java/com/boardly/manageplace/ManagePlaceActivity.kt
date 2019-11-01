@@ -11,7 +11,7 @@ import android.view.View
 import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseDrawerActivity
-import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
+import com.boardly.constants.PLACE_PICK_REQUEST_CODE
 import com.boardly.discover.models.Place
 import com.boardly.extensions.loadImageFromFile
 import com.boardly.extensions.loadImageFromUrl
@@ -181,7 +181,7 @@ class ManagePlaceActivity : BaseDrawerActivity(), ManagePlaceView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data != null) {
             when (requestCode) {
-                PLACE_AUTOCOMPLETE_REQUEST_CODE -> handleAutoCompleteResult(resultCode, data)
+                PLACE_PICK_REQUEST_CODE -> handleAutoCompleteResult(resultCode, data)
                 CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> handlePlacePictureResult(resultCode, data)
             }
         }
@@ -192,7 +192,7 @@ class ManagePlaceActivity : BaseDrawerActivity(), ManagePlaceView {
             val placeSearchIntent = PlaceAutocomplete
                     .IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
                     .build(this)
-            startActivityForResult(placeSearchIntent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
+            startActivityForResult(placeSearchIntent, PLACE_PICK_REQUEST_CODE)
         } catch (e: GooglePlayServicesRepairableException) {
             showErrorToast(R.string.gps_update_needed)
         } catch (e: GooglePlayServicesNotAvailableException) {

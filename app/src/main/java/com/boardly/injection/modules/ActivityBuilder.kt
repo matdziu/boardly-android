@@ -13,6 +13,7 @@ import com.boardly.manageplace.ManagePlaceActivity
 import com.boardly.myevents.MyEventsActivity
 import com.boardly.notify.NotifyActivity
 import com.boardly.pickgame.PickGameActivity
+import com.boardly.pickplace.PickPlaceActivity
 import com.boardly.signup.SignUpActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -72,4 +73,8 @@ abstract class ActivityBuilder {
     @ActivityScope
     @ContributesAndroidInjector(modules = [ManagePlaceActivityModule::class])
     abstract fun bindManagePlaceActivity(): ManagePlaceActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [PickPlaceActivityModule::class])
+    abstract fun bindPickPlaceActivity(): PickPlaceActivity
 }

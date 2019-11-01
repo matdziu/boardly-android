@@ -6,8 +6,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.boardly.R
 import com.boardly.base.BaseSearchActivity
+import com.boardly.common.search.SearchResultsAdapter
 import com.boardly.factories.PickGameViewModelFactory
-import com.boardly.pickgame.list.SearchResultsAdapter
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_pick_game.noSearchResultsTextView
@@ -18,6 +18,7 @@ import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+@Deprecated("Can't use BGG API")
 class PickGameActivity : BaseSearchActivity(), PickGameView {
 
     override val searchHintResId: Int = R.string.search_game_hint
@@ -60,7 +61,7 @@ class PickGameActivity : BaseSearchActivity(), PickGameView {
             showNoResultsPrompt(searchResults.isEmpty() && !progress && error == null)
             showContent(searchResults.isNotEmpty() && !progress && error == null)
             showTimeOutPrompt(error is SocketTimeoutException, unacceptedQuery)
-            searchResultsAdapter.submitList(searchResults)
+//            searchResultsAdapter.submitList(searchResults)
         }
     }
 

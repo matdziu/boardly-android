@@ -6,24 +6,25 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/gameNameTextView"
+        android:id="@+id/searchResultTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:textSize="18dp"
         tools:text="Galaxy Truck" />
 
     <TextView
-        android:id="@+id/yearPublishedTextView"
+        android:id="@+id/searchResultSubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
         android:textSize="14dp"
         android:textStyle="italic"
+        android:visibility="gone"
         tools:text="2008" />
 
 </LinearLayout>

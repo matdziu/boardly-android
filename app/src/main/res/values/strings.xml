@@ -35,6 +35,7 @@
     <string name="pick_date_text">Pick a date (optional)</string>
     <string name="add_new_event">Add event</string>
     <string name="search_game_hint">Search for games</string>
+    <string name="search_place_hint">Search for places</string>
     <string name="search_title">Search</string>
     <string name="gps_not_available">Google Play Services are unavailable</string>
     <string name="gps_update_needed">Update or turn on Google Play Services</string>

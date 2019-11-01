@@ -2,6 +2,7 @@ package com.boardly.pickgame
 
 import com.boardly.retrofit.gameservice.models.SearchResult
 
+@Deprecated("Can't use BGG API")
 sealed class PartialPickGameViewState {
 
     abstract fun reduce(previousState: PickGameViewState): PickGameViewState

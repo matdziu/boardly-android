@@ -27,15 +27,18 @@ android {
     buildTypes {
         def OAUTH_CLIENT_ID = "OAUTH_CLIENT_ID"
         def BGG_API_URL = "BGG_API_URL"
+        def NOMINATIM_API_URL = "NOMINATIM_API_URL"
         debug {
             buildConfigField "String", OAUTH_CLIENT_ID, "\"196233843818-aluarmqrskkkn5t82svife5rn5htep5k.apps.googleusercontent.com\""
             buildConfigField "String", BGG_API_URL, "\"https://www.boardgamegeek.com/xmlapi2/\""
+            buildConfigField "String", NOMINATIM_API_URL, "\"https://nominatim.openstreetmap.org/\""
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
         }
         release {
             buildConfigField "String", OAUTH_CLIENT_ID, "\"73058153525-774qk36ttm3qaokbsjuidp6099js6u4i.apps.googleusercontent.com\""
             buildConfigField "String", BGG_API_URL, "\"https://www.boardgamegeek.com/xmlapi2/\""
+            buildConfigField "String", NOMINATIM_API_URL, "\"https://nominatim.openstreetmap.org/\""
             minifyEnabled true
             useProguard true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -74,6 +77,7 @@ dependencies {
     implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.tickaroo.tikxml:retrofit-converter:0.8.13'
     implementation 'com.tickaroo.tikxml:annotation:0.8.13'
     implementation 'com.tickaroo.tikxml:core:0.8.13'

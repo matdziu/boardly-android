@@ -1,7 +1,7 @@
 package com.boardly.constants
 
 const val SIGN_IN_REQUEST_CODE = 1
-const val PLACE_AUTOCOMPLETE_REQUEST_CODE = 2
+const val PLACE_PICK_REQUEST_CODE = 2
 const val PICK_FIRST_GAME_REQUEST_CODE = 3
 const val PICK_SECOND_GAME_REQUEST_CODE = 30
 const val PICK_THIRD_GAME_REQUEST_CODE = 300
@@ -15,6 +15,7 @@ const val EVENT_REMOVED_RESULT_CODE = 8
 
 const val SHOW_HAMBURGER_MENU = "showHamburgerMenu"
 const val PICKED_GAME = "pickedGame"
+const val PICKED_SEARCH_RESULT = "pickedGame"
 const val PICKED_FILTER = "pickedFilter"
 const val SAVED_RADIUS = "savedRadius"
 const val SAVED_GAME_ID = "savedGameId"
@@ -31,3 +32,6 @@ const val MODE = "mode"
 const val TOGGLE_CHAT_NOTIFICATIONS_KEY_PREFIX = "toggleChatNotificationsFor:"
 const val LAUNCH_INFO = "launchInfo"
 const val COLLECTION_ID = "collectionId"
+
+const val LATITUDE = "latitude"
+const val LONGITUDE = "longitude"

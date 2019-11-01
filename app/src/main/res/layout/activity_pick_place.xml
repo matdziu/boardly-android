@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/searchResultsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_below="@id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/noSearchResultsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:text="@string/no_search_results_text"
+        android:textAlignment="center"
+        android:textSize="16dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/timeOutTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:text="@string/be_more_specific_error_text"
+        android:textAlignment="center"
+        android:textSize="16dp"
+        android:visibility="gone" />
+
+</RelativeLayout>

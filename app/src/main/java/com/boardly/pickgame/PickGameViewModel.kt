@@ -6,6 +6,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.BehaviorSubject
 
+@Deprecated("Can't use BGG API")
 class PickGameViewModel(private val pickGameInteractor: PickGameInteractor) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()

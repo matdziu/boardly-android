@@ -13,7 +13,7 @@ import com.boardly.R
 import com.boardly.base.BaseActivity
 import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_NOTIFY_GAME_REQUEST_CODE
-import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
+import com.boardly.constants.PLACE_PICK_REQUEST_CODE
 import com.boardly.constants.RPG_TYPE
 import com.boardly.extensions.loadImageFromUrl
 import com.boardly.factories.NotifyViewModelFactory
@@ -110,7 +110,7 @@ class NotifyActivity : BaseActivity(), NotifyView {
         if (data != null) {
             when (requestCode) {
                 PICK_NOTIFY_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data)
-                PLACE_AUTOCOMPLETE_REQUEST_CODE -> handleAutoCompleteResult(resultCode, data)
+                PLACE_PICK_REQUEST_CODE -> handleAutoCompleteResult(resultCode, data)
             }
         }
     }
@@ -185,7 +185,7 @@ class NotifyActivity : BaseActivity(), NotifyView {
             val placeSearchIntent = PlaceAutocomplete
                     .IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
                     .build(this)
-            startActivityForResult(placeSearchIntent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
+            startActivityForResult(placeSearchIntent, PLACE_PICK_REQUEST_CODE)
         } catch (e: GooglePlayServicesRepairableException) {
             showErrorToast(R.string.gps_update_needed)
         } catch (e: GooglePlayServicesNotAvailableException) {

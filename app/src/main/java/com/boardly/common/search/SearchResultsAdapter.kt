@@ -1,12 +1,11 @@
-package com.boardly.pickgame.list
+package com.boardly.common.search
 
 import android.support.v7.recyclerview.extensions.ListAdapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.boardly.R
-import com.boardly.retrofit.gameservice.models.SearchResult
 
-class SearchResultsAdapter : ListAdapter<SearchResult, SearchResultViewHolder>(SearchResultDiffCallback()) {
+class SearchResultsAdapter : ListAdapter<SearchResultData, SearchResultViewHolder>(SearchResultDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_search_result, parent, false)

@@ -153,4 +153,5 @@
     <string name="add_game_dialog_positive_text">Dodaj</string>
     <string name="add_game_dialog_negative_text">Anuluj</string>
     <string name="add_game_dialog_title">Dodaj grę</string>
+    <string name="search_place_hint">Szukaj miejsc</string>
 </resources>

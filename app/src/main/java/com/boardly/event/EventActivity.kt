@@ -16,16 +16,20 @@ import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseActivity
 import com.boardly.common.events.models.Event
+import com.boardly.common.search.SearchResultData
 import com.boardly.constants.EDIT_EVENT_REQUEST_CODE
 import com.boardly.constants.EVENT
 import com.boardly.constants.EVENT_EDITED_RESULT_CODE
 import com.boardly.constants.EVENT_REMOVED_RESULT_CODE
+import com.boardly.constants.LATITUDE
+import com.boardly.constants.LONGITUDE
 import com.boardly.constants.MODE
 import com.boardly.constants.PICKED_GAME
+import com.boardly.constants.PICKED_SEARCH_RESULT
 import com.boardly.constants.PICK_FIRST_GAME_REQUEST_CODE
 import com.boardly.constants.PICK_SECOND_GAME_REQUEST_CODE
 import com.boardly.constants.PICK_THIRD_GAME_REQUEST_CODE
-import com.boardly.constants.PLACE_AUTOCOMPLETE_REQUEST_CODE
+import com.boardly.constants.PLACE_PICK_REQUEST_CODE
 import com.boardly.constants.RPG_TYPE
 import com.boardly.event.dialogs.DatePickerFragment
 import com.boardly.event.dialogs.TimePickerFragment
@@ -37,10 +41,9 @@ import com.boardly.extensions.loadImageFromUrl
 import com.boardly.factories.EventViewModelFactory
 import com.boardly.pickgame.PickGameActivity
 import com.boardly.pickgame.dialog.addGameDialog
+import com.boardly.pickplace.PickPlaceActivity
 import com.boardly.retrofit.gameservice.models.Game
 import com.boardly.retrofit.gameservice.models.SearchResult
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException
-import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import com.jakewharton.rxbinding2.view.RxView
 import dagger.android.AndroidInjection
@@ -219,7 +222,7 @@ class EventActivity : BaseActivity(), EventView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data != null) {
             when (requestCode) {
-                PLACE_AUTOCOMPLETE_REQUEST_CODE -> handleAutoCompleteResult(resultCode, data)
+                PLACE_PICK_REQUEST_CODE -> handlePlacePickResult(resultCode, data)
                 PICK_FIRST_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data, GamePickType.FIRST)
                 PICK_SECOND_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data, GamePickType.SECOND)
                 PICK_THIRD_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data, GamePickType.THIRD)
@@ -257,15 +260,15 @@ class EventActivity : BaseActivity(), EventView {
         }
     }
 
-    private fun handleAutoCompleteResult(resultCode: Int, data: Intent) {
+    private fun handlePlacePickResult(resultCode: Int, data: Intent) {
         when (resultCode) {
             Activity.RESULT_OK -> {
-                val place = PlaceAutocomplete.getPlace(this, data)
+                val place = data.getParcelableExtra<SearchResultData>(PICKED_SEARCH_RESULT)
                 with(place) {
-                    inputData.placeLatitude = latLng.latitude
-                    inputData.placeLongitude = latLng.longitude
-                    inputData.placeName = address.toString()
-                    placeTextView.text = address
+                    inputData.placeLatitude = additionalInfo[LATITUDE]?.toDouble() ?: 0.0
+                    inputData.placeLongitude = additionalInfo[LONGITUDE]?.toDouble() ?: 0.0
+                    inputData.placeName = title
+                    placeTextView.text = title
 
                     // Somehow default Places API Activity does not trigger onStop() of EventActivity
                     // so it's ok to emit event here
@@ -327,16 +330,7 @@ class EventActivity : BaseActivity(), EventView {
     private fun formatId(id: Int, type: String): String = if (type == RPG_TYPE) "$id$RPG_TYPE" else id.toString()
 
     private fun launchPlacePickScreen() {
-        try {
-            val placeSearchIntent = PlaceAutocomplete
-                    .IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                    .build(this)
-            startActivityForResult(placeSearchIntent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
-        } catch (e: GooglePlayServicesRepairableException) {
-            showErrorToast(R.string.gps_update_needed)
-        } catch (e: GooglePlayServicesNotAvailableException) {
-            showErrorToast(R.string.gps_not_available)
-        }
+        startActivityForResult(Intent(this, PickPlaceActivity::class.java), PLACE_PICK_REQUEST_CODE)
     }
 
     private fun launchGamePickScreen(requestCode: Int) {
