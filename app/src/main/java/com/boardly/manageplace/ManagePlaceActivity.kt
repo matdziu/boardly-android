@@ -11,6 +11,10 @@ import android.view.View
 import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseDrawerActivity
+import com.boardly.common.search.SearchResultData
+import com.boardly.constants.LATITUDE
+import com.boardly.constants.LONGITUDE
+import com.boardly.constants.PICKED_SEARCH_RESULT
 import com.boardly.constants.PLACE_PICK_REQUEST_CODE
 import com.boardly.discover.models.Place
 import com.boardly.extensions.loadImageFromFile
@@ -18,8 +22,7 @@ import com.boardly.extensions.loadImageFromUrl
 import com.boardly.factories.ManagePlaceViewModelFactory
 import com.boardly.gamescollection.GamesCollectionActivity
 import com.boardly.manageplace.models.PlaceInputData
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException
-import com.google.android.gms.common.GooglePlayServicesRepairableException
+import com.boardly.pickplace.PickPlaceActivity
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import com.jakewharton.rxbinding2.view.RxView
 import com.theartofdev.edmodo.cropper.CropImage
@@ -181,23 +184,14 @@ class ManagePlaceActivity : BaseDrawerActivity(), ManagePlaceView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (data != null) {
             when (requestCode) {
-                PLACE_PICK_REQUEST_CODE -> handleAutoCompleteResult(resultCode, data)
+                PLACE_PICK_REQUEST_CODE -> handlePlacePickResult(resultCode, data)
                 CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> handlePlacePictureResult(resultCode, data)
             }
         }
     }
 
     private fun launchPlacePickScreen() {
-        try {
-            val placeSearchIntent = PlaceAutocomplete
-                    .IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                    .build(this)
-            startActivityForResult(placeSearchIntent, PLACE_PICK_REQUEST_CODE)
-        } catch (e: GooglePlayServicesRepairableException) {
-            showErrorToast(R.string.gps_update_needed)
-        } catch (e: GooglePlayServicesNotAvailableException) {
-            showErrorToast(R.string.gps_not_available)
-        }
+        startActivityForResult(Intent(this, PickPlaceActivity::class.java), PLACE_PICK_REQUEST_CODE)
     }
 
     private fun handlePlacePictureResult(resultCode: Int, data: Intent) {
@@ -211,15 +205,16 @@ class ManagePlaceActivity : BaseDrawerActivity(), ManagePlaceView {
         }
     }
 
-    private fun handleAutoCompleteResult(resultCode: Int, data: Intent) {
+    private fun handlePlacePickResult(resultCode: Int, data: Intent) {
         when (resultCode) {
             Activity.RESULT_OK -> {
-                val place = PlaceAutocomplete.getPlace(this, data)
+                val place = data.getParcelableExtra<SearchResultData>(PICKED_SEARCH_RESULT)
                 with(place) {
-                    currentManagedPlace.placeLatitude = latLng.latitude
-                    currentManagedPlace.placeLongitude = latLng.longitude
-                    currentManagedPlace.locationName = address.toString()
-                    placeTextView.text = address
+                    currentManagedPlace.placeLatitude = additionalInfo[LATITUDE]?.toDouble() ?: 0.0
+                    currentManagedPlace.placeLongitude = additionalInfo[LONGITUDE]?.toDouble()
+                            ?: 0.0
+                    currentManagedPlace.locationName = title
+                    placeTextView.text = title
 
                     // Somehow default Places API Activity does not trigger onStop() of EventActivity
                     // so it's ok to emit event here
@@ -230,6 +225,7 @@ class ManagePlaceActivity : BaseDrawerActivity(), ManagePlaceView {
             Activity.RESULT_CANCELED -> hideSoftKeyboard()
         }
     }
+
 
     private fun showErrorToast(@StringRes errorTextId: Int) {
         Toast.makeText(this, errorTextId, Toast.LENGTH_LONG).show()

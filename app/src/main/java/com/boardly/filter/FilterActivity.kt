@@ -11,8 +11,12 @@ import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseActivity
 import com.boardly.common.location.UserLocation
+import com.boardly.common.search.SearchResultData
+import com.boardly.constants.LATITUDE
+import com.boardly.constants.LONGITUDE
 import com.boardly.constants.PICKED_FILTER
 import com.boardly.constants.PICKED_GAME
+import com.boardly.constants.PICKED_SEARCH_RESULT
 import com.boardly.constants.PICK_FILTER_REQUEST_CODE
 import com.boardly.constants.PICK_FIRST_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_PICK_REQUEST_CODE
@@ -23,9 +27,8 @@ import com.boardly.factories.FilterViewModelFactory
 import com.boardly.filter.models.Filter
 import com.boardly.injection.modules.GlideApp
 import com.boardly.pickgame.PickGameActivity
+import com.boardly.pickplace.PickPlaceActivity
 import com.boardly.retrofit.gameservice.models.SearchResult
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException
-import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
@@ -139,7 +142,7 @@ class FilterActivity : BaseActivity(), FilterView {
         if (data != null) {
             when (requestCode) {
                 PICK_FIRST_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data)
-                PLACE_PICK_REQUEST_CODE -> handleAutoCompleteResult(resultCode, data)
+                PLACE_PICK_REQUEST_CODE -> handlePlacePickResult(resultCode, data)
             }
         }
     }
@@ -159,28 +162,20 @@ class FilterActivity : BaseActivity(), FilterView {
     }
 
     private fun launchPlacePickScreen() {
-        try {
-            val placeSearchIntent = PlaceAutocomplete
-                    .IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                    .build(this)
-            startActivityForResult(placeSearchIntent, PLACE_PICK_REQUEST_CODE)
-        } catch (e: GooglePlayServicesRepairableException) {
-            showErrorToast(R.string.gps_update_needed)
-        } catch (e: GooglePlayServicesNotAvailableException) {
-            showErrorToast(R.string.gps_not_available)
-        }
+        startActivityForResult(Intent(this, PickPlaceActivity::class.java), PLACE_PICK_REQUEST_CODE)
     }
 
-    private fun handleAutoCompleteResult(resultCode: Int, data: Intent) {
+    private fun handlePlacePickResult(resultCode: Int, data: Intent) {
         when (resultCode) {
             Activity.RESULT_OK -> {
-                val place = PlaceAutocomplete.getPlace(this, data)
+                val place = data.getParcelableExtra<SearchResultData>(PICKED_SEARCH_RESULT)
                 with(place) {
-                    val userLocation = UserLocation(latLng.latitude, latLng.longitude)
+                    val userLocation = UserLocation(additionalInfo[LATITUDE]?.toDouble() ?: 0.0,
+                            additionalInfo[LONGITUDE]?.toDouble() ?: 0.0)
                     currentFilter.userLocation = userLocation
-                    currentFilter.locationName = place.address.toString()
+                    currentFilter.locationName = place.title
                     currentFilter.isCurrentLocation = false
-                    locationTextView.text = place.address
+                    locationTextView.text = place.title
                 }
             }
             PlaceAutocomplete.RESULT_ERROR -> showErrorToast(R.string.generic_error)

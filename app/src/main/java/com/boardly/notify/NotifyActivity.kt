@@ -11,7 +11,11 @@ import android.widget.SeekBar
 import android.widget.Toast
 import com.boardly.R
 import com.boardly.base.BaseActivity
+import com.boardly.common.search.SearchResultData
+import com.boardly.constants.LATITUDE
+import com.boardly.constants.LONGITUDE
 import com.boardly.constants.PICKED_GAME
+import com.boardly.constants.PICKED_SEARCH_RESULT
 import com.boardly.constants.PICK_NOTIFY_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_PICK_REQUEST_CODE
 import com.boardly.constants.RPG_TYPE
@@ -20,9 +24,8 @@ import com.boardly.factories.NotifyViewModelFactory
 import com.boardly.injection.modules.GlideApp
 import com.boardly.notify.models.NotifySettings
 import com.boardly.pickgame.PickGameActivity
+import com.boardly.pickplace.PickPlaceActivity
 import com.boardly.retrofit.gameservice.models.SearchResult
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException
-import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import com.jakewharton.rxbinding2.view.RxView
 import dagger.android.AndroidInjection
@@ -110,7 +113,7 @@ class NotifyActivity : BaseActivity(), NotifyView {
         if (data != null) {
             when (requestCode) {
                 PICK_NOTIFY_GAME_REQUEST_CODE -> handlePickGameResult(resultCode, data)
-                PLACE_PICK_REQUEST_CODE -> handleAutoCompleteResult(resultCode, data)
+                PLACE_PICK_REQUEST_CODE -> handlePlacePickResult(resultCode, data)
             }
         }
     }
@@ -181,33 +184,24 @@ class NotifyActivity : BaseActivity(), NotifyView {
     }
 
     private fun launchPlacePickScreen() {
-        try {
-            val placeSearchIntent = PlaceAutocomplete
-                    .IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN)
-                    .build(this)
-            startActivityForResult(placeSearchIntent, PLACE_PICK_REQUEST_CODE)
-        } catch (e: GooglePlayServicesRepairableException) {
-            showErrorToast(R.string.gps_update_needed)
-        } catch (e: GooglePlayServicesNotAvailableException) {
-            showErrorToast(R.string.gps_not_available)
-        }
+        startActivityForResult(Intent(this, PickPlaceActivity::class.java), PLACE_PICK_REQUEST_CODE)
     }
 
     private fun showErrorToast(@StringRes errorTextId: Int) {
         Toast.makeText(this, errorTextId, Toast.LENGTH_LONG).show()
     }
 
-    private fun handleAutoCompleteResult(resultCode: Int, data: Intent) {
+    private fun handlePlacePickResult(resultCode: Int, data: Intent) {
         when (resultCode) {
             Activity.RESULT_OK -> {
-                val place = PlaceAutocomplete.getPlace(this, data)
+                val place = data.getParcelableExtra<SearchResultData>(PICKED_SEARCH_RESULT)
                 with(place) {
-                    newSettings.userLatitude = latLng.latitude
-                    newSettings.userLongitude = latLng.longitude
-                    newSettings.locationName = place.address.toString()
-                    locationTextView.text = place.address
+                    newSettings.userLatitude = additionalInfo[LATITUDE]?.toDouble() ?: 0.0
+                    newSettings.userLongitude = additionalInfo[LONGITUDE]?.toDouble() ?: 0.0
+                    newSettings.locationName = title
+                    locationTextView.text = title
 
-                    // Somehow default Places API Activity does not trigger onStop() of NotifyActivity
+                    // Somehow default Places API Activity does not trigger onStop() of EventActivity
                     // so it's ok to emit event here
                     placePickEventSubject.onNext(true)
                 }
@@ -216,6 +210,7 @@ class NotifyActivity : BaseActivity(), NotifyView {
             Activity.RESULT_CANCELED -> hideSoftKeyboard()
         }
     }
+
 
     private fun launchGamePickScreen() {
         val pickGameIntent = Intent(this, PickGameActivity::class.java)

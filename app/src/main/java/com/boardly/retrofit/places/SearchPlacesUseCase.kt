@@ -14,7 +14,6 @@ class SearchPlacesUseCase @Inject constructor(private val nominatimService: Nomi
         latestQuery = query
         val formattedQuery = query.trim()
                 .toLowerCase(Locale.ENGLISH)
-                .replace(" ", "+")
                 .noSpecialChars()
         return nominatimService.search(formattedQuery)
                 .filter { query == latestQuery }
