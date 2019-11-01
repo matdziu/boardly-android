@@ -30,6 +30,7 @@
 -keep class com.boardly.gamescollection.models.** { *; }
 -keep class com.boardly.manageplace.models.** { *; }
 -keep class com.boardly.retrofit.gameservice.models.** { *; }
+-keep class com.boardly.retrofit.places.models.** { *; }
 -keepattributes Signature
 -keepattributes *Annotation*
 -keepattributes Signature, InnerClasses

@@ -1,6 +1,5 @@
 package com.boardly.injection.modules
 
-import com.boardly.BuildConfig
 import com.tickaroo.tikxml.TikXml
 import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import dagger.Module
@@ -17,7 +16,6 @@ class NetworkModule {
     @Singleton
     fun provideRetrofitInstance(tikXml: TikXml): Retrofit {
         return Retrofit.Builder()
-                .baseUrl(BuildConfig.BGG_API_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .addConverterFactory(TikXmlConverterFactory.create(tikXml))
                 .build()
