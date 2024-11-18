@@ -22,6 +22,7 @@ import com.boardly.constants.PICK_FIRST_GAME_REQUEST_CODE
 import com.boardly.constants.PLACE_PICK_REQUEST_CODE
 import com.boardly.constants.RPG_TYPE
 import com.boardly.constants.SAVED_FILTER
+import com.boardly.databinding.ActivityFilterBinding
 import com.boardly.extensions.loadImageFromUrl
 import com.boardly.factories.FilterViewModelFactory
 import com.boardly.filter.models.Filter
@@ -33,16 +34,6 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.activity_filter.applyFilterButton
-import kotlinx.android.synthetic.main.activity_filter.boardGameImageView
-import kotlinx.android.synthetic.main.activity_filter.boardGameTextView
-import kotlinx.android.synthetic.main.activity_filter.currentLocationButton
-import kotlinx.android.synthetic.main.activity_filter.deleteGameButton
-import kotlinx.android.synthetic.main.activity_filter.distanceSeekBar
-import kotlinx.android.synthetic.main.activity_filter.distanceTextView
-import kotlinx.android.synthetic.main.activity_filter.locationTextView
-import kotlinx.android.synthetic.main.activity_filter.pickGameButton
-import kotlinx.android.synthetic.main.activity_filter.pickPlaceButton
 import javax.inject.Inject
 
 class FilterActivity : BaseActivity(), FilterView {
@@ -59,6 +50,8 @@ class FilterActivity : BaseActivity(), FilterView {
 
     private var fetchDetails = true
 
+    private lateinit var binding: ActivityFilterBinding
+
     companion object {
         fun start(activity: Activity, savedFilter: Filter) {
             val intent = Intent(activity, FilterActivity::class.java)
@@ -69,43 +62,45 @@ class FilterActivity : BaseActivity(), FilterView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
-        setContentView(R.layout.activity_filter)
+        binding = ActivityFilterBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         super.onCreate(savedInstanceState)
         showBackToolbarArrow(true, this::finish)
 
-        currentFilter = intent.getParcelableExtra(SAVED_FILTER)
+        currentFilter = intent.getParcelableExtra(SAVED_FILTER) ?: Filter()
         initDistanceFilter(currentFilter.radius.toInt())
         initGameFilter(currentFilter.gameName)
         initLocationFilter(currentFilter.locationName)
 
-        filterViewModel = ViewModelProviders.of(this, filterViewModelFactory)[FilterViewModel::class.java]
+        filterViewModel =
+            ViewModelProviders.of(this, filterViewModelFactory)[FilterViewModel::class.java]
 
-        deleteGameButton.setOnClickListener {
+        binding.deleteGameButton.setOnClickListener {
             GlideApp.with(this).pauseAllRequests()
-            boardGameTextView.text = getString(R.string.game_text_placeholder)
-            boardGameImageView.setImageResource(R.drawable.board_game_placeholder)
+            binding.boardGameTextView.text = getString(R.string.game_text_placeholder)
+            binding.boardGameImageView.setImageResource(R.drawable.board_game_placeholder)
             currentFilter.gameId = ""
             currentFilter.gameName = ""
             gameIdSubject.onNext("")
         }
-        pickGameButton.setOnClickListener {
+        binding.pickGameButton.setOnClickListener {
             launchGamePickScreen()
         }
-        applyFilterButton.setOnClickListener {
+        binding.applyFilterButton.setOnClickListener {
             val data = Intent()
             data.putExtra(PICKED_FILTER, currentFilter)
             setResult(Activity.RESULT_OK, data)
             finish()
         }
-        pickPlaceButton.setOnClickListener { launchPlacePickScreen() }
-        currentLocationButton.setOnClickListener {
+        binding.pickPlaceButton.setOnClickListener { launchPlacePickScreen() }
+        binding.currentLocationButton.setOnClickListener {
             checkLocationSettings({
                 locationProcessingSubject.onNext(true)
                 val onLocationFound = { location: Location ->
                     currentFilter.userLocation = UserLocation(location.latitude, location.longitude)
                     currentFilter.locationName = getString(R.string.current_location_info)
                     currentFilter.isCurrentLocation = true
-                    locationTextView.text = getString(R.string.current_location_info)
+                    binding.locationTextView.text = getString(R.string.current_location_info)
                     locationProcessingSubject.onNext(false)
                 }
                 getLastKnownLocation(true) { onLocationFound(it) }
@@ -152,9 +147,9 @@ class FilterActivity : BaseActivity(), FilterView {
             Activity.RESULT_OK -> {
                 val pickedGame = data.getParcelableExtra<SearchResult>(PICKED_GAME)
                 with(pickedGame) {
-                    boardGameTextView.text = name
-                    currentFilter.gameId = if (type == RPG_TYPE) "$id$RPG_TYPE" else id.toString()
-                    currentFilter.gameName = name
+                    binding.boardGameTextView.text = this?.name ?: ""
+                    currentFilter.gameId = if (this?.type == RPG_TYPE) "$id$RPG_TYPE" else this?.id.toString()
+                    currentFilter.gameName = this?.name ?: ""
                     fetchDetails = true
                 }
             }
@@ -170,14 +165,17 @@ class FilterActivity : BaseActivity(), FilterView {
             Activity.RESULT_OK -> {
                 val place = data.getParcelableExtra<SearchResultData>(PICKED_SEARCH_RESULT)
                 with(place) {
-                    val userLocation = UserLocation(additionalInfo[LATITUDE]?.toDouble() ?: 0.0,
-                            additionalInfo[LONGITUDE]?.toDouble() ?: 0.0)
+                    val userLocation = UserLocation(
+                        this?.additionalInfo?.get(LATITUDE)?.toDouble() ?: 0.0,
+                        this?.additionalInfo?.get(LONGITUDE)?.toDouble() ?: 0.0
+                    )
                     currentFilter.userLocation = userLocation
-                    currentFilter.locationName = place.title
+                    currentFilter.locationName = place?.title ?: ""
                     currentFilter.isCurrentLocation = false
-                    locationTextView.text = place.title
+                    binding.locationTextView.text = place?.title ?: ""
                 }
             }
+
             PlaceAutocomplete.RESULT_ERROR -> showErrorToast(R.string.generic_error)
             Activity.RESULT_CANCELED -> hideSoftKeyboard()
         }
@@ -190,13 +188,15 @@ class FilterActivity : BaseActivity(), FilterView {
     private fun initDistanceFilter(initialProgress: Int) {
         val seekBarMin = 1
         val actualInitialProgress = initialProgress - seekBarMin
-        distanceTextView.text = getString(R.string.max_distance_text, initialProgress)
-        distanceSeekBar.progress = actualInitialProgress
-        distanceSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.distanceTextView.text = getString(R.string.max_distance_text, initialProgress)
+        binding.distanceSeekBar.progress = actualInitialProgress
+        binding.distanceSeekBar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 val actualProgress = progress + seekBarMin
                 currentFilter.radius = actualProgress.toDouble()
-                distanceTextView.text = getString(R.string.max_distance_text, actualProgress)
+                binding.distanceTextView.text =
+                    getString(R.string.max_distance_text, actualProgress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -210,11 +210,11 @@ class FilterActivity : BaseActivity(), FilterView {
     }
 
     private fun initGameFilter(gameName: String) {
-        if (gameName.isNotEmpty()) boardGameTextView.text = gameName
+        if (gameName.isNotEmpty()) binding.boardGameTextView.text = gameName
     }
 
     private fun initLocationFilter(locationName: String) {
-        if (locationName.isNotEmpty()) locationTextView.text = locationName
+        if (locationName.isNotEmpty()) binding.locationTextView.text = locationName
     }
 
     override fun gameIdEmitter(): Observable<String> = gameIdSubject
@@ -223,12 +223,16 @@ class FilterActivity : BaseActivity(), FilterView {
 
     override fun render(filterViewState: FilterViewState) {
         with(filterViewState) {
-            loadImageFromUrl(boardGameImageView, gameImageUrl, R.drawable.board_game_placeholder)
+            loadImageFromUrl(
+                binding.boardGameImageView,
+                gameImageUrl,
+                R.drawable.board_game_placeholder
+            )
             if (locationProcessing) {
-                locationTextView.text = getString(R.string.location_processing_text)
-                pickPlaceButton.isClickable = false
+                binding.locationTextView.text = getString(R.string.location_processing_text)
+                binding.pickPlaceButton.isClickable = false
             } else {
-                pickPlaceButton.isClickable = true
+                binding.pickPlaceButton.isClickable = true
             }
         }
     }

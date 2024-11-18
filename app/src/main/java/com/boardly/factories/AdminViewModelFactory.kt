@@ -11,7 +11,7 @@ import javax.inject.Inject
 class AdminViewModelFactory @Inject constructor(private val adminInteractor: AdminInteractor,
                                                 private val analytics: Analytics) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return AdminViewModel(adminInteractor, analytics) as T
     }
 }

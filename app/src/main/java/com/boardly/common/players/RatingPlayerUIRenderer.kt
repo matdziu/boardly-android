@@ -11,19 +11,28 @@ import com.boardly.R
 import com.boardly.base.eventdetails.EventDetailsView
 import com.boardly.base.eventdetails.models.RateInput
 import com.boardly.common.players.models.Player
-import kotlinx.android.synthetic.main.view_rate_dialog.view.ratingBar
+import com.willy.ratingbar.ScaleRatingBar
 
 class RatingPlayerUIRenderer(private val activity: AppCompatActivity) : PlayerUIRenderer(activity) {
 
-    fun displayPlayerInfo(player: Player,
-                          playerImageView: ImageView,
-                          nameTextView: TextView,
-                          helloTextView: TextView,
-                          ratingTextView: TextView,
-                          ratingImageView: ImageView,
-                          rateButton: Button,
-                          eventDetailsView: EventDetailsView) {
-        super.displayPlayerInfo(player, playerImageView, nameTextView, helloTextView, ratingTextView, ratingImageView)
+    fun displayPlayerInfo(
+        player: Player,
+        playerImageView: ImageView,
+        nameTextView: TextView,
+        helloTextView: TextView,
+        ratingTextView: TextView,
+        ratingImageView: ImageView,
+        rateButton: Button,
+        eventDetailsView: EventDetailsView
+    ) {
+        super.displayPlayerInfo(
+            player,
+            playerImageView,
+            nameTextView,
+            helloTextView,
+            ratingTextView,
+            ratingImageView
+        )
         displayRateButton(player.ratedOrSelf, rateButton)
         setRateButtonOnClick(player, rateButton, eventDetailsView)
     }
@@ -33,23 +42,32 @@ class RatingPlayerUIRenderer(private val activity: AppCompatActivity) : PlayerUI
         else rateButton.visibility = View.VISIBLE
     }
 
-    private fun setRateButtonOnClick(player: Player,
-                                     rateButton: Button,
-                                     eventDetailsView: EventDetailsView) {
+    private fun setRateButtonOnClick(
+        player: Player,
+        rateButton: Button,
+        eventDetailsView: EventDetailsView
+    ) {
         rateButton.setOnClickListener {
             val dialogView = LayoutInflater.from(rateButton.context)
-                    .inflate(R.layout.view_rate_dialog, rateButton.parent as ViewGroup, false)
+                .inflate(R.layout.view_rate_dialog, rateButton.parent as ViewGroup, false)
 
             val dialog = android.app.AlertDialog.Builder(activity)
-                    .setTitle(R.string.rate_dialog_title)
-                    .setPositiveButton(R.string.rate_dialog_positive_text) { _, _ ->
-                        with(dialogView) {
-                            eventDetailsView.emitRating(RateInput(ratingBar.rating.toInt(), player.id, player.eventId))
-                        }
+                .setTitle(R.string.rate_dialog_title)
+                .setPositiveButton(R.string.rate_dialog_positive_text) { _, _ ->
+                    with(dialogView) {
+                        val ratingBar = this.findViewById<ScaleRatingBar>(R.id.ratingBar)
+                        eventDetailsView.emitRating(
+                            RateInput(
+                                ratingBar.rating.toInt(),
+                                player.id,
+                                player.eventId
+                            )
+                        )
                     }
-                    .setNegativeButton(R.string.rate_dialog_negative_text, null)
-                    .setView(dialogView)
-                    .create()
+                }
+                .setNegativeButton(R.string.rate_dialog_negative_text, null)
+                .setView(dialogView)
+                .create()
 
             dialog.show()
         }

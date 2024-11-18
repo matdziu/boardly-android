@@ -10,7 +10,7 @@ import javax.inject.Inject
 @Suppress("UNCHECKED_CAST")
 class ManagePlaceViewModelFactory @Inject constructor(private val managePlaceInteractor: ManagePlaceInteractor) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return ManagePlaceViewModel(managePlaceInteractor) as T
     }
 }

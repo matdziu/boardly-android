@@ -4,8 +4,9 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
+import android.support.v4.app.FragmentActivity
 import android.widget.DatePicker
-import java.util.*
+import java.util.Calendar
 
 
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
@@ -18,7 +19,8 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(activity, this, year, month, day)
+        val datePickerDialog =
+            DatePickerDialog((activity as FragmentActivity), this, year, month, day)
         datePickerDialog.datePicker.minDate = System.currentTimeMillis() - 1000
 
         return datePickerDialog

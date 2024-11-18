@@ -10,7 +10,7 @@ import javax.inject.Inject
 class NotifyViewModelFactory @Inject constructor(private val notifyInteractor: NotifyInteractor)
     : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return NotifyViewModel(notifyInteractor) as T
     }
 }

@@ -4,10 +4,10 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.TextView
+import com.boardly.R
 import com.boardly.base.BaseSearchActivity
 import com.boardly.constants.PICKED_SEARCH_RESULT
-import kotlinx.android.synthetic.main.item_search_result.view.searchResultSubtitle
-import kotlinx.android.synthetic.main.item_search_result.view.searchResultTitle
 
 class SearchResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -17,6 +17,9 @@ class SearchResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         with(itemView) {
             val resultIntent = Intent()
             resultIntent.putExtra(PICKED_SEARCH_RESULT, searchResultData)
+
+            val searchResultTitle = this.findViewById<TextView>(R.id.searchResultTitle)
+            val searchResultSubtitle = this.findViewById<TextView>(R.id.searchResultSubtitle)
 
             searchResultTitle.text = searchResultData.title
             searchResultSubtitle.text = searchResultData.subtitle

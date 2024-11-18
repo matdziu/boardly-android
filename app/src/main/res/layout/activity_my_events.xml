@@ -25,25 +25,21 @@
                 app:tabIndicatorHeight="5dp">
 
                 <android.support.design.widget.TabItem
-                    android:id="@+id/acceptedTab"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:icon="@drawable/ic_accepted" />
 
                 <android.support.design.widget.TabItem
-                    android:id="@+id/createdTab"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:icon="@drawable/ic_created" />
 
                 <android.support.design.widget.TabItem
-                    android:id="@+id/pendingTab"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:icon="@drawable/ic_pending" />
 
                 <android.support.design.widget.TabItem
-                    android:id="@+id/interestingTab"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:icon="@drawable/ic_notify" />

@@ -7,23 +7,18 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import com.boardly.R
 import com.boardly.base.BaseActivity
 import com.boardly.common.location.UserLocation
 import com.boardly.constants.SAVED_LOCATION_LATITUDE
 import com.boardly.constants.SAVED_LOCATION_LONGITUDE
 import com.boardly.constants.SAVED_RADIUS
+import com.boardly.databinding.ActivityDiscoverBinding
 import com.boardly.discover.list.PlacesAdapter
 import com.boardly.discover.models.FilteredFetchData
 import com.boardly.factories.DiscoverViewModelFactory
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.activity_discover.contentView
-import kotlinx.android.synthetic.main.activity_discover.noPlacesTextView
-import kotlinx.android.synthetic.main.activity_discover.noUserLocationTextView
-import kotlinx.android.synthetic.main.activity_discover.placesRecyclerView
-import kotlinx.android.synthetic.main.activity_discover.progressBar
 import javax.inject.Inject
 
 class DiscoverActivity : BaseActivity(), DiscoverView {
@@ -37,6 +32,8 @@ class DiscoverActivity : BaseActivity(), DiscoverView {
 
     private val placesAdapter = PlacesAdapter()
 
+    private lateinit var binding: ActivityDiscoverBinding
+
     private var init = true
     private var currentFilteredFetchData: FilteredFetchData? = null
 
@@ -49,24 +46,26 @@ class DiscoverActivity : BaseActivity(), DiscoverView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
-        setContentView(R.layout.activity_discover)
+        binding = ActivityDiscoverBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         super.onCreate(savedInstanceState)
         showBackToolbarArrow(true, this::finish)
-        discoverViewModel = ViewModelProviders.of(this, discoverViewModelFactory)[DiscoverViewModel::class.java]
+        discoverViewModel =
+            ViewModelProviders.of(this, discoverViewModelFactory)[DiscoverViewModel::class.java]
         currentFilteredFetchData = getFilteredFetchData()
         initRecyclerView()
     }
 
     private fun initRecyclerView() {
-        placesRecyclerView.layoutManager = LinearLayoutManager(this)
-        placesRecyclerView.adapter = placesAdapter
+        binding.placesRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.placesRecyclerView.adapter = placesAdapter
     }
 
     private fun getFilteredFetchData(): FilteredFetchData? {
         val sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this)
         val savedRadius = sharedPrefs.getInt(SAVED_RADIUS, 50)
-        val savedLocationLongitude = sharedPrefs.getString(SAVED_LOCATION_LONGITUDE, "")
-        val savedLocationLatitude = sharedPrefs.getString(SAVED_LOCATION_LATITUDE, "")
+        val savedLocationLongitude = sharedPrefs.getString(SAVED_LOCATION_LONGITUDE, "") ?: ""
+        val savedLocationLatitude = sharedPrefs.getString(SAVED_LOCATION_LATITUDE, "") ?: ""
         val userLocation = getUserLocationFromString(savedLocationLongitude, savedLocationLatitude)
 
         return if (userLocation != null) FilteredFetchData(userLocation, savedRadius.toDouble())
@@ -77,12 +76,15 @@ class DiscoverActivity : BaseActivity(), DiscoverView {
         super.onStart()
         initEmitters()
         discoverViewModel.bind(this)
-        if (init && currentFilteredFetchData != null) fetchPlacesListTriggerSubject.onNext(currentFilteredFetchData!!)
+        if (init && currentFilteredFetchData != null) fetchPlacesListTriggerSubject.onNext(
+            currentFilteredFetchData!!
+        )
     }
 
     private fun getUserLocationFromString(longitude: String, latitude: String): UserLocation? {
         return if (longitude != "null" && latitude != "null" &&
-                longitude.isNotEmpty() && latitude.isNotEmpty()) UserLocation(latitude.toDouble(), longitude.toDouble())
+            longitude.isNotEmpty() && latitude.isNotEmpty()
+        ) UserLocation(latitude.toDouble(), longitude.toDouble())
         else null
     }
 
@@ -116,29 +118,29 @@ class DiscoverActivity : BaseActivity(), DiscoverView {
 
     private fun showProgressBar(show: Boolean) {
         if (show) {
-            contentView.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
+            binding.contentView.visibility = View.GONE
+            binding.progressBar.visibility = View.VISIBLE
         } else {
-            contentView.visibility = View.VISIBLE
-            progressBar.visibility = View.GONE
+            binding.contentView.visibility = View.VISIBLE
+            binding.progressBar.visibility = View.GONE
         }
     }
 
     private fun showNoLocationText(show: Boolean) {
         if (show) {
-            noUserLocationTextView.visibility = View.VISIBLE
-            noPlacesTextView.visibility = View.GONE
+            binding.noUserLocationTextView.visibility = View.VISIBLE
+            binding.noPlacesTextView.visibility = View.GONE
         } else {
-            noUserLocationTextView.visibility = View.GONE
+            binding.noUserLocationTextView.visibility = View.GONE
         }
     }
 
     private fun showNoPlacesText(show: Boolean) {
         if (show) {
-            noPlacesTextView.visibility = View.VISIBLE
-            noUserLocationTextView.visibility = View.GONE
+            binding.noPlacesTextView.visibility = View.VISIBLE
+            binding.noUserLocationTextView.visibility = View.GONE
         } else {
-            noPlacesTextView.visibility = View.GONE
+            binding.noPlacesTextView.visibility = View.GONE
         }
     }
 }

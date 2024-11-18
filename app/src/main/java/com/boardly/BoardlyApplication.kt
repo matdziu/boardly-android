@@ -40,52 +40,52 @@ class BoardlyApplication : Application(), HasActivityInjector {
 
     private fun initInjection() {
         DaggerAppComponent.builder()
-                .application(this)
-                .build()
-                .inject(this)
+            .application(this)
+            .build()
+            .inject(this)
     }
 
     private fun initFirebaseConnectionListener() {
         FirebaseDatabase.getInstance().getReference(".info/connected")
-                .addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        dataSnapshot.getValue(Boolean::class.java)?.let { online = it }
-                    }
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    dataSnapshot.getValue(Boolean::class.java)?.let { online = it }
+                }
 
-                    override fun onCancelled(databaseError: DatabaseError) {
-                        online = false
-                    }
-                })
+                override fun onCancelled(databaseError: DatabaseError) {
+                    online = false
+                }
+            })
     }
 
     private fun initVisibleActivityListener() {
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
 
-            override fun onActivityStarted(activity: Activity?) {
-                visibleActivity = activity
+            override fun onActivityStarted(p0: Activity) {
+                visibleActivity = p0
             }
 
-            override fun onActivityStopped(activity: Activity?) {
-                if (activity == visibleActivity) visibleActivity = null
+            override fun onActivityStopped(p0: Activity) {
+                if (p0 == visibleActivity) visibleActivity = null
             }
 
-            override fun onActivityPaused(activity: Activity?) {
+            override fun onActivityCreated(p0: Activity, p1: Bundle?) {
                 // unused
             }
 
-            override fun onActivityResumed(activity: Activity?) {
+            override fun onActivityResumed(p0: Activity) {
                 // unused
             }
 
-            override fun onActivityDestroyed(activity: Activity?) {
+            override fun onActivityPaused(p0: Activity) {
                 // unused
             }
 
-            override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {
+            override fun onActivitySaveInstanceState(p0: Activity, p1: Bundle) {
                 // unused
             }
 
-            override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
+            override fun onActivityDestroyed(p0: Activity) {
                 // unused
             }
         })

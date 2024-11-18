@@ -5,34 +5,20 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import com.boardly.R
 import com.boardly.base.BaseActivity
 import com.boardly.base.joinevent.BaseJoinEventActivity
 import com.boardly.common.events.EventUIRenderer
 import com.boardly.common.events.models.Event
 import com.boardly.common.events.models.EventType
+import com.boardly.customviews.BoardlyEditText
 import com.boardly.eventdetails.EventDetailsActivity
 import com.boardly.extensions.setOnClickListener
 import com.boardly.home.JoinDialogValidator
 import com.boardly.home.models.JoinEventData
-import kotlinx.android.synthetic.main.item_event.view.acceptedTextView
-import kotlinx.android.synthetic.main.item_event.view.boardGameImageView
-import kotlinx.android.synthetic.main.item_event.view.boardGameImageView2
-import kotlinx.android.synthetic.main.item_event.view.boardGameImageView3
-import kotlinx.android.synthetic.main.item_event.view.createdTextView
-import kotlinx.android.synthetic.main.item_event.view.eventNameTextView
-import kotlinx.android.synthetic.main.item_event.view.gameTextView
-import kotlinx.android.synthetic.main.item_event.view.gameTextView2
-import kotlinx.android.synthetic.main.item_event.view.gameTextView3
-import kotlinx.android.synthetic.main.item_event.view.joinEventButton
-import kotlinx.android.synthetic.main.item_event.view.locationImageView
-import kotlinx.android.synthetic.main.item_event.view.locationTextView
-import kotlinx.android.synthetic.main.item_event.view.openEventScreenButton
-import kotlinx.android.synthetic.main.item_event.view.pendingTextView
-import kotlinx.android.synthetic.main.item_event.view.seeDescriptionButton
-import kotlinx.android.synthetic.main.item_event.view.timeImageView
-import kotlinx.android.synthetic.main.item_event.view.timeTextView
-import kotlinx.android.synthetic.main.view_hello_dialog.view.helloEditText
 
 class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -41,19 +27,33 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(event: Event) {
         with(itemView) {
-            eventUIRenderer.displayEventInfo(event,
-                    eventNameTextView,
-                    gameTextView,
-                    locationTextView,
-                    locationImageView,
-                    boardGameImageView,
-                    seeDescriptionButton,
-                    timeTextView,
-                    timeImageView,
-                    gameTextView2,
-                    boardGameImageView2,
-                    gameTextView3,
-                    boardGameImageView3)
+            val eventNameTextView = this.findViewById<TextView>(R.id.eventNameTextView)
+            val gameTextView = this.findViewById<TextView>(R.id.gameTextView)
+            val locationTextView = this.findViewById<TextView>(R.id.locationTextView)
+            val locationImageView = this.findViewById<ImageView>(R.id.locationImageView)
+            val boardGameImageView = this.findViewById<ImageView>(R.id.boardGameImageView)
+            val seeDescriptionButton = this.findViewById<Button>(R.id.seeDescriptionButton)
+            val timeTextView = this.findViewById<TextView>(R.id.timeTextView)
+            val timeImageView = this.findViewById<ImageView>(R.id.timeImageView)
+            val gameTextView2 = this.findViewById<TextView>(R.id.gameTextView2)
+            val boardGameImageView2 = this.findViewById<ImageView>(R.id.boardGameImageView2)
+            val gameTextView3 = this.findViewById<TextView>(R.id.gameTextView3)
+            val boardGameImageView3 = this.findViewById<ImageView>(R.id.boardGameImageView3)
+            eventUIRenderer.displayEventInfo(
+                event,
+                eventNameTextView,
+                gameTextView,
+                locationTextView,
+                locationImageView,
+                boardGameImageView,
+                seeDescriptionButton,
+                timeTextView,
+                timeImageView,
+                gameTextView2,
+                boardGameImageView2,
+                gameTextView3,
+                boardGameImageView3
+            )
             setTypeLabel(event.type)
             setClickAction(event)
         }
@@ -70,29 +70,36 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private fun setDefaultClickAction(eventId: String) {
         with(itemView) {
+            val openEventScreenButton = this.findViewById<Button>(R.id.openEventScreenButton)
+            val gameTextView = this.findViewById<TextView>(R.id.gameTextView)
+            val gameTextView2 = this.findViewById<TextView>(R.id.gameTextView2)
+            val gameTextView3 = this.findViewById<TextView>(R.id.gameTextView3)
+            val eventNameTextView = this.findViewById<TextView>(R.id.eventNameTextView)
+            val joinEventButton = this.findViewById<Button>(R.id.joinEventButton)
             openEventScreenButton.visibility = View.GONE
             listOf(joinEventButton, gameTextView, gameTextView2, gameTextView3, eventNameTextView)
-                    .setOnClickListener { launchHelloDialog(eventId) }
+                .setOnClickListener { launchHelloDialog(eventId) }
         }
     }
 
     private fun launchHelloDialog(eventId: String) {
         val dialogView = LayoutInflater.from(itemView.context)
-                .inflate(R.layout.view_hello_dialog, itemView.parent as ViewGroup, false)
+            .inflate(R.layout.view_hello_dialog, itemView.parent as ViewGroup, false)
 
         val joinDialogValidator = JoinDialogValidator()
 
         val dialog = android.app.AlertDialog.Builder(parentActivity)
-                .setTitle(R.string.hello_dialog_title)
-                .setPositiveButton(R.string.hello_dialog_positive_text, null)
-                .setNegativeButton(R.string.hello_dialog_negative_text, null)
-                .setView(dialogView)
-                .create()
+            .setTitle(R.string.hello_dialog_title)
+            .setPositiveButton(R.string.hello_dialog_positive_text, null)
+            .setNegativeButton(R.string.hello_dialog_negative_text, null)
+            .setView(dialogView)
+            .create()
 
         dialog.show()
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             with(dialogView) {
+                val helloEditText = this.findViewById<BoardlyEditText>(R.id.helloEditText)
                 val helloText = helloEditText.text.toString()
                 if (joinDialogValidator.validate(helloText)) {
                     emitJoinEventData(JoinEventData(eventId, helloText))
@@ -112,28 +119,67 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private fun setCreatedClickAction(event: Event) {
         with(itemView) {
+            val openEventScreenButton = this.findViewById<Button>(R.id.openEventScreenButton)
+            val gameTextView = this.findViewById<TextView>(R.id.gameTextView)
+            val gameTextView2 = this.findViewById<TextView>(R.id.gameTextView2)
+            val gameTextView3 = this.findViewById<TextView>(R.id.gameTextView3)
+            val eventNameTextView = this.findViewById<TextView>(R.id.eventNameTextView)
             openEventScreenButton.visibility = View.VISIBLE
-            listOf(openEventScreenButton, gameTextView, gameTextView2, gameTextView3, eventNameTextView)
-                    .setOnClickListener { EventDetailsActivity.start(parentActivity, event.eventId, event.type) }
+            listOf(
+                openEventScreenButton,
+                gameTextView,
+                gameTextView2,
+                gameTextView3,
+                eventNameTextView
+            )
+                .setOnClickListener {
+                    EventDetailsActivity.start(
+                        parentActivity,
+                        event.eventId,
+                        event.type
+                    )
+                }
         }
     }
 
     private fun setPendingClickAction() {
         with(itemView) {
+            val openEventScreenButton = this.findViewById<Button>(R.id.openEventScreenButton)
             openEventScreenButton.visibility = View.GONE
         }
     }
 
     private fun setAcceptedClickAction(event: Event) {
         with(itemView) {
+            val openEventScreenButton = this.findViewById<Button>(R.id.openEventScreenButton)
+            val gameTextView = this.findViewById<TextView>(R.id.gameTextView)
+            val gameTextView2 = this.findViewById<TextView>(R.id.gameTextView2)
+            val gameTextView3 = this.findViewById<TextView>(R.id.gameTextView3)
+            val eventNameTextView = this.findViewById<TextView>(R.id.eventNameTextView)
             openEventScreenButton.visibility = View.VISIBLE
-            listOf(openEventScreenButton, gameTextView, gameTextView2, gameTextView3, eventNameTextView)
-                    .setOnClickListener { EventDetailsActivity.start(parentActivity, event.eventId, event.type) }
+            listOf(
+                openEventScreenButton,
+                gameTextView,
+                gameTextView2,
+                gameTextView3,
+                eventNameTextView
+            )
+                .setOnClickListener {
+                    EventDetailsActivity.start(
+                        parentActivity,
+                        event.eventId,
+                        event.type
+                    )
+                }
         }
     }
 
     private fun setTypeLabel(type: EventType) {
         with(itemView) {
+            val joinEventButton = this.findViewById<Button>(R.id.joinEventButton)
+            val createdTextView = this.findViewById<TextView>(R.id.createdTextView)
+            val pendingTextView = this.findViewById<TextView>(R.id.pendingTextView)
+            val acceptedTextView = this.findViewById<TextView>(R.id.acceptedTextView)
             when (type) {
                 EventType.DEFAULT -> makeVisibleOnly(joinEventButton)
                 EventType.CREATED -> makeVisibleOnly(createdTextView)
@@ -145,7 +191,12 @@ class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private fun makeVisibleOnly(selectedView: View) {
         with(itemView) {
-            val viewsList = listOf(joinEventButton, acceptedTextView, pendingTextView, createdTextView)
+            val joinEventButton = this.findViewById<Button>(R.id.joinEventButton)
+            val createdTextView = this.findViewById<TextView>(R.id.createdTextView)
+            val pendingTextView = this.findViewById<TextView>(R.id.pendingTextView)
+            val acceptedTextView = this.findViewById<TextView>(R.id.acceptedTextView)
+            val viewsList =
+                listOf(joinEventButton, acceptedTextView, pendingTextView, createdTextView)
             for (view in viewsList) {
                 if (selectedView == view) view.visibility = View.VISIBLE
                 else view.visibility = View.INVISIBLE

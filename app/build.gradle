@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-parcelize'
 
 apply plugin: 'kotlin-kapt'
 
@@ -11,17 +11,24 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
 
 android {
-    compileSdkVersion 27
+    buildFeatures {
+        buildConfig = true
+    }
+    namespace "com.boardly"
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.boardly"
         minSdkVersion 19
-        targetSdkVersion 27
-        versionCode 35
-        versionName "1.35"
+        targetSdkVersion 34
+        versionCode 40
+        versionName "1.40"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         lintOptions {
             abortOnError false
+        }
+        buildFeatures {
+            viewBinding = true
         }
     }
     buildTypes {
@@ -39,20 +46,23 @@ android {
             buildConfigField "String", OAUTH_CLIENT_ID, "\"73058153525-774qk36ttm3qaokbsjuidp6099js6u4i.apps.googleusercontent.com\""
             buildConfigField "String", BGG_API_URL, "\"https://www.boardgamegeek.com/xmlapi2/\""
             buildConfigField "String", NOMINATIM_API_URL, "\"https://nominatim.openstreetmap.org/\""
-            minifyEnabled true
-            useProguard true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled false
         }
     }
-}
 
-androidExtensions {
-    experimental = true
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.14'
@@ -70,11 +80,11 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.github.bumptech.glide:glide:4.7.1'
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
+//    implementation 'com.vanniktech:android-image-cropper:2.3.0'
     implementation 'com.google.firebase:firebase-storage:16.0.1'
     implementation 'com.google.android.gms:play-services-places:15.0.1'
     implementation "com.google.android.gms:play-services-location:15.0.1"
-    implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
+//    implementation 'com.github.tbruyelle:rxpermissions:0.12'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'

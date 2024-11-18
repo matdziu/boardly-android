@@ -8,9 +8,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.boardly.R
 import com.boardly.common.utils.MessagesAdapterObserver
 import com.boardly.constants.EVENT_ID
+import com.boardly.databinding.FragmentChatBinding
 import com.boardly.eventdetails.chat.list.MessagesAdapter
 import com.boardly.extensions.getCurrentISODate
 import com.boardly.factories.ChatViewModelFactory
@@ -18,11 +18,6 @@ import com.jakewharton.rxbinding2.view.RxView
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.fragment_chat.incentiveTextView
-import kotlinx.android.synthetic.main.fragment_chat.messageInputEditText
-import kotlinx.android.synthetic.main.fragment_chat.messagesRecyclerView
-import kotlinx.android.synthetic.main.fragment_chat.progressBar
-import kotlinx.android.synthetic.main.fragment_chat.sendMessageButton
 import javax.inject.Inject
 
 class ChatFragment : Fragment(), ChatView {
@@ -42,12 +37,14 @@ class ChatFragment : Fragment(), ChatView {
     private lateinit var newMessagesListenerToggleSubject: PublishSubject<Boolean>
     private lateinit var batchFetchTriggerSubject: PublishSubject<String>
 
+    private lateinit var binding: FragmentChatBinding
+
     private val messagesAdapterObserver: MessagesAdapterObserver by lazy {
         MessagesAdapterObserver { lastItemPosition ->
             if (lastItemPosition == 0) {
                 isBatchLoading = false
             } else {
-                messagesRecyclerView.scrollToPosition(lastItemPosition)
+                binding.messagesRecyclerView.scrollToPosition(lastItemPosition)
             }
         }
     }
@@ -70,8 +67,13 @@ class ChatFragment : Fragment(), ChatView {
         chatViewModel = ViewModelProviders.of(this, chatViewModelFactory)[ChatViewModel::class.java]
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_chat, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentChatBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -82,10 +84,10 @@ class ChatFragment : Fragment(), ChatView {
         val layoutManager = LinearLayoutManager(context)
         layoutManager.stackFromEnd = true
 
-        messagesRecyclerView.layoutManager = layoutManager
-        messagesRecyclerView.adapter = messagesAdapter
+        binding.messagesRecyclerView.layoutManager = layoutManager
+        binding.messagesRecyclerView.adapter = messagesAdapter
 
-        messagesRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.messagesRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (!recyclerView.canScrollVertically(-1) && !isBatchLoading) {
                     isBatchLoading = true
@@ -133,30 +135,31 @@ class ChatFragment : Fragment(), ChatView {
     }
 
     private fun showIncentiveTextView(show: Boolean) {
-        incentiveTextView.visibility = if (show) View.VISIBLE else View.GONE
+        binding.incentiveTextView.visibility = if (show) View.VISIBLE else View.GONE
     }
 
     private fun showProgressBar(show: Boolean) {
         if (show) {
-            messagesRecyclerView.visibility = View.GONE
-            messageInputEditText.visibility = View.GONE
-            sendMessageButton.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
+            binding.messagesRecyclerView.visibility = View.GONE
+            binding.messageInputEditText.visibility = View.GONE
+            binding.sendMessageButton.visibility = View.GONE
+            binding.progressBar.visibility = View.VISIBLE
         } else {
-            messagesRecyclerView.visibility = View.VISIBLE
-            messageInputEditText.visibility = View.VISIBLE
-            sendMessageButton.visibility = View.VISIBLE
-            progressBar.visibility = View.GONE
+            binding.messagesRecyclerView.visibility = View.VISIBLE
+            binding.messageInputEditText.visibility = View.VISIBLE
+            binding.sendMessageButton.visibility = View.VISIBLE
+            binding.progressBar.visibility = View.GONE
         }
     }
 
-    override fun newMessagesListenerToggleEmitter(): Observable<Boolean> = newMessagesListenerToggleSubject
+    override fun newMessagesListenerToggleEmitter(): Observable<Boolean> =
+        newMessagesListenerToggleSubject
 
     override fun batchFetchTriggerEmitter(): Observable<String> = batchFetchTriggerSubject
 
     override fun messageEmitter(): Observable<String> {
-        return RxView.clicks(sendMessageButton)
-                .map { messageInputEditText.text.toString() }
-                .doOnNext { messageInputEditText.setText("") }
+        return RxView.clicks(binding.sendMessageButton)
+            .map { binding.messageInputEditText.text.toString() }
+            .doOnNext { binding.messageInputEditText.setText("") }
     }
 }

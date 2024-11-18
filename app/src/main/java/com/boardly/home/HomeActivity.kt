@@ -25,6 +25,7 @@ import com.boardly.constants.SAVED_LOCATION_LATITUDE
 import com.boardly.constants.SAVED_LOCATION_LONGITUDE
 import com.boardly.constants.SAVED_LOCATION_NAME
 import com.boardly.constants.SAVED_RADIUS
+import com.boardly.databinding.ActivityHomeBinding
 import com.boardly.discover.DiscoverActivity
 import com.boardly.event.EventActivity
 import com.boardly.factories.HomeViewModelFactory
@@ -36,15 +37,6 @@ import com.google.android.gms.common.GoogleApiAvailability
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.activity_home.addEventButton
-import kotlinx.android.synthetic.main.activity_home.contentViewGroup
-import kotlinx.android.synthetic.main.activity_home.discoverButton
-import kotlinx.android.synthetic.main.activity_home.eventsRecyclerView
-import kotlinx.android.synthetic.main.activity_home.inviteFriendsButton
-import kotlinx.android.synthetic.main.activity_home.locationProcessingTextView
-import kotlinx.android.synthetic.main.activity_home.lookingForEventsTextView
-import kotlinx.android.synthetic.main.activity_home.noEventsTextView
-import kotlinx.android.synthetic.main.activity_home.noLocationPermissionTextView
 import javax.inject.Inject
 
 class HomeActivity : BaseJoinEventActivity(), HomeView {
@@ -61,9 +53,12 @@ class HomeActivity : BaseJoinEventActivity(), HomeView {
     private var selectedFilter = Filter()
     private var init = true
 
+    private lateinit var binding: ActivityHomeBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
-        setContentView(R.layout.activity_home)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         super.onCreate(savedInstanceState)
         GoogleApiAvailability.getInstance().makeGooglePlayServicesAvailable(this)
         initRecyclerView()
@@ -72,9 +67,9 @@ class HomeActivity : BaseJoinEventActivity(), HomeView {
         saveFilter(selectedFilter, PreferenceManager.getDefaultSharedPreferences(this))
 
         homeViewModel = ViewModelProviders.of(this, homeViewModelFactory)[HomeViewModel::class.java]
-        addEventButton.setOnClickListener { EventActivity.startAddMode(this@HomeActivity) }
-        discoverButton.setOnClickListener { DiscoverActivity.start(this@HomeActivity) }
-        inviteFriendsButton.setOnClickListener {
+        binding.addEventButton.setOnClickListener { EventActivity.startAddMode(this@HomeActivity) }
+        binding.discoverButton.setOnClickListener { DiscoverActivity.start(this@HomeActivity) }
+        binding.inviteFriendsButton.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "text/plain"
             shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.boardly_invite_text))
@@ -83,8 +78,8 @@ class HomeActivity : BaseJoinEventActivity(), HomeView {
     }
 
     private fun initRecyclerView() {
-        eventsRecyclerView.layoutManager = LinearLayoutManager(this)
-        eventsRecyclerView.adapter = eventsAdapter
+        binding.eventsRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.eventsRecyclerView.adapter = eventsAdapter
     }
 
     override fun onStart() {
@@ -156,7 +151,7 @@ class HomeActivity : BaseJoinEventActivity(), HomeView {
     private fun handlePickFilterResult(resultCode: Int, data: Intent) {
         when (resultCode) {
             Activity.RESULT_OK -> {
-                selectedFilter = data.getParcelableExtra(PICKED_FILTER)
+                selectedFilter = data.getParcelableExtra(PICKED_FILTER) ?: Filter()
                 init = true
                 saveFilter(selectedFilter)
             }
@@ -187,55 +182,65 @@ class HomeActivity : BaseJoinEventActivity(), HomeView {
 
     private fun showLocationProcessingText(locationProcessing: Boolean) {
         if (locationProcessing) {
-            locationProcessingTextView.visibility = View.VISIBLE
+            binding.locationProcessingTextView.visibility = View.VISIBLE
         } else {
-            locationProcessingTextView.visibility = View.GONE
+            binding.locationProcessingTextView.visibility = View.GONE
         }
     }
 
     private fun showLookingForEventsText(show: Boolean) {
         if (show) {
-            lookingForEventsTextView.visibility = View.VISIBLE
-            contentViewGroup.visibility = View.GONE
+            binding.lookingForEventsTextView.visibility = View.VISIBLE
+            binding.contentViewGroup.visibility = View.GONE
         } else {
-            lookingForEventsTextView.visibility = View.GONE
-            contentViewGroup.visibility = View.VISIBLE
+            binding.lookingForEventsTextView.visibility = View.GONE
+            binding.contentViewGroup.visibility = View.VISIBLE
         }
     }
 
     private fun showNoEventsFoundText(show: Boolean) {
         if (show) {
-            contentViewGroup.visibility = View.GONE
-            noEventsTextView.visibility = View.VISIBLE
+            binding.contentViewGroup.visibility = View.GONE
+            binding.noEventsTextView.visibility = View.VISIBLE
         } else {
-            contentViewGroup.visibility = View.VISIBLE
-            noEventsTextView.visibility = View.GONE
+            binding.contentViewGroup.visibility = View.VISIBLE
+            binding.noEventsTextView.visibility = View.GONE
         }
     }
 
     private fun showNoLocationPermissionText(show: Boolean) {
         if (show) {
-            noLocationPermissionTextView.visibility = View.VISIBLE
+            binding.noLocationPermissionTextView.visibility = View.VISIBLE
         } else {
-            noLocationPermissionTextView.visibility = View.GONE
+            binding.noLocationPermissionTextView.visibility = View.GONE
         }
     }
 
     private fun getSavedFilter(): Filter {
         val sharedPrefs = getPreferences(Context.MODE_PRIVATE)
         val savedRadius = sharedPrefs.getInt(SAVED_RADIUS, 50)
-        val savedGameId = sharedPrefs.getString(SAVED_GAME_ID, "")
-        val savedGameName = sharedPrefs.getString(SAVED_GAME_NAME, "")
-        val savedLocationName = sharedPrefs.getString(SAVED_LOCATION_NAME, "")
-        val savedLocationLongitude = sharedPrefs.getString(SAVED_LOCATION_LONGITUDE, "")
-        val savedLocationLatitude = sharedPrefs.getString(SAVED_LOCATION_LATITUDE, "")
+        val savedGameId = sharedPrefs.getString(SAVED_GAME_ID, "") ?: ""
+        val savedGameName = sharedPrefs.getString(SAVED_GAME_NAME, "") ?: ""
+        val savedLocationName = sharedPrefs.getString(SAVED_LOCATION_NAME, "") ?: ""
+        val savedLocationLongitude = sharedPrefs.getString(SAVED_LOCATION_LONGITUDE, "") ?: ""
+        val savedLocationLatitude = sharedPrefs.getString(SAVED_LOCATION_LATITUDE, "") ?: ""
         val savedIsCurrentLocation = sharedPrefs.getBoolean(SAVED_IS_CURRENT_LOCATION, true)
         val userLocation = getUserLocationFromString(savedLocationLongitude, savedLocationLatitude)
-        return Filter(savedRadius.toDouble(), savedGameId, savedGameName, userLocation, savedLocationName, savedIsCurrentLocation)
+        return Filter(
+            savedRadius.toDouble(),
+            savedGameId,
+            savedGameName,
+            userLocation,
+            savedLocationName,
+            savedIsCurrentLocation
+        )
     }
 
     private fun getUserLocationFromString(longitude: String, latitude: String): UserLocation? {
-        return if (longitude.isNotEmpty() && latitude.isNotEmpty()) UserLocation(latitude.toDouble(), longitude.toDouble())
+        return if (longitude.isNotEmpty() && latitude.isNotEmpty() && longitude != "null" && latitude != "null") UserLocation(
+            latitude.toDouble(),
+            longitude.toDouble()
+        )
         else null
     }
 
@@ -248,13 +253,13 @@ class HomeActivity : BaseJoinEventActivity(), HomeView {
 
     private fun saveFilter(filter: Filter, sharedPrefs: SharedPreferences) {
         sharedPrefs.edit()
-                .putInt(SAVED_RADIUS, filter.radius.toInt())
-                .putString(SAVED_GAME_ID, filter.gameId)
-                .putString(SAVED_GAME_NAME, filter.gameName)
-                .putString(SAVED_LOCATION_NAME, filter.locationName)
-                .putString(SAVED_LOCATION_LATITUDE, filter.userLocation?.latitude.toString())
-                .putString(SAVED_LOCATION_LONGITUDE, filter.userLocation?.longitude.toString())
-                .putBoolean(SAVED_IS_CURRENT_LOCATION, filter.isCurrentLocation)
-                .apply()
+            .putInt(SAVED_RADIUS, filter.radius.toInt())
+            .putString(SAVED_GAME_ID, filter.gameId)
+            .putString(SAVED_GAME_NAME, filter.gameName)
+            .putString(SAVED_LOCATION_NAME, filter.locationName)
+            .putString(SAVED_LOCATION_LATITUDE, filter.userLocation?.latitude.toString())
+            .putString(SAVED_LOCATION_LONGITUDE, filter.userLocation?.longitude.toString())
+            .putBoolean(SAVED_IS_CURRENT_LOCATION, filter.isCurrentLocation)
+            .apply()
     }
 }

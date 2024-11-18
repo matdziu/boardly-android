@@ -11,7 +11,7 @@ import javax.inject.Inject
 class MyEventsViewModelFactory @Inject constructor(private val myEventsInteractor: MyEventsInteractor,
                                                    private val analytics: Analytics) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return MyEventsViewModel(myEventsInteractor, analytics) as T
     }
 }

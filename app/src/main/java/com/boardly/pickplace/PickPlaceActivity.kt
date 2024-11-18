@@ -7,13 +7,10 @@ import android.view.View
 import com.boardly.R
 import com.boardly.base.BaseSearchActivity
 import com.boardly.common.search.SearchResultsAdapter
+import com.boardly.databinding.ActivityPickPlaceBinding
 import com.boardly.factories.PickPlaceViewModelFactory
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.activity_pick_place.noSearchResultsTextView
-import kotlinx.android.synthetic.main.activity_pick_place.progressBar
-import kotlinx.android.synthetic.main.activity_pick_place.searchResultsRecyclerView
-import kotlinx.android.synthetic.main.activity_pick_place.timeOutTextView
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -29,18 +26,22 @@ class PickPlaceActivity : BaseSearchActivity(), PickPlaceView {
 
     private val searchResultsAdapter = SearchResultsAdapter()
 
+    private lateinit var binding: ActivityPickPlaceBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
-        setContentView(R.layout.activity_pick_place)
+        binding = ActivityPickPlaceBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         super.onCreate(savedInstanceState)
         initRecyclerView()
 
-        pickPlaceViewModel = ViewModelProviders.of(this, pickPlaceViewModelFactory)[PickPlaceViewModel::class.java]
+        pickPlaceViewModel =
+            ViewModelProviders.of(this, pickPlaceViewModelFactory)[PickPlaceViewModel::class.java]
     }
 
     private fun initRecyclerView() {
-        searchResultsRecyclerView.layoutManager = LinearLayoutManager(this)
-        searchResultsRecyclerView.adapter = searchResultsAdapter
+        binding.searchResultsRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.searchResultsRecyclerView.adapter = searchResultsAdapter
     }
 
     override fun onStart() {
@@ -66,27 +67,27 @@ class PickPlaceActivity : BaseSearchActivity(), PickPlaceView {
 
     private fun showProgressBar(show: Boolean) {
         val visibility = if (show) View.VISIBLE else View.GONE
-        progressBar.visibility = visibility
+        binding.progressBar.visibility = visibility
     }
 
     private fun showNoResultsPrompt(show: Boolean) {
         val visibility = if (show) View.VISIBLE else View.GONE
-        noSearchResultsTextView.visibility = visibility
-        noSearchResultsTextView.text = getString(R.string.no_search_results_text)
+        binding.noSearchResultsTextView.visibility = visibility
+        binding.noSearchResultsTextView.text = getString(R.string.no_search_results_text)
     }
 
     private fun showContent(show: Boolean) {
         val visibility = if (show) View.VISIBLE else View.GONE
-        searchResultsRecyclerView.visibility = visibility
+        binding.searchResultsRecyclerView.visibility = visibility
     }
 
     private fun showTimeOutPrompt(show: Boolean, query: String) {
         val visibility = if (show) View.VISIBLE else View.GONE
-        timeOutTextView.visibility = visibility
-        timeOutTextView.text = getString(R.string.be_more_specific_error_text, query)
+        binding.timeOutTextView.visibility = visibility
+        binding.timeOutTextView.text = getString(R.string.be_more_specific_error_text, query)
     }
 
     override fun queryEmitter(): Observable<String> =
-            searchInput.debounce(300, TimeUnit.MILLISECONDS)
-                    .distinctUntilChanged()
+        searchInput.debounce(300, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
 }

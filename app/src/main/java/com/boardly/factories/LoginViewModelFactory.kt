@@ -9,7 +9,7 @@ import javax.inject.Inject
 @Suppress("UNCHECKED_CAST")
 class LoginViewModelFactory @Inject constructor(private val loginInteractor: LoginInteractor) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return LoginViewModel(loginInteractor) as T
     }
 }

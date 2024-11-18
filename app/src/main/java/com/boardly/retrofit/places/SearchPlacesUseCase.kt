@@ -4,6 +4,7 @@ import com.boardly.extensions.noSpecialChars
 import com.boardly.retrofit.places.models.PlaceSearchResult
 import io.reactivex.Observable
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SearchPlacesUseCase @Inject constructor(private val nominatimService: NominatimService) {
@@ -13,9 +14,13 @@ class SearchPlacesUseCase @Inject constructor(private val nominatimService: Nomi
     fun search(query: String): Observable<List<PlaceSearchResult>> {
         latestQuery = query
         val formattedQuery = query.trim()
-                .toLowerCase(Locale.ENGLISH)
-                .noSpecialChars()
+            .toLowerCase(Locale.ENGLISH)
+            .noSpecialChars()
         return nominatimService.search(formattedQuery)
-                .filter { query == latestQuery }
+            .onErrorReturn {
+                println(it.toString())
+                listOf()
+            }
+            .filter { query == latestQuery }
     }
 }

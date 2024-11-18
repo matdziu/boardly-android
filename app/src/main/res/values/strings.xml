@@ -39,7 +39,7 @@
     <string name="search_title">Search</string>
     <string name="gps_not_available">Google Play Services are unavailable</string>
     <string name="gps_update_needed">Update or turn on Google Play Services</string>
-    <string name="location_denied_text">Turn on your location. We use it to provide you with events.</string>
+    <string name="location_denied_text">Click filtering icon at the top right corner and select your location to see events nearby.</string>
     <string name="description_hint">Event description (optional)</string>
     <string name="no_search_results_text">No results</string>
     <string name="be_more_specific_error_text">There are too many results for \'%1$s\'. Be more specific.</string>
@@ -59,7 +59,7 @@
     <string name="delete_game_text">Delete game</string>
     <string name="description_text">Description</string>
     <string name="close_dialog">Close</string>
-    <string name="enable_location_permission">Turn on your location and allow Boardly to access it or use filtering to see events nearby.</string>
+    <string name="enable_location_permission">Click filtering icon at the top right corner and select your location to see events nearby.</string>
     <string name="date_to_be_added">To be added</string>
     <string name="my_events_text">Your events</string>
     <string name="created_text">CREATED</string>

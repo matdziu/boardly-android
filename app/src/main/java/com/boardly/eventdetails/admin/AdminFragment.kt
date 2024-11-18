@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.boardly.R
 import com.boardly.base.eventdetails.BaseEventDetailsFragment
 import com.boardly.common.events.EventUIRenderer
 import com.boardly.common.events.models.Event
@@ -15,6 +14,7 @@ import com.boardly.constants.EDIT_EVENT_REQUEST_CODE
 import com.boardly.constants.EVENT_EDITED_RESULT_CODE
 import com.boardly.constants.EVENT_ID
 import com.boardly.constants.EVENT_REMOVED_RESULT_CODE
+import com.boardly.databinding.FragmentAdminBinding
 import com.boardly.event.EventActivity
 import com.boardly.eventdetails.admin.list.AcceptedPlayersAdapter
 import com.boardly.eventdetails.admin.list.PendingPlayersAdapter
@@ -22,27 +22,6 @@ import com.boardly.factories.AdminViewModelFactory
 import dagger.android.support.AndroidSupportInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.fragment_admin.acceptedPlayersRecyclerView
-import kotlinx.android.synthetic.main.fragment_admin.acceptedProgressBar
-import kotlinx.android.synthetic.main.fragment_admin.editEventButton
-import kotlinx.android.synthetic.main.fragment_admin.eventLayout
-import kotlinx.android.synthetic.main.fragment_admin.eventProgressBar
-import kotlinx.android.synthetic.main.fragment_admin.noAcceptedPlayersTextView
-import kotlinx.android.synthetic.main.fragment_admin.noPendingPlayersTextView
-import kotlinx.android.synthetic.main.fragment_admin.pendingPlayersRecyclerView
-import kotlinx.android.synthetic.main.fragment_admin.pendingProgressBar
-import kotlinx.android.synthetic.main.item_event.locationImageView
-import kotlinx.android.synthetic.main.item_event.seeDescriptionButton
-import kotlinx.android.synthetic.main.layout_event.boardGameImageView
-import kotlinx.android.synthetic.main.layout_event.boardGameImageView2
-import kotlinx.android.synthetic.main.layout_event.boardGameImageView3
-import kotlinx.android.synthetic.main.layout_event.eventNameTextView
-import kotlinx.android.synthetic.main.layout_event.gameTextView
-import kotlinx.android.synthetic.main.layout_event.gameTextView2
-import kotlinx.android.synthetic.main.layout_event.gameTextView3
-import kotlinx.android.synthetic.main.layout_event.locationTextView
-import kotlinx.android.synthetic.main.layout_event.timeImageView
-import kotlinx.android.synthetic.main.layout_event.timeTextView
 import javax.inject.Inject
 
 class AdminFragment : BaseEventDetailsFragment(), AdminView {
@@ -66,6 +45,8 @@ class AdminFragment : BaseEventDetailsFragment(), AdminView {
     private val acceptedPlayersAdapter = AcceptedPlayersAdapter(this)
     private val pendingPlayersAdapter = PendingPlayersAdapter(this)
 
+    private lateinit var binding: FragmentAdminBinding
+
     companion object {
         fun newInstance(eventId: String): AdminFragment {
             val adminFragment = AdminFragment()
@@ -81,45 +62,53 @@ class AdminFragment : BaseEventDetailsFragment(), AdminView {
         super.onCreate(savedInstanceState)
         eventId = arguments?.getString(EVENT_ID, "") ?: ""
 
-        adminViewModel = ViewModelProviders.of(this, adminViewModelFactory)[AdminViewModel::class.java]
+        adminViewModel =
+            ViewModelProviders.of(this, adminViewModelFactory)[AdminViewModel::class.java]
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_admin, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentAdminBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        editEventButton.setOnClickListener { EventActivity.startEditMode(this, event) }
+        binding.editEventButton.setOnClickListener { EventActivity.startEditMode(this, event) }
         initRecyclerViews()
     }
 
     private fun initEventView(event: Event) {
         this.event = event
-        eventUIRenderer.displayEventInfo(event,
-                eventNameTextView,
-                gameTextView,
-                locationTextView,
-                locationImageView,
-                boardGameImageView,
-                seeDescriptionButton,
-                timeTextView,
-                timeImageView,
-                gameTextView2,
-                boardGameImageView2,
-                gameTextView3,
-                boardGameImageView3)
+        eventUIRenderer.displayEventInfo(
+            event,
+            binding.eventLayout.eventNameTextView,
+            binding.eventLayout.gameTextView,
+            binding.eventLayout.locationTextView,
+            binding.eventLayout.locationImageView,
+            binding.eventLayout.boardGameImageView,
+            binding.eventLayout.seeDescriptionButton,
+            binding.eventLayout.timeTextView,
+            binding.eventLayout.timeImageView,
+            binding.eventLayout.gameTextView2,
+            binding.eventLayout.boardGameImageView2,
+            binding.eventLayout.gameTextView3,
+            binding.eventLayout.boardGameImageView3
+        )
     }
 
     private fun initRecyclerViews() {
-        acceptedPlayersRecyclerView.isNestedScrollingEnabled = false
-        pendingPlayersRecyclerView.isNestedScrollingEnabled = false
+        binding.acceptedPlayersRecyclerView.isNestedScrollingEnabled = false
+        binding.pendingPlayersRecyclerView.isNestedScrollingEnabled = false
 
-        acceptedPlayersRecyclerView.layoutManager = LinearLayoutManager(context)
-        pendingPlayersRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.acceptedPlayersRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.pendingPlayersRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        acceptedPlayersRecyclerView.adapter = acceptedPlayersAdapter
-        pendingPlayersRecyclerView.adapter = pendingPlayersAdapter
+        binding.acceptedPlayersRecyclerView.adapter = acceptedPlayersAdapter
+        binding.pendingPlayersRecyclerView.adapter = pendingPlayersAdapter
     }
 
     override fun onStart() {
@@ -183,51 +172,51 @@ class AdminFragment : BaseEventDetailsFragment(), AdminView {
 
     private fun showAcceptedProgressBar(show: Boolean) {
         if (show) {
-            acceptedPlayersRecyclerView.visibility = View.GONE
-            acceptedProgressBar.visibility = View.VISIBLE
+            binding.acceptedPlayersRecyclerView.visibility = View.GONE
+            binding.acceptedProgressBar.visibility = View.VISIBLE
         } else {
-            acceptedPlayersRecyclerView.visibility = View.VISIBLE
-            acceptedProgressBar.visibility = View.GONE
+            binding.acceptedPlayersRecyclerView.visibility = View.VISIBLE
+            binding.acceptedProgressBar.visibility = View.GONE
         }
     }
 
     private fun showNoAcceptedPlayersText(show: Boolean) {
         if (show) {
-            acceptedPlayersRecyclerView.visibility = View.GONE
-            noAcceptedPlayersTextView.visibility = View.VISIBLE
+            binding.acceptedPlayersRecyclerView.visibility = View.GONE
+            binding.noAcceptedPlayersTextView.visibility = View.VISIBLE
         } else {
-            acceptedPlayersRecyclerView.visibility = View.VISIBLE
-            noAcceptedPlayersTextView.visibility = View.GONE
+            binding.acceptedPlayersRecyclerView.visibility = View.VISIBLE
+            binding.noAcceptedPlayersTextView.visibility = View.GONE
         }
     }
 
     private fun showEventProgressBar(show: Boolean) {
         if (show) {
-            eventLayout.visibility = View.GONE
-            eventProgressBar.visibility = View.VISIBLE
+            binding.eventLayout.eventLayoutInternal.visibility = View.GONE
+            binding.eventProgressBar.visibility = View.VISIBLE
         } else {
-            eventLayout.visibility = View.VISIBLE
-            eventProgressBar.visibility = View.GONE
+            binding.eventLayout.eventLayoutInternal.visibility = View.VISIBLE
+            binding.eventProgressBar.visibility = View.GONE
         }
     }
 
     private fun showPendingProgressBar(show: Boolean) {
         if (show) {
-            pendingPlayersRecyclerView.visibility = View.GONE
-            pendingProgressBar.visibility = View.VISIBLE
+            binding.pendingPlayersRecyclerView.visibility = View.GONE
+            binding.pendingProgressBar.visibility = View.VISIBLE
         } else {
-            pendingPlayersRecyclerView.visibility = View.VISIBLE
-            pendingProgressBar.visibility = View.GONE
+            binding.pendingPlayersRecyclerView.visibility = View.VISIBLE
+            binding.pendingProgressBar.visibility = View.GONE
         }
     }
 
     private fun showNoPendingPlayersText(show: Boolean) {
         if (show) {
-            pendingPlayersRecyclerView.visibility = View.GONE
-            noPendingPlayersTextView.visibility = View.VISIBLE
+            binding.pendingPlayersRecyclerView.visibility = View.GONE
+            binding.noPendingPlayersTextView.visibility = View.VISIBLE
         } else {
-            pendingPlayersRecyclerView.visibility = View.VISIBLE
-            noPendingPlayersTextView.visibility = View.GONE
+            binding.pendingPlayersRecyclerView.visibility = View.VISIBLE
+            binding.noPendingPlayersTextView.visibility = View.GONE
         }
     }
 
@@ -235,5 +224,6 @@ class AdminFragment : BaseEventDetailsFragment(), AdminView {
 
     override fun acceptPlayerEmitter(): Observable<String> = acceptPlayerSubject
 
-    override fun fetchEventDetailsTriggerEmitter(): Observable<Boolean> = fetchEventDetailsTriggerSubject
+    override fun fetchEventDetailsTriggerEmitter(): Observable<Boolean> =
+        fetchEventDetailsTriggerSubject
 }

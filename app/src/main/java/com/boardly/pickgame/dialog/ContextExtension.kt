@@ -6,23 +6,24 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import com.boardly.R
-import kotlinx.android.synthetic.main.view_add_game.view.gameNameEditText
+import com.boardly.customviews.BoardlyEditText
 
 fun Context.addGameDialog(parent: ViewGroup, onGameAdded: (String) -> Unit) {
     val dialogView = LayoutInflater.from(this)
-            .inflate(R.layout.view_add_game, parent, false)
+        .inflate(R.layout.view_add_game, parent, false)
 
     val dialog = AlertDialog.Builder(this)
-            .setTitle(R.string.add_game_dialog_title)
-            .setPositiveButton(R.string.add_game_dialog_positive_text, null)
-            .setNegativeButton(R.string.add_game_dialog_negative_text, null)
-            .setView(dialogView)
-            .create()
+        .setTitle(R.string.add_game_dialog_title)
+        .setPositiveButton(R.string.add_game_dialog_positive_text, null)
+        .setNegativeButton(R.string.add_game_dialog_negative_text, null)
+        .setView(dialogView)
+        .create()
 
     dialog.show()
 
     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
         with(dialogView) {
+            val gameNameEditText = this.findViewById<BoardlyEditText>(R.id.gameNameEditText)
             val gameName = gameNameEditText.text.trim().toString()
             if (gameName.isNotEmpty()) {
                 onGameAdded(gameName)

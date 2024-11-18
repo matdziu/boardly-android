@@ -4,11 +4,14 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
+import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.TextView
 import com.boardly.R
 import com.boardly.base.joinevent.BaseJoinEventActivity
 import com.boardly.common.events.models.Event
 import com.boardly.constants.LAUNCH_INFO
+import com.boardly.databinding.ActivityMyEventsBinding
 import com.boardly.extensions.setBackgroundColor
 import com.boardly.extensions.setMaxLines
 import com.boardly.extensions.setTextColor
@@ -17,12 +20,6 @@ import com.boardly.factories.MyEventsViewModelFactory
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.activity_my_events.coordinatorLayout
-import kotlinx.android.synthetic.main.activity_my_events.progressBar
-import kotlinx.android.synthetic.main.activity_my_events.tabLayout
-import kotlinx.android.synthetic.main.activity_my_events.viewPager
-import kotlinx.android.synthetic.main.view_my_events.view.myEventsRecyclerView
-import kotlinx.android.synthetic.main.view_my_events.view.noEventsTextView
 import javax.inject.Inject
 
 class MyEventsActivity : BaseJoinEventActivity(), MyEventsView {
@@ -39,24 +36,28 @@ class MyEventsActivity : BaseJoinEventActivity(), MyEventsView {
     private var init = true
     private var viewPagerInit = false
 
+    private lateinit var binding: ActivityMyEventsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
-        setContentView(R.layout.activity_my_events)
+        binding = ActivityMyEventsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         super.onCreate(savedInstanceState)
         initViewPager()
 
-        myEventsViewModel = ViewModelProviders.of(this, myEventsViewModelFactory)[MyEventsViewModel::class.java]
+        myEventsViewModel =
+            ViewModelProviders.of(this, myEventsViewModelFactory)[MyEventsViewModel::class.java]
 
         val launchInfo = intent.getStringExtra(LAUNCH_INFO)
         if (launchInfo != null) {
-            Snackbar.make(coordinatorLayout, launchInfo, Snackbar.LENGTH_INDEFINITE)
-                    .simplySetActionTextColor(android.R.color.white)
-                    .setBackgroundColor(R.color.colorPrimary)
-                    .setTextColor(android.R.color.white)
-                    .setMaxLines(6)
-                    .setAction(R.string.snackbar_ok, {})
-                    .show()
-            viewPager.currentItem = 3
+            Snackbar.make(binding.coordinatorLayout, launchInfo, Snackbar.LENGTH_INDEFINITE)
+                .simplySetActionTextColor(android.R.color.white)
+                .setBackgroundColor(R.color.colorPrimary)
+                .setTextColor(android.R.color.white)
+                .setMaxLines(6)
+                .setAction(R.string.snackbar_ok, {})
+                .show()
+            binding.viewPager.currentItem = 3
         }
     }
 
@@ -84,10 +85,10 @@ class MyEventsActivity : BaseJoinEventActivity(), MyEventsView {
     }
 
     private fun initViewPager() {
-        viewPager.offscreenPageLimit = 3
-        viewPager.adapter = viewPagerAdapter
-        viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
-        tabLayout.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(viewPager))
+        binding.viewPager.offscreenPageLimit = 3
+        binding.viewPager.adapter = viewPagerAdapter
+        binding.viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding.tabLayout))
+        binding.tabLayout.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(binding.viewPager))
     }
 
     override fun fetchEventsTriggerEmitter(): Observable<Boolean> = fetchEventsSubject
@@ -112,10 +113,22 @@ class MyEventsActivity : BaseJoinEventActivity(), MyEventsView {
                     }
                 }
             } else {
-                showNoEventsTextView(acceptedEvents, viewPager.findViewWithTag(PageView.ACCEPTED))
-                showNoEventsTextView(pendingEvents, viewPager.findViewWithTag(PageView.PENDING))
-                showNoEventsTextView(createdEvents, viewPager.findViewWithTag(PageView.CREATED))
-                showNoEventsTextView(interestingEvents, viewPager.findViewWithTag(PageView.INTERESTING))
+                showNoEventsTextView(
+                    acceptedEvents,
+                    binding.viewPager.findViewWithTag(PageView.ACCEPTED)
+                )
+                showNoEventsTextView(
+                    pendingEvents,
+                    binding.viewPager.findViewWithTag(PageView.PENDING)
+                )
+                showNoEventsTextView(
+                    createdEvents,
+                    binding.viewPager.findViewWithTag(PageView.CREATED)
+                )
+                showNoEventsTextView(
+                    interestingEvents,
+                    binding.viewPager.findViewWithTag(PageView.INTERESTING)
+                )
             }
 
             showJoinRequestSentToast(joinRequestSent)
@@ -124,6 +137,8 @@ class MyEventsActivity : BaseJoinEventActivity(), MyEventsView {
 
     private fun showNoEventsTextView(eventsList: List<Event>, pageView: View) {
         with(pageView) {
+            val noEventsTextView = this.findViewById<TextView>(R.id.noEventsTextView)
+            val myEventsRecyclerView = this.findViewById<RecyclerView>(R.id.myEventsRecyclerView)
             if (eventsList.isEmpty()) {
                 noEventsTextView.visibility = View.VISIBLE
                 myEventsRecyclerView.visibility = View.GONE
@@ -136,13 +151,13 @@ class MyEventsActivity : BaseJoinEventActivity(), MyEventsView {
 
     private fun showProgressBar(show: Boolean) {
         if (show) {
-            viewPager.visibility = View.GONE
-            tabLayout.visibility = View.GONE
-            progressBar.visibility = View.VISIBLE
+            binding.viewPager.visibility = View.GONE
+            binding.tabLayout.visibility = View.GONE
+            binding.progressBar.visibility = View.VISIBLE
         } else {
-            viewPager.visibility = View.VISIBLE
-            tabLayout.visibility = View.VISIBLE
-            progressBar.visibility = View.GONE
+            binding.viewPager.visibility = View.VISIBLE
+            binding.tabLayout.visibility = View.VISIBLE
+            binding.progressBar.visibility = View.GONE
         }
     }
 }

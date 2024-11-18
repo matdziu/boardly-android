@@ -15,13 +15,11 @@
         app:tabIndicatorHeight="5dp">
 
         <android.support.design.widget.TabItem
-            android:id="@+id/chatTab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:icon="@drawable/ic_chat" />
 
         <android.support.design.widget.TabItem
-            android:id="@+id/playersTab"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:icon="@drawable/ic_people_white" />

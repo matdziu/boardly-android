@@ -14,6 +14,7 @@ import com.boardly.constants.COLLECTION_ID
 import com.boardly.constants.MODE
 import com.boardly.constants.PICKED_GAME
 import com.boardly.constants.PICK_FIRST_GAME_REQUEST_CODE
+import com.boardly.databinding.ActivityGamesCollectionBinding
 import com.boardly.factories.GamesCollectionViewModelFactory
 import com.boardly.gamescollection.list.CollectionGamesAdapter
 import com.boardly.gamescollection.models.CollectionGame
@@ -23,12 +24,6 @@ import com.boardly.retrofit.gameservice.models.SearchResult
 import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
-import kotlinx.android.synthetic.main.activity_games_collection.addGameButton
-import kotlinx.android.synthetic.main.activity_games_collection.gamesCollectionRecyclerView
-import kotlinx.android.synthetic.main.activity_games_collection.hintTextView
-import kotlinx.android.synthetic.main.activity_games_collection.noGamesTextView
-import kotlinx.android.synthetic.main.activity_games_collection.progressBar
-import kotlinx.android.synthetic.main.activity_games_collection.rootView
 import javax.inject.Inject
 
 enum class Mode {
@@ -60,6 +55,8 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
 
     private var recentlyPickedGame: CollectionGame? = null
 
+    private lateinit var binding: ActivityGamesCollectionBinding
+
     companion object {
         fun startViewMode(context: Context, collectionId: String) {
             val intent = Intent(context, GamesCollectionActivity::class.java)
@@ -78,15 +75,25 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
-        setContentView(R.layout.activity_games_collection)
+        binding = ActivityGamesCollectionBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         super.onCreate(savedInstanceState)
         showBackToolbarArrow(true, this::finish)
-        gamesCollectionViewModel = ViewModelProviders.of(this, gamesCollectionViewModelFactory)[GamesCollectionViewModel::class.java]
-        collectionId = intent.getStringExtra(COLLECTION_ID)
+        gamesCollectionViewModel = ViewModelProviders.of(
+            this,
+            gamesCollectionViewModelFactory
+        )[GamesCollectionViewModel::class.java]
+        collectionId = intent.getStringExtra(COLLECTION_ID) ?: ""
         mode = intent.getSerializableExtra(MODE) as Mode
         initRecyclerView()
         prepareMode(mode)
-        addGameButton.setOnClickListener { addGameDialog(rootView) { handlePickGameResult(it) } }
+        binding.addGameButton.setOnClickListener {
+            addGameDialog(binding.rootView) {
+                handlePickGameResult(
+                    it
+                )
+            }
+        }
         initWithKeyboard = false
     }
 
@@ -97,16 +104,16 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
 
     private fun prepareMode(mode: Mode) {
         if (mode == Mode.VIEW) {
-            addGameButton.visibility = View.GONE
+            binding.addGameButton.visibility = View.GONE
         } else if (mode == Mode.MANAGE) {
-            addGameButton.visibility = View.VISIBLE
+            binding.addGameButton.visibility = View.VISIBLE
         }
     }
 
     private fun initRecyclerView() {
         collectionGamesAdapter = CollectionGamesAdapter(mode)
-        gamesCollectionRecyclerView.layoutManager = LinearLayoutManager(this)
-        gamesCollectionRecyclerView.adapter = collectionGamesAdapter
+        binding.gamesCollectionRecyclerView.layoutManager = LinearLayoutManager(this)
+        binding.gamesCollectionRecyclerView.adapter = collectionGamesAdapter
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -122,9 +129,10 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
             Activity.RESULT_OK -> {
                 val pickedGame = data.getParcelableExtra<SearchResult>(PICKED_GAME)
                 val collectionGame = CollectionGame(
-                        pickedGame.id.toString(),
-                        pickedGame.name,
-                        pickedGame.yearPublished)
+                    pickedGame?.id.toString(),
+                    pickedGame?.name ?: "",
+                    pickedGame?.yearPublished ?: ""
+                )
                 recentlyPickedGame = collectionGame
             }
         }
@@ -159,24 +167,25 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
         super.onStop()
     }
 
-    override fun render(gamesCollectionViewState: GamesCollectionViewState) = with(gamesCollectionViewState) {
-        showProgressBar(progress)
-        showSuccessToast(success)
-        showNoGamesText(games.isEmpty() && !progress)
-        showNoMoreLimitToast(noMoreLimit)
-        collectionGamesAdapter.submitList(games)
-    }
+    override fun render(gamesCollectionViewState: GamesCollectionViewState) =
+        with(gamesCollectionViewState) {
+            showProgressBar(progress)
+            showSuccessToast(success)
+            showNoGamesText(games.isEmpty() && !progress)
+            showNoMoreLimitToast(noMoreLimit)
+            collectionGamesAdapter.submitList(games)
+        }
 
     private fun showProgressBar(show: Boolean) {
         progress = show
         if (show) {
-            progressBar.visibility = View.VISIBLE
-            hintTextView.visibility = View.GONE
-            gamesCollectionRecyclerView.visibility = View.GONE
+            binding.progressBar.visibility = View.VISIBLE
+            binding.hintTextView.visibility = View.GONE
+            binding.gamesCollectionRecyclerView.visibility = View.GONE
         } else {
-            progressBar.visibility = View.GONE
-            hintTextView.visibility = View.VISIBLE
-            gamesCollectionRecyclerView.visibility = View.VISIBLE
+            binding.progressBar.visibility = View.GONE
+            binding.hintTextView.visibility = View.VISIBLE
+            binding.gamesCollectionRecyclerView.visibility = View.VISIBLE
         }
     }
 
@@ -195,9 +204,9 @@ class GamesCollectionActivity : BaseSearchActivity(), GamesCollectionView {
 
     private fun showNoGamesText(show: Boolean) {
         if (show) {
-            noGamesTextView.visibility = View.VISIBLE
+            binding.noGamesTextView.visibility = View.VISIBLE
         } else {
-            noGamesTextView.visibility = View.GONE
+            binding.noGamesTextView.visibility = View.GONE
         }
     }
 

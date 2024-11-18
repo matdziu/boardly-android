@@ -15,7 +15,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
-import com.tbruyelle.rxpermissions2.RxPermissions
+//import com.tbruyelle.rxpermissions2.RxPermissions
 
 @SuppressLint("Registered")
 open class BaseLocationActivity : AppCompatActivity() {
@@ -52,12 +52,12 @@ open class BaseLocationActivity : AppCompatActivity() {
     }
 
     private fun checkLocationPermission() {
-        RxPermissions(this)
-                .request(Manifest.permission.ACCESS_FINE_LOCATION)
-                .subscribe {
-                    if (!it) locationDenied()
-                    else locationGranted()
-                }
+//        RxPermissions(this)
+//                .request(Manifest.permission.ACCESS_FINE_LOCATION)
+//                .subscribe {
+//                    if (!it) locationDenied()
+//                    else locationGranted()
+//                }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -100,6 +100,7 @@ open class BaseLocationActivity : AppCompatActivity() {
     }
 
     fun isLocationPermissionGranted(): Boolean {
-        return RxPermissions(this).isGranted(Manifest.permission.ACCESS_FINE_LOCATION)
+        return false
+//        return RxPermissions(this).isGranted(Manifest.permission.ACCESS_FINE_LOCATION)
     }
 }

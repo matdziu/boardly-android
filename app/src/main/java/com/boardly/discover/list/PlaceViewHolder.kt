@@ -5,6 +5,9 @@ import android.content.Intent
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import com.boardly.R
 import com.boardly.common.events.models.Event
@@ -13,22 +16,23 @@ import com.boardly.event.EventActivity
 import com.boardly.extensions.loadImageFromUrl
 import com.boardly.extensions.setOnClickListener
 import com.boardly.gamescollection.GamesCollectionActivity
-import kotlinx.android.synthetic.main.item_place.view.callButton
-import kotlinx.android.synthetic.main.item_place.view.callImageView
-import kotlinx.android.synthetic.main.item_place.view.createEventButton
-import kotlinx.android.synthetic.main.item_place.view.createEventImageView
-import kotlinx.android.synthetic.main.item_place.view.descriptionTextView
-import kotlinx.android.synthetic.main.item_place.view.locationImageView
-import kotlinx.android.synthetic.main.item_place.view.locationTextView
-import kotlinx.android.synthetic.main.item_place.view.placeImageView
-import kotlinx.android.synthetic.main.item_place.view.placeNameTextView
-import kotlinx.android.synthetic.main.item_place.view.viewBoardGamesButton
-import kotlinx.android.synthetic.main.item_place.view.viewBoardGamesImageView
 
 
 class PlaceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(place: Place) = with(itemView) {
+        val placeNameTextView = this.findViewById<TextView>(R.id.placeNameTextView)
+        val descriptionTextView = this.findViewById<TextView>(R.id.descriptionTextView)
+        val placeImageView = this.findViewById<ImageView>(R.id.placeImageView)
+        val locationTextView = this.findViewById<TextView>(R.id.locationTextView)
+        val locationImageView = this.findViewById<ImageView>(R.id.locationImageView)
+        val callImageView = this.findViewById<ImageView>(R.id.callImageView)
+        val callButton = this.findViewById<Button>(R.id.callButton)
+        val createEventButton = this.findViewById<Button>(R.id.createEventButton)
+        val createEventImageView = this.findViewById<ImageView>(R.id.createEventImageView)
+        val viewBoardGamesImageView = this.findViewById<ImageView>(R.id.viewBoardGamesImageView)
+        val viewBoardGamesButton = this.findViewById<Button>(R.id.viewBoardGamesButton)
+
         placeNameTextView.text = place.name
         descriptionTextView.text = place.description
         context.loadImageFromUrl(placeImageView, place.imageUrl, R.drawable.place_placeholder)
@@ -41,11 +45,13 @@ class PlaceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             openPhone(place.phoneNumber, context)
         }
         listOf(createEventButton, createEventImageView).setOnClickListener {
-            EventActivity.startAddMode(context, Event(
+            EventActivity.startAddMode(
+                context, Event(
                     placeName = place.locationName,
                     placeLatitude = place.placeLatitude,
                     placeLongitude = place.placeLongitude
-            ))
+                )
+            )
         }
         listOf(viewBoardGamesImageView, viewBoardGamesButton).setOnClickListener {
             GamesCollectionActivity.startViewMode(context, place.collectionId)
